@@ -21,6 +21,6 @@
     </string>
 
     <string name="title_activity_flash_screen">flashScreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="dummy_button">Click to Continue</string>
+    <string name="dummy_content">Restaurant\nOrdering\nSystem</string>
 </resources>

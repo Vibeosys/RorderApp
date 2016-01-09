@@ -3,25 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/flash_img_new"
-    tools:context="com.vibeosys.rorderapp.flashScreenActivity">
+    tools:context=".activities.FlashScreenActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <!--<TextView
+    <TextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:gravity="center_horizontal|top"
         android:keepScreenOn="true"
+        android:paddingTop="16dp"
         android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />-->
+        android:textColor="@color/White"
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
-    <!--<FrameLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -37,7 +38,7 @@
             tools:ignore="UselessParent">
 
             <Button
-                android:id="@+id/dummy_button"
+                android:id="@+id/continue_to_click_button"
                 style="?metaButtonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -45,6 +46,6 @@
                 android:text="@string/dummy_button" />
 
         </LinearLayout>
-    </FrameLayout>-->
+    </FrameLayout>
 
 </FrameLayout>
