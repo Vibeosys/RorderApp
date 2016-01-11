@@ -31,11 +31,13 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:orientation="vertical">
 
-            <android.support.v4.widget.CircleImageView
+            <com.vibeosys.rorderapp.views.RoundedImageView
                 android:id="@+id/companyLogo"
-                android:layout_gravity="center"
-                android:layout_width="300dp"
+                android:layout_width="170dp"
                 android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
                 android:src="@drawable/r_logo" />
 
             <android.support.design.widget.TextInputLayout
@@ -45,8 +47,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/email"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_person_outline_24dp"
+                    android:layout_height="40dp"
+                    android:drawableStart="@drawable/ic_person_outline_24dp"
                     android:drawablePadding="10dp"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
@@ -63,7 +65,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_vpn_key_24dp"
+                    android:drawableStart="@drawable/ic_vpn_key_24dp"
                     android:drawablePadding="10dp"
                     android:hint="@string/prompt_password"
                     android:imeActionId="@+id/login"

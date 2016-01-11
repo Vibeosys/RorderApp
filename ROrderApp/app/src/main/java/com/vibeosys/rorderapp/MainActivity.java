@@ -3,18 +3,20 @@ package com.vibeosys.rorderapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity
+import com.vibeosys.rorderapp.activities.BaseActivity;
+import com.vibeosys.rorderapp.activities.LoginActivity;
+
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -44,6 +46,17 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (mSessionManager.getUserId() == null) {
+            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(loginIntent);
+        }
     }
 
     @Override
