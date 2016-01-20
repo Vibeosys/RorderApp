@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -15,16 +17,49 @@ import android.view.View;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
+import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    TabLayout tab_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_login);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tab_layout= (TabLayout) findViewById(R.id.tab_layout);
+        tab_layout.addTab(tab_layout.newTab().setText("Tables"));
+        tab_layout.addTab(tab_layout.newTab().setText("My Serving"));
+        tab_layout.addTab(tab_layout.newTab().setText("All Serving"));
+
+        tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final TablePagerAdapter adapter = new TablePagerAdapter
+                (getSupportFragmentManager(), tab_layout.getTabCount());
+        viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
+        tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -52,10 +87,10 @@ public class MainActivity extends BaseActivity
     protected void onPostResume() {
         super.onPostResume();
         if (mSessionManager.getUserId() == null) {
-            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+           /* Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(loginIntent);
+            startActivity(loginIntent);*/
         }
     }
 
