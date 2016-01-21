@@ -24,6 +24,7 @@
         android:id="@+id/spinner" />
 
     <Button
+        android:id="@+id/btnOk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="30dp"
@@ -31,8 +32,7 @@
         android:layout_marginTop="160dp"
         android:textColor="@color/White"
         android:background="#FF4040"
-        android:text="Ok"
-        />
+        android:text="Ok" />
 
 
 </LinearLayout>

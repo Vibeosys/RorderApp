@@ -1,5 +1,7 @@
 package com.vibeosys.rorderapp;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,7 +19,10 @@ import android.view.View;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
+import com.vibeosys.rorderapp.activities.SelectRestaurentActivity;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
+
+import java.io.File;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -86,7 +91,16 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (mSessionManager.getUserId() == null) {
+        ContextWrapper ctw = new ContextWrapper(getApplicationContext());
+        File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
+        File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
+        if (!dbFile.exists()) {
+            Intent loginIntent = new Intent(getApplicationContext(), SelectRestaurentActivity.class);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(loginIntent);
+        }
+        else if (mSessionManager.getUserId() == null) {
             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);

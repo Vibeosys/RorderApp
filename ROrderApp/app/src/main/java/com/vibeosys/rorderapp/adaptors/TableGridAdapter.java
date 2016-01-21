@@ -81,11 +81,11 @@ public class TableGridAdapter extends BaseAdapter {
         if (row == null) {
             LayoutInflater theLayoutInflator = (LayoutInflater) mContext.getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
-           /* row = theLayoutInflator.inflate(R.layout.row_add_table, null);
+            row = theLayoutInflator.inflate(R.layout.row_add_table, null);
             viewHolder = new TableGridAdapter.ViewHolder();
             viewHolder.imgTablePhoto = (ImageView) row.findViewById(R.id.imgTablePhoto);
             viewHolder.txtCapacity = (TextView) row.findViewById(R.id.txtCapacity);
-            viewHolder.txtTableNumber = (TextView) row.findViewById(R.id.txtTableNumber);*/
+            viewHolder.txtTableNumber = (TextView) row.findViewById(R.id.txtTableNumber);
             row.setTag(viewHolder);
 
         } else viewHolder = (TableGridAdapter.ViewHolder) row.getTag();
