@@ -65,6 +65,17 @@ public class TableGridAdapter extends BaseAdapter {
         return position;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+
+    }
+
+    public void clearData()
+    {
+        mHotelTables.clear();
+        notifyDataSetChanged();
+    }
     /**
      * Get the view for the layout
      *
@@ -92,7 +103,8 @@ public class TableGridAdapter extends BaseAdapter {
 
         HotelTableDTO hotelTableDTO = mHotelTables.get(position);
         Log.d(TAG, hotelTableDTO.toString());
-        viewHolder.txtCapacity.setText(hotelTableDTO.getmCapacity());
+        viewHolder.txtCapacity.setText(""+hotelTableDTO.getmCapacity());
+        viewHolder.txtTableNumber.setText(""+hotelTableDTO.getmTableNo());
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }

@@ -15,6 +15,12 @@ public class HotelTableDTO {
     public HotelTableDTO() {
     }
 
+    public HotelTableDTO(int mTableNo, int mTableCategoryId, int mCapacity) {
+        this.mTableNo = mTableNo;
+        this.mTableCategoryId = mTableCategoryId;
+        this.mCapacity = mCapacity;
+    }
+
     public int getmTableNo() {
         return mTableNo;
     }
