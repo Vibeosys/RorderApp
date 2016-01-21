@@ -87,10 +87,10 @@ public class MainActivity extends BaseActivity
     protected void onPostResume() {
         super.onPostResume();
         if (mSessionManager.getUserId() == null) {
-           /* Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(loginIntent);*/
+            startActivity(loginIntent);
         }
     }
 

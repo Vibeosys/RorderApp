@@ -21,6 +21,9 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".activities.SelectRestaurentActivity"
+            android:label="@string/title_activity_login" />
+        <activity
             android:name=".activities.FlashScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme">
