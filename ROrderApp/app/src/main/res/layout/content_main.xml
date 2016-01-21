@@ -24,36 +24,28 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_marginTop="50dp"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_action_search"/>
-
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/etSearch"
+            android:layout_below="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableStart="@drawable/ic_action_search"
             android:layout_gravity="center"
-            android:textSize="20sp"
-            android:layout_marginRight="60dp"
+            android:textSize="15sp"
+            android:textColor="@android:color/secondary_text_light"
+            android:textColorHint="#B6B6B6"
+            android:drawableEnd="@drawable/delete_logo"
+            android:background="@drawable/search_design"
+            android:layout_margin="8dp"
+            android:singleLine="true"
+            android:padding="4dp"
             android:hint="Type table or number"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/close"/>
-
-    </LinearLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
+        android:layout_below="@+id/etSearch"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        />
 
 </RelativeLayout>

@@ -100,12 +100,12 @@ public class MainActivity extends BaseActivity
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(loginIntent);
         }
-        else if (mSessionManager.getUserId() == null) {
+       /* else if (mSessionManager.getUserId() == null) {
             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(loginIntent);
-        }
+        }*/
     }
 
     @Override

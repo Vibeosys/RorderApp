@@ -2,36 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@drawable/restaurent1"
+    android:layout_height="match_parent"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:gravity="center">
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select your restaurent"
-        android:layout_marginTop="100dp"
         android:textSize="25sp"
-        android:layout_marginLeft="20dp"
-        android:textColor="#CD853F"
+        android:textColor="@color/light_yello"
         android:id="@+id/textView2" />
 
     <Spinner
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="40dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:background="@drawable/border_spinner"
+        android:spinnerMode="dropdown"
         android:id="@+id/spinner" />
 
     <Button
         android:id="@+id/btnOk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="160dp"
         android:textColor="@color/White"
-        android:background="#FF4040"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/button_custom"
         android:text="Ok" />
 
 

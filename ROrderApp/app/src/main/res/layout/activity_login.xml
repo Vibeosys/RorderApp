@@ -44,13 +44,13 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="#B6B6B6"
+                android:textColorHint="@color/light_grey"
                 android:layout_marginTop="20dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/email"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:drawableStart="@drawable/ic_person_outline_24dp"
                     android:drawablePadding="10dp"
                     android:hint="@string/prompt_email"
@@ -59,19 +59,20 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
                     android:textColor="@color/White"
+                    android:background="@color/transperent"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:textColorHint="#B6B6B6"
+                android:textColorHint="@color/light_grey"
                 android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:drawableStart="@drawable/ic_vpn_key_24dp"
                     android:drawablePadding="10dp"
                     android:hint="@string/prompt_password"
@@ -83,6 +84,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
                     android:textColor="@color/White"
+                    android:background="@color/transperent"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
@@ -96,7 +98,7 @@
                 android:layout_marginTop="30dp"
                 android:text="@string/action_sign_in"
                 android:textColor="@color/White"
-                android:background="#D2691E"
+                android:background="@drawable/button_custom"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
                 android:textStyle="bold" />

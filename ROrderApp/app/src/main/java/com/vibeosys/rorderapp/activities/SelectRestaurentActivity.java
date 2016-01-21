@@ -2,6 +2,7 @@ package com.vibeosys.rorderapp.activities;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
@@ -110,6 +111,9 @@ public class SelectRestaurentActivity extends BaseActivity implements View.OnCli
                 } else if (dbFile.exists() && (mSessionManager.getUserId() == null || mSessionManager.getUserId().isEmpty())) {
                     downloadDatabase(dbFile);
                 }
+                Intent intentLogin=new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(intentLogin);
+                finish();
             }
         }
     }

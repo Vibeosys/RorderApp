@@ -6,4 +6,8 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="White">#fff</color>
+
+    <color name="transperent">#80000000</color>
+    <color name="light_grey">#B6B6B6</color>
+    <color name="light_yello">#CD853F</color>
 </resources>
