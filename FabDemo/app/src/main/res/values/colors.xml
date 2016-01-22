@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="White">#fff</color>
+
+    <color name="transperent">#80000000</color>
+    <color name="light_grey">#B6B6B6</color>
+    <color name="light_yello">#CD853F</color>
+
+    <color name="colorPrimary">#125688</color>
+    <color name="colorPrimaryDark">#90125688</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+
+    <color name="red">#F74042</color>
+    <color name="red_light">#80F74042</color>
+    <color name="background">#EDEDED</color>
+    <color name="blue">#336799</color>
+    <color name="blue_light">#80336799</color>
+    <color name="red_dark">#CD2626</color>
+    <color name="yellow">#fdb52d</color>
+    <color name="yellow_light">#80fdb52d</color>
+
+    <color name="app_theme">#FAD33A</color>
+    <color name="chocolate">#603814</color>
+    <color name="drawer">#464646</color>
+
+    <color name="login_background">#8D44AD</color>
+    <color name="text_hint">#f3f3f3</color>
+    <color name="line_color">#a6a6a6</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="black_color">#000000</color>
+    <color name="btn_text_color">#8900a2</color>
+    <color name="listview_background">#404040</color>
+    <color name="listview_item">#454545</color>
+    <color name="dark_green_color">#229327</color>
+
+
+
+
+    <color name="custom_header_text">#CD5C5C</color>
+    <color name="custom_selected">#C1CDCD</color>
+    <color name="custom_background">#ffffff</color>
+    <color name="custom_background_today">#CD5C5C</color>
+    <color name="custom_background_disabled">#ffffff</color>
+    <color name="custom_text_selected">#FAD33A</color>
+    <color name="custom_text_inactive">#C1CDCD</color>
+    <color name="transparent">#00000000</color>
+</resources>
