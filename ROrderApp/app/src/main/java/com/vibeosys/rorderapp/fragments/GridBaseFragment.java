@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.activities.TableMenusActivity;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
 
@@ -37,6 +39,9 @@ public class GridBaseFragment extends BaseFragment implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         HotelTableDTO hotelTableDTO= (HotelTableDTO) adapter.getItem(position);
+
+        Intent intentOpenTableMenu=new Intent(getActivity(), TableMenusActivity.class);
+        startActivity(intentOpenTableMenu);
         Log.i(TAG,"##"+hotelTableDTO.getmTableNo()+"Is Clicked");
     }
 }
