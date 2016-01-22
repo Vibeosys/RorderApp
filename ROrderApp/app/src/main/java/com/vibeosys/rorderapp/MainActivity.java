@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +22,10 @@ import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurentActivity;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
+import com.vibeosys.rorderapp.data.UserDbDTO;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -88,6 +91,18 @@ public class MainActivity extends BaseActivity
 
     }
 
+    private void testing() {
+        mDbRepository.getDatabaseStructure();
+      /*  Log.i(TAG,"## DB Path "+mSessionManager.getDatabaseDeviceFullPath());
+        ArrayList<UserDbDTO> data=new ArrayList<>();
+        data.add(new UserDbDTO(1,"abc",true,1,1,"abc"));
+        data.add(new UserDbDTO(2,"pqr",true,1,1,"pqr"));
+        data.add(new UserDbDTO(3,"def",true,1,1,"def"));
+        data.add(new UserDbDTO(4,"ghi",true,1,1,"ghi"));
+        mDbRepository.insertUsers(data);*/
+       Log.i(TAG,"## User Login to "+getImei());
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -99,6 +114,9 @@ public class MainActivity extends BaseActivity
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(loginIntent);
+        }
+        else {
+            testing();
         }
        /* else if (mSessionManager.getUserId() == null) {
             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -149,7 +167,6 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
 
         } else if (id == R.id.nav_share) {
 

@@ -5,6 +5,7 @@ package com.vibeosys.rorderapp.data;
  */
 public class HotelTableDbDTO {
 
+    private int tableId;
     private int tableNo;
     private int tableCategoryId;
     private int capacity;
@@ -13,6 +14,14 @@ public class HotelTableDbDTO {
     private boolean isOccupied;
 
     public HotelTableDbDTO() {
+    }
+
+    public int getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(int tableId) {
+        this.tableId = tableId;
     }
 
     public int getTableNo() {

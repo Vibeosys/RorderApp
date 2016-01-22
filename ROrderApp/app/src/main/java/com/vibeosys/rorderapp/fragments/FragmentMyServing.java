@@ -11,6 +11,7 @@ import android.widget.GridView;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
+import com.vibeosys.rorderapp.data.TableCategoryDTO;
 
 import java.util.ArrayList;
 
@@ -19,21 +20,14 @@ import java.util.ArrayList;
  */
 public class FragmentMyServing extends GridBaseFragment {
 
-    ArrayList<HotelTableDTO> hotels;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.layout_all_table, container, false);
-        hotels=new ArrayList<>();
-        hotels.add(new HotelTableDTO(11, 1, 2));
-        hotels.add(new HotelTableDTO(12,1,2));
-        hotels.add(new HotelTableDTO(13,2,4));
-        hotels.add(new HotelTableDTO(14,2,4));
-        hotels.add(new HotelTableDTO(15,1,2));
-        hotels.add(new HotelTableDTO(16,1,4));
-        hotels.add(new HotelTableDTO(17,1,8));
-
-        setGridAdapter(v,hotels);
+       ArrayList<HotelTableDTO> hotels=mDbRepository.getTableRecords();
+        TableCategoryDTO categoryDTO=new TableCategoryDTO();
+        setGridAdapter(v,categoryDTO.filterByCategory(hotels,2));
         return v;
     }
 }

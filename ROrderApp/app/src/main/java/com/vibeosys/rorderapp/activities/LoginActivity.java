@@ -16,6 +16,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -297,7 +298,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
         private final String mEmail;
         private final String mPassword;
-
+        int userId=0;
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -313,17 +314,15 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             } catch (InterruptedException e) {
                 return false;
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            userId=mDbRepository.autheticateUser("Akshay","Akshay123");
 
             // TODO: register the new account here.
-            return true;
+            if(userId>0)
+            {
+                return true;
+            }
+            else
+                return false;
         }
 
         @Override
@@ -332,6 +331,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             showProgress(false);
 
             if (success) {
+                Log.i(TAG,"##"+userId);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

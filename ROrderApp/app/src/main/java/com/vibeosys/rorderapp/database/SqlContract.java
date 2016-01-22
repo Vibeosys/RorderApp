@@ -20,12 +20,13 @@ public class SqlContract {
 
     public abstract class SqlHotelTable{
         public final static String TABLE_NAME="r_tables";
-        public final static String TABLE_ID="TableID";
+        public final static String TABLE_ID="TableId";
         public final static String TABLE_NO="TableNo";
         public final static String TABLE_CATEGORY="TableCategoryId";
         public final static String CAPACITY="Capacity";
         public final static String CREATED_DATE="CreatedDate";
         public final static String UPDATED_DATE="UpdatedDate";
+        public final static String IS_OCCUPIED="IsOccupied";
     }
 
     public abstract class SqlTableCategory{

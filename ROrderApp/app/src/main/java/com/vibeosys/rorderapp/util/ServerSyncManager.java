@@ -186,7 +186,7 @@ public class ServerSyncManager
             return;
         }
 
-        Log.d("TableDataDTO", "" + downloadData.toString());
+        Log.d("TableDataDTO", "##" + downloadData.toString());
         Map<String, Integer> downloadResults = updateDownloadedData(downloadData);
 
         if (mOnDownloadReceived != null)

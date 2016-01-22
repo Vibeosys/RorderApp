@@ -5,6 +5,7 @@ package com.vibeosys.rorderapp.data;
  */
 public class HotelTableDTO {
 
+    private int mTableId;
     private int mTableNo;
     private int mTableCategoryId;
     private int mCapacity;
@@ -19,6 +20,25 @@ public class HotelTableDTO {
         this.mTableNo = mTableNo;
         this.mTableCategoryId = mTableCategoryId;
         this.mCapacity = mCapacity;
+    }
+
+    public HotelTableDTO(int mTableId, int mTableNo, int mTableCategoryId,
+                         int mCapacity, String mCreatedDate, String mUpdatedDate, boolean mIsOccupied) {
+        this.mTableId = mTableId;
+        this.mTableNo = mTableNo;
+        this.mTableCategoryId = mTableCategoryId;
+        this.mCapacity = mCapacity;
+        this.mCreatedDate = mCreatedDate;
+        this.mUpdatedDate = mUpdatedDate;
+        this.mIsOccupied = mIsOccupied;
+    }
+
+    public int getmTableId() {
+        return mTableId;
+    }
+
+    public void setmTableId(int mTableId) {
+        this.mTableId = mTableId;
     }
 
     public int getmTableNo() {

@@ -3,6 +3,7 @@ package com.vibeosys.rorderapp.activities;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
@@ -44,12 +45,12 @@ public class SelectRestaurentActivity extends BaseActivity implements View.OnCli
         String buildInfo64Based = getBuild64BasedInfo();
         UUID uuid = UUID.randomUUID();
         mSessionManager.setUserId(uuid.toString());
-        String downloadDBURL = mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;
-
+        String downloadDBURL = "http://192.168.1.6/rorderwebapp/api/v1/downloadDb";/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
+        Log.i(TAG,"##"+downloadDBURL);
         try {
             URL url = new URL(downloadDBURL);
             urlConnection = (HttpURLConnection) url.openConnection();
-            Log.d("STATUS", "Request Sent...");
+            Log.d("STATUS", "##Request Sent...");
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
             urlConnection.setDoOutput(true);
@@ -80,12 +81,12 @@ public class SelectRestaurentActivity extends BaseActivity implements View.OnCli
             }
 
         } catch (Exception ex) {
-            Log.e("DbDownloadException", "TravelAppError while downloading database" + ex.toString());
+            Log.e("DbDownloadException", "##TravelAppError while downloading database" + ex.toString());
         }
 
         boolean userCreated = mDbRepository.createUserId(mSessionManager.getUserId());
         if (!userCreated)
-            Log.e("UserCreation", "New user could not be created in DB");
+            Log.e("UserCreation", "##New user could not be created in DB");
     }
 
     private String getBuild64BasedInfo() {
@@ -111,10 +112,11 @@ public class SelectRestaurentActivity extends BaseActivity implements View.OnCli
                 } else if (dbFile.exists() && (mSessionManager.getUserId() == null || mSessionManager.getUserId().isEmpty())) {
                     downloadDatabase(dbFile);
                 }
-                Intent intentLogin=new Intent(getApplicationContext(),LoginActivity.class);
-                startActivity(intentLogin);
-                finish();
             }
+            Intent intentLogin=new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intentLogin);
+            finish();
         }
     }
+
 }
