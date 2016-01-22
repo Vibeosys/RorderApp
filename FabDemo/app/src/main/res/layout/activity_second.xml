@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:gravity="bottom"
-    android:background="@color/White"
+    android:background="#80ffffff"
+
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -28,18 +30,19 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="70"
+                android:layout_weight="85"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@color/custom_background_today"
                 android:text="Garden View"/>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab1"
+                android:id="@+id/fab11"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_new_margin"
-                android:layout_weight="30"
+                android:layout_weight="15"
+                fab:fab_type="mini"
                 android:src="@drawable/ic_action_rain" />
 
 
@@ -56,17 +59,17 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="70"
+                android:layout_weight="85"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:text="Pool Side View"/>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab1"
+                android:id="@+id/fab12"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_new_margin"
-                android:layout_weight="30"
+                android:layout_weight="15"
                 android:src="@drawable/ic_action_mist" />
 
         </LinearLayout>
@@ -83,17 +86,17 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="70"
+                android:layout_weight="85"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@color/custom_background_today"
                 android:text="Occupied Tables"/>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab1"
+                android:id="@+id/fab31"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="30"
+                android:layout_weight="15"
                 android:layout_margin="@dimen/fab_new_margin"
                 android:src="@drawable/ic_action_link" />
 
@@ -112,18 +115,18 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="70"
+                android:layout_weight="85"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@color/custom_background_today"
                 android:text="Exit"/>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab1"
+                android:id="@+id/fab14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_new_margin"
-                android:layout_weight="30"
+                android:layout_weight="15"
                 android:src="@drawable/ic_action_cancel" />
 
 

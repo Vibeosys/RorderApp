@@ -27,14 +27,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                Intent intent=new Intent(getApplicationContext(),SecondActivity.class);
-//                startActivity(intent);
+                Intent intent=new Intent(getApplicationContext(),SecondActivity.class);
+                startActivity(intent);
 
-                final Dialog dialog = new Dialog(MainActivity.this);
+                /*final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(true);
                 dialog.setContentView(R.layout.activity_second);
-                dialog.show();
+                dialog.show();*/
 
 
                /* Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
