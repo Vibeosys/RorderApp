@@ -1,5 +1,11 @@
 package com.vibeosys.rorderapp.data;
 
+import com.google.gson.Gson;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by akshay on 20-01-2016.
  */
@@ -9,8 +15,8 @@ public class HotelTableDbDTO {
     private int tableNo;
     private int tableCategoryId;
     private int capacity;
-    private String createdDate;
-    private String updatedDate;
+    private Date createdDate;
+    private Date updatedDate;
     private boolean isOccupied;
 
     public HotelTableDbDTO() {
@@ -48,19 +54,19 @@ public class HotelTableDbDTO {
         this.capacity = capacity;
     }
 
-    public String getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public String getUpdatedDate() {
+    public Date getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(String updatedDate) {
+    public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
 
@@ -70,5 +76,16 @@ public class HotelTableDbDTO {
 
     public void setIsOccupied(boolean isOccupied) {
         this.isOccupied = isOccupied;
+    }
+
+    public static List<HotelTableDbDTO> deserializeHotelTables(List<String> serializedStringList) {
+        Gson gson = new Gson();
+        ArrayList<HotelTableDbDTO> objectList = new ArrayList<>();
+
+        for (String serializedString : serializedStringList) {
+            HotelTableDbDTO deserializeObject = gson.fromJson(serializedString, HotelTableDbDTO.class);
+            objectList.add(deserializeObject);
+        }
+        return objectList;
     }
 }

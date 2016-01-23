@@ -1,5 +1,11 @@
 package com.vibeosys.rorderapp.data;
 
+import com.google.gson.Gson;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by akshay on 22-01-2016.
  */
@@ -11,6 +17,8 @@ public class UserDbDTO extends BaseDTO {
     private boolean active;
     private int roleId;
     private int restaurantId;
+    private Date createdDate;
+    private Date updatedDate;
 
     public UserDbDTO() {
     }
@@ -71,4 +79,32 @@ public class UserDbDTO extends BaseDTO {
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public static List<UserDbDTO> deserializeUser(List<String> serializedStringList) {
+        Gson gson = new Gson();
+        ArrayList<UserDbDTO> objectList = new ArrayList<>();
+
+        for (String serializedString : serializedStringList) {
+            UserDbDTO deserializeObject = gson.fromJson(serializedString, UserDbDTO.class);
+            objectList.add(deserializeObject);
+        }
+        return objectList;
+    }
+
 }

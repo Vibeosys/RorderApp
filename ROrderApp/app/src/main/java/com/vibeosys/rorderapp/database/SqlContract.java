@@ -37,4 +37,81 @@ public class SqlContract {
         public final static String CREATED_DATE="CrearedDate";
         public final static String UPDATED_DATE="UpdatedDate";
     }
+
+    public abstract class SqlBill{
+        public final static String TABLE_NAME="bill";
+        public final static String BILL_NO="BillNo";
+        public final static String BILL_DATE="BillDate";
+        public final static String BILL_TIME="BillTime";
+        public final static String NET_AMOUNT="NetAmount";
+        public final static String TOATL_TAX_AMT="TotalTaxAmount";
+        public final static String TOTAL_PAY_AMT="TotalPayAmount";
+        public final static String CREATED_DATE="CreatedDate";
+        public final static String UPDATED_DATE="UpdatedDate";
+        public final static String USER_ID="userId";
+    }
+
+    public abstract class SqlBillDetails{
+        public final static String TABLE_NAME="bill_details";
+        public final static String AUTO_ID="AutoId";
+        public final static String ORDER_ID="OrderId";
+        public final static String BILL_NO="BillNo";
+        public final static String CREATED_DATE="CreatedDate";
+        public final static String UPDATED_DATE="UpdatedDate";
+    }
+
+    public abstract class SqlMenu{
+        public final static String TABLE_NAME="menu";
+        public final static String MENU_ID="MenuId";
+        public final static String MENU_TITLE="MenuTitle";
+        public final static String IMAGE="Image";
+        public final static String PRICE="Price";
+        public final static String INGREDIENTS="Ingredients";
+        public final static String TAGS="Tags";
+        public final static String AVAIL_STATUS="AvailabilityStatus";
+        public final static String ACTIVE="Active";
+        public final static String FOOD_TYPE="FoodType";
+        public final static String CREATED_DATE="CreatedDate";
+        public final static String UPDATED_DATE="UpdatedDate";
+        public final static String CATEGORY_ID="CategoryId";
+    }
+    public abstract class SqlMenuCategory{
+        public final static String TABLE_NAME="menu_category";
+        public final static String CATEGORY_ID="CategoryId";
+        public final static String CATEGORY_TITLE="CategoryTitle";
+        public final static String CATEGORY_IMG="CategoryImage";
+        public final static String ACTIVE="Active";
+        public final static String CREATED_DATE="CreatedDate";
+        public final static String UPDATED_DATE="UpdatedDate";
+    }
+    public abstract class SqlMenuTags{
+        public final static String TABLE_NAME="menu_tags";
+        public final static String TAG_ID="TagId";
+        public final static String TAG_TITLE="TagTitle";
+
+    }
+    public abstract class SqlOrderDetails{
+        public final static String TABLE_NAME="order_details";
+        public final static String ORDER_DETAILS_ID="OrderDetailsId";
+        public final static String ORDER_PRICE="OrderPrice";
+        public final static String ORDER_QUANTITY="OrderQuantity";
+        public final static String CREATED_DATE="CreatedDate";
+        public final static String UPDATE_DATE="UpdatedDate";
+        public final static String ORDER_ID="OrderId";
+        public final static String MENU_ID="MenuId";
+        public final static String MENU_TITLE="MenuTitle";
+    }
+    public abstract class SqlOrders{
+        public final static String TABLE_NAME="orders";
+        public final static String ORDER_ID="OrderId";
+        public final static String ORDER_NO="OrderNo";
+        public final static String ORDER_STATUS="OrderStatus";
+        public final static String ORDER_DATE="Orderdate";
+        public final static String ORDER_TIME="OrderTime";
+        public final static String CREATED_DATE="CreatedDate";
+        public final static String UPDATED_DATE="UpdatedDate";
+        public final static String TABLE_NO="TableNo";
+        public final static String USER_ID="UserId";
+        public final static String ORDER_AMOUNT="OrderAmount";
+    }
 }

@@ -19,13 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
-import com.vibeosys.rorderapp.activities.LoginActivity;
-import com.vibeosys.rorderapp.activities.SelectRestaurentActivity;
+import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
-import com.vibeosys.rorderapp.data.UserDbDTO;
 
 import java.io.File;
-import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -110,7 +107,7 @@ public class MainActivity extends BaseActivity
         File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
         File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
         if (!dbFile.exists()) {
-            Intent loginIntent = new Intent(getApplicationContext(), SelectRestaurentActivity.class);
+            Intent loginIntent = new Intent(getApplicationContext(), SelectRestaurantActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(loginIntent);

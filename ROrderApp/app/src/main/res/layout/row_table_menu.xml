@@ -46,7 +46,7 @@
                     android:layout_weight="30"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="Chinise"/>
+                    android:text="Chinese"/>
 
                 <TextView
                     android:layout_width="0dp"

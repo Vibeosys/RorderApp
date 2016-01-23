@@ -25,9 +25,9 @@ public class FragmentMyServing extends GridBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.layout_all_table, container, false);
-       ArrayList<HotelTableDTO> hotels=mDbRepository.getTableRecords();
+       /*ArrayList<HotelTableDTO> hotels=mDbRepository.getTableRecords();
         TableCategoryDTO categoryDTO=new TableCategoryDTO();
-        setGridAdapter(v,categoryDTO.filterByCategory(hotels,2));
+        setGridAdapter(v,categoryDTO.filterByCategory(hotels,2));*/
         return v;
     }
 }

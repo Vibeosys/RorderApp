@@ -24,7 +24,7 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".activities.SelectRestaurentActivity"
+            android:name=".activities.SelectRestaurantActivity"
             android:label="@string/select_rest" />
         <activity
             android:name=".activities.FlashScreenActivity"

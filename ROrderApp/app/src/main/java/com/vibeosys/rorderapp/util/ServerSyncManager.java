@@ -189,6 +189,88 @@ public class ServerSyncManager
         Log.d("TableDataDTO", "##" + downloadData.toString());
         Map<String, Integer> downloadResults = updateDownloadedData(downloadData);
 
+        Hashtable<String, TableJsonCollectionDTO> theTableData = new Hashtable<>();
+        for (TableDataDTO tableData : downloadData.getTableData()) {
+            String theTableName = tableData.getTableName();
+            String theTableValue = tableData.getTableData().replaceAll("\\\\", "");
+
+            TableJsonCollectionDTO tableJsonCollectionDTO;
+            if (!theTableData.containsKey(theTableName)) {
+                tableJsonCollectionDTO = new TableJsonCollectionDTO();
+                theTableData.put(theTableName, tableJsonCollectionDTO);
+            }
+
+            if (tableData.getOperation().compareToIgnoreCase("insert") == 0)
+                theTableData.get(theTableName).getInsertJsonList().add(theTableValue);
+
+            if (tableData.getOperation().compareToIgnoreCase("update") == 0)
+                theTableData.get(theTableName).getUpdateJsonList().add(theTableValue);
+        }
+
+        DbOperations dbOperations = new DbOperations(mDbRepository);
+
+        if (theTableData.containsKey(DbTableNameConstants.BILL)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.BILL);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.BILL, jsonInsertList.size());
+            dbOperations.addOrUpdateBills(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.BILL_DETAILS)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.BILL_DETAILS);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.BILL_DETAILS, jsonInsertList.size());
+            dbOperations.addOrUpdateBillDetails(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.MENU)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.MENU);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.MENU, jsonInsertList.size());
+            dbOperations.addOrUpdateMenu(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.MENU_CATEGORY)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.MENU_CATEGORY);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.MENU_CATEGORY, jsonInsertList.size());
+            dbOperations.addOrUpdateMenuCategory(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.MENU_TAGS)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.MENU_TAGS);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.MENU_TAGS, jsonInsertList.size());
+            dbOperations.addOrUpdateMenuTags(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.ORDER_DETAILS)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.ORDER_DETAILS);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.ORDER_DETAILS, jsonInsertList.size());
+            dbOperations.addOrUpdateOrderDetails(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.ORDER)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.ORDER);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.ORDER, jsonInsertList.size());
+            dbOperations.addOrUpdateOrder(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.R_TABLES)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_TABLES);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.R_TABLES, jsonInsertList.size());
+            dbOperations.addOrUpdateRTable(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.TABLE_CATEGORY)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TABLE_CATEGORY);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.TABLE_CATEGORY, jsonInsertList.size());
+            dbOperations.addOrUpdateTableCategory(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.USER)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.USER);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.USER, jsonInsertList.size());
+            dbOperations.addOrUpdateUser(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+
+
         if (mOnDownloadReceived != null)
             mOnDownloadReceived.onDownloadResultReceived(downloadResults);
 
@@ -218,8 +300,6 @@ public class ServerSyncManager
         }
 
         //DbOperations dbOperations = new DbOperations(mDbRepository);
-
-
         return downloadResults;
     }
 

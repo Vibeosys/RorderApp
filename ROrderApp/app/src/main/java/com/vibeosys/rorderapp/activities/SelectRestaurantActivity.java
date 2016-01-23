@@ -26,7 +26,7 @@ import java.util.UUID;
 /**
  * Created by kiran on 21-01-2016.
  */
-public class SelectRestaurentActivity extends BaseActivity implements View.OnClickListener {
+public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

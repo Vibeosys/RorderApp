@@ -7,27 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This DTO is use to transfer the
- * data from server to client or vice versa.
- * Created by akshay on 20-01-2016.
+ * Created by akshay on 23-01-2016.
  */
-public class TableCategoryDbDTO {
+public class MenuCateoryDbDTO extends BaseDTO {
 
-    private int tableCategoryId;
+    private int categoryId;
     private String categoryTitle;
-    private String image;
+    private String categoryImage;
+    private boolean active;
     private Date createdDate;
     private Date updatedDate;
 
-    public TableCategoryDbDTO() {
+    public MenuCateoryDbDTO() {
     }
 
-    public int getTableCategoryId() {
-        return tableCategoryId;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setTableCategoryId(int tableCategoryId) {
-        this.tableCategoryId = tableCategoryId;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategoryTitle() {
@@ -38,12 +37,20 @@ public class TableCategoryDbDTO {
         this.categoryTitle = categoryTitle;
     }
 
-    public String getImage() {
-        return image;
+    public String getCategoryImage() {
+        return categoryImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setCategoryImage(String categoryImage) {
+        this.categoryImage = categoryImage;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Date getCreatedDate() {
@@ -62,12 +69,12 @@ public class TableCategoryDbDTO {
         this.updatedDate = updatedDate;
     }
 
-    public static List<TableCategoryDbDTO> deserializeTableCateory(List<String> serializedStringList) {
+    public static List<MenuCateoryDbDTO> deserializeMenuCateory(List<String> serializedStringList) {
         Gson gson = new Gson();
-        ArrayList<TableCategoryDbDTO> objectList = new ArrayList<>();
+        ArrayList<MenuCateoryDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {
-            TableCategoryDbDTO deserializeObject = gson.fromJson(serializedString, TableCategoryDbDTO.class);
+            MenuCateoryDbDTO deserializeObject = gson.fromJson(serializedString, MenuCateoryDbDTO.class);
             objectList.add(deserializeObject);
         }
         return objectList;
