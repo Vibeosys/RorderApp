@@ -33,6 +33,7 @@
                 android:weightSum="100">
 
                 <TextView
+                    android:id="@+id/txtMenuName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="40"
@@ -41,6 +42,7 @@
                     android:text="Veg Manchuerian"/>
 
                 <TextView
+                    android:id="@+id/txtMenuTag"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="30"
@@ -49,6 +51,7 @@
                     android:text="Chinese"/>
 
                 <TextView
+                    android:id="@+id/txtCategory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="30"
@@ -71,6 +74,7 @@
                     android:src="@drawable/rupee_symbol"/>
 
                 <TextView
+                    android:id="@+id/txtMenuPrice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="40"
@@ -93,6 +97,7 @@
                     android:text="Qty:"/>
 
                 <TextView
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="20"

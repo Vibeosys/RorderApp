@@ -21,6 +21,7 @@ import android.view.View;
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
+import com.vibeosys.rorderapp.service.SyncService;
 
 import java.io.File;
 
@@ -42,6 +43,11 @@ public class MainActivity extends BaseActivity
         tab_layout.addTab(tab_layout.newTab().setText("All Serving"));
 
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        /*mServerSyncManager.syncDataWithServer(true);
+        Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+        startService(syncServiceIntent);*/
+
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final TablePagerAdapter adapter = new TablePagerAdapter
@@ -175,4 +181,5 @@ public class MainActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
