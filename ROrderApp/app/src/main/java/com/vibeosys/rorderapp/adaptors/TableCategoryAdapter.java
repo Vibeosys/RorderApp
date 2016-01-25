@@ -52,10 +52,10 @@ public class TableCategoryAdapter extends BaseAdapter {
         if (row == null) {
             LayoutInflater theLayoutInflator = (LayoutInflater) mContext.getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
-            /*row = theLayoutInflator.inflate(R.layout.row_catogory, null);
+            row = theLayoutInflator.inflate(R.layout.row_table_category, null);
             viewHolder = new TableCategoryAdapter.ViewHolder();
-            viewHolder.txtCategory = (TextView) row.findViewById(R.id.txtCategory);
-            row.setTag(viewHolder);*/
+            viewHolder.txtCategory = (TextView) row.findViewById(R.id.txtTableCategory);
+            row.setTag(viewHolder);
 
         } else viewHolder = (TableCategoryAdapter.ViewHolder) row.getTag();
         TableCategoryDTO categoryDTO=mTablecategories.get(position);

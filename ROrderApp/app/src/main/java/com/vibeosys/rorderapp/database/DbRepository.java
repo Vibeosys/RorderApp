@@ -17,6 +17,7 @@ import com.vibeosys.rorderapp.data.MenuTagsDbDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.Sync;
+import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
@@ -267,7 +268,43 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return hotelTables;
     }
+    public ArrayList<TableCategoryDTO> getTableCategories() {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        ArrayList<TableCategoryDTO> tableCategories = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlTableCategory.TABLE_NAME, null);
+            tableCategories = new ArrayList<>();
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
 
+                    do {
+                        //Log.i(TAG, "##" + cursor.getCount() + " " + cursor.getInt(1));
+                        int categoryId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableCategory.TABLE_CATEGORY_ID));
+                        String categoryTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
+                       // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.));
+
+                        TableCategoryDTO table = new TableCategoryDTO();
+                        table.setmCategoryId(categoryId);
+                        table.setmTitle(categoryTitle);
+                        //table.setJsonSync();
+                        tableCategories.add(table);
+                    } while (cursor.moveToNext());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+        }
+        return tableCategories;
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP DATABASE IF EXISTS Answer");

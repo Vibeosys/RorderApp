@@ -17,10 +17,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
+import com.vibeosys.rorderapp.adaptors.TableCategoryAdapter;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.UserAuth;
@@ -43,7 +46,6 @@ public class MainActivity extends BaseActivity
         if (!dbFile.exists()) {
             Intent selectRestoIntent = new Intent(getApplicationContext(), SelectRestaurantActivity.class);
             selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(selectRestoIntent);
             finish();
         }
@@ -101,6 +103,11 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+          TextView txtUserName=(TextView)drawer.findViewById(R.id.txtUserName);
+            txtUserName.setText(mSessionManager.getUserName());
+            TableCategoryAdapter categoryAdapter=new TableCategoryAdapter(mDbRepository.getTableCategories(),getApplicationContext());
+            ListView listCategories=(ListView)drawer.findViewById(R.id.list_category);
+            listCategories.setAdapter(categoryAdapter);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -113,14 +120,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
-
-      /* else if (mSessionManager.getUserId() == null) {
-            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(loginIntent);
-        }*/
     }
 
     @Override
@@ -130,7 +129,6 @@ public class MainActivity extends BaseActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-            //finish();
         }
     }
 
@@ -182,8 +180,6 @@ public class MainActivity extends BaseActivity
     public void callLogin()
     {
         Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-        //loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
         finish();
