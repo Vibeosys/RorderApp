@@ -1,12 +1,15 @@
 package com.vibeosys.rorderapp.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
@@ -15,7 +18,7 @@ import com.vibeosys.rorderapp.R;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FlashScreenActivity extends BaseActivity {
+public class FlashScreenActivity extends Activity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -57,10 +60,10 @@ public class FlashScreenActivity extends BaseActivity {
         @Override
         public void run() {
             // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
+           /* ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
                 actionBar.show();
-            }
+            }*/
             //mControlsView.setVisibility(View.VISIBLE);
         }
     };
@@ -85,7 +88,7 @@ public class FlashScreenActivity extends BaseActivity {
 
             Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(mainActivityIntent);
-            //finish();
+            finish();
             return false;
         }
     };
@@ -93,7 +96,11 @@ public class FlashScreenActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
+        /** Making this activity, full screen */
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_flash_screen);
 
         mVisible = true;
@@ -133,10 +140,10 @@ public class FlashScreenActivity extends BaseActivity {
 
     private void hide() {
         // Hide UI first
-        ActionBar actionBar = getSupportActionBar();
+       /* ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
-        }
+        }*/
         //mControlsView.setVisibility(View.GONE);
         mVisible = false;
 

@@ -81,12 +81,12 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
             }
 
         } catch (Exception ex) {
-            Log.e("DbDownloadException", "##TravelAppError while downloading database" + ex.toString());
+            Log.e("DbDownloadException", "##ROrder while downloading database" + ex.toString());
         }
 
-        boolean userCreated = mDbRepository.createUserId(mSessionManager.getUserId());
+       /* boolean userCreated = mDbRepository.createUserId(mSessionManager.getUserId());
         if (!userCreated)
-            Log.e("UserCreation", "##New user could not be created in DB");
+            Log.e("UserCreation", "##New user could not be created in DB");*/
     }
 
     private String getBuild64BasedInfo() {
@@ -114,6 +114,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                 }
             }
             Intent intentLogin=new Intent(getApplicationContext(),LoginActivity.class);
+            intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intentLogin);
             finish();
         }

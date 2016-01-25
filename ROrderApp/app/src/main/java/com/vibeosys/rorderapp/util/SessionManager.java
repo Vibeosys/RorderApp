@@ -144,6 +144,36 @@ public class SessionManager {
         setValuesInSharedPrefs(PropertyTypeConstants.USER_EMAIL_ID, userEmailId);
     }
 
+    public void setUserActive(boolean active) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_IS_ACTIVE, String.valueOf(active));
+    }
+
+    public boolean getUserActive() {
+        return mProjectSharedPref.getBoolean(PropertyTypeConstants.USER_IS_ACTIVE, false);
+    }
+
+    public void setUserRollId(int rollId) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_ROLL_ID, rollId);
+    }
+
+    public int getUserRollId() {
+        return mProjectSharedPref.getInt(PropertyTypeConstants.USER_ROLL_ID, 0);
+    }
+
+    public void setUserRestaurantId(int restoId) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_RESTO_ID, restoId);
+    }
+
+    public int getUserRestaurantId() {
+        return mProjectSharedPref.getInt(PropertyTypeConstants.USER_RESTO_ID, 0);
+    }
+  /*  public void setIntUserId(int userId) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_ID, userId);
+    }
+
+    public int getIntUserId() {
+        return mProjectSharedPref.getInt(PropertyTypeConstants.USER_RESTO_ID, 0);
+    }*/
     public String getDatabaseDirPath() {
         return mProjectSharedPref.getString(PropertyTypeConstants.DATABASE_DIR_PATH, null);
     }
@@ -171,6 +201,12 @@ public class SessionManager {
     private static void setValuesInSharedPrefs(String sharedPrefKey, String sharedPrefValue) {
         SharedPreferences.Editor editor = mProjectSharedPref.edit();
         editor.putString(sharedPrefKey, sharedPrefValue);
+        editor.apply();
+    }
+
+    private static void setValuesInSharedPrefs(String sharedPrefKey, int sharedPrefValue) {
+        SharedPreferences.Editor editor = mProjectSharedPref.edit();
+        editor.putInt(sharedPrefKey, sharedPrefValue);
         editor.apply();
     }
 }

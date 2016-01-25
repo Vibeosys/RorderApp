@@ -18,6 +18,7 @@ import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
+import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.util.SessionManager;
 
@@ -188,10 +189,15 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
-    public int autheticateUser(String userName, String password) {
+    public UserDTO autheticateUser(String userName, String password) {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         int userId = 0;
+        String name="";
+        boolean active;
+        int rollId;
+        int restaurantId;
+        UserDTO user = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             String query = "SELECT * FROM " + SqlContract.SqlUser.TABLE_NAME + " WHERE " + SqlContract.SqlUser.USER_NAME
@@ -203,10 +209,15 @@ public class DbRepository extends SQLiteOpenHelper {
 
                     cursor.moveToFirst();
                     userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.USER_ID));
+                    name=cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                    active=Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.ACTIVE)));
+                    rollId=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.ROLE_ID));
+                    restaurantId=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.RESTAURANTID));
+                    user=new UserDTO(userId,name,active,rollId,restaurantId);
                 }
             }
         } catch (Exception e) {
-            userId = 0;
+            user=null;
             Log.e(TAG, "Error occured in autheticate User function" + e.toString());
         } finally {
             if (cursor != null)
@@ -214,7 +225,7 @@ public class DbRepository extends SQLiteOpenHelper {
             if (sqLiteDatabase != null)
                 sqLiteDatabase.close();
         }
-        return userId;
+        return user;
     }
 
     public ArrayList<HotelTableDTO> getTableRecords() {

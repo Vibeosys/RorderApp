@@ -19,9 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
+import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
 import com.vibeosys.rorderapp.service.SyncService;
+import com.vibeosys.rorderapp.util.UserAuth;
 
 import java.io.File;
 
@@ -35,7 +37,21 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_login);
         setContentView(R.layout.activity_main);
-
+        ContextWrapper ctw = new ContextWrapper(getApplicationContext());
+        File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
+        File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
+        if (!dbFile.exists()) {
+            Intent selectRestoIntent = new Intent(getApplicationContext(), SelectRestaurantActivity.class);
+            selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(selectRestoIntent);
+            finish();
+        }
+       else if(!UserAuth.isUserLoggedIn())
+        {
+            callLogin();
+        }
+        else {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         tab_layout= (TabLayout) findViewById(R.id.tab_layout);
         tab_layout.addTab(tab_layout.newTab().setText("Tables"));
@@ -90,38 +106,16 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        }
 
-
-    }
-
-    private void testing() {
-        mDbRepository.getDatabaseStructure();
-      /*  Log.i(TAG,"## DB Path "+mSessionManager.getDatabaseDeviceFullPath());
-        ArrayList<UserDbDTO> data=new ArrayList<>();
-        data.add(new UserDbDTO(1,"abc",true,1,1,"abc"));
-        data.add(new UserDbDTO(2,"pqr",true,1,1,"pqr"));
-        data.add(new UserDbDTO(3,"def",true,1,1,"def"));
-        data.add(new UserDbDTO(4,"ghi",true,1,1,"ghi"));
-        mDbRepository.insertUsers(data);*/
-       Log.i(TAG,"## User Login to "+getImei());
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        ContextWrapper ctw = new ContextWrapper(getApplicationContext());
-        File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
-        File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
-        if (!dbFile.exists()) {
-            Intent loginIntent = new Intent(getApplicationContext(), SelectRestaurantActivity.class);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(loginIntent);
-        }
-        else {
-            testing();
-        }
-       /* else if (mSessionManager.getUserId() == null) {
+
+
+      /* else if (mSessionManager.getUserId() == null) {
             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -136,6 +130,7 @@ public class MainActivity extends BaseActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            //finish();
         }
     }
 
@@ -173,13 +168,25 @@ public class MainActivity extends BaseActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_log_out) {
+            UserAuth.CleanAuthenticationInfo();
+            callLogin();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void callLogin()
+    {
+        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+        //loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //loginIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
+        finish();
     }
 
 }

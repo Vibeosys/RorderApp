@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -27,7 +28,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.UserDTO;
+import com.vibeosys.rorderapp.util.UserAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,11 +175,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        }/* else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
-        }
+        }*/
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -289,7 +293,10 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
+    @Override
+    public void onBackPressed() {
+            finish();
+    }
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -298,7 +305,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
         private final String mEmail;
         private final String mPassword;
-        int userId=0;
+        UserDTO user=null;
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -314,10 +321,10 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             } catch (InterruptedException e) {
                 return false;
             }
-            userId=mDbRepository.autheticateUser("Akshay","Akshay123");
+            user=mDbRepository.autheticateUser(mEmail,mPassword);
 
             // TODO: register the new account here.
-            if(userId>0)
+            if(user!=null)
             {
                 return true;
             }
@@ -331,7 +338,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             showProgress(false);
 
             if (success) {
-                Log.i(TAG,"##"+userId);
+                UserAuth userAuth=new UserAuth();
+                userAuth.saveAuthenticationInfo(user,getApplicationContext());
+                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(mainIntent);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

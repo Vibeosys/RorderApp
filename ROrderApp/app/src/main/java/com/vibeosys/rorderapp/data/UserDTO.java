@@ -20,7 +20,13 @@ public class UserDTO {
         this.mRoleId = mRoleId;
         this.mRestaurantId = mRestaurantId;
     }
-
+    public UserDTO(int mUserId, String mUserName, boolean mActive, int mRoleId, int mRestaurantId) {
+        this.mUserId = mUserId;
+        this.mUserName = mUserName;
+        this.mActive = mActive;
+        this.mRoleId = mRoleId;
+        this.mRestaurantId = mRestaurantId;
+    }
     public int getmUserId() {
         return mUserId;
     }

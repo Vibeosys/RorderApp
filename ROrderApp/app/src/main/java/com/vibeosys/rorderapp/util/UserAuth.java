@@ -27,8 +27,8 @@ public class UserAuth {
 
     private OnUpdateUserResultReceived mOnUpdateUserResultReceived;
 
-    public static boolean isUserLoggedIn(Context context, String userName, String userEmailId) {
-        if (userEmailId == null || userEmailId == "" || userName == null || userName == "") {
+    public static boolean isUserLoggedIn(Context context, String userName) {
+        if ( userName == null || userName == "") {
             Intent theLoginIntent = new Intent(context, LoginActivity.class);
             //theLoginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             theLoginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -40,9 +40,9 @@ public class UserAuth {
     }
 
     public static boolean isUserLoggedIn(Context context) {
-        String theUserEmailId = SessionManager.Instance().getUserEmailId();
+        //String theUserEmailId = SessionManager.Instance().getUserEmailId();
         String theUserName = SessionManager.Instance().getUserName();
-        return isUserLoggedIn(context, theUserName, theUserEmailId);
+        return isUserLoggedIn(context, theUserName);
     }
 
     public static boolean isUserLoggedIn() {
@@ -50,7 +50,7 @@ public class UserAuth {
         String theUserName = SessionManager.Instance().getUserName();
         //String theUserPhotoURL = SessionManager.Instance().getUserPhotoUrl();
 
-        if (theUserEmailId == null || theUserEmailId == "" || theUserName == null || theUserName == "") {
+        if (theUserName == null || theUserName == "") {
             return false;
         }
         return true;
@@ -65,6 +65,10 @@ public class UserAuth {
 
         SessionManager theSessionManager = SessionManager.getInstance(context);
         theSessionManager.setUserName(userInfo.getmUserName());
+        theSessionManager.setUserActive(userInfo.ismActive());
+        theSessionManager.setUserRollId(userInfo.getmRoleId());
+        theSessionManager.setUserRestaurantId(userInfo.getmRestaurantId());
+        theSessionManager.setUserId(String.valueOf(userInfo.getmUserId()));
         //theSessionManager.setUserRegdApiKey(userInfo.getApiKey());
 
         //updateUserDetailsOnServer(context, userInfo);
@@ -81,8 +85,11 @@ public class UserAuth {
 
         SessionManager theSessionManager = SessionManager.Instance();
         theSessionManager.setUserName(null);
-        theSessionManager.setUserEmailId(null);
-        theSessionManager.setUserPhotoUrl(null);
+        theSessionManager.setUserId(null);
+        theSessionManager.setUserActive(false);
+        theSessionManager.setUserRollId(0);
+        theSessionManager.setUserRestaurantId(0);
+       // theSessionManager.setUserPhotoUrl(null);
         //theSessionManager.setUserLoginRegdSource(RegistrationSourceTypes.NONE);
         theSessionManager.setUserRegdApiKey(null);
 
