@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,7 +35,7 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TabLayout tab_layout;
-
+    DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +101,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
           TextView txtUserName=(TextView)drawer.findViewById(R.id.txtUserName);
@@ -108,6 +109,7 @@ public class MainActivity extends BaseActivity
             TableCategoryAdapter categoryAdapter=new TableCategoryAdapter(mDbRepository.getTableCategories(),getApplicationContext());
             ListView listCategories=(ListView)drawer.findViewById(R.id.list_category);
             listCategories.setAdapter(categoryAdapter);
+            listCategories.setOnItemClickListener(new SelectCategory());
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -124,7 +126,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -185,4 +187,12 @@ public class MainActivity extends BaseActivity
         finish();
     }
 
+    private class SelectCategory implements android.widget.AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        }
+    }
 }
