@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -11,9 +12,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.RestaurantDbDTO;
+import com.vibeosys.rorderapp.data.RestaurantDbDTOList;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
 import com.vibeosys.rorderapp.util.NetworkUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,11 +44,14 @@ import java.util.UUID;
  */
 public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener {
 
+    private Context mContext=this;
+    ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk=(Button)findViewById(R.id.btnOk);
+        getRestaurant("http://192.168.1.6/rorderwebapp/api/v1/getRestaurant");
         btnOk.setOnClickListener(this);
     }
 
@@ -46,7 +65,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         UUID uuid = UUID.randomUUID();
         mSessionManager.setUserId(uuid.toString());
         String downloadDBURL = "http://192.168.1.6/rorderwebapp/api/v1/downloadDb";/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
-        Log.i(TAG,"##"+downloadDBURL);
+        Log.i(TAG, "##" + downloadDBURL);
         try {
             URL url = new URL(downloadDBURL);
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -119,5 +138,38 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
             finish();
         }
     }
+    private void getRestaurant(String Url) {
+        RequestQueue vollyRequest = Volley.newRequestQueue(mContext);
+        progress=ProgressDialog.show(mContext,"Loading","Wait");
+        StringRequest restoRequest = new StringRequest(Url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
+                displayRestaurant(response);
+                progress.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progress.dismiss();
+            }
+        });
+        restoRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        vollyRequest.add(restoRequest);
+    }
+
+    private void displayRestaurant(String result) {
+       /* Gson gson = new Gson();
+        try {
+            JSONArray arr=new JSONArray(result);
+            //for(int i=0;i<)
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RestaurantDbDTO[] restaurantList= gson.fromJson(result,RestaurantDbDTO[].class);*/
+        //Log.i(TAG,"##"+restaurantList.getList().toString());
+    }
 }

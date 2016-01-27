@@ -15,6 +15,7 @@ import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
 import com.vibeosys.rorderapp.data.MenuDbDTO;
 import com.vibeosys.rorderapp.data.MenuTagsDbDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
+import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
@@ -577,5 +578,47 @@ public class DbRepository extends SQLiteOpenHelper {
             }
         }
         return count!=-1;
+    }
+
+    public ArrayList<OrderMenuDTO> getOrderMenu() {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        ArrayList<OrderMenuDTO> orderMenus = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType," +
+                    "menu.Image,menu.MenuTitle,menu.Tags,menu_category.CategoryTitle," +
+                    "menu.Price From menu Left Join menu_category " +
+                    "where menu.CategoryId=menu_category.CategoryId", null);
+            orderMenus = new ArrayList<>();
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+
+                    do {
+                        //Log.i(TAG, "##" + cursor.getCount() + " " + cursor.getInt(1));
+                        int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_ID));
+                        boolean foodType=Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.FOOD_TYPE)));
+                        String menuImage=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.IMAGE));
+                        String menuTitle=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
+                        String menuTags=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.TAGS));
+                        String menuCategory=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenuCategory.CATEGORY_TITLE));
+                        double menuPrice=Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
+                        OrderMenuDTO orderMenu=new OrderMenuDTO(menuId,menuTitle,menuImage,foodType,menuTags,menuCategory,menuPrice);
+                        //table.setJsonSync();
+                        orderMenus.add(orderMenu);
+                    } while (cursor.moveToNext());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+        }
+        return orderMenus;
     }
 }

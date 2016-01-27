@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@drawable/table_back">
+    android:background="@drawable/table_back"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +31,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <EditText
             android:id="@+id/etSearch"
@@ -48,242 +51,38 @@
             android:singleLine="true"
             android:padding="4dp"
             android:hint="Type menu or category"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="0"
+            android:background="@color/black_overlay"/>
+        <ListView
+            android:id="@+id/listMenus"
+            android:dividerHeight="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black_overlay"/>
-
-
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-
-
-    </ListView>
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100"
-        android:background="@drawable/table_border"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:padding="10dp">
-
-        <com.vibeosys.rorderapp.views.RoundedImageView
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:layout_weight="20"
-            android:src="@drawable/veg"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
+        android:layout_gravity="bottom"
+        android:layout_weight="2"
+        android:background="@color/custom_text_selected"
+        android:orientation="horizontal">
+        <EditText
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:layout_weight="80">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="100">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="40"
-                    android:paddingTop="5dp"
-                    android:singleLine="true"
-                    android:text="Veg Manchuerian"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="30"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="Chinise"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="30"
-                    android:gravity="right"
-                    android:singleLine="true"
-                    android:text="Starters"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:weightSum="100">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="10"
-                    android:layout_gravity="left"
-                    android:src="@drawable/rupee_symbol"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="40"
-                    android:gravity="left"
-                    android:paddingLeft="10dp"
-                    android:text="90"/>
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="10"
-                    android:src="@drawable/ic_action_minus"/>
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="20"
-                    android:gravity="right"
-                    android:text="Qty:"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="20"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:text="4"/>
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="10"
-                    android:src="@drawable/ic_action_add"/>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
+            android:text="Current Order"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Items selected"/>
     </LinearLayout>
+</LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:gravity="bottom"
-        android:weightSum="100"
-        android:layout_height="fill_parent">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="50"
-            android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@color/colorPrimaryDark"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Current Order"
-                android:id="@+id/TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </TextView>
-
-            <LinearLayout
-                android:id="@+id/LinearLayout"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom">
-
-                <ImageView
-                    android:text="Current Order"
-                    android:id="@+id/TextView"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/rupee_symbol">
-                </ImageView>
-
-                <TextView
-                    android:text="2013"
-                    android:id="@+id/TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp">
-                </TextView>
-
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="50"
-            android:gravity="center"
-            android:background="@color/colorAccent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/LinearLayout"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom">
-
-                <TextView
-                    android:text="3"
-                    android:id="@+id/TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                </TextView>
-                <TextView
-                    android:text="Items Selected"
-                    android:id="@+id/TextView"
-                    android:layout_width="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:layout_height="wrap_content">
-
-                </TextView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/LinearLayout"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom">
-
-                <TextView
-                    android:text="Reviews Order"
-                    android:id="@+id/TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp">
-                </TextView>
-
-
-            </LinearLayout>
-        </LinearLayout>
-
-
-
-
-    </LinearLayout>
-
-
-    </LinearLayout>
 
 
 
