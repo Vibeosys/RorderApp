@@ -604,7 +604,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         String menuTags=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.TAGS));
                         String menuCategory=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenuCategory.CATEGORY_TITLE));
                         double menuPrice=Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
-                        OrderMenuDTO orderMenu=new OrderMenuDTO(menuId,menuTitle,menuImage,foodType,menuTags,menuCategory,menuPrice);
+                        OrderMenuDTO orderMenu=new OrderMenuDTO(menuId,menuTitle,menuImage,foodType,menuTags,menuCategory,menuPrice,0,OrderMenuDTO.SHOW);
                         //table.setJsonSync();
                         orderMenus.add(orderMenu);
                     } while (cursor.moveToNext());

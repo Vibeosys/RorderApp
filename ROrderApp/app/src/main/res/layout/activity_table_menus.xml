@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="@drawable/table_back"
+
+    android:orientation="vertical"
     android:weightSum="1">
 
     <LinearLayout
@@ -16,52 +16,76 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:src="@drawable/back"/>
+            android:src="@drawable/back" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Order List"
+            android:layout_marginRight="20dp"
             android:gravity="center_horizontal"
             android:paddingTop="10dp"
-            android:textSize="20sp"
-            android:layout_marginRight="20dp"
-            android:textColor="@color/White"/>
+            android:text="Order List"
+            android:textColor="@color/White"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etSearch"
-            android:layout_below="@+id/tab_layout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center"
-            android:drawableStart="@drawable/ic_action_search"
-            android:textSize="15sp"
-            android:textColor="@android:color/secondary_text_light"
-            android:textColorHint="#B6B6B6"
-            android:drawableEnd="@drawable/delete_logo"
-            android:background="@drawable/search_design"
-            android:layout_margin="8dp"
-            android:singleLine="true"
-            android:padding="4dp"
-            android:hint="Type menu or category"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/search_box"
+                android:src="@drawable/search" />
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:paddingTop="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="4dp"
+                android:textSize="12sp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/White"
+                android:hint="Type menu or category"
+                android:singleLine="true"
+                android:textColor="@android:color/secondary_text_light"
+                android:textColorHint="#B6B6B6"
+                />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/search_delete_btn"
+                android:src="@drawable/delete_logo" />
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="0"
-            android:background="@color/black_overlay"/>
+            android:background="@color/black_overlay" />
+
         <ListView
             android:id="@+id/listMenus"
-            android:dividerHeight="0dp"
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"></ListView>
 
     </LinearLayout>
 
@@ -72,14 +96,16 @@
         android:layout_weight="2"
         android:background="@color/custom_text_selected"
         android:orientation="horizontal">
+
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Order"/>
+            android:text="Current Order" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Items selected"/>
+            android:text="Items selected" />
     </LinearLayout>
 </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
@@ -24,8 +25,8 @@ public class OrderListAdapter extends BaseAdapter {
     private static final String TAG = OrderListAdapter.class.getSimpleName();
     private List<OrderMenuDTO> mMenus;
     private Context mContext;
-
-    public OrderListAdapter(List<OrderMenuDTO> mMenus, Context mContext) {
+    CustomButtonListener customButtonListener;
+     public OrderListAdapter(List<OrderMenuDTO> mMenus, Context mContext) {
         this.mMenus = mMenus;
         this.mContext = mContext;
     }
@@ -58,7 +59,7 @@ public class OrderListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row=convertView;
         ViewHolder viewHolder=null;
         if (row == null) {
@@ -66,45 +67,79 @@ public class OrderListAdapter extends BaseAdapter {
                     (Context.LAYOUT_INFLATER_SERVICE);
             row = theLayoutInflator.inflate(R.layout.row_table_menu, null);
             viewHolder = new ViewHolder();
+            viewHolder.rowElement=(LinearLayout)row.findViewById(R.id.row_menu_item);
             viewHolder.menuImage=(ImageView)row.findViewById(R.id.imgMenu);
-            viewHolder.txtFoodType= (TextView)row.findViewById(R.id.txtFoodType);
+            viewHolder.imgFoodType= (ImageView)row.findViewById(R.id.imgFoodType);
             viewHolder.txtMenuTitle=(TextView)row.findViewById(R.id.txtMenuName);
             viewHolder.txtMenuTags=(TextView)row.findViewById(R.id.txtMenuTag);
             viewHolder.txtMenuCategory=(TextView)row.findViewById(R.id.txtCategory);
             viewHolder.txtPrice=(TextView)row.findViewById(R.id.txtMenuPrice);
             viewHolder.imgPlus=(ImageView)row.findViewById(R.id.imgPlus);
             viewHolder.imgMinus=(ImageView)row.findViewById(R.id.imgMinus);
-           // viewHolder.imgMinus.setOnClickListener();
+            viewHolder.txtQuantity=(TextView)row.findViewById(R.id.txtMenuQty);
             row.setTag(viewHolder);
 
         } else viewHolder = (ViewHolder) row.getTag();
 
-        OrderMenuDTO menu=mMenus.get(position);
+        final OrderMenuDTO menu=mMenus.get(position);
+        if(menu.ismShow())
+        {
+            viewHolder.rowElement.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewHolder.rowElement.setVisibility(View.GONE);
+            viewHolder.rowElement.setMinimumHeight(0);
+        }
         Log.d(TAG, menu.toString());
         viewHolder.txtMenuTitle.setText(menu.getmMenuTitle());
-        if(menu.getmFoodType())
+        if(menu.ismFoodType())
         {
-            viewHolder.txtFoodType.setText("Veg");
+            viewHolder.imgFoodType.setImageResource(R.drawable.veg_icon);
         }
 
-        else if(!menu.getmFoodType())
+        else if(!menu.ismFoodType())
         {
-            viewHolder.txtFoodType.setText("Non-Veg");
+            viewHolder.imgFoodType.setImageResource(R.drawable.non_veg_icon);
         }
         viewHolder.txtMenuTags.setText(menu.getmTags());
         viewHolder.txtMenuCategory.setText(menu.getmCategory());
         viewHolder.txtPrice.setText(String.format("%.2f", menu.getmPrice()));
+        viewHolder.txtQuantity.setText(""+menu.getmQuantity());
+        viewHolder.imgMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (customButtonListener != null)
+                    customButtonListener.onButtonClickListener(v.getId(), position, menu.getmQuantity(), menu);
+            }
+        });
+
+        viewHolder.imgPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (customButtonListener != null)
+                    customButtonListener.onButtonClickListener(v.getId(), position, menu.getmQuantity(), menu);
+            }
+        });
         return row;
     }
 
     private class ViewHolder{
+        LinearLayout rowElement;
         ImageView menuImage;
-        TextView txtFoodType;
+        ImageView imgFoodType;
         TextView txtMenuTitle;
         TextView txtMenuTags;
         TextView txtMenuCategory;
         TextView txtPrice;
         ImageView imgPlus;
         ImageView imgMinus;
+        TextView txtQuantity;
+    }
+    public void setCustomButtonListner(CustomButtonListener listener) {
+        this.customButtonListener = listener;
+    }
+    public interface CustomButtonListener{
+        public void onButtonClickListener(int id,int position,int value,OrderMenuDTO orderMenu);
     }
 }

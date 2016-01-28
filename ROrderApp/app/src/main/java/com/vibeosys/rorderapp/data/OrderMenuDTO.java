@@ -1,10 +1,14 @@
 package com.vibeosys.rorderapp.data;
 
+import java.util.Comparator;
+
 /**
  * Created by akshay on 27-01-2016.
  */
-public class OrderMenuDTO {
+public class OrderMenuDTO implements Comparator<OrderMenuDTO> {
 
+    public static final boolean HIDE=false;
+    public static final boolean SHOW=true;
     private int mMenuId;
     private String mMenuTitle;
     private String mImage;
@@ -12,11 +16,12 @@ public class OrderMenuDTO {
     private String mTags;
     private String mCategory;
     private double mPrice;
-
+    private int mQuantity;
+    private boolean mShow;
     public OrderMenuDTO() {
     }
 
-    public OrderMenuDTO(int mMenuId,String mMenuTitle, String mImage, boolean mFoodType, String mTags, String mCategory, double mPrice) {
+    public OrderMenuDTO(int mMenuId,String mMenuTitle, String mImage, boolean mFoodType, String mTags, String mCategory, double mPrice,int mQuantity,boolean mShow) {
         this.mMenuId=mMenuId;
         this.mMenuTitle = mMenuTitle;
         this.mImage = mImage;
@@ -24,6 +29,8 @@ public class OrderMenuDTO {
         this.mTags = mTags;
         this.mCategory = mCategory;
         this.mPrice = mPrice;
+        this.mQuantity=mQuantity;
+        this.mShow=mShow;
     }
 
     public int getmMenuId() {
@@ -50,7 +57,7 @@ public class OrderMenuDTO {
         this.mImage = mImage;
     }
 
-    public boolean getmFoodType() {
+    public boolean ismFoodType() {
         return mFoodType;
     }
 
@@ -82,15 +89,40 @@ public class OrderMenuDTO {
         this.mPrice = mPrice;
     }
 
+    public int getmQuantity() {
+        return mQuantity;
+    }
+
+    public void setmQuantity(int mQuantity) {
+        this.mQuantity = mQuantity;
+    }
+
+    public boolean ismShow() {
+        return mShow;
+    }
+
+    public void setmShow(boolean mShow) {
+        this.mShow = mShow;
+    }
+
     @Override
     public String toString() {
         return "OrderMenuDTO{" +
-                "mMenuTitle='" + mMenuTitle + '\'' +
+                "mMenuId=" + mMenuId +
+                ", mMenuTitle='" + mMenuTitle + '\'' +
                 ", mImage='" + mImage + '\'' +
-                ", mFoodType='" + mFoodType + '\'' +
+                ", mFoodType=" + mFoodType +
                 ", mTags='" + mTags + '\'' +
                 ", mCategory='" + mCategory + '\'' +
                 ", mPrice=" + mPrice +
+                ", mQuantity=" + mQuantity +
                 '}';
+    }
+
+    @Override
+    public int compare(OrderMenuDTO o1, OrderMenuDTO o2) {
+        boolean v1 = o1.ismShow();
+        boolean v2 = o2.ismShow();
+        return (v1 ^ v2) ? ((v1 ^ this.mShow) ? 1 : -1) : 0;
     }
 }
