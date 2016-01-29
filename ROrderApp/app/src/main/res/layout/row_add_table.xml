@@ -57,6 +57,13 @@
                 android:textSize="18sp"
                 android:paddingLeft="5dp"
                 android:id="@+id/txtCapacity" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/imgTabelStatus"
+                android:src="@drawable/table_occupied"/>
         </LinearLayout>
     </LinearLayout>
 

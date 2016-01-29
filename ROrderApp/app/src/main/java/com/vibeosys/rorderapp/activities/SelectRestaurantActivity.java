@@ -59,6 +59,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     RestaurantListAdapter adapter;
     Spinner spnRestaurant;
     private int mSelectedRestoId;
+    private String mSelectedRestaurantName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +144,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         int id=v.getId();
         if(id==R.id.btnOk)
         {
+            mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
             if (NetworkUtils.isActiveNetworkAvailable(this)) {
                 ContextWrapper ctw = new ContextWrapper(getApplicationContext());
                 File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
@@ -196,6 +198,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         RestaurantDbDTO restaurant= (RestaurantDbDTO) adapter.getItem(position);
         mSelectedRestoId=restaurant.getRestaurantId();
+        mSelectedRestaurantName=restaurant.getTitle();
         Log.i(TAG,"##"+mSelectedRestoId);
     }
 

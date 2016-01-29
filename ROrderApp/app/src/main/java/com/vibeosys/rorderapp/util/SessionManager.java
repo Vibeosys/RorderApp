@@ -171,6 +171,15 @@ public class SessionManager {
     public int getUserRestaurantId() {
         return mProjectSharedPref.getInt(PropertyTypeConstants.USER_RESTO_ID, 0);
     }
+
+    public void setUserRestaurantName(String restaurantName) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_RESTO_NAME, restaurantName);
+    }
+
+    public String getUserRestaurantName() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.USER_RESTO_NAME, null);
+    }
+
   /*  public void setIntUserId(int userId) {
         setValuesInSharedPrefs(PropertyTypeConstants.USER_ID, userId);
     }

@@ -97,6 +97,7 @@ public class TableGridAdapter extends BaseAdapter {
             viewHolder.imgTablePhoto = (ImageView) row.findViewById(R.id.imgTablePhoto);
             viewHolder.txtCapacity = (TextView) row.findViewById(R.id.txtCapacity);
             viewHolder.txtTableNumber = (TextView) row.findViewById(R.id.txtTableNumber);
+            viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
             row.setTag(viewHolder);
 
         } else viewHolder = (TableGridAdapter.ViewHolder) row.getTag();
@@ -105,6 +106,13 @@ public class TableGridAdapter extends BaseAdapter {
         Log.d(TAG, hotelTableDTO.toString());
         viewHolder.txtCapacity.setText(""+hotelTableDTO.getmCapacity());
         viewHolder.txtTableNumber.setText(""+hotelTableDTO.getmTableNo());
+        if(hotelTableDTO.ismIsOccupied())
+        {
+            viewHolder.imgTableStatus.setImageResource(R.drawable.table_occupied);
+        }
+        else {
+            viewHolder.imgTableStatus.setImageResource(R.drawable.table_unoccupied);
+        }
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }
@@ -114,5 +122,6 @@ public class TableGridAdapter extends BaseAdapter {
         TextView txtCapacity;
         ImageView imgGroup;
         TextView txtTableNumber;
+        ImageView imgTableStatus;
     }
 }

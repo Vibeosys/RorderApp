@@ -3,11 +3,8 @@
 
     <!-- Colored rectangle-->
     <item>
-        <shape android:shape="rectangle">
-            <stroke android:color="@color/red" android:width="15dp">
-
-            </stroke>
-            <solid android:color="@color/white_color" />
+        <shape android:shape="oval">
+           <solid android:color="@color/red"></solid>
         </shape>
 
     </item>

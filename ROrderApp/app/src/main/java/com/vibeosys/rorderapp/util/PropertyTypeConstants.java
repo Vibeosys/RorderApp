@@ -23,6 +23,7 @@ public final class PropertyTypeConstants {
     public static final String USER_IS_ACTIVE = "user.active";
     public static final String USER_ROLL_ID= "user.rollid";
     public static final String USER_RESTO_ID = "user.restoId";
+    public static final String USER_RESTO_NAME = "user.restoName";
     public static final String USER_PHOTO_URL = "user.photo.url";
     public static final String USER_REGD_API_KEY = "user.regd.api.key";
 }

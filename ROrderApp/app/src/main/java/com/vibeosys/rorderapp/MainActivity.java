@@ -61,11 +61,11 @@ public class MainActivity extends BaseActivity
 
             tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-            mServerSyncManager.syncDataWithServer(true);
-            if (!isMyServiceRunning(SyncService.class)) {
+            /*mServerSyncManager.syncDataWithServer(true);*/
+           /* if (!isMyServiceRunning(SyncService.class)) {
                 Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
                 startService(syncServiceIntent);
-            }
+            }*/
 
             final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
             final TablePagerAdapter adapter = new TablePagerAdapter
@@ -105,6 +105,8 @@ public class MainActivity extends BaseActivity
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             TextView txtUserName = (TextView) drawer.findViewById(R.id.txtUserName);
             txtUserName.setText(mSessionManager.getUserName());
+            TextView txtRestaurantName = (TextView) drawer.findViewById(R.id.txtHotelName);
+            txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
             TableCategoryAdapter categoryAdapter = new TableCategoryAdapter(mDbRepository.getTableCategories(), getApplicationContext());
             ListView listCategories = (ListView) drawer.findViewById(R.id.list_category);
             listCategories.setAdapter(categoryAdapter);
