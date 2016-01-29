@@ -10,7 +10,11 @@ import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -22,6 +26,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.adaptors.RestaurantListAdapter;
+import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.RestaurantDbDTO;
 import com.vibeosys.rorderapp.data.RestaurantDbDTOList;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
@@ -37,21 +43,36 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by kiran on 21-01-2016.
  */
-public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener {
+public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener{
 
+    ArrayList<RestaurantDbDTO> mRestaurantList;
     private Context mContext=this;
     ProgressDialog progress;
+    //ListView listResto;
+    RestaurantListAdapter adapter;
+    Spinner spnRestaurant;
+    private int mSelectedRestoId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk=(Button)findViewById(R.id.btnOk);
-        getRestaurant("http://192.168.1.6/rorderwebapp/api/v1/getRestaurant");
+        //listResto=(ListView)findViewById(R.id.listView);
+        getRestaurant(mSessionManager.getRestaurantUrl());
+
+
+       spnRestaurant=(Spinner)findViewById(R.id.spnRestaurant);
+        /*spnRestaurant.setAdapter(adapter);*/
+        spnRestaurant.setOnItemSelectedListener(this);
+
+       // adapter.notifyDataSetChanged();
         btnOk.setOnClickListener(this);
     }
 
@@ -64,7 +85,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         String buildInfo64Based = getBuild64BasedInfo();
         UUID uuid = UUID.randomUUID();
         mSessionManager.setUserId(uuid.toString());
-        String downloadDBURL = "http://192.168.1.6/rorderwebapp/api/v1/downloadDb";/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
+        String downloadDBURL = "http://192.168.1.6/rorderwebapp/api/v1/downloadDb?restaurantId="+mSelectedRestoId;/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
         Log.i(TAG, "##" + downloadDBURL);
         try {
             URL url = new URL(downloadDBURL);
@@ -162,14 +183,24 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     }
 
     private void displayRestaurant(String result) {
-       /* Gson gson = new Gson();
-        try {
-            JSONArray arr=new JSONArray(result);
-            //for(int i=0;i<)
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        RestaurantDbDTO[] restaurantList= gson.fromJson(result,RestaurantDbDTO[].class);*/
-        //Log.i(TAG,"##"+restaurantList.getList().toString());
+        RestaurantDbDTO restaurantDbDTO=new RestaurantDbDTO();
+        mRestaurantList=restaurantDbDTO.getArrayList(result);
+        adapter=new RestaurantListAdapter(mRestaurantList,this);
+        spnRestaurant.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        Log.i(TAG,"##"+mRestaurantList.toString());
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        RestaurantDbDTO restaurant= (RestaurantDbDTO) adapter.getItem(position);
+        mSelectedRestoId=restaurant.getRestaurantId();
+        Log.i(TAG,"##"+mSelectedRestoId);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

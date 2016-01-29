@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity
 
     TabLayout tab_layout;
     DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,72 +50,70 @@ public class MainActivity extends BaseActivity
             selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(selectRestoIntent);
             finish();
-        }
-       else if(!UserAuth.isUserLoggedIn())
-        {
+        } else if (!UserAuth.isUserLoggedIn()) {
             callLogin();
-        }
-        else {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        tab_layout= (TabLayout) findViewById(R.id.tab_layout);
-        tab_layout.addTab(tab_layout.newTab().setText("Tables"));
-        tab_layout.addTab(tab_layout.newTab().setText("My Serving"));
-        tab_layout.addTab(tab_layout.newTab().setText("All Serving"));
+        } else {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            tab_layout = (TabLayout) findViewById(R.id.tab_layout);
+            tab_layout.addTab(tab_layout.newTab().setText("Tables"));
+            tab_layout.addTab(tab_layout.newTab().setText("My Serving"));
+            tab_layout.addTab(tab_layout.newTab().setText("All Serving"));
 
-        tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        /*mServerSyncManager.syncDataWithServer(true);
-        Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-        startService(syncServiceIntent);*/
-
-
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final TablePagerAdapter adapter = new TablePagerAdapter
-                (getSupportFragmentManager(), tab_layout.getTabCount());
-        viewPager.setAdapter(adapter);
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
-        tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+            mServerSyncManager.syncDataWithServer(true);
+            if (!isMyServiceRunning(SyncService.class)) {
+                Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+                startService(syncServiceIntent);
             }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+            final TablePagerAdapter adapter = new TablePagerAdapter
+                    (getSupportFragmentManager(), tab_layout.getTabCount());
+            viewPager.setAdapter(adapter);
 
-            }
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
+            tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    viewPager.setCurrentItem(tab.getPosition());
+                }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
 
-            }
-        });
-        setSupportActionBar(toolbar);
+                }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-          TextView txtUserName=(TextView)drawer.findViewById(R.id.txtUserName);
+                }
+            });
+            setSupportActionBar(toolbar);
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+
+            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            TextView txtUserName = (TextView) drawer.findViewById(R.id.txtUserName);
             txtUserName.setText(mSessionManager.getUserName());
-            TableCategoryAdapter categoryAdapter=new TableCategoryAdapter(mDbRepository.getTableCategories(),getApplicationContext());
-            ListView listCategories=(ListView)drawer.findViewById(R.id.list_category);
+            TableCategoryAdapter categoryAdapter = new TableCategoryAdapter(mDbRepository.getTableCategories(), getApplicationContext());
+            ListView listCategories = (ListView) drawer.findViewById(R.id.list_category);
             listCategories.setAdapter(categoryAdapter);
             listCategories.setOnItemClickListener(new SelectCategory());
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
         }
 
     }
@@ -179,8 +178,7 @@ public class MainActivity extends BaseActivity
     }
 
 
-    public void callLogin()
-    {
+    public void callLogin() {
         Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);

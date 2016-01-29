@@ -7,6 +7,7 @@ public final class PropertyTypeConstants {
 
     //Properties file constants
     public static final String API_ENDPOINT_URI = "api.endpoint.uri";
+    public static final String API_RESTAURANT_URI = "api.getrestaurant.uri";
     public static final String API_DOWNLOAD_DB_URI = "api.download.db.url";
     public static final String API_DOWNLOAD_URI = "api.download.url";
     public static final String API_UPLOAD_URL = "api.upload.url";

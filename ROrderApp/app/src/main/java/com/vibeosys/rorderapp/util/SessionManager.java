@@ -84,6 +84,7 @@ public class SessionManager {
         editor.putString(PropertyTypeConstants.DATABASE_DEVICE_FULLPATH, mPropertyFileReader.getDatabaseDeviceFullPath());
         editor.putString(PropertyTypeConstants.DATABASE_DIR_PATH, mPropertyFileReader.getDatabaseDirPath());
         editor.putString(PropertyTypeConstants.DATABASE_FILE_NAME, mPropertyFileReader.getDatabaseFileName());
+        editor.putString(PropertyTypeConstants.API_RESTAURANT_URI, mPropertyFileReader.getRestaurantUrl());
         //editor.putString(PropertyTypeConstants.API_SEND_OTP_URL, mPropertyFileReader.getSendOtpUrl());
         editor.putString(PropertyTypeConstants.VERSION_NUMBER, String.valueOf(mPropertyFileReader.getVersion()));
         editor.apply();
@@ -109,7 +110,10 @@ public class SessionManager {
         String downloadUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_DOWNLOAD_URI, null);
         return downloadUrl + userId;
     }
-
+    public String getRestaurantUrl() {
+        String downloadUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_RESTAURANT_URI, null);
+        return downloadUrl;
+    }
 
     public String getUploadUrl() {
         return mProjectSharedPref.getString(PropertyTypeConstants.API_UPLOAD_URL, null);

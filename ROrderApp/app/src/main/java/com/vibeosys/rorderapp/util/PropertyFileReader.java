@@ -54,7 +54,10 @@ public class PropertyFileReader {
         return getEndPointUri() + mProperties.getProperty(PropertyTypeConstants.API_UPLOAD_URL);
     }
 
-
+    public String getRestaurantUrl()
+    {
+        return getEndPointUri()+mProperties.getProperty(PropertyTypeConstants.API_RESTAURANT_URI);
+    }
     public String getDatabaseDeviceFullPath() {
         return mProperties.getProperty(PropertyTypeConstants.DATABASE_DEVICE_FULLPATH);
     }

@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@drawable/restaurent1"
     android:layout_height="match_parent"
+    android:background="@drawable/restaurent1"
+    android:gravity="center"
+    android:orientation="vertical"
     android:paddingLeft="30dp"
     android:paddingRight="30dp"
-    android:gravity="center">
+    android:weightSum="1">
 
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select your restaurent"
-        android:textSize="25sp"
         android:textColor="@color/light_yello"
-        android:id="@+id/textView2" />
+        android:textSize="25sp" />
 
-    <Spinner
+   <Spinner
+        android:id="@+id/spnRestaurant"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:background="@drawable/border_spinner"
-        android:spinnerMode="dropdown"
-        android:id="@+id/spinner" />
+        android:drawSelectorOnTop="true"
+        android:background="@color/White"
+        />
+
+    <!--<ListView
+        android:layout_width="wrap_content"
+        android:layout_height="149dp"
+        android:id="@+id/listView"
+        android:background="@color/White"
+        android:layout_weight="0.57" />-->
 
     <Button
         android:id="@+id/btnOk"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/White"
-        android:layout_marginTop="150dp"
         android:background="@drawable/button_custom"
-        android:text="Ok" />
+        android:text="Ok"
+        android:textColor="@color/White" />
 
 
 </LinearLayout>
