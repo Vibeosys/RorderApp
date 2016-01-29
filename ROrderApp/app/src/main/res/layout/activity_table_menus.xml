@@ -38,8 +38,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -51,20 +51,19 @@
 
             <EditText
                 android:id="@+id/etSearch"
-                android:paddingTop="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:padding="4dp"
-                android:textSize="12sp"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:background="@color/White"
+                android:gravity="left"
                 android:hint="Type menu or category"
+                android:padding="4dp"
+                android:paddingTop="3dp"
                 android:singleLine="true"
                 android:textColor="@android:color/secondary_text_light"
                 android:textColorHint="#B6B6B6"
-                />
+                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="25dp"
@@ -82,9 +81,9 @@
 
         <ListView
             android:id="@+id/listMenus"
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:dividerHeight="0dp"></ListView>
 
     </LinearLayout>
@@ -93,19 +92,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_weight="2"
+        android:gravity="center_vertical"
         android:background="@color/custom_text_selected"
         android:orientation="horizontal">
 
-        <EditText
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Order" />
+            android:layout_margin="@dimen/activity_table_menu_bottom"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/activity_table_menu_bottom">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Items selected" />
+            <TextView
+                android:id="@+id/txt"
+                android:layout_width="wrap_content"
+                android:textSize="13sp"
+                android:layout_height="wrap_content"
+                android:text="Current Order"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtTotalRs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="0.00 Rs."
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!----> <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/black_color" />
+
+        <TextView
+            android:id="@+id/txtTotalItems"
+            android:layout_margin="@dimen/activity_table_menu_bottom"
+            android:padding="@dimen/activity_table_menu_bottom"
+            android:layout_width="wrap_content"
+            android:singleLine="false"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"
+            android:text="0 Items Selected"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
     </LinearLayout>
 </LinearLayout>
 

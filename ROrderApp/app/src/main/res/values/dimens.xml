@@ -10,5 +10,6 @@
     <dimen name="header_margin_top">8dp</dimen>
     <dimen name="list_item_right_margin">16dp</dimen>
     <dimen name="list_item_left_margin">25dp</dimen>
+    <dimen name="activity_table_menu_bottom">5dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>
