@@ -19,6 +19,7 @@ import com.vibeosys.rorderapp.data.OrderMenuDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class TableMenusActivity extends BaseActivity implements TextWatcher, OrderListAdapter.CustomButtonListener {
@@ -47,17 +48,17 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
     public void sortList(String search) {
 
         for (OrderMenuDTO menu : this.allMenus) {
-            if (menu.getmCategory().contains(search)) {
+            if (menu.getmCategory().toLowerCase().contains(search.toLowerCase())) {
                 menu.setmShow(OrderMenuDTO.SHOW);
-            } else if (menu.getmMenuTitle().contains(search)) {
+            } else if (menu.getmMenuTitle().toLowerCase().contains(search.toLowerCase())) {
                 menu.setmShow(OrderMenuDTO.SHOW);
-            } else if (menu.getmTags().contains(search)) {
+            } else if (menu.getmTags().toLowerCase().contains(search.toLowerCase())) {
                 menu.setmShow(OrderMenuDTO.SHOW);
             } else {
                 menu.setmShow(OrderMenuDTO.HIDE);
             }
         }
-       
+        Collections.sort(allMenus);
     }
 
     @Override
@@ -72,6 +73,7 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
             for (OrderMenuDTO menu : this.allMenus) {
                 menu.setmShow(OrderMenuDTO.SHOW);
             }
+            Collections.sort(allMenus);
             orderListAdapter.notifyDataSetChanged();
             //((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
         }
@@ -95,6 +97,7 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
                 Toast.makeText(getApplicationContext(), "Quantity Should be greater than 0", Toast.LENGTH_LONG).show();
         if (id == R.id.imgPlus)
             orderMenu.setmQuantity(value + 1);
+        //Collections.sort(allMenus);
         orderListAdapter.notifyDataSetChanged();
     }
 }

@@ -5,10 +5,10 @@ import java.util.Comparator;
 /**
  * Created by akshay on 27-01-2016.
  */
-public class OrderMenuDTO implements Comparator<OrderMenuDTO> {
+public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
 
-    public static final boolean HIDE=false;
-    public static final boolean SHOW=true;
+    public static final int HIDE=0;
+    public static final int SHOW=1;
     private int mMenuId;
     private String mMenuTitle;
     private String mImage;
@@ -17,11 +17,11 @@ public class OrderMenuDTO implements Comparator<OrderMenuDTO> {
     private String mCategory;
     private double mPrice;
     private int mQuantity;
-    private boolean mShow;
+    private int mShow;
     public OrderMenuDTO() {
     }
 
-    public OrderMenuDTO(int mMenuId,String mMenuTitle, String mImage, boolean mFoodType, String mTags, String mCategory, double mPrice,int mQuantity,boolean mShow) {
+    public OrderMenuDTO(int mMenuId,String mMenuTitle, String mImage, boolean mFoodType, String mTags, String mCategory, double mPrice,int mQuantity,int mShow) {
         this.mMenuId=mMenuId;
         this.mMenuTitle = mMenuTitle;
         this.mImage = mImage;
@@ -97,11 +97,11 @@ public class OrderMenuDTO implements Comparator<OrderMenuDTO> {
         this.mQuantity = mQuantity;
     }
 
-    public boolean ismShow() {
+    public int getmShow() {
         return mShow;
     }
 
-    public void setmShow(boolean mShow) {
+    public void setmShow(int mShow) {
         this.mShow = mShow;
     }
 
@@ -119,10 +119,14 @@ public class OrderMenuDTO implements Comparator<OrderMenuDTO> {
                 '}';
     }
 
+
+
     @Override
-    public int compare(OrderMenuDTO o1, OrderMenuDTO o2) {
-        boolean v1 = o1.ismShow();
-        boolean v2 = o2.ismShow();
-        return (v1 ^ v2) ? ((v1 ^ this.mShow) ? 1 : -1) : 0;
-    }
-}
+    public int compareTo(OrderMenuDTO another) {
+        int result = another.getmShow()-this.mShow;
+        if (result != 0)
+        {
+            return result;
+        }
+        return another.getmQuantity()-this.getmQuantity();
+    }}

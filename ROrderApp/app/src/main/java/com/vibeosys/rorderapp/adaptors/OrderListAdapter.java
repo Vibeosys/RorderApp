@@ -26,7 +26,7 @@ public class OrderListAdapter extends BaseAdapter {
     private List<OrderMenuDTO> mMenus;
     private Context mContext;
     CustomButtonListener customButtonListener;
-     public OrderListAdapter(List<OrderMenuDTO> mMenus, Context mContext) {
+    public OrderListAdapter(List<OrderMenuDTO> mMenus, Context mContext) {
         this.mMenus = mMenus;
         this.mContext = mContext;
     }
@@ -82,7 +82,7 @@ public class OrderListAdapter extends BaseAdapter {
         } else viewHolder = (ViewHolder) row.getTag();
 
         final OrderMenuDTO menu=mMenus.get(position);
-        if(menu.ismShow())
+        if(menu.getmShow()==1)
         {
             viewHolder.rowElement.setVisibility(View.VISIBLE);
         }
