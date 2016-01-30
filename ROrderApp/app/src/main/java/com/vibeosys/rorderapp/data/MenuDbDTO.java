@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.data;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class MenuDbDTO extends BaseDTO {
     private boolean availabilityStatus;
     private boolean active;
     private boolean foodType;
+    private boolean isSpicy;
     private Date createdDate;
     private Date updatedDate;
     private int categoryId;
@@ -123,8 +125,16 @@ public class MenuDbDTO extends BaseDTO {
         this.categoryId = categoryId;
     }
 
+    public boolean isSpicy() {
+        return isSpicy;
+    }
+
+    public void setIsSpicy(boolean isSpicy) {
+        this.isSpicy = isSpicy;
+    }
+
     public static List<MenuDbDTO> deserializeMenu(List<String> serializedStringList) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         ArrayList<MenuDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

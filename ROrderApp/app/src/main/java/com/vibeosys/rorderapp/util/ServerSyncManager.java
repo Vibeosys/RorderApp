@@ -48,7 +48,7 @@ public class ServerSyncManager
     private Context mContext;
     private boolean mIsWorkInProgress;
     private OnDownloadReceived mOnDownloadReceived;
-
+    private String TAG=ServerSyncManager.class.getSimpleName();
     public ServerSyncManager() {
 
     }
@@ -61,7 +61,7 @@ public class ServerSyncManager
 
     public void syncDataWithServer(final boolean aShowProgressDlg) {
         Log.d("BaseActivity", "IN Base");
-        String downloadUrl = mSessionManager.getDownloadUrl(mSessionManager.getUserId());
+        String downloadUrl = mSessionManager.getDownloadUrl(mSessionManager.getUserId(),mSessionManager.getUserRestaurantId());
         String uploadJson = getUploadSyncJson();
         SyncDataDTO syncData = new SyncDataDTO();
         syncData.setDownloadUrl(downloadUrl);
@@ -152,7 +152,7 @@ public class ServerSyncManager
         Upload uploadToServer = new Upload();
         uploadToServer.setUser(new UploadUser(
                 SessionManager.Instance().getUserId(),
-                SessionManager.Instance().getUserEmailId()));
+                String.valueOf(SessionManager.Instance().getUserRestaurantId())));
         List<Sync> syncRecordsInDb = mDbRepository.getPendingSyncRecords();
         ArrayList<TableDataDTO> tableDataList = new ArrayList<>();
 
@@ -175,7 +175,7 @@ public class ServerSyncManager
         try {
             downloadData = new Gson().fromJson(downloadedJson, ServerSync.class);
         } catch (JsonSyntaxException e) {
-            Log.e("JsonSyntaxDwnld", "ServerSync object could not be deserialized, nothing to download" + e.toString());
+            Log.e("JsonSyntaxDwnld", "## ServerSync object could not be deserialized, nothing to download" + e.toString());
         }
 
 
@@ -214,18 +214,21 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.BILL, jsonInsertList.size());
             dbOperations.addOrUpdateBills(jsonInsertList, tableValue.getUpdateJsonList());
+            Log.d("TableDataDTO", "##" +DbTableNameConstants.BILL);
         }
         if (theTableData.containsKey(DbTableNameConstants.BILL_DETAILS)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.BILL_DETAILS);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.BILL_DETAILS, jsonInsertList.size());
             dbOperations.addOrUpdateBillDetails(jsonInsertList, tableValue.getUpdateJsonList());
+            Log.d("TableDataDTO", "##" + DbTableNameConstants.BILL_DETAILS);
         }
         if (theTableData.containsKey(DbTableNameConstants.MENU)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.MENU);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.MENU, jsonInsertList.size());
             dbOperations.addOrUpdateMenu(jsonInsertList, tableValue.getUpdateJsonList());
+            Log.d("TableDataDTO", "##" + DbTableNameConstants.MENU);
         }
         if (theTableData.containsKey(DbTableNameConstants.MENU_CATEGORY)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.MENU_CATEGORY);
@@ -256,6 +259,7 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.R_TABLES, jsonInsertList.size());
             dbOperations.addOrUpdateRTable(jsonInsertList, tableValue.getUpdateJsonList());
+            Log.d("TableDataDTO", "##" + DbTableNameConstants.R_TABLES);
         }
         if (theTableData.containsKey(DbTableNameConstants.TABLE_CATEGORY)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TABLE_CATEGORY);
@@ -284,6 +288,7 @@ public class ServerSyncManager
 
         for (TableDataDTO tableData : downloadData.getTableData()) {
             String theTableName = tableData.getTableName();
+            Log.d(TAG,"##"+tableData.toString());
             String theTableValue = tableData.getTableData().replaceAll("\\\\", "");
 
             TableJsonCollectionDTO tableJsonCollectionDTO;

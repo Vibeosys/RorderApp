@@ -41,6 +41,8 @@ public class GridBaseFragment extends BaseFragment implements AdapterView.OnItem
         HotelTableDTO hotelTableDTO= (HotelTableDTO) adapter.getItem(position);
 
         Intent intentOpenTableMenu=new Intent(getActivity(), TableMenusActivity.class);
+        intentOpenTableMenu.putExtra("TableNo",hotelTableDTO.getmTableNo());
+        intentOpenTableMenu.putExtra("TableId",hotelTableDTO.getmTableId());
         startActivity(intentOpenTableMenu);
         Log.i(TAG,"##"+hotelTableDTO.getmTableNo()+"Is Clicked");
     }

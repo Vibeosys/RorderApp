@@ -22,6 +22,7 @@ import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
+import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.SessionManager;
 
 import java.util.ArrayList;
@@ -195,7 +196,7 @@ public class DbRepository extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         int userId = 0;
-        String name="";
+        String name = "";
         boolean active;
         int rollId;
         int restaurantId;
@@ -211,15 +212,15 @@ public class DbRepository extends SQLiteOpenHelper {
 
                     cursor.moveToFirst();
                     userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.USER_ID));
-                    name=cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
-                    active=Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.ACTIVE)));
-                    rollId=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.ROLE_ID));
-                    restaurantId=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.RESTAURANTID));
-                    user=new UserDTO(userId,name,active,rollId,restaurantId);
+                    name = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                    active = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.ACTIVE)));
+                    rollId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.ROLE_ID));
+                    restaurantId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.RESTAURANTID));
+                    user = new UserDTO(userId, name, active, rollId, restaurantId);
                 }
             }
         } catch (Exception e) {
-            user=null;
+            user = null;
             Log.e(TAG, "Error occured in autheticate User function" + e.toString());
         } finally {
             if (cursor != null)
@@ -236,7 +237,7 @@ public class DbRepository extends SQLiteOpenHelper {
         ArrayList<HotelTableDTO> hotelTables = null;
         try {
             sqLiteDatabase = getReadableDatabase();
-            cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME, null);
+            cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME+" ORDER BY "+SqlContract.SqlHotelTable.TABLE_NO, null);
             hotelTables = new ArrayList<>();
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -269,6 +270,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return hotelTables;
     }
+
     public ArrayList<TableCategoryDTO> getTableCategories() {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -285,7 +287,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         //Log.i(TAG, "##" + cursor.getCount() + " " + cursor.getInt(1));
                         int categoryId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableCategory.TABLE_CATEGORY_ID));
                         String categoryTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
-                       // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.));
+                        // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.));
 
                         TableCategoryDTO table = new TableCategoryDTO();
                         table.setmCategoryId(categoryId);
@@ -306,6 +308,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return tableCategories;
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP DATABASE IF EXISTS Answer");
@@ -399,6 +402,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlMenu.CREATED_DATE, menu.getCreatedDate().toString());
                 contentValues.put(SqlContract.SqlMenu.UPDATED_DATE, menu.getUpdatedDate().toString());
                 contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
+                contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.isSpicy());
                 count = sqLiteDatabase.insert(SqlContract.SqlMenu.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Menu is added successfully" + menu.getMenuId());
@@ -420,14 +424,14 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getWritableDatabase();
             contentValues = new ContentValues();
-            for (MenuCateoryDbDTO menuCateory:menuCategoryInserts) {
-                contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_ID,menuCateory.getCategoryId());
-                contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_TITLE,menuCateory.getCategoryTitle());
-                contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_IMG,menuCateory.getCategoryImage());
-                contentValues.put(SqlContract.SqlMenuCategory.ACTIVE,menuCateory.isActive());
-                contentValues.put(SqlContract.SqlMenuCategory.CREATED_DATE,menuCateory.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlMenuCategory.UPDATED_DATE,menuCateory.getUpdatedDate().toString());
-                count=sqLiteDatabase.insert(SqlContract.SqlMenuCategory.TABLE_NAME,null,contentValues);
+            for (MenuCateoryDbDTO menuCateory : menuCategoryInserts) {
+                contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_ID, menuCateory.getCategoryId());
+                contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_TITLE, menuCateory.getCategoryTitle());
+                contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_IMG, menuCateory.getCategoryImage());
+                contentValues.put(SqlContract.SqlMenuCategory.ACTIVE, menuCateory.isActive());
+                contentValues.put(SqlContract.SqlMenuCategory.CREATED_DATE, menuCateory.getCreatedDate().toString());
+                contentValues.put(SqlContract.SqlMenuCategory.UPDATED_DATE, menuCateory.getUpdatedDate().toString());
+                count = sqLiteDatabase.insert(SqlContract.SqlMenuCategory.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Menu Category is added successfully" + menuCateory.getCategoryId());
 
@@ -451,10 +455,10 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getWritableDatabase();
             contentValues = new ContentValues();
-            for (MenuTagsDbDTO menuTag:menuTagInserts) {
-                contentValues.put(SqlContract.SqlMenuTags.TAG_ID,menuTag.getTagId());
-                contentValues.put(SqlContract.SqlMenuTags.TAG_TITLE,menuTag.getTagTitle());
-                count=sqLiteDatabase.insert(SqlContract.SqlMenuTags.TABLE_NAME,null,contentValues);
+            for (MenuTagsDbDTO menuTag : menuTagInserts) {
+                contentValues.put(SqlContract.SqlMenuTags.TAG_ID, menuTag.getTagId());
+                contentValues.put(SqlContract.SqlMenuTags.TAG_TITLE, menuTag.getTagTitle());
+                count = sqLiteDatabase.insert(SqlContract.SqlMenuTags.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Menu Tag is added successfully" + menuTag.getTagId());
 
@@ -472,112 +476,100 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public boolean insertOrderDetails(List<OrderDetailsDbDTO> orderDetailInserts) {
-        SQLiteDatabase sqLiteDatabase=null;
-        ContentValues contentValues=null;
-        long count=-1;
-        try{
-            sqLiteDatabase=getWritableDatabase();
-            contentValues=new ContentValues();
-            for(OrderDetailsDbDTO orderDetail: orderDetailInserts)
-            {
-                contentValues.put(SqlContract.SqlOrderDetails.ORDER_DETAILS_ID,orderDetail.getOrderDetailsId());
-                contentValues.put(SqlContract.SqlOrderDetails.ORDER_PRICE,orderDetail.getOrderPrice());
-                contentValues.put(SqlContract.SqlOrderDetails.ORDER_QUANTITY,orderDetail.getOrderQuantity());
-                contentValues.put(SqlContract.SqlOrderDetails.CREATED_DATE,orderDetail.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlOrderDetails.UPDATE_DATE,orderDetail.getUpdatedDate().toString());
-                contentValues.put(SqlContract.SqlOrderDetails.ORDER_ID,orderDetail.getOrderId());
-                contentValues.put(SqlContract.SqlOrderDetails.MENU_ID,orderDetail.getMenuId());
-                contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE,orderDetail.getMenuTitle());
-                count=sqLiteDatabase.insert(SqlContract.SqlOrderDetails.TABLE_NAME,null,contentValues);
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (OrderDetailsDbDTO orderDetail : orderDetailInserts) {
+                contentValues.put(SqlContract.SqlOrderDetails.ORDER_DETAILS_ID, orderDetail.getOrderDetailsId());
+                contentValues.put(SqlContract.SqlOrderDetails.ORDER_PRICE, orderDetail.getOrderPrice());
+                contentValues.put(SqlContract.SqlOrderDetails.ORDER_QUANTITY, orderDetail.getOrderQuantity());
+                contentValues.put(SqlContract.SqlOrderDetails.CREATED_DATE, orderDetail.getCreatedDate().toString());
+                contentValues.put(SqlContract.SqlOrderDetails.UPDATE_DATE, orderDetail.getUpdatedDate().toString());
+                contentValues.put(SqlContract.SqlOrderDetails.ORDER_ID, orderDetail.getOrderId());
+                contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
+                contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
+                count = sqLiteDatabase.insert(SqlContract.SqlOrderDetails.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Order detail is added successfully" + orderDetail.getOrderDetailsId());
 
             }
 
-        }
-        catch(Exception e)
-        {
-            Log.d(TAG,"## Error at insertOrderDetails"+e.toString());
-        }
-        finally {
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at insertOrderDetails" + e.toString());
+        } finally {
             {
-                if(sqLiteDatabase!=null)
+                if (sqLiteDatabase != null)
                     sqLiteDatabase.close();
             }
         }
-        return count!=-1;
+        return count != -1;
     }
 
     public boolean insertOrders(List<OrdersDbDTO> orderInserts) {
-        SQLiteDatabase sqLiteDatabase=null;
-        ContentValues contentValues=null;
-        long count=-1;
-        try{
-            sqLiteDatabase=getWritableDatabase();
-            contentValues=new ContentValues();
-            for(OrdersDbDTO order:orderInserts)
-            {
-                contentValues.put(SqlContract.SqlOrders.ORDER_ID,order.getOrderId());
-                contentValues.put(SqlContract.SqlOrders.ORDER_NO,order.getOrderNo());
-                contentValues.put(SqlContract.SqlOrders.ORDER_STATUS,order.isOrderStatus());
-                contentValues.put(SqlContract.SqlOrders.ORDER_DATE,order.getOrderDate().toString());
-                contentValues.put(SqlContract.SqlOrders.ORDER_TIME,order.getOrderTime().toString());
-                contentValues.put(SqlContract.SqlOrders.CREATED_DATE,order.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlOrders.UPDATED_DATE,order.getUpdatedDate().toString());
-                contentValues.put(SqlContract.SqlOrders.TABLE_NO,order.getTableNo());
-                contentValues.put(SqlContract.SqlOrders.USER_ID,order.getUserId());
-                contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT,order.getOrderAmount());
-                count=sqLiteDatabase.insert(SqlContract.SqlOrders.TABLE_NAME,null,contentValues);
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (OrdersDbDTO order : orderInserts) {
+                contentValues.put(SqlContract.SqlOrders.ORDER_ID, order.getOrderId());
+                contentValues.put(SqlContract.SqlOrders.ORDER_NO, order.getOrderNo());
+                contentValues.put(SqlContract.SqlOrders.ORDER_STATUS, order.isOrderStatus());
+                contentValues.put(SqlContract.SqlOrders.ORDER_DATE, order.getOrderDate().toString());
+                contentValues.put(SqlContract.SqlOrders.ORDER_TIME, order.getOrderTime().toString());
+                contentValues.put(SqlContract.SqlOrders.CREATED_DATE, order.getCreatedDate().toString());
+                contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, order.getUpdatedDate().toString());
+                contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableNo());
+                contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
+                contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmount());
+                count = sqLiteDatabase.insert(SqlContract.SqlOrders.TABLE_NAME, null, contentValues);
                 contentValues.clear();
-                Log.d(TAG, "## Order is added successfully" +order.getOrderId());
+                Log.d(TAG, "## Order is added successfully" + order.getOrderId());
             }
 
-        }
-        catch(Exception e)
-        {
-            Log.d(TAG,"## Error at insertOrders"+e.toString());
-        }
-        finally {
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at insertOrders" + e.toString());
+        } finally {
             {
-                if(sqLiteDatabase!=null)
+                if (sqLiteDatabase != null)
                     sqLiteDatabase.close();
             }
         }
-        return count!=-1;
+        return count != -1;
     }
 
     public boolean insertTableCategories(List<TableCategoryDbDTO> tableCategoryInsert) {
-        SQLiteDatabase sqLiteDatabase=null;
-        ContentValues contentValues=null;
-        long count=-1;
-        try{
-            sqLiteDatabase=getWritableDatabase();
-            contentValues=new ContentValues();
-            for(TableCategoryDbDTO tableCategory:tableCategoryInsert)
-            {
-                contentValues.put(SqlContract.SqlTableCategory.TABLE_CATEGORY_ID,tableCategory.getTableCategoryId());
-                contentValues.put(SqlContract.SqlTableCategory.CATEGORY_TITLE,tableCategory.getCategoryTitle());
-                contentValues.put(SqlContract.SqlTableCategory.IMAGE,tableCategory.getImage());
-                contentValues.put(SqlContract.SqlTableCategory.CREATED_DATE,tableCategory.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlTableCategory.UPDATED_DATE,tableCategory.getUpdatedDate().toString());
-                count=sqLiteDatabase.insert(SqlContract.SqlTableCategory.TABLE_NAME,null,contentValues);
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (TableCategoryDbDTO tableCategory : tableCategoryInsert) {
+                contentValues.put(SqlContract.SqlTableCategory.TABLE_CATEGORY_ID, tableCategory.getTableCategoryId());
+                contentValues.put(SqlContract.SqlTableCategory.CATEGORY_TITLE, tableCategory.getCategoryTitle());
+                contentValues.put(SqlContract.SqlTableCategory.IMAGE, tableCategory.getImage());
+                contentValues.put(SqlContract.SqlTableCategory.CREATED_DATE, tableCategory.getCreatedDate().toString());
+                contentValues.put(SqlContract.SqlTableCategory.UPDATED_DATE, tableCategory.getUpdatedDate().toString());
+                count = sqLiteDatabase.insert(SqlContract.SqlTableCategory.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Table Category is added successfully" + tableCategory.getTableCategoryId());
 
             }
 
-        }
-        catch(Exception e)
-        {
-            Log.d(TAG,"## Error at insertMenuCategory"+e.toString());
-        }
-        finally {
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at insertMenuCategory" + e.toString());
+        } finally {
             {
-                if(sqLiteDatabase!=null)
+                if (sqLiteDatabase != null)
                     sqLiteDatabase.close();
             }
         }
-        return count!=-1;
+        return count != -1;
     }
 
     public ArrayList<OrderMenuDTO> getOrderMenu() {
@@ -598,13 +590,13 @@ public class DbRepository extends SQLiteOpenHelper {
                     do {
                         //Log.i(TAG, "##" + cursor.getCount() + " " + cursor.getInt(1));
                         int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_ID));
-                        boolean foodType=Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.FOOD_TYPE)));
-                        String menuImage=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.IMAGE));
-                        String menuTitle=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
-                        String menuTags=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.TAGS));
-                        String menuCategory=cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenuCategory.CATEGORY_TITLE));
-                        double menuPrice=Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
-                        OrderMenuDTO orderMenu=new OrderMenuDTO(menuId,menuTitle,menuImage,foodType,menuTags,menuCategory,menuPrice,0,OrderMenuDTO.SHOW);
+                        boolean foodType = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.FOOD_TYPE)));
+                        String menuImage = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.IMAGE));
+                        String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
+                        String menuTags = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.TAGS));
+                        String menuCategory = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenuCategory.CATEGORY_TITLE));
+                        double menuPrice = Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
+                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, 0, OrderMenuDTO.SHOW);
                         //table.setJsonSync();
                         orderMenus.add(orderMenu);
                     } while (cursor.moveToNext());
@@ -621,4 +613,56 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return orderMenus;
     }
+
+    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo), String.valueOf(menuId)};
+            sqLiteDatabase = getReadableDatabase();
+            Cursor cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlTempOrder.TABLE_NAME
+                    + " Where " + SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
+                    + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+            int rowCount = cursor.getCount();
+            cursor.close();
+            sqLiteDatabase.close();
+
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            ROrderDateUtils rOrderDateUtils = new ROrderDateUtils();
+            contentValues.put(SqlContract.SqlTempOrder.TABLE_NO, tableNo);
+            contentValues.put(SqlContract.SqlTempOrder.TABLE_ID, tableId);
+            contentValues.put(SqlContract.SqlTempOrder.MENU_ID, menuId);
+            contentValues.put(SqlContract.SqlTempOrder.QUANTITY, qty);
+            contentValues.put(SqlContract.SqlTempOrder.ORDER_DATE, rOrderDateUtils.getGMTCurrentDate());
+            contentValues.put(SqlContract.SqlTempOrder.ORDER_TIME, rOrderDateUtils.getGMTCurrentTime());
+            contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
+
+            if (rowCount == 0)
+                count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);
+            else
+                count = sqLiteDatabase.update(SqlContract.SqlTempOrder.TABLE_NAME, contentValues, SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
+                        + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+
+            contentValues.clear();
+            sqLiteDatabase.close();
+            Log.i(TAG, "Values are inserted into TempTable" + rOrderDateUtils.getGMTCurrentDate() + "" + rOrderDateUtils.getGMTCurrentTime());
+        } catch (Exception e) {
+            Log.e(TAG, "error at insertOrUpdateTempOrder");
+        } finally {
+            if (sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+
+        return count != -1;
+    }
+
+    /*public boolean clearUpdateTempData(int tableId, int tableNo) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+
+
+    }*/
 }

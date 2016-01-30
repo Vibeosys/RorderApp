@@ -7,14 +7,15 @@ public class UploadUser extends BaseDTO {
     protected String userId;
     protected String emailId;
     protected String userName;
+    protected String restaurantId;
 
     public UploadUser() {
 
     }
 
-    public UploadUser(String userId, String emailId) {
+    public UploadUser(String userId, String restaurantId) {
         this.userId = userId;
-        this.emailId = emailId;
+        this.restaurantId = restaurantId;
     }
 
     public UploadUser(String userId, String emailId, String userName) {
@@ -45,5 +46,13 @@ public class UploadUser extends BaseDTO {
 
     public void setEmailId(String emailId) {
         this.emailId = emailId;
+    }
+
+    public String getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }

@@ -44,4 +44,13 @@ public class TableDataDTO {
     public void setOperation(String operation) {
         this.operation = operation;
     }
+
+    @Override
+    public String toString() {
+        return "TableDataDTO{" +
+                "tableName='" + tableName + '\'' +
+                ", tableData='" + tableData + '\'' +
+                ", operation='" + operation + '\'' +
+                '}';
+    }
 }

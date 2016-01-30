@@ -74,6 +74,7 @@ public class SqlContract {
         public final static String CREATED_DATE="CreatedDate";
         public final static String UPDATED_DATE="UpdatedDate";
         public final static String CATEGORY_ID="CategoryId";
+        public final static String IS_SPICY="IsSpicy";
     }
     public abstract class SqlMenuCategory{
         public final static String TABLE_NAME="menu_category";
@@ -113,5 +114,17 @@ public class SqlContract {
         public final static String TABLE_NO="TableNo";
         public final static String USER_ID="UserId";
         public final static String ORDER_AMOUNT="OrderAmount";
+    }
+
+    public abstract class SqlTempOrder{
+        public final static String TABLE_NAME="temp_order";
+        public final static String TEMP_ORDER_ID="TempOrderId";
+        public final static String TABLE_ID="TableId";
+        public final static String TABLE_NO="TableNo";
+        public final static String MENU_ID="MenuId";
+        public final static String QUANTITY="Quantity";
+        public final static String ORDER_DATE="OrderDate";
+        public final static String ORDER_TIME="OrderTime";
+        public final static String ORDER_STATUS="OrderStatus";
     }
 }

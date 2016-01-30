@@ -103,12 +103,12 @@ public class SessionManager {
         return downloadDbUrl + userId;
     }
 
-    public String getDownloadUrl(String userId) {
+    public String getDownloadUrl(String userId,int restaurantId) {
         if (userId == null || userId.equals(""))
             Log.e("SessionManager", "User id in download URL is blank");
 
         String downloadUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_DOWNLOAD_URI, null);
-        return downloadUrl + userId;
+        return downloadUrl + userId+"&restaurantId="+restaurantId;
     }
     public String getRestaurantUrl() {
         String downloadUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_RESTAURANT_URI, null);

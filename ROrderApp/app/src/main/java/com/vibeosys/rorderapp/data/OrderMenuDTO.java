@@ -7,8 +7,8 @@ import java.util.Comparator;
  */
 public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
 
-    public static final int HIDE=0;
-    public static final int SHOW=1;
+    public static final int HIDE = 0;
+    public static final int SHOW = 1;
     private int mMenuId;
     private String mMenuTitle;
     private String mImage;
@@ -18,19 +18,20 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
     private double mPrice;
     private int mQuantity;
     private int mShow;
+
     public OrderMenuDTO() {
     }
 
-    public OrderMenuDTO(int mMenuId,String mMenuTitle, String mImage, boolean mFoodType, String mTags, String mCategory, double mPrice,int mQuantity,int mShow) {
-        this.mMenuId=mMenuId;
+    public OrderMenuDTO(int mMenuId, String mMenuTitle, String mImage, boolean mFoodType, String mTags, String mCategory, double mPrice, int mQuantity, int mShow) {
+        this.mMenuId = mMenuId;
         this.mMenuTitle = mMenuTitle;
         this.mImage = mImage;
         this.mFoodType = mFoodType;
         this.mTags = mTags;
         this.mCategory = mCategory;
         this.mPrice = mPrice;
-        this.mQuantity=mQuantity;
-        this.mShow=mShow;
+        this.mQuantity = mQuantity;
+        this.mShow = mShow;
     }
 
     public int getmMenuId() {
@@ -120,13 +121,12 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
     }
 
 
-
     @Override
     public int compareTo(OrderMenuDTO another) {
-        int result = another.getmShow()-this.mShow;
-        if (result != 0)
-        {
+        int result = another.getmShow() - this.mShow;
+        if (result != 0) {
             return result;
         }
-        return another.getmQuantity()-this.getmQuantity();
-    }}
+        return another.getmQuantity() - this.getmQuantity();
+    }
+}

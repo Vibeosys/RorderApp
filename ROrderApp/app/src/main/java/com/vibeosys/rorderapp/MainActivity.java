@@ -61,11 +61,11 @@ public class MainActivity extends BaseActivity
 
             tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-            /*mServerSyncManager.syncDataWithServer(true);*/
-           /* if (!isMyServiceRunning(SyncService.class)) {
-                Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-                startService(syncServiceIntent);
-            }*/
+            mServerSyncManager.syncDataWithServer(true);
+
+            Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+            startService(syncServiceIntent);
+
 
             final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
             final TablePagerAdapter adapter = new TablePagerAdapter

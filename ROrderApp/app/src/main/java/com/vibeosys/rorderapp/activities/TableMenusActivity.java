@@ -30,18 +30,23 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
     EditText edtSearch;
     List<OrderMenuDTO> allMenus;
     ListView listMenus;
-    TextView txtTotalAmount,txtTotalItems;
+    TextView txtTotalAmount, txtTotalItems;
+    int mTableId, mTableNo;
+
     //List<OrderMenuDTO> sortingMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_menus);
+
         listMenus = (ListView) findViewById(R.id.listMenus);
         allMenus = mDbRepository.getOrderMenu();
+        mTableId = getIntent().getIntExtra("TableId", 0);
+        mTableNo = getIntent().getExtras().getInt("TableNo");
         //sortingMenu=mDbRepository.getOrderMenu();
         edtSearch = (EditText) findViewById(R.id.etSearch);
-        txtTotalItems=(TextView)findViewById(R.id.txtTotalItems);
-        txtTotalAmount=(TextView)findViewById(R.id.txtTotalRs);
+        txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
+        txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
         edtSearch.addTextChangedListener(this);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
@@ -89,17 +94,15 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
     }
 
     private void displayMenuPriceAndItems() {
-        ArrayList<OrderMenuDTO> selectedItems=new ArrayList<>();
-        for(OrderMenuDTO menu: allMenus)
-        {
-            if(menu.getmQuantity()>0)
-            {
+        ArrayList<OrderMenuDTO> selectedItems = new ArrayList<>();
+        for (OrderMenuDTO menu : allMenus) {
+            if (menu.getmQuantity() > 0) {
                 selectedItems.add(menu);
             }
         }
-        SelectedMenusDTO selectedMenusDTO=new SelectedMenusDTO(selectedItems);
-        txtTotalAmount.setText(String.format(String.format("%.2f", selectedMenusDTO.getTotalBillAmount()))+" Rs.");
-        txtTotalItems.setText(selectedMenusDTO.getTotalItems()+" Items are selected");
+        SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(selectedItems);
+        txtTotalAmount.setText(String.format(String.format("%.2f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
+        txtTotalItems.setText(selectedMenusDTO.getTotalItems() + " Items are selected");
     }
 
     @Override
@@ -118,6 +121,7 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
             orderMenu.setmQuantity(value + 1);
         //Collections.sort(allMenus);
         displayMenuPriceAndItems();
+        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(), orderMenu.getmQuantity());
         orderListAdapter.notifyDataSetChanged();
     }
 }

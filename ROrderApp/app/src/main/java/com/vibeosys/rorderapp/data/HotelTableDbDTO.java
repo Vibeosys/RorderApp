@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.data;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class HotelTableDbDTO {
     }
 
     public static List<HotelTableDbDTO> deserializeHotelTables(List<String> serializedStringList) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         ArrayList<HotelTableDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {
