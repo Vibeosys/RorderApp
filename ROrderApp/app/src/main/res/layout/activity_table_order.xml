@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <RelativeLayout
+      android:id="@+id/buttonForTableOrder"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+      <Button
+          android:id="@+id/btnKtchOrder"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentLeft="true"
+          android:text="Send KOT"
+          android:background="@drawable/button_custom"/>
+
+      <Button
+          android:id="@+id/btnPaybill"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:text ="Payment"
+          android:background="@drawable/button_custom"/>
+  </RelativeLayout>
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ExpandableListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/expListViewForTableOrder"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>
