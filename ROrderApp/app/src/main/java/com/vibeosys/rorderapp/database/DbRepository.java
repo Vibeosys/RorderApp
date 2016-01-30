@@ -237,7 +237,7 @@ public class DbRepository extends SQLiteOpenHelper {
         ArrayList<HotelTableDTO> hotelTables = null;
         try {
             sqLiteDatabase = getReadableDatabase();
-            cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME+" ORDER BY "+SqlContract.SqlHotelTable.TABLE_NO, null);
+            cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME + " ORDER BY " + SqlContract.SqlHotelTable.TABLE_NO, null);
             hotelTables = new ArrayList<>();
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -658,11 +658,20 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
-    /*public boolean clearUpdateTempData(int tableId, int tableNo) {
+    public boolean clearUpdateTempData(int tableId, int tableNo) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
+        long count = -1;
 
+        try {
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo)};
+            count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
+                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=?",
+                    whereClause);
+        } catch (Exception e) {
 
-    }*/
+        }
+        return count!=-1;
+    }
 }
