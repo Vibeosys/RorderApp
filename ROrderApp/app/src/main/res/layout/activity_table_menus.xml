@@ -80,6 +80,7 @@ changes for tool bar 01/02/2016 by Shrinivas
                 android:textSize="12sp" />
 
             <ImageView
+                android:id="@+id/deleteSearch"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_weight="0.2"

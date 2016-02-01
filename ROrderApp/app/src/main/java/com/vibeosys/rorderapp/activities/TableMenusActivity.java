@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class TableMenusActivity extends BaseActivity implements TextWatcher, OrderListAdapter.CustomButtonListener {
+public class TableMenusActivity extends BaseActivity implements TextWatcher, OrderListAdapter.CustomButtonListener,View.OnClickListener {
 
     OrderListAdapter orderListAdapter;
     EditText edtSearch;
@@ -32,6 +34,7 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
     ListView listMenus;
     TextView txtTotalAmount, txtTotalItems;
     int mTableId, mTableNo;
+    ImageView deleteSearch;
 
     //List<OrderMenuDTO> sortingMenu;
     @Override
@@ -47,12 +50,13 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
         edtSearch = (EditText) findViewById(R.id.etSearch);
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
+        deleteSearch=(ImageView)findViewById(R.id.deleteSearch);
         edtSearch.addTextChangedListener(this);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
         orderListAdapter.notifyDataSetChanged();
-
+        deleteSearch.setOnClickListener(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
 
        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -130,5 +134,16 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
         displayMenuPriceAndItems();
         mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(), orderMenu.getmQuantity());
         orderListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        int id=v.getId();
+        if(id==R.id.deleteSearch)
+        {
+            edtSearch.setText("");
+        }
+
     }
 }
