@@ -3,6 +3,7 @@ package com.vibeosys.rorderapp;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -60,6 +61,7 @@ public class MainActivity extends BaseActivity
             tab_layout.addTab(tab_layout.newTab().setText("All Serving"));
 
             tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tab_layout.setSelectedTabIndicatorHeight(4);
 
             mServerSyncManager.syncDataWithServer(true);
 

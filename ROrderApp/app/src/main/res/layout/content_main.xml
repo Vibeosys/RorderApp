@@ -18,7 +18,7 @@
         android:background="#ffffff"
         app:tabTextColor="#000000"
         android:touchscreenBlocksFocus="true"
-        app:tabSelectedTextColor="#ff3333"
+        app:tabSelectedTextColor= "@color/colorAccent"
         app:tabGravity="center"
         android:elevation="2dp"
         android:minHeight="?attr/actionBarSize"
