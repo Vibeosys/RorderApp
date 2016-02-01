@@ -4,15 +4,18 @@
     android:layout_height="@dimen/list_item_height"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/header_margin_top"
+    android:layout_marginBottom="@dimen/header_margin_top"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="25dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_add" />
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/tableCategoryIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="@dimen/header_margin_top"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
+        />
     <TextView
         android:id="@+id/txtTableCategory"
         android:layout_width="match_parent"

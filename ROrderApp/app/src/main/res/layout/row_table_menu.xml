@@ -19,12 +19,20 @@
             android:orientation="vertical"
             android:layout_margin="4dp"
             android:gravity="center">
-            <com.vibeosys.rorderapp.views.RoundedImageView
+            <!--<com.vibeosys.rorderapp.views.RoundedImageView
                 android:id="@+id/imgMenu"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="4dp"
-                android:src="@drawable/veg" />
+                android:src="@drawable/veg" >
+
+            </com.vibeosys.rorderapp.views.RoundedImageView>-->
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/menuImageLoader"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/button_custom"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
