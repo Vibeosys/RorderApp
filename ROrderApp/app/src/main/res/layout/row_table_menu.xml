@@ -28,16 +28,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/imgFoodType"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:src="@drawable/veg_icon"/>
-                <ImageView
-                    android:id="@+id/imgSpicy"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/spicy_food"/>
+
             </LinearLayout>
         </LinearLayout>
 
@@ -91,16 +82,32 @@
                 android:padding="2dp"
                 android:orientation="horizontal"
                 android:layout_marginRight="10dp"
-                android:gravity="right">
-
+                android:layout_marginLeft="15dp"
+                android:gravity="left">
+                <ImageView
+                    android:id="@+id/imgFoodType"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/veg_icon"/>
+                <ImageView
+                    android:id="@+id/imgSpicy"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/spicy_food"/>
                 <ImageView
                     android:layout_width="12dp"
+                    android:layout_weight="1"
                     android:layout_height="12dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginTop="3dp"
                     android:src="@drawable/rupee_icon" />
 
                 <TextView
                     android:id="@+id/txtMenuPrice"
+                    android:layout_weight="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
@@ -110,9 +117,9 @@
 
                 <ImageView
                     android:id="@+id/imgMinus"
+                    android:layout_weight="1"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
                     android:src="@drawable/ic_action_minus"
                     android:background="@drawable/menu_row_button_theme"/>
 
@@ -121,6 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:layout_weight="2"
                     android:text="Qty:"
                     android:textSize="12sp"
                     android:layout_margin="3dp"
@@ -128,6 +136,7 @@
 
                 <TextView
                     android:id="@+id/txtMenuQty"
+                    android:layout_weight="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
@@ -140,11 +149,11 @@
 
                 <ImageView
                     android:id="@+id/imgPlus"
+                    android:layout_weight="1"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="3dp"
                     android:background="@drawable/menu_row_button_theme"
-                    android:translationZ="3dp"
                     android:src="@drawable/ic_action_add" />
 
 
