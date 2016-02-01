@@ -13,7 +13,6 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_add" />
-
     <TextView
         android:id="@+id/txtTableCategory"
         android:layout_width="match_parent"

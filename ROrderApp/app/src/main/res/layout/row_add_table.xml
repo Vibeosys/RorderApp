@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_margin="8dp"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/LLAddTable"
@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="5dp"
-        android:background="@color/transperent"
+        android:padding="@dimen/list_item_padding"
+        android:background="@color/background"
         android:layout_gravity="center_horizontal">
 
         <com.vibeosys.rorderapp.views.RoundedImageView

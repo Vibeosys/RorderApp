@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_margin="@dimen/list_item_padding"
     android:id="@+id/row_menu_item">
 
     <LinearLayout
         android:layout_gravity="fill|left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@drawable/table_border"
         android:orientation="horizontal">
 
@@ -94,10 +94,10 @@
                 android:gravity="right">
 
                 <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:layout_margin="3dp"
-                    android:src="@drawable/rupee_symbol" />
+                    android:src="@drawable/rupee_icon" />
 
                 <TextView
                     android:id="@+id/txtMenuPrice"

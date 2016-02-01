@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FFAB00</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="White">#fff</color>
@@ -9,8 +9,8 @@
     <color name="light_grey">#B6B6B6</color>
     <color name="light_yello">#CD853F</color>
 
-    <color name="colorPrimary">#125688</color>
-    <color name="colorPrimaryDark">#90125688</color>
+    <color name="colorPrimary">#9C27B0</color>
+    <color name="colorPrimaryDark">#6A1B9A</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>

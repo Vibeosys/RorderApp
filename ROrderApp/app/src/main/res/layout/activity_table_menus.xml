@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/table_back"
-
     android:orientation="vertical"
-    android:weightSum="1">
-<!-- changes for tool bar 01/02/2016 by Shrinivas-->
+    android:weightSum="1"
+    >
+changes for tool bar 01/02/2016 by Shrinivas
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

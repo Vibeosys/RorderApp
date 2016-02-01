@@ -55,7 +55,7 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
 
         /// changes for Tool bar  01/02/2016 by Shrinivas
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
