@@ -52,6 +52,13 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
         orderListAdapter.notifyDataSetChanged();
+
+        /// changes for Tool bar  01/02/2016 by Shrinivas
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     public void sortList(String search) {
