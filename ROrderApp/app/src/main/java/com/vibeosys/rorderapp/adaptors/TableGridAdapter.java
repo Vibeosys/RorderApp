@@ -1,12 +1,14 @@
 package com.vibeosys.rorderapp.adaptors;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
@@ -94,10 +96,10 @@ public class TableGridAdapter extends BaseAdapter {
                     (Context.LAYOUT_INFLATER_SERVICE);
             row = theLayoutInflator.inflate(R.layout.row_add_table, null);
             viewHolder = new TableGridAdapter.ViewHolder();
-            viewHolder.imgTablePhoto = (ImageView) row.findViewById(R.id.imgTablePhoto);
+           viewHolder.layoutIsOccupied = (LinearLayout) row.findViewById(R.id.isOccupied);
             viewHolder.txtCapacity = (TextView) row.findViewById(R.id.txtCapacity);
             viewHolder.txtTableNumber = (TextView) row.findViewById(R.id.txtTableNumber);
-            viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
+           // viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
             row.setTag(viewHolder);
 
         } else viewHolder = (TableGridAdapter.ViewHolder) row.getTag();
@@ -108,20 +110,19 @@ public class TableGridAdapter extends BaseAdapter {
         viewHolder.txtTableNumber.setText(""+hotelTableDTO.getmTableNo());
         if(hotelTableDTO.ismIsOccupied())
         {
-            viewHolder.imgTableStatus.setImageResource(R.drawable.table_occupied);
+            viewHolder.layoutIsOccupied.setBackgroundColor(mContext.getResources().getColor(R.color.red));
         }
         else {
-            viewHolder.imgTableStatus.setImageResource(R.drawable.table_unoccupied);
+            viewHolder.layoutIsOccupied.setBackgroundColor(mContext.getResources().getColor(R.color.dark_green_color));
         }
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }
 
     private static class ViewHolder {
-        ImageView imgTablePhoto;
+       LinearLayout layoutIsOccupied;
         TextView txtCapacity;
         ImageView imgGroup;
         TextView txtTableNumber;
-        ImageView imgTableStatus;
     }
 }

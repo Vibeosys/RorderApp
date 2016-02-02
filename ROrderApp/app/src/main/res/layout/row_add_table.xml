@@ -1,71 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:padding="8dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <LinearLayout
-        android:id="@+id/LLAddTable"
-        android:orientation="vertical"
+        android:id="@+id/isOccupied"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="8dp"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
+        android:orientation="horizontal"></LinearLayout>
 
-        android:background="@color/background"
-        android:layout_gravity="center_horizontal">
-
-        <com.vibeosys.rorderapp.views.RoundedImageView
-            android:id="@+id/imgTablePhoto"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/table_new"
-            />
+    <LinearLayout
+        android:id="@+id/LLDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingLeft="10dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="T:"
-                android:textSize="18sp"
-                android:id="@+id/txtTableName" />
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:background="@color/red"
+                    android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/txtTableName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T"
+                    android:layout_gravity="fill"
+                    android:textColor="@color/White"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/txtTableNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textColor="@color/White"
+                    android:textSize="22sp" />
+                    </LinearLayout>
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/txtCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="18sp"
-                android:id="@+id/txtTableNumber" />
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/multi_men"
-
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5"
-                android:textSize="18sp"
+                android:layout_weight="0.5"
                 android:paddingLeft="5dp"
-                android:id="@+id/txtCapacity" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="20dp"
-                android:id="@+id/imgTabelStatus"
-                android:src="@drawable/table_occupied"/>
+                android:textColor="@color/login_background"
+                android:text="CATEGORY"
+                android:textSize="10sp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|bottom">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person"
+
+                    />
+                <TextView
+                    android:id="@+id/txtUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textColor="@color/custom_text_inactive"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtCapacity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/multi_men" />
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
-
-
 </LinearLayout>

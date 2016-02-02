@@ -19,25 +19,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
+import com.vibeosys.rorderapp.activities.TableMenusActivity;
 import com.vibeosys.rorderapp.adaptors.TableCategoryAdapter;
+import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
+import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.UserAuth;
 
 import java.io.File;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener {
 
     TabLayout tab_layout;
     DrawerLayout drawer;
-
+    GridView gridView;
+    TableGridAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,42 +60,6 @@ public class MainActivity extends BaseActivity
             callLogin();
         } else {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            tab_layout = (TabLayout) findViewById(R.id.tab_layout);
-            tab_layout.addTab(tab_layout.newTab().setText("Tables"));
-            tab_layout.addTab(tab_layout.newTab().setText("My Serving"));
-            tab_layout.addTab(tab_layout.newTab().setText("All Serving"));
-
-            tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
-            tab_layout.setSelectedTabIndicatorHeight(4);
-
-            mServerSyncManager.syncDataWithServer(true);
-
-            Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-            startService(syncServiceIntent);
-
-
-            final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            final TablePagerAdapter adapter = new TablePagerAdapter
-                    (getSupportFragmentManager(), tab_layout.getTabCount());
-            viewPager.setAdapter(adapter);
-
-            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
-            tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    viewPager.setCurrentItem(tab.getPosition());
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
             setSupportActionBar(toolbar);
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -105,17 +74,16 @@ public class MainActivity extends BaseActivity
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            TextView txtUserName = (TextView) drawer.findViewById(R.id.txtUserName);
-            txtUserName.setText(mSessionManager.getUserName());
-            TextView txtRestaurantName = (TextView) drawer.findViewById(R.id.txtHotelName);
-            txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
-            TableCategoryAdapter categoryAdapter = new TableCategoryAdapter(mDbRepository.getTableCategories(), getApplicationContext());
-            ListView listCategories = (ListView) drawer.findViewById(R.id.list_category);
-            listCategories.setAdapter(categoryAdapter);
-            listCategories.setOnItemClickListener(new SelectCategory());
+           /* TextView txtUserName = (TextView) findViewById(R.id.txtHeaderWaiterName);
+            txtUserName.setText("");
+            TextView txtRestaurantName = (TextView)findViewById(R.id.txtHeaderHotelName);
+            txtRestaurantName.setText("");*/
             drawer.setDrawerListener(toggle);
             toggle.syncState();
-
+            gridView=(GridView)findViewById(R.id.gridview);
+            gridView.setOnItemClickListener(this);
+            adapter=new TableGridAdapter(getApplicationContext(),mDbRepository.getTableRecords());
+            gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
         }
@@ -190,12 +158,14 @@ public class MainActivity extends BaseActivity
         finish();
     }
 
-    private class SelectCategory implements android.widget.AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            }
-        }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        HotelTableDTO hotelTableDTO= (HotelTableDTO) adapter.getItem(position);
+        Intent intentOpenTableMenu=new Intent(getApplicationContext(), TableMenusActivity.class);
+        intentOpenTableMenu.putExtra("TableNo",hotelTableDTO.getmTableNo());
+        intentOpenTableMenu.putExtra("TableId",hotelTableDTO.getmTableId());
+        startActivity(intentOpenTableMenu);
+        Log.i(TAG,"##"+hotelTableDTO.getmTableNo()+"Is Clicked");
     }
 }
