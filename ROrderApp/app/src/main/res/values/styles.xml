@@ -28,5 +28,24 @@
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
-
+    <style name="largeText">
+        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="largeText_bold">
+        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="largeText_bold_bill">
+        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+    <style name="total_bold_bill">
+        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
 </resources>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/custom_background"
+    android:layout_margin="4dp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/custom_background">
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:id="@+id/TableNoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Table No    :"
+                style="@style/largeText"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/TableNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                style="@style/largeText_bold"
+                android:text=" # 5" />
+        </TableRow>
+        <TableRow android:weightSum="2">
+            <TextView
+                android:id="@+id/orderNoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                style="@style/largeText"
+                android:text="Order No  :"/>
+            <TextView
+                android:id="@+id/OrderNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                style="@style/largeText_bold"
+                android:paddingLeft="2dp"
+                android:layout_weight="1"
+                android:text=" # 8"/>
+        </TableRow>
+        <TableRow android:weightSum="2">
+            <TextView
+                android:id="@+id/ServedByTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                style="@style/largeText"
+                android:text="Served by :"/>
+            <TextView
+                android:id="@+id/ServedByName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingLeft="2dp"
+                style="@style/largeText_bold"
+                android:layout_weight="1"
+                android:text="Name Text"/>
+        </TableRow>
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:id="@+id/DateTimeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                style="@style/largeText"
+                android:gravity="center_vertical"
+                android:text="Date          :"/>
+            <TextView
+                android:id="@+id/DateDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_weight="1"
+                style="@style/largeText_bold"
+                android:paddingLeft="2dp"
+                android:text="21-jan-2016"/>
+        </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/custom_background">
+
+        <TableRow>
+            <View
+                android:layout_weight="3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/holo_red_light"/>
+        </TableRow>
+        <TableRow >
+            <View
+                android:layout_weight="3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/holo_red_light"/>
+
+
+        </TableRow>
+
+        <TableRow
+            android:background="@color/text_hint"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="Bill Details"
+
+                style="@style/largeText_bold_bill"
+                android:gravity="center"/>
+        </TableRow>
+        <TableRow>
+            <View
+                android:layout_weight="3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/holo_red_light"/>
+        </TableRow>
+        <TableRow >
+            <View
+                android:layout_weight="3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/holo_red_light"/>
+        </TableRow>
+     </TableLayout>
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="15dp">
+
+        <TableRow android:weightSum="2"
+                  android:layout_marginBottom="2dp">
+            <TextView
+                android:id="@+id/AmtTitle"
+                android:layout_weight="1"
+                style="@style/largeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount"/>
+
+
+            <TextView
+                android:id="@+id/PaymentAmt"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                style="@style/largeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1120.00"/>
+        </TableRow>
+
+        <TableRow android:layout_weight="2"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp">
+            <TextView
+                android:id="@+id/TaxTitle"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Taxes"
+                style="@style/largeText"/>
+
+
+            <TextView
+                android:id="@+id/TaxAmt"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/largeText"
+                android:text="120.00"/>
+
+        </TableRow>
+
+
+        <TableRow android:layout_weight="2"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp">
+            <TextView
+                android:id="@+id/ServicesChrgTitle"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Service Charges"
+                style="@style/largeText"/>
+
+
+            <TextView
+                android:id="@+id/ServicesChrgAmt"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                style="@style/largeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50.00"/>
+
+        </TableRow>
+
+        <TableRow android:layout_weight="2"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp">
+            <TextView
+                android:id="@+id/DiscountTitle"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Discount"
+                style="@style/largeText"/>
+
+
+            <TextView
+                android:id="@+id/DiscountAmt"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10.00"
+                style="@style/largeText"/>
+
+        </TableRow>
+        <TableRow>
+            <View
+                android:layout_weight="3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/background_dark"/>
+        </TableRow>
+        <TableRow android:layout_weight="2"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/TotalTitle"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    style="@style/total_bold_bill"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                >
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/rupee_icon" />
+                <TextView
+                    android:id="@+id/TotalAmt"
+                    android:paddingLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|right"
+                    android:text="1000.00"
+                    style="@style/total_bold_bill"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </TableRow>
+    </TableLayout>
+
+
+
+
+</LinearLayout>
