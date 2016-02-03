@@ -29,4 +29,8 @@
     <string name="search_table">Search Table</string>
     <string name="reserve_table">Reserve</string>
     <string name="cancel_string">Cancel</string>
+    <string name ="my_serving">My Serving</string>
+    <string name ="my_unoccupy">UnOccupy</string>
+    <string name ="apply">APPLY</string>
+    <string name ="cancle">CANCEL</string>
 </resources>
