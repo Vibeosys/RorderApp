@@ -172,7 +172,7 @@
                 style="@style/largeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1120.00"/>
+                android:text="112000.00"/>
         </TableRow>
 
         <TableRow android:layout_weight="2"
@@ -218,7 +218,7 @@
                 style="@style/largeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="50.00"/>
+                android:text="50000.00"/>
 
         </TableRow>
 
@@ -287,7 +287,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|right"
-                    android:text="1000.00"
+                    android:text="40.00"
                     style="@style/total_bold_bill"/>
                 </LinearLayout>
             </LinearLayout>
@@ -295,7 +295,27 @@
 
         </TableRow>
     </TableLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="2">
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PAYMENT"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bill Summery"
+
+            />
+
+    </LinearLayout>
 
 
 

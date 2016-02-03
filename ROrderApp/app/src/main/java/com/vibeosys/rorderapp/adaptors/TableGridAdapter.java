@@ -99,6 +99,7 @@ public class TableGridAdapter extends BaseAdapter {
            viewHolder.layoutIsOccupied = (LinearLayout) row.findViewById(R.id.isOccupied);
             viewHolder.txtCapacity = (TextView) row.findViewById(R.id.txtCapacity);
             viewHolder.txtTableNumber = (TextView) row.findViewById(R.id.txtTableNumber);
+            viewHolder.textTableCategory  = (TextView) row.findViewById(R.id.txtCategory);
            // viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
             row.setTag(viewHolder);
 
@@ -106,8 +107,9 @@ public class TableGridAdapter extends BaseAdapter {
 
         HotelTableDTO hotelTableDTO = mHotelTables.get(position);
         Log.d(TAG, hotelTableDTO.toString());
-        viewHolder.txtCapacity.setText(""+hotelTableDTO.getmCapacity());
+        viewHolder.txtCapacity.setText("" + hotelTableDTO.getmCapacity());
         viewHolder.txtTableNumber.setText(""+hotelTableDTO.getmTableNo());
+        viewHolder.textTableCategory.setText(""+hotelTableDTO.getmTableCategoryName());
         if(hotelTableDTO.ismIsOccupied())
         {
             viewHolder.layoutIsOccupied.setBackgroundColor(mContext.getResources().getColor(R.color.red));
@@ -124,5 +126,6 @@ public class TableGridAdapter extends BaseAdapter {
         TextView txtCapacity;
         ImageView imgGroup;
         TextView txtTableNumber;
+        TextView textTableCategory;//shrinivas
     }
 }

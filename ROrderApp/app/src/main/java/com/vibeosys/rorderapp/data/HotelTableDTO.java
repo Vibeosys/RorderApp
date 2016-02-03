@@ -8,6 +8,7 @@ public class HotelTableDTO {
     private int mTableId;
     private int mTableNo;
     private int mTableCategoryId;
+    private String mTableCategoryName;
     private int mCapacity;
     private String mCreatedDate;
     private String mUpdatedDate;
@@ -22,11 +23,12 @@ public class HotelTableDTO {
         this.mCapacity = mCapacity;
     }
 
-    public HotelTableDTO(int mTableId, int mTableNo, int mTableCategoryId,
+    public HotelTableDTO(int mTableId, int mTableNo, int mTableCategoryId,String mTableCategoryName ,
                          int mCapacity, String mCreatedDate, String mUpdatedDate, boolean mIsOccupied) {
         this.mTableId = mTableId;
         this.mTableNo = mTableNo;
         this.mTableCategoryId = mTableCategoryId;
+        this.mTableCategoryName = mTableCategoryName;
         this.mCapacity = mCapacity;
         this.mCreatedDate = mCreatedDate;
         this.mUpdatedDate = mUpdatedDate;
@@ -87,5 +89,12 @@ public class HotelTableDTO {
 
     public void setmIsOccupied(boolean mIsOccupied) {
         this.mIsOccupied = mIsOccupied;
+    }
+    public String getmTableCategoryName() {
+        return mTableCategoryName;
+    }
+
+    public void setmTableCategoryName(String mTableCategoryName) {
+        this.mTableCategoryName = mTableCategoryName;
     }
 }

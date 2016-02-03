@@ -60,9 +60,13 @@ public class TableCategoryDTO {
         this.mUpdatedDate = mUpdatedDate;
     }
 
+
+
+
     public ArrayList<HotelTableDTO> filterByCategory(ArrayList<HotelTableDTO> hotelTables, int categoryId) {
         ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
         for (HotelTableDTO table : hotelTables) {
+
             if (table.getmTableCategoryId() == categoryId) {
                 sortedTable.add(table);
                 Log.i(TAG, "" + table.toString());

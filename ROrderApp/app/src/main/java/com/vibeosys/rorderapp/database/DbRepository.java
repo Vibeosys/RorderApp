@@ -231,13 +231,15 @@ public class DbRepository extends SQLiteOpenHelper {
         return user;
     }
 
-    public ArrayList<HotelTableDTO> getTableRecords() {
+    public ArrayList<HotelTableDTO> getTableRecords() {//changes
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         ArrayList<HotelTableDTO> hotelTables = null;
         try {
             sqLiteDatabase = getReadableDatabase();
-            cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME + " ORDER BY " + SqlContract.SqlHotelTable.TABLE_NO, null);
+          //  cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME + " ORDER BY " + SqlContract.SqlHotelTable.TABLE_NO, null);
+            cursor = sqLiteDatabase.rawQuery("select TableId ,TableNo,r_tables.TableCategoryId,CategoryTitle,Capacity,IsOccupied,r_tables.CreatedDate,r_tables.UpdatedDate From r_tables INNER Join table_category  On r_tables.TableCategoryId = r_tables.TableCategoryId ORder by r_tables.TableNo", null);
+
             hotelTables = new ArrayList<>();
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -248,12 +250,12 @@ public class DbRepository extends SQLiteOpenHelper {
                         int tableId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_ID));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
                         int tableCtegory = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_CATEGORY));
+                       String tableCtegoryName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
                         int capacity = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.CAPACITY));
                         String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.CREATED_DATE));
                         String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.UPDATED_DATE));
                         String isOccupied = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
-                        HotelTableDTO table = new HotelTableDTO(tableId, tableNo, tableCtegory,
-                                capacity, createdDate, updatedDate, Boolean.parseBoolean(isOccupied));
+                        HotelTableDTO table = new HotelTableDTO(tableId, tableNo, tableCtegory,tableCtegoryName,capacity, createdDate, updatedDate, Boolean.parseBoolean(isOccupied));
                         //table.setJsonSync();
                         hotelTables.add(table);
                     } while (cursor.moveToNext());
