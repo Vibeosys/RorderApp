@@ -29,8 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
+import com.vibeosys.rorderapp.activities.BillSummeryActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
+import com.vibeosys.rorderapp.activities.TableFilterActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
 import com.vibeosys.rorderapp.adaptors.TableCategoryAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
@@ -176,7 +178,11 @@ public class MainActivity extends BaseActivity
         //noinspection SimplifiableIfStatement
         /*if (id == R.id.action_settings) {
             return true;
-        }*/
+        }*/if(id == R.id.filter)
+        {
+                Intent i = new Intent(this, TableFilterActivity.class);
+                startActivity(i);
+        }
 
         return super.onOptionsItemSelected(item);
     }

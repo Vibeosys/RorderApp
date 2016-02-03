@@ -28,29 +28,55 @@
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
+
+    <style name="filtertextStyle">
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">3dp</item>
+    </style>
+
     <style name="largeText">
-        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">20sp</item>
     </style>
+
     <style name="largeText_bold">
-        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
+        <item name="android:textColor">@color/light_grey</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@color/text_hint</item>
     </style>
+
     <style name="largeText_bold_bill">
-        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24sp</item>
     </style>
+
     <style name="total_bold_bill">
-        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24sp</item>
     </style>
 
     <style name="layout_cancel_button_style">
-        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
         <item name="android:textSize">20sp</item>
         <item name="android:background">@color/black_color</item>
         <item name="android:textColor">@color/White</item>
@@ -60,7 +86,9 @@
     </style>
 
     <style name="layout_ok_button_style">
-        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
         <item name="android:textSize">20sp</item>
         <item name="android:background">@color/ok_btn_colour</item>
         <item name="android:textColor">@color/White</item>

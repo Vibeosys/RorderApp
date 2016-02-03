@@ -50,6 +50,12 @@
             android:windowSoftInputMode="stateHidden">
 
         </activity>
+        <activity
+            android:name=".activities.TableFilterActivity"
+            android:label="@string/title_filter_menu"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
     </application>
 
 </manifest>
