@@ -31,7 +31,8 @@
         android:clickable="true"
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchorGravity="bottom|right|end"
-        android:src="@drawable/ic_add"/>
+        android:src="@drawable/ic_add"
+        android:background="@color/red"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -48,4 +48,24 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24sp</item>
     </style>
+
+    <style name="layout_cancel_button_style">
+        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@color/black_color</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+
+    </style>
+
+    <style name="layout_ok_button_style">
+        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Widget.TextView</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@color/ok_btn_colour</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:gravity">center</item>
+
+    </style>
 </resources>

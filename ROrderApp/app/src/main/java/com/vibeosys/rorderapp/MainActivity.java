@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -13,15 +14,19 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
@@ -35,14 +40,19 @@ import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.UserAuth;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     TabLayout tab_layout;
     DrawerLayout drawer;
     GridView gridView;
     TableGridAdapter adapter;
+    List<HotelTableDTO> hotelTableDTOs;
+    List<HotelTableDTO> sortedTables;
+    private Context mContext=this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,9 +90,10 @@ public class MainActivity extends BaseActivity
             txtRestaurantName.setText("");*/
             drawer.setDrawerListener(toggle);
             toggle.syncState();
-            gridView=(GridView)findViewById(R.id.gridview);
+            gridView = (GridView) findViewById(R.id.gridview);
             gridView.setOnItemClickListener(this);
-            adapter=new TableGridAdapter(getApplicationContext(),mDbRepository.getTableRecords());
+            hotelTableDTOs=mDbRepository.getTableRecords();
+            adapter = new TableGridAdapter(getApplicationContext(), hotelTableDTOs);
             gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
@@ -110,9 +121,51 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                if (s.length() == 0) {
+
+                } else {
+                    try {
+                        sortedTables= sortAdapter(Integer.parseInt(s));
+                        adapter.refresh(sortedTables);
+                    } catch (Exception e) {
+                        Log.e(TAG,"##"+e.toString());
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "You should Enter number", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.refresh(mDbRepository.getTableRecords());
+                return false;
+            }
+        });
+
         return true;
     }
 
+    public List<HotelTableDTO> sortAdapter(int tableNo)
+    {
+        List<HotelTableDTO> mHotelTables=new ArrayList<>();
+
+        for(HotelTableDTO table:mDbRepository.getTableRecords())
+        {
+            if(table.getmTableNo()==tableNo)
+            {
+                mHotelTables.add(table);
+            }
+        }
+       return mHotelTables;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -121,9 +174,9 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -161,11 +214,49 @@ public class MainActivity extends BaseActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        HotelTableDTO hotelTableDTO= (HotelTableDTO) adapter.getItem(position);
-        Intent intentOpenTableMenu=new Intent(getApplicationContext(), TableMenusActivity.class);
-        intentOpenTableMenu.putExtra("TableNo",hotelTableDTO.getmTableNo());
-        intentOpenTableMenu.putExtra("TableId",hotelTableDTO.getmTableId());
+        HotelTableDTO hotelTableDTO = (HotelTableDTO) adapter.getItem(position);
+        if(hotelTableDTO.ismIsOccupied())
+        {
+            callToMenuIntent(hotelTableDTO.getmTableNo(),hotelTableDTO.getmTableId());
+        }
+       else
+        {
+            showReserveDialog(hotelTableDTO.getmTableNo(),hotelTableDTO.getmTableId());
+        }
+        Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
+    }
+
+    private void callToMenuIntent(int tableNo, int tableId) {
+        Intent intentOpenTableMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
+        intentOpenTableMenu.putExtra("TableNo",tableNo);
+        intentOpenTableMenu.putExtra("TableId", tableId);
         startActivity(intentOpenTableMenu);
-        Log.i(TAG,"##"+hotelTableDTO.getmTableNo()+"Is Clicked");
+    }
+
+    private void showReserveDialog(final int tableNo, final int tableId) {
+
+        final Dialog dialog=new Dialog(mContext);
+        dialog.setContentView(R.layout.dialog_table_reserve);
+        dialog.setTitle("Reserve Table");
+        EditText txtCustomerName=(EditText)dialog.findViewById(R.id.txtCustomerName);
+        TextView cancel=(TextView)dialog.findViewById(R.id.txtCancel);
+        TextView reserve=(TextView)dialog.findViewById(R.id.txtReserve);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+
+        });
+        reserve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Customer Entered in db",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                callToMenuIntent(tableNo,tableId);
+            }
+        });
+        dialog.show();
     }
 }

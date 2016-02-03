@@ -49,4 +49,6 @@
     <color name="custom_text_selected">#FAD33A</color>
     <color name="custom_text_inactive">#C1CDCD</color>
     <color name="transparent">#00000000</color>
+    <color name="cancel_btn_colour">#e74c3c</color>
+    <color name="ok_btn_colour">#2ecc71</color>
 </resources>

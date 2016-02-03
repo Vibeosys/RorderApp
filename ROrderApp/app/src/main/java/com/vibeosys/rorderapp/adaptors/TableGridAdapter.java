@@ -45,6 +45,19 @@ public class TableGridAdapter extends BaseAdapter {
         else return 0;
     }
 
+    public List<HotelTableDTO> getmHotelTables() {
+        return mHotelTables;
+    }
+
+    public void setmHotelTables(List<HotelTableDTO> mHotelTables) {
+        this.mHotelTables = mHotelTables;
+    }
+    public void refresh(List<HotelTableDTO> tables)
+    {
+        this.mHotelTables.clear();
+        this.mHotelTables=tables;
+        notifyDataSetChanged();
+    }
     /**
      * Get the item of the given position
      *
@@ -109,7 +122,7 @@ public class TableGridAdapter extends BaseAdapter {
         Log.d(TAG, hotelTableDTO.toString());
         viewHolder.txtCapacity.setText("" + hotelTableDTO.getmCapacity());
         viewHolder.txtTableNumber.setText(""+hotelTableDTO.getmTableNo());
-        viewHolder.textTableCategory.setText(""+hotelTableDTO.getmTableCategoryName());
+        viewHolder.textTableCategory.setText(hotelTableDTO.getmTableCategoryName().toUpperCase());
         if(hotelTableDTO.ismIsOccupied())
         {
             viewHolder.layoutIsOccupied.setBackgroundColor(mContext.getResources().getColor(R.color.red));

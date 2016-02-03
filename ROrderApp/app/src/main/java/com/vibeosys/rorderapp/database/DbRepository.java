@@ -237,8 +237,8 @@ public class DbRepository extends SQLiteOpenHelper {
         ArrayList<HotelTableDTO> hotelTables = null;
         try {
             sqLiteDatabase = getReadableDatabase();
-          //  cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME + " ORDER BY " + SqlContract.SqlHotelTable.TABLE_NO, null);
-            cursor = sqLiteDatabase.rawQuery("select TableId ,TableNo,r_tables.TableCategoryId,CategoryTitle,Capacity,IsOccupied,r_tables.CreatedDate,r_tables.UpdatedDate From r_tables INNER Join table_category  On r_tables.TableCategoryId = r_tables.TableCategoryId ORder by r_tables.TableNo", null);
+            //  cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME + " ORDER BY " + SqlContract.SqlHotelTable.TABLE_NO, null);
+            cursor = sqLiteDatabase.rawQuery("select TableId ,TableNo,r_tables.TableCategoryId,CategoryTitle,Capacity,IsOccupied,r_tables.CreatedDate,r_tables.UpdatedDate From r_tables LEFT Join table_category  On r_tables.TableCategoryId = table_category.TableCategoryId ORder by r_tables.TableNo", null);
 
             hotelTables = new ArrayList<>();
             if (cursor != null) {
@@ -250,12 +250,12 @@ public class DbRepository extends SQLiteOpenHelper {
                         int tableId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_ID));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
                         int tableCtegory = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_CATEGORY));
-                       String tableCtegoryName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
+                        String tableCtegoryName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
                         int capacity = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.CAPACITY));
                         String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.CREATED_DATE));
                         String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.UPDATED_DATE));
                         String isOccupied = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
-                        HotelTableDTO table = new HotelTableDTO(tableId, tableNo, tableCtegory,tableCtegoryName,capacity, createdDate, updatedDate, Boolean.parseBoolean(isOccupied));
+                        HotelTableDTO table = new HotelTableDTO(tableId, tableNo, tableCtegory, tableCtegoryName, capacity, createdDate, updatedDate, Boolean.parseBoolean(isOccupied));
                         //table.setJsonSync();
                         hotelTables.add(table);
                     } while (cursor.moveToNext());
@@ -581,7 +581,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType," +
-                    "menu.Image,menu.MenuTitle,menu.Tags,menu_category.CategoryTitle," +
+                    "menu.Image,menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle," +
                     "menu.Price From menu Left Join menu_category " +
                     "where menu.CategoryId=menu_category.CategoryId", null);
             orderMenus = new ArrayList<>();
@@ -592,13 +592,16 @@ public class DbRepository extends SQLiteOpenHelper {
                     do {
                         //Log.i(TAG, "##" + cursor.getCount() + " " + cursor.getInt(1));
                         int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_ID));
-                        boolean foodType = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.FOOD_TYPE)));
+                        int iFoodType = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.FOOD_TYPE));
+                        boolean foodType = iFoodType == 1 ? true : false;
                         String menuImage = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.IMAGE));
                         String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
                         String menuTags = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.TAGS));
                         String menuCategory = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenuCategory.CATEGORY_TITLE));
+                        int iSpicy = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.IS_SPICY));
+                        boolean isSpicy = iSpicy == 1 ? true : false;
                         double menuPrice = Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
-                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, 0, OrderMenuDTO.SHOW);
+                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, 0, OrderMenuDTO.SHOW,isSpicy);
                         //table.setJsonSync();
                         orderMenus.add(orderMenu);
                     } while (cursor.moveToNext());
@@ -674,6 +677,6 @@ public class DbRepository extends SQLiteOpenHelper {
         } catch (Exception e) {
 
         }
-        return count!=-1;
+        return count != -1;
     }
 }

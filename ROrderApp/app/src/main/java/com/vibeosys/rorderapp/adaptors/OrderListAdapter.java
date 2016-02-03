@@ -16,8 +16,6 @@ import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.util.CustomVolleyRequestQueue;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 /**
@@ -74,6 +72,7 @@ public class OrderListAdapter extends BaseAdapter {
             viewHolder.rowElement=(LinearLayout)row.findViewById(R.id.row_menu_item);
            // viewHolder.menuImage=(ImageView)row.findViewById(R.id.imgMenu);
             viewHolder.imgFoodType= (ImageView)row.findViewById(R.id.imgFoodType);
+            viewHolder.imgSpicy=(ImageView)row.findViewById(R.id.imgSpicy);
             viewHolder.txtMenuTitle=(TextView)row.findViewById(R.id.txtMenuName);
             viewHolder.txtMenuTags=(TextView)row.findViewById(R.id.txtMenuTag);
             viewHolder.txtMenuCategory=(TextView)row.findViewById(R.id.txtCategory);
@@ -81,7 +80,7 @@ public class OrderListAdapter extends BaseAdapter {
             viewHolder.imgPlus=(ImageView)row.findViewById(R.id.imgPlus);
             viewHolder.imgMinus=(ImageView)row.findViewById(R.id.imgMinus);
             viewHolder.txtQuantity=(TextView)row.findViewById(R.id.txtMenuQty);
-            viewHolder.mNetworkImageView=(NetworkImageView)row.findViewById(R.id.menuImageLoader);
+            viewHolder.networkImageView =(NetworkImageView)row.findViewById(R.id.menuImageLoader);
             row.setTag(viewHolder);
 
         } else viewHolder = (ViewHolder) row.getTag();
@@ -107,14 +106,23 @@ public class OrderListAdapter extends BaseAdapter {
         {
             viewHolder.imgFoodType.setImageResource(R.drawable.non_veg_icon);
         }
+
+        if(menu.isSpicy())
+        {
+            viewHolder.imgSpicy.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewHolder.imgSpicy.setVisibility(View.INVISIBLE);
+        }
         mImageLoader = CustomVolleyRequestQueue.getInstance(mContext)
                 .getImageLoader();
         //Image URL - This can point to any image file supported by Android
         final String url = menu.getmImage();
-        mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.mNetworkImageView,
+        mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.networkImageView,
                 R.mipmap.ic_launcher, android.R.drawable
                         .ic_dialog_alert));
-        viewHolder.mNetworkImageView.setImageUrl(url, mImageLoader);
+        viewHolder.networkImageView.setImageUrl(url, mImageLoader);
         viewHolder.txtMenuTags.setText(menu.getmTags());
         viewHolder.txtMenuCategory.setText(menu.getmCategory());
         viewHolder.txtPrice.setText(String.format("%.2f", menu.getmPrice()));
@@ -141,6 +149,7 @@ public class OrderListAdapter extends BaseAdapter {
         LinearLayout rowElement;
         ImageView menuImage;
         ImageView imgFoodType;
+        ImageView imgSpicy;
         TextView txtMenuTitle;
         TextView txtMenuTags;
         TextView txtMenuCategory;
@@ -148,7 +157,7 @@ public class OrderListAdapter extends BaseAdapter {
         ImageView imgPlus;
         ImageView imgMinus;
         TextView txtQuantity;
-        NetworkImageView mNetworkImageView;
+        NetworkImageView networkImageView;
     }
     public void setCustomButtonListner(CustomButtonListener listener) {
         this.customButtonListener = listener;
