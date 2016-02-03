@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,15 +30,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class TableMenusActivity extends BaseActivity implements TextWatcher, OrderListAdapter.CustomButtonListener,View.OnClickListener {
+public class TableMenusActivity extends BaseActivity implements OrderListAdapter.CustomButtonListener{
 
     OrderListAdapter orderListAdapter;
-    EditText edtSearch;
     List<OrderMenuDTO> allMenus;
     ListView listMenus;
     TextView txtTotalAmount, txtTotalItems;
     int mTableId, mTableNo;
-    ImageView deleteSearch;
 
     //List<OrderMenuDTO> sortingMenu;
     @Override
@@ -47,20 +49,17 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
         mTableId = getIntent().getIntExtra("TableId", 0);
         mTableNo = getIntent().getExtras().getInt("TableNo");
         //sortingMenu=mDbRepository.getOrderMenu();
-        edtSearch = (EditText) findViewById(R.id.etSearch);
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
-        deleteSearch=(ImageView)findViewById(R.id.deleteSearch);
-        edtSearch.addTextChangedListener(this);
+
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
         orderListAdapter.notifyDataSetChanged();
-        deleteSearch.setOnClickListener(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
 
-       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+      /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -81,28 +80,6 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
         Collections.sort(allMenus);
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (s.length() == 0 || s.length() < 3) {
-            // sortList
-            for (OrderMenuDTO menu : this.allMenus) {
-                menu.setmShow(OrderMenuDTO.SHOW);
-            }
-            Collections.sort(allMenus);
-            orderListAdapter.notifyDataSetChanged();
-            //((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
-        }
-        if (s.length() >= 3) {
-            sortList(s.toString());
-            orderListAdapter.notifyDataSetChanged();
-        }
-        displayMenuPriceAndItems();
-    }
 
     private void displayMenuPriceAndItems() {
         ArrayList<OrderMenuDTO> selectedItems = new ArrayList<>();
@@ -114,11 +91,6 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
         SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(selectedItems);
         txtTotalAmount.setText(String.format(String.format("%.2f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
         txtTotalItems.setText(selectedMenusDTO.getTotalItems() + " Items are selected");
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
     }
 
     @Override
@@ -137,13 +109,52 @@ public class TableMenusActivity extends BaseActivity implements TextWatcher, Ord
     }
 
     @Override
-    public void onClick(View v) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
-        int id=v.getId();
-        if(id==R.id.deleteSearch)
-        {
-            edtSearch.setText("");
-        }
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.length() == 0 || s.length() < 3) {
+                    // sortList
+                    for (OrderMenuDTO menu : allMenus) {
+                        menu.setmShow(OrderMenuDTO.SHOW);
+                    }
+                    Collections.sort(allMenus);
+                    orderListAdapter.notifyDataSetChanged();
+                    //((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                }
+                if (s.length() >= 3) {
+                    sortList(s.toString());
+                    orderListAdapter.notifyDataSetChanged();
+                }
+                displayMenuPriceAndItems();
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        /*if (id == R.id.action_settings) {
+            return true;
+        }*/
+
+        return super.onOptionsItemSelected(item);
     }
 }

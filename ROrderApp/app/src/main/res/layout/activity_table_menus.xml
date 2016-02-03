@@ -5,43 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/table_back"
     android:orientation="vertical"
-    android:weightSum="1"
-    >
-changes for tool bar 01/02/2016 by Shrinivas
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-             />
-
-    </android.support.design.widget.AppBarLayout>
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/light_yello">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/back" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:gravity="center_horizontal"
-            android:paddingTop="10dp"
-            android:text="Order List"
-            android:textColor="@color/White"
-            android:textSize="20sp" />
-    </LinearLayout>-->
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,57 +13,13 @@ changes for tool bar 01/02/2016 by Shrinivas
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="0.2"
-                android:background="@drawable/search_box"
-                android:src="@drawable/search" />
-
-            <EditText
-                android:id="@+id/etSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@color/White"
-                android:gravity="left"
-                android:hint="Type menu or category"
-                android:padding="4dp"
-                android:paddingTop="3dp"
-                android:singleLine="true"
-                android:textColor="@android:color/secondary_text_light"
-                android:textColorHint="#B6B6B6"
-                android:textSize="12sp" />
-
-            <ImageView
-                android:id="@+id/deleteSearch"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="0.2"
-                android:background="@drawable/search_delete_btn"
-                android:src="@drawable/delete_logo" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="0"
-            android:background="@color/black_overlay" />
 
         <ListView
             android:id="@+id/listMenus"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:dividerHeight="0dp"></ListView>
+            android:dividerHeight="0dp"/>
 
     </LinearLayout>
 
@@ -107,8 +27,8 @@ changes for tool bar 01/02/2016 by Shrinivas
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center_vertical"
         android:background="@color/custom_text_selected"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
 
@@ -116,26 +36,26 @@ changes for tool bar 01/02/2016 by Shrinivas
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_table_menu_bottom"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="@dimen/activity_table_menu_bottom">
 
             <TextView
                 android:id="@+id/txt"
                 android:layout_width="wrap_content"
-                android:textSize="13sp"
                 android:layout_height="wrap_content"
                 android:text="Current Order"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtTotalRs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
                 android:text="0.00 Rs."
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -146,14 +66,14 @@ changes for tool bar 01/02/2016 by Shrinivas
 
         <TextView
             android:id="@+id/txtTotalItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_table_menu_bottom"
             android:padding="@dimen/activity_table_menu_bottom"
-            android:layout_width="wrap_content"
             android:singleLine="false"
-            android:textSize="13sp"
-            android:layout_height="wrap_content"
             android:text="0 Items Selected"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
     </LinearLayout>
