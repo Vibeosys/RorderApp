@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="false">
 
-  <RelativeLayout
-      android:id="@+id/buttonForTableOrder"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/buttonForTableOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin">
 
-      <Button
-          android:id="@+id/btnKtchOrder"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentLeft="true"
-          android:text="Send KOT"
-          android:background="@drawable/button_custom"/>
+        <Button
+            android:id="@+id/btnKtchOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/button_custom"
+            android:text="Send KOT" />
 
-      <Button
-          android:id="@+id/btnPaybill"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:text ="Payment"
-          android:background="@drawable/button_custom"/>
-  </RelativeLayout>
+        <Button
+            android:id="@+id/btnPaybill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_custom"
+            android:text="Payment" />
+    </RelativeLayout>
+
     <LinearLayout
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:focusable="false">
 
 
         <ExpandableListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/expListViewForTableOrder"
-            android:layout_weight="1" />
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:groupIndicator="@null"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true" />
     </LinearLayout>
 </LinearLayout>

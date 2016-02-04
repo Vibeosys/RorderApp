@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,22 +24,26 @@ import android.widget.Toast;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.OrderListAdapter;
 import com.vibeosys.rorderapp.data.MenuDbDTO;
+import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
+import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.SelectedMenusDTO;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class TableMenusActivity extends BaseActivity implements OrderListAdapter.CustomButtonListener{
+public class TableMenusActivity extends BaseActivity implements OrderListAdapter.CustomButtonListener,View.OnClickListener{
 
     OrderListAdapter orderListAdapter;
     List<OrderMenuDTO> allMenus;
     ListView listMenus;
     TextView txtTotalAmount, txtTotalItems;
     int mTableId, mTableNo;
-
+    LinearLayout llCurrentOrder;
     //List<OrderMenuDTO> sortingMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +57,12 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
         //sortingMenu=mDbRepository.getOrderMenu();
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
-
+        llCurrentOrder=(LinearLayout)findViewById(R.id.llCurrentOrder);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
         orderListAdapter.notifyDataSetChanged();
+        llCurrentOrder.setOnClickListener(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
 
       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -111,7 +118,7 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.table_menus, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -156,5 +163,24 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
         }*/
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id=v.getId();
+        if(id==R.id.llCurrentOrder)
+        {
+            /*List<OrdersDbDTO> orderInserts=new ArrayList<>();
+            orderInserts.add(new OrdersDbDTO("" + 2, 1234, true, Date.valueOf("2016-02-02"),
+                    Time.valueOf("8:50:22"), Date.valueOf("2016-02-02"), Date.valueOf("2016-02-02"), 1, "" + 1, 61));
+            mDbRepository.insertOrders(orderInserts);
+
+            List<OrderDetailsDbDTO> orderDetailsDbDTOList=new ArrayList<>();
+            orderDetailsDbDTOList.add(new OrderDetailsDbDTO(3,23,1,Date.valueOf("2016-02-02"),Date.valueOf("2016-02-02"),""+2,3,"Kabab"));
+            orderDetailsDbDTOList.add(new OrderDetailsDbDTO(4,36,1,Date.valueOf("2016-02-02"),Date.valueOf("2016-02-02"),""+2,4,"Garlic Bread"));
+            mDbRepository.insertOrderDetails(orderDetailsDbDTOList);*/
+
+            startActivity(new Intent(getApplicationContext(), TableOrderActivity.class));
+        }
     }
 }

@@ -24,6 +24,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class MainActivity extends BaseActivity
     List<HotelTableDTO> hotelTableDTOs;
     List<HotelTableDTO> sortedTables;
     private Context mContext=this;
+    TextView txtTotalCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +76,7 @@ public class MainActivity extends BaseActivity
         } else {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            ImageButton fab = (ImageButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -93,6 +94,7 @@ public class MainActivity extends BaseActivity
             txtRestaurantName.setText("");*/
             drawer.setDrawerListener(toggle);
             toggle.syncState();
+            txtTotalCount=(TextView)findViewById(R.id.txtCount);
             gridView = (GridView) findViewById(R.id.gridview);
             gridView.setOnItemClickListener(this);
             hotelTableDTOs=mDbRepository.getTableRecords();
@@ -100,6 +102,7 @@ public class MainActivity extends BaseActivity
             gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+            txtTotalCount.setText(""+mDbRepository.getOccupiedTable()+" out of "+hotelTableDTOs.size()+ " tables are occupied");
         }
 
     }

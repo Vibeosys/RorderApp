@@ -14,7 +14,16 @@
         android:layout_width="match_parent"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:layout_height="match_parent">
-
+<TextView
+    android:id="@+id/txtCount"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Total Tables"
+    android:gravity="center"
+    android:padding="8dp"
+    android:textColor="@color/White"
+    android:background="@color/drawer"
+    />
         <GridView
             android:id="@+id/gridview"
 

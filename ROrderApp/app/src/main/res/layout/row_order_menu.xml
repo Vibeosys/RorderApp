@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="2dp">
+    android:layout_margin="2dp"
+    android:focusable="false"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-       android:padding="4dp" >
+        android:padding="4dp">
 
 
-
-         <TextView
+        <TextView
             android:id="@+id/txtMenuName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,41 +24,43 @@
             android:textColor="@color/listview_item" />
 
 
-            <ImageView
-                android:id="@+id/imgOrderPluse"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="3dp"
-                android:layout_weight="2"
-                android:src = "@drawable/ic_action_minus"
-                />
+        <ImageView
+            android:id="@+id/imgOrderPluse"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="3dp"
+            android:layout_weight="2"
+            android:src="@drawable/ic_action_minus" />
 
-            <TextView
-                android:id="@+id/txtOderQty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Qty"
-                android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/txtOderQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Qty" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_marginLeft="3dp"
-                android:layout_weight="1"
-                android:text="0"
-                android:textSize="12sp"
-                android:translationZ="3dp"
-                android:textColor="@color/listview_item"/>
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="3dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="2"
+        <TextView
+            android:id="@+id/txtQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="0"
+            android:textColor="@color/listview_item"
+            android:textSize="12sp"
+            android:translationZ="3dp" />
 
-                android:translationZ="3dp"
-                android:src="@drawable/ic_action_add" />
+        <ImageView
+            android:id="@+id/imgMinus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="3dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="2"
+
+            android:src="@drawable/ic_action_add"
+            android:translationZ="3dp" />
 
     </LinearLayout>
 </LinearLayout>
