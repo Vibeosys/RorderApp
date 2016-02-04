@@ -80,7 +80,7 @@
                 android:text="@string/reset"
                 style="@style/layout_cancel_button_style" />
             <TextView
-                android:id="@+id/txtReserve"
+                android:id="@+id/txtApply"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/apply"

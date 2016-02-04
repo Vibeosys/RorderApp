@@ -38,6 +38,7 @@ import com.vibeosys.rorderapp.adaptors.TableCategoryAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
+import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.UserAuth;
 
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener{
 
     TabLayout tab_layout;
     DrawerLayout drawer;
@@ -180,8 +181,8 @@ public class MainActivity extends BaseActivity
             return true;
         }*/if(id == R.id.filter)
         {
-                Intent i = new Intent(this, TableFilterActivity.class);
-                startActivity(i);
+                Intent iFilter = new Intent(this, TableFilterActivity.class);
+                startActivityForResult(iFilter, 2);
         }
 
         return super.onOptionsItemSelected(item);
@@ -227,14 +228,15 @@ public class MainActivity extends BaseActivity
         }
        else
         {
-            showReserveDialog(hotelTableDTO.getmTableNo(),hotelTableDTO.getmTableId());
+            mDbRepository.setOccupied(true,hotelTableDTO.getmTableId());
+            showReserveDialog(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId());
         }
         Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
     }
 
     private void callToMenuIntent(int tableNo, int tableId) {
         Intent intentOpenTableMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-        intentOpenTableMenu.putExtra("TableNo",tableNo);
+        intentOpenTableMenu.putExtra("TableNo", tableNo);
         intentOpenTableMenu.putExtra("TableId", tableId);
         startActivity(intentOpenTableMenu);
     }
@@ -258,11 +260,24 @@ public class MainActivity extends BaseActivity
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Customer Entered in db",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Customer Entered in db", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
-                callToMenuIntent(tableNo,tableId);
+                callToMenuIntent(tableNo, tableId);
             }
         });
         dialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2)
+        {
+            int categoryId=data.getIntExtra("Category",0);
+            Log.d(TAG,"##"+categoryId);
+            adapter.refresh(new TableCategoryDTO().filterByCategory(mDbRepository.getTableRecords(), categoryId));
+        }
     }
 }

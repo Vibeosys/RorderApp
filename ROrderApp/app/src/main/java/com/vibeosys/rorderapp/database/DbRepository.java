@@ -674,9 +674,41 @@ public class DbRepository extends SQLiteOpenHelper {
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
                     SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=?",
                     whereClause);
+            contentValues.clear();
+            sqLiteDatabase.close();
         } catch (Exception e) {
 
         }
+        finally {
+            sqLiteDatabase.close();
+        }
         return count != -1;
+    }
+
+    public boolean setOccupied(boolean value,int tableId)
+    {
+        SQLiteDatabase sqLiteDatabase=null;
+        ContentValues contentValues=null;
+        sqLiteDatabase=getWritableDatabase();
+        long count=-1;
+
+        try{
+            contentValues=new ContentValues();
+            contentValues.put(SqlContract.SqlHotelTable.IS_OCCUPIED,value);
+            String[] whereClause=new String[]{String.valueOf(tableId)};
+            count=sqLiteDatabase.update(SqlContract.SqlHotelTable.TABLE_NAME,contentValues,
+                    SqlContract.SqlHotelTable.TABLE_ID+"=?",whereClause);
+            sqLiteDatabase.close();
+
+        }
+        catch(Exception e)
+        {
+            Log.e(TAG,"## error at set Occupied "+e.toString());
+            e.printStackTrace();
+        }
+        finally {
+            sqLiteDatabase.close();
+        }
+        return count!=-1;
     }
 }
