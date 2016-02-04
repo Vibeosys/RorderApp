@@ -254,8 +254,11 @@ public class DbRepository extends SQLiteOpenHelper {
                         int capacity = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.CAPACITY));
                         String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.CREATED_DATE));
                         String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.UPDATED_DATE));
-                        String isOccupied = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
-                        HotelTableDTO table = new HotelTableDTO(tableId, tableNo, tableCtegory, tableCtegoryName, capacity, createdDate, updatedDate, Boolean.parseBoolean(isOccupied));
+                        int isOccupied = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
+                        boolean occupied = isOccupied == 1 ? true : false;
+                        HotelTableDTO table = new HotelTableDTO(tableId, tableNo, tableCtegory,
+                                tableCtegoryName, capacity, createdDate, updatedDate,
+                                occupied);
                         //table.setJsonSync();
                         hotelTables.add(table);
                     } while (cursor.moveToNext());
@@ -601,7 +604,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         int iSpicy = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.IS_SPICY));
                         boolean isSpicy = iSpicy == 1 ? true : false;
                         double menuPrice = Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
-                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, 0, OrderMenuDTO.SHOW,isSpicy);
+                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, 0, OrderMenuDTO.SHOW, isSpicy);
                         //table.setJsonSync();
                         orderMenus.add(orderMenu);
                     } while (cursor.moveToNext());
@@ -678,37 +681,32 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase.close();
         } catch (Exception e) {
 
-        }
-        finally {
+        } finally {
             sqLiteDatabase.close();
         }
         return count != -1;
     }
 
-    public boolean setOccupied(boolean value,int tableId)
-    {
-        SQLiteDatabase sqLiteDatabase=null;
-        ContentValues contentValues=null;
-        sqLiteDatabase=getWritableDatabase();
-        long count=-1;
+    public boolean setOccupied(boolean value, int tableId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
 
-        try{
-            contentValues=new ContentValues();
-            contentValues.put(SqlContract.SqlHotelTable.IS_OCCUPIED,value);
-            String[] whereClause=new String[]{String.valueOf(tableId)};
-            count=sqLiteDatabase.update(SqlContract.SqlHotelTable.TABLE_NAME,contentValues,
-                    SqlContract.SqlHotelTable.TABLE_ID+"=?",whereClause);
+        try {
+            contentValues = new ContentValues();
+            contentValues.put(SqlContract.SqlHotelTable.IS_OCCUPIED, value);
+            String[] whereClause = new String[]{String.valueOf(tableId)};
+            count = sqLiteDatabase.update(SqlContract.SqlHotelTable.TABLE_NAME, contentValues,
+                    SqlContract.SqlHotelTable.TABLE_ID + "=?", whereClause);
             sqLiteDatabase.close();
 
-        }
-        catch(Exception e)
-        {
-            Log.e(TAG,"## error at set Occupied "+e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, "## error at set Occupied " + e.toString());
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             sqLiteDatabase.close();
         }
-        return count!=-1;
+        return count != -1;
     }
 }

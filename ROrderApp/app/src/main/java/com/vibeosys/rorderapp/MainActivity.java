@@ -228,7 +228,6 @@ public class MainActivity extends BaseActivity
         }
        else
         {
-            mDbRepository.setOccupied(true,hotelTableDTO.getmTableId());
             showReserveDialog(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId());
         }
         Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
@@ -262,6 +261,8 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Customer Entered in db", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
+                mDbRepository.setOccupied(true, tableId);
+                adapter.refresh(mDbRepository.getTableRecords());
                 callToMenuIntent(tableNo, tableId);
             }
         });
