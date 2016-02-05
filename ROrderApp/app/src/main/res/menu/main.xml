@@ -15,7 +15,7 @@
     <item
         android:id="@+id/filter"
         android:title ="Filter Menu"
-        android:icon ="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        android:icon ="@drawable/ic_action_filter"
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget"/>
 </menu>

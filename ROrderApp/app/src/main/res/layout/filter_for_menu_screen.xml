@@ -64,6 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
+            android:choiceMode="singleChoice"
+            android:listSelector="@drawable/list_selector"
             android:layout_marginRight="20dp">
 
         </ListView>

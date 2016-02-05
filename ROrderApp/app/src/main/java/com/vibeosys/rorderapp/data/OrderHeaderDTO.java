@@ -19,12 +19,25 @@ public class OrderHeaderDTO {
     private int mUserId;
     private double mOrderAmount;
     private int mItemCount;
+    private boolean mCurrent;
+
+
 
     private List<OrderDetailsDTO> orderDetailsDTOs;
 
+    public OrderHeaderDTO(int mTableNo, int mUserId, double mOrderAmount, int mItemCount,
+                          boolean mCurrent, List<OrderDetailsDTO> orderDetailsDTOs) {
+        this.mTableNo = mTableNo;
+        this.mUserId = mUserId;
+        this.mOrderAmount = mOrderAmount;
+        this.mItemCount = mItemCount;
+        this.mCurrent = mCurrent;
+        this.orderDetailsDTOs = orderDetailsDTOs;
+    }
+
     public OrderHeaderDTO(int mOrderId, int mOrderNo, boolean mOrderStatus, Date mOrderDate,
                           Time mOrderTime, Date mCreatedDate, Date mUpdatedDate, int mTableNo,
-                          int mUserId, double mOrderAmount) {
+                          int mUserId, double mOrderAmount,boolean mCurrent) {
         this.mOrderId = mOrderId;
         this.mOrderNo = mOrderNo;
         this.mOrderStatus = mOrderStatus;
@@ -35,6 +48,7 @@ public class OrderHeaderDTO {
         this.mTableNo = mTableNo;
         this.mUserId = mUserId;
         this.mOrderAmount = mOrderAmount;
+        this.mCurrent=mCurrent;
     }
 
     public int getOrderId() {
@@ -131,5 +145,13 @@ public class OrderHeaderDTO {
 
     public void setOrderDetailsDTOs(List<OrderDetailsDTO> orderDetailsDTOs) {
         this.orderDetailsDTOs = orderDetailsDTOs;
+    }
+
+    public boolean isCurrent() {
+        return mCurrent;
+    }
+
+    public void setCurrent(boolean mCurrent) {
+        this.mCurrent = mCurrent;
     }
 }

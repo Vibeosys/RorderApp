@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
@@ -25,7 +28,7 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
     private List<OrderHeaderDTO> orderHeaderDTOs;
-
+    ButtonListener buttonListener;
     public OrderSummaryAdapter(Context mContext, List<OrderHeaderDTO> orderHeaderDTOs) {
         this.mContext = mContext;
         this.orderHeaderDTOs = orderHeaderDTOs;
@@ -58,7 +61,8 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return orderHeaderDTOs.get(groupPosition).getOrderDetailsDTOs().get(childPosition).getMenuId();
+        //return orderHeaderDTOs.get(groupPosition).getOrderDetailsDTOs().get(childPosition).getMenuId();
+        return childPosition;
     }
 
     @Override
@@ -78,14 +82,27 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         }
         TextView txtOrderName = (TextView) convertView.findViewById(R.id.txtOrderName);
         TextView orderCount = (TextView) convertView.findViewById(R.id.textOrderCount);
-
-        txtOrderName.setText("Order # " + orderHeaderDTO.getOrderNo());
+        Button btnPlaceOrder=(Button)convertView.findViewById(R.id.btnPlaceOrder);
+        if(orderHeaderDTO.getOrderNo()==0)
+        {
+            txtOrderName.setText("Order # Current");
+        }
+        else {
+            txtOrderName.setText("Order # " + orderHeaderDTO.getOrderNo());
+        }
+        if(orderHeaderDTO.isCurrent())
+        {
+            btnPlaceOrder.setVisibility(View.VISIBLE);
+        }
+        else {
+            btnPlaceOrder.setVisibility(View.INVISIBLE);
+        }
         orderCount.setText(""+orderHeaderDTO.getItemCount());
         return convertView;
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         final OrderDetailsDTO orderDetail = orderHeaderDTOs.get(groupPosition).getOrderDetailsDTOs().get(childPosition);
         if (convertView == null) {
@@ -96,14 +113,43 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         Log.d("child", "## in getChildView()");
         TextView txtMenuName = (TextView) convertView.findViewById(R.id.txtMenuName);
         TextView txtQuantity = (TextView) convertView.findViewById(R.id.txtQuantity);
+        ImageView imgPlus=(ImageView)convertView.findViewById(R.id.imgOrderPluse);
+        ImageView imgMinus=(ImageView)convertView.findViewById(R.id.imgOrderMinus);
+        TextView txtPrice=(TextView)convertView.findViewById(R.id.txtMenuPrice);
         txtMenuName.setText(orderDetail.getMenuTitle());
         txtQuantity.setText(""+orderDetail.getOrderQuantity());
+        txtPrice.setText(String.valueOf(orderDetail.getOrderPrice()));
+        OrderHeaderDTO header=orderHeaderDTOs.get(groupPosition);
+        if(header.isCurrent())
+        {
+            imgPlus.setVisibility(View.VISIBLE);
+            imgMinus.setVisibility(View.VISIBLE);
+        }
+        else {
+            imgPlus.setVisibility(View.INVISIBLE);
+            imgMinus.setVisibility(View.INVISIBLE);
+        }
+        imgPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(buttonListener!=null)
+                    buttonListener.onButtonClickListener(v.getId(),childPosition,orderDetail.getOrderQuantity(),orderDetail);
+            }
+        });
+
+        imgMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(buttonListener!=null)
+                    buttonListener.onButtonClickListener(v.getId(),childPosition,orderDetail.getOrderQuantity(),orderDetail);
+            }
+        });
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 
     @Override
@@ -123,5 +169,12 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isEmpty() {
         return false;
+    }
+
+    public void setButtonListner(ButtonListener listener) {
+        this.buttonListener = listener;
+    }
+    public interface ButtonListener{
+        void onButtonClickListener(int id,int position,int value,OrderDetailsDTO orderMenu);
     }
 }

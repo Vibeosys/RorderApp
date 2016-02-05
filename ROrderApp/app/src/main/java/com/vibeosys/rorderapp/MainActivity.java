@@ -43,6 +43,7 @@ import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.UserAuth;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -60,6 +61,8 @@ public class MainActivity extends BaseActivity
     List<HotelTableDTO> sortedTables;
     private Context mContext=this;
     TextView txtTotalCount;
+    static int selectedCategory=0;
+    static boolean btnCancelFlag =false , chkMyservingFlag =false ,chkUnoccupied =false ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,6 +190,16 @@ public class MainActivity extends BaseActivity
         }*/if(id == R.id.filter)
         {
                 Intent iFilter = new Intent(this, TableFilterActivity.class);
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Category", selectedCategory);
+                jsonObject.put("chkMyservingFlag", chkMyservingFlag);
+                jsonObject.put("chkUnoccupied",chkUnoccupied);
+                jsonObject.put("btnFlag",true);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            iFilter.putExtra("json",jsonObject.toString());
                 startActivityForResult(iFilter, 2);
         }
 
@@ -280,14 +293,40 @@ public class MainActivity extends BaseActivity
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
 
-        if(requestCode==2)
+        if(requestCode==2&&data!=null)
         {
-         //   JSONObject obj = new JSONObject(getIntent().getStringExtra("json"));
-            int categoryId=data.getIntExtra("Category",0);
+            JSONObject json;
             String jsonString = data.getStringExtra("json");
+            Log.d(TAG, "##" + jsonString);
+            try {
+                json =new JSONObject(jsonString);
+                btnCancelFlag=json.getBoolean("btnFlag");
+                chkMyservingFlag=json.getBoolean("chkMyservingFlag");
+                chkUnoccupied=json.getBoolean("chkUnoccupied");
+                selectedCategory=json.getInt("Category");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            Log.d(TAG,"##"+jsonString);
-            adapter.refresh(new TableCategoryDTO().filterByCategory(mDbRepository.getTableRecords(), categoryId));
+            if(btnCancelFlag)
+            {
+                if(chkUnoccupied&&selectedCategory!=0)
+                {
+                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory,chkUnoccupied));
+                }
+                else if(!chkUnoccupied&&selectedCategory!=0)
+                {
+                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory));
+                }
+
+            }
+            else {
+                Toast.makeText(getApplicationContext(),"All Filters are removed",Toast.LENGTH_SHORT).show();
+                adapter.refresh(mDbRepository.getTableRecords());
+            }
+        }
+        else {
+
         }
     }
 }

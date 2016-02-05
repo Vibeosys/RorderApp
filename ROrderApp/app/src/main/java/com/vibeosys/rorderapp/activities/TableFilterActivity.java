@@ -30,7 +30,7 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
     TableCategoryAdapter tableCategoryAdapter;
     ArrayList<TableCategoryDTO> allTableCategory;
     int selectedCategory;
-    boolean btnCancelFlag =false , chkMyservingFlag =false ,chkUnoccupied =false ;
+    boolean btnFlag =false , chkMyservingFlag =false ,chkUnoccupied =false ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +41,45 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
         TextView unOccupy = (TextView) findViewById(R.id.unOccupy);
         CheckBox myServingChk = (CheckBox) findViewById(R.id.chkMyserving);
         CheckBox unOccupyChk = (CheckBox) findViewById(R.id.chkUnoccupy);
+        String jsonString = getIntent().getStringExtra("json");
+        Log.d(TAG, "##" + jsonString);
+
+
         TextView txtCancel=(TextView)findViewById(R.id.txtCancel);
         TextView txtApply=(TextView)findViewById(R.id.txtApply);
+
         allTableCategory = mDbRepository.getTableCategories();
+       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tableCategoryAdapter = new TableCategoryAdapter(allTableCategory,getApplicationContext());
         filterTableList.setAdapter(tableCategoryAdapter);
+        if(jsonString=="null"||jsonString.isEmpty())
+        {
+
+        }
+        else {
+            JSONObject json;
+            try {
+                json =new JSONObject(jsonString);
+                btnFlag=json.getBoolean("btnFlag");
+                chkMyservingFlag=json.getBoolean("chkMyservingFlag");
+                chkUnoccupied=json.getBoolean("chkUnoccupied");
+                selectedCategory=json.getInt("Category");
+                changeUi();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        //filterTableList.setSelection(getPosition());
+        if(chkMyservingFlag)
+        {
+            myServingChk.setSelected(true);
+        }
+        if(chkUnoccupied)
+        {
+            unOccupy.setSelected(true);
+        }
+
+
         txtApply.setOnClickListener(this);
         txtCancel.setOnClickListener(this);
         unOccupyChk.setOnClickListener(this);
@@ -80,14 +114,15 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
 
     }
 
+    private void changeUi() {
+
+
+    }
 
 
     @Override
     public void onClick(View v) {
         int id=v.getId();
-
-
-
 
         if(id==R.id.txtApply)
         {
@@ -96,6 +131,7 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
                 jsonObject.put("Category", selectedCategory);
                 jsonObject.put("chkMyservingFlag", chkMyservingFlag);
                 jsonObject.put("chkUnoccupied",chkUnoccupied);
+                jsonObject.put("btnFlag",true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,6 +148,7 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
                 jsonObject.put("Category", -1);
                 jsonObject.put("chkMyservingFlag", false);
                 jsonObject.put("chkUnoccupied",false);
+                jsonObject.put("btnFlag",false);
                 Intent intent=new Intent();
                 //  intent.putExtra("Category", selectedCategory);
                 intent.putExtra("json", jsonObject.toString());//json data added here
@@ -130,5 +167,38 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
         TableCategoryDTO categoryDTO= (TableCategoryDTO) tableCategoryAdapter.getItem(position);
         selectedCategory=categoryDTO.getmCategoryId();
         Log.d(TAG,"## "+selectedCategory);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+       /* JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Category", -1);
+            jsonObject.put("chkMyservingFlag", false);
+            jsonObject.put("chkUnoccupied",false);
+            jsonObject.put("btnFlag",false);
+            Intent intent=new Intent();
+            //  intent.putExtra("Category", selectedCategory);
+            intent.putExtra("json", jsonObject.toString());//json data added here
+            setResult(2, intent);
+            finish();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+
+    }
+
+    public int getPosition()
+    {
+        int position=0;
+        for (int i=0;i<allTableCategory.size();i++)
+        {
+            TableCategoryDTO table=allTableCategory.get(i);
+            if(selectedCategory==table.getmCategoryId())
+                position= i;
+            break;
+        }
+        return position;
     }
 }

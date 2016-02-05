@@ -63,7 +63,7 @@ public class TableCategoryDTO {
 
 
 
-    public ArrayList<HotelTableDTO> filterByCategory(ArrayList<HotelTableDTO> hotelTables, int categoryId) {
+    public ArrayList<HotelTableDTO> filterTable(ArrayList<HotelTableDTO> hotelTables, int categoryId) {
         ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
         for (HotelTableDTO table : hotelTables) {
 
@@ -71,6 +71,20 @@ public class TableCategoryDTO {
                 sortedTable.add(table);
                 Log.i(TAG, "" + table.toString());
             }
+        }
+        return sortedTable;
+    }
+    public ArrayList<HotelTableDTO> filterTable(ArrayList<HotelTableDTO> hotelTables, int categoryId,boolean unOccupied) {
+        ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
+        for (HotelTableDTO table : hotelTables) {
+
+            if(!table.ismIsOccupied()){
+                if (table.getmTableCategoryId() == categoryId) {
+                    sortedTable.add(table);
+                    Log.i(TAG, "" + table.toString());
+                }
+            }
+
         }
         return sortedTable;
     }

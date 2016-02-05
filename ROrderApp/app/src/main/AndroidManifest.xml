@@ -58,9 +58,8 @@
         </activity>
         <activity
             android:name=".activities.TableOrderActivity"
-            android:label="@string/title_filter_menu"
-            android:parentActivityName=".activities.TableMenusActivity">
-
+            android:label="@string/order_summary"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

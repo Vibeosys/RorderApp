@@ -25,7 +25,7 @@
     <string name="dummy_button">Click to Continue</string>
     <string name="dummy_content">Restaurant\nOrdering\nSystem</string>
     <string name="title_activity_table_menus">Table Menus</string>
-
+    <string name="order_summary">Order Summary</string>
     <string name="search_table">Search Table</string>
     <string name="reserve_table">Reserve</string>
     <string name="cancel_string">Cancel</string>

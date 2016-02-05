@@ -3,19 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="2dp"
-    android:focusable="false"
+    android:focusable="true"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:padding="4dp"
+        android:gravity="right|center_vertical">
 
 
         <TextView
             android:id="@+id/txtMenuName"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:layout_weight="3"
@@ -23,20 +24,29 @@
             android:text="Manchurian"
             android:textColor="@color/listview_item" />
 
+        <TextView
+            android:id="@+id/txtMenuPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:singleLine="false"
+            android:text="Price"
+            android:textColor="@color/listview_item" />
 
         <ImageView
-            android:id="@+id/imgOrderPluse"
+            android:id="@+id/imgOrderMinus"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_margin="3dp"
-            android:layout_weight="2"
+            android:layout_margin="5dp"
+            android:padding="1dp"
             android:src="@drawable/ic_action_minus" />
 
         <TextView
             android:id="@+id/txtOderQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:textColor="@color/black_overlay"
+            android:layout_margin="5dp"
             android:text="Qty" />
 
         <TextView
@@ -44,23 +54,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:singleLine="true"
             android:text="0"
-            android:textColor="@color/listview_item"
-            android:textSize="12sp"
-            android:translationZ="3dp" />
+            android:layout_margin="5dp"
+            android:textColor="@color/black_color"
+            android:textSize="12sp" />
 
         <ImageView
-            android:id="@+id/imgMinus"
+            android:id="@+id/imgOrderPluse"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_margin="3dp"
+            android:layout_margin="5dp"
+            android:padding="1dp"
             android:layout_marginLeft="5dp"
-            android:layout_weight="2"
-
             android:src="@drawable/ic_action_add"
             android:translationZ="3dp" />
-
     </LinearLayout>
 </LinearLayout>

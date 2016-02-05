@@ -652,8 +652,12 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTempOrder.ORDER_TIME, rOrderDateUtils.getGMTCurrentTime());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
 
-            if (rowCount == 0)
+            if (rowCount == 0&&qty!=0)
                 count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);
+            else if(qty==0)
+
+                count=sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
+                        + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?",whereClause);
             else
                 count = sqLiteDatabase.update(SqlContract.SqlTempOrder.TABLE_NAME, contentValues, SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
                         + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
@@ -743,7 +747,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         OrderHeaderDTO orderHeaderDTO = new OrderHeaderDTO(orderId,
                                 orderNo, true, Date.valueOf(orderDate), Time.valueOf(orderTime),
                                 Date.valueOf(createdDate), Date.valueOf(updatedDate), tableNo,
-                                userId, orderAmount);
+                                userId, orderAmount, false);
                         orders.add(orderHeaderDTO);
                     } while (cursor.moveToNext());
                 }
@@ -792,7 +796,7 @@ public class DbRepository extends SQLiteOpenHelper {
 
                             OrderDetailsDTO orderDetails = new OrderDetailsDTO(orderDetailsId,
                                     orderPrice, orderQuantity, Date.valueOf(createdDate),
-                                    Date.valueOf(updatedDate), myOrderId, menuId, menuTitle);
+                                    Date.valueOf(updatedDate), myOrderId, menuId, menuTitle,0);
                             orderDetailsList.add(orderDetails);
                         } while (cursor.moveToNext());
                     }
@@ -802,25 +806,83 @@ public class DbRepository extends SQLiteOpenHelper {
                 order.setOrderDetailsDTOs(orderDetailsList);
             }
         } catch (Exception e) {
-
+            Log.e(TAG, "## error at getOrederDetailsGroupByID function");
+        } finally {
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
         }
 
     }
 
-    public int getOccupiedTable()
-    {
-        int count=0;
-        SQLiteDatabase sqLiteDatabase=null;
-        Cursor cursor=null;
-        try{
-            sqLiteDatabase=getReadableDatabase();
-            cursor=sqLiteDatabase.rawQuery("Select * From "+SqlContract.SqlHotelTable.TABLE_NAME+" where IsOccupied = 1",null);
-            count=cursor.getCount();
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG,"## error at getOccupied table"+e.toString());
+    public int getOccupiedTable() {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlHotelTable.TABLE_NAME + " where IsOccupied = 1", null);
+            count = cursor.getCount();
+        } catch (Exception e) {
+            Log.e(TAG, "## error at getOccupied table" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
         }
         return count;
+    }
+
+    public OrderHeaderDTO getOrederDetailsFromTemp(int tableId, int userId) {
+
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        OrderHeaderDTO orderHeaderDTO=null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            List<OrderDetailsDTO> orderDetailsList = new ArrayList<>();
+            String[] whereClause = new String[]{String.valueOf(tableId)};
+            double orderAmount = 0;
+            cursor = sqLiteDatabase.rawQuery("Select temp_order.TempOrderId,temp_order.Quantity," +
+                    "temp_order.MenuId,temp_order.OrderDate,temp_order.OrderTime,menu.MenuTitle," +
+                    "menu.Price from temp_order left join menu where " +
+                    "temp_order.MenuId=menu.MenuId and temp_order.TableId=?", whereClause);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    do {
+                        int orderDetailsTempId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.TEMP_ORDER_ID));
+                        double menuPrice = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE));
+                        int orderQuantity = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.QUANTITY));
+                        String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTempOrder.ORDER_DATE));
+                        //String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.UPDATE_DATE));
+                        //String myOrderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_ID));
+                        int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.MENU_ID));
+                        String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
+                        double orderPice = menuPrice * orderQuantity;
+                        orderAmount = orderAmount + orderPice;
+                        OrderDetailsDTO orderDetails = new OrderDetailsDTO(orderDetailsTempId,orderPice
+                                , orderQuantity, Date.valueOf(createdDate),
+                                Date.valueOf(createdDate), "", menuId, menuTitle,menuPrice);
+                        orderDetailsList.add(orderDetails);
+                    } while (cursor.moveToNext());
+                }
+            }
+            orderHeaderDTO = new OrderHeaderDTO(tableId, userId, orderAmount, orderDetailsList.size(), true, orderDetailsList);
+            cursor.close();
+        } catch (Exception e) {
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+        }
+        return orderHeaderDTO;
     }
 }
