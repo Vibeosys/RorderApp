@@ -35,4 +35,8 @@
     <string name ="reset">RESET</string>
     <string name = "title_filter_menu">My Filter</string>
     <string name = "filter_category">Select Category</string>
+    <string name ="Bill_details_title">Billing Details</string>
+    <string name ="MenuItem">Order</string>
+    <string name ="BillingQty">Qty</string>
+    <string name ="BillingAmt">Amount</string>
 </resources>

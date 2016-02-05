@@ -96,4 +96,28 @@
         <item name="android:gravity">center</item>
 
     </style>
+    <style name="largeTextBillingDtl">
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="largeTextbilling_bold">
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
+        <item name="android:textColor">@color/black_color</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@color/White</item>
+    </style>
+    <style name="billing_summery_bold">
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@color/White</item>
+        <item name="android:textStyle">bold|italic</item>
+    </style>
 </resources>

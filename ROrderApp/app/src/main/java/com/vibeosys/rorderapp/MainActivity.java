@@ -43,6 +43,8 @@ import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.UserAuth;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +104,7 @@ public class MainActivity extends BaseActivity
             gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
-            txtTotalCount.setText(""+mDbRepository.getOccupiedTable()+" out of "+hotelTableDTOs.size()+ " tables are occupied");
+            txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + hotelTableDTOs.size() + " tables are occupied");
         }
 
     }
@@ -277,10 +279,14 @@ public class MainActivity extends BaseActivity
     {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
+
         if(requestCode==2)
         {
+         //   JSONObject obj = new JSONObject(getIntent().getStringExtra("json"));
             int categoryId=data.getIntExtra("Category",0);
-            Log.d(TAG,"##"+categoryId);
+            String jsonString = data.getStringExtra("json");
+
+            Log.d(TAG,"##"+jsonString);
             adapter.refresh(new TableCategoryDTO().filterByCategory(mDbRepository.getTableRecords(), categoryId));
         }
     }
