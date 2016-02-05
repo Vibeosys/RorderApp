@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:padding="2dp"
+    android:layout_weight="3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+    android:layout_weight="1"
+    android:id="@+id/Item_menu_name"
+    android:text="Veg Manchurian"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="@style/largeTextBillingDtl"/>
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/Item_menu_Qty"
+        android:text="3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/largeTextBillingDtl"/>
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/Item_menu_price"
+        android:text="180"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/largeTextBillingDtl"/>
+</LinearLayout>
