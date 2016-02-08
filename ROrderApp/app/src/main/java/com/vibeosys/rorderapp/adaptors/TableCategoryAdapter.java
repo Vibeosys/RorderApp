@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -59,6 +60,7 @@ public class TableCategoryAdapter extends BaseAdapter {
             viewHolder = new TableCategoryAdapter.ViewHolder();
             viewHolder.txtCategory = (TextView) row.findViewById(R.id.txtTableCategory);
             viewHolder.icon=(NetworkImageView)row.findViewById(R.id.tableCategoryIcon);
+            viewHolder.checkMark=(ImageView)row.findViewById(R.id.imgCheck);
             row.setTag(viewHolder);
 
         } else viewHolder = (TableCategoryAdapter.ViewHolder) row.getTag();
@@ -72,6 +74,13 @@ public class TableCategoryAdapter extends BaseAdapter {
         mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.icon,
                 R.mipmap.ic_launcher, android.R.drawable.stat_notify_error));
         viewHolder.icon.setImageUrl(url, mImageLoader);
+        if(categoryDTO.isSelected())
+        {
+            viewHolder.checkMark.setVisibility(View.VISIBLE);
+        }
+        else {
+            viewHolder.checkMark.setVisibility(View.INVISIBLE);
+        }
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }
@@ -79,5 +88,23 @@ public class TableCategoryAdapter extends BaseAdapter {
     private class ViewHolder{
         TextView txtCategory;
         NetworkImageView icon;
+        ImageView checkMark;
+    }
+
+    public void setItemChecked(int categoryId)
+    {
+        for(int i=0;i<mTablecategories.size();i++)
+        {
+            TableCategoryDTO tableCategory=mTablecategories.get(i);
+            if(tableCategory.getmCategoryId()==categoryId)
+            {
+                tableCategory.setSelected(!tableCategory.isSelected());
+            }
+            else {
+                tableCategory.setSelected(false);
+            }
+
+        }
+        notifyDataSetChanged();
     }
 }

@@ -7,12 +7,12 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <ImageView
+ <ImageView
         android:id="@+id/orderImg"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@drawable/triangular_arrow_down" />
+        android:src="@drawable/expand_indicator" />
 
     <TextView
         android:id="@+id/txtOrderName"

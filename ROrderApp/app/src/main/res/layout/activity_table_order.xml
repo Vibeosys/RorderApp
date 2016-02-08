@@ -11,23 +11,23 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin">
 
-        <Button
+       <!-- <Button
             android:id="@+id/btnKtchOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textColor="@color/White"
             android:background="@drawable/button_custom"
-            android:text="Send KOT" />
+            android:text="Send KOT" />-->
 
-        <Button
+       <!-- <Button
             android:id="@+id/btnPaybill"
             android:textColor="@color/White"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@drawable/button_custom"
-            android:text="Payment" />
+            android:text="Payment" />-->
     </RelativeLayout>
 
     <LinearLayout
@@ -42,9 +42,9 @@
             android:id="@+id/expListViewForTableOrder"
             android:layout_width="match_parent"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:groupIndicator="@null"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true" />
+            android:clickable="true"
+            />
     </LinearLayout>
 </LinearLayout>

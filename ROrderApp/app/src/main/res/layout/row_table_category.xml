@@ -6,6 +6,7 @@
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:layout_marginTop="@dimen/header_margin_top"
     android:layout_marginBottom="@dimen/header_margin_top"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <com.android.volley.toolbox.NetworkImageView
@@ -18,12 +19,21 @@
         />
     <TextView
         android:id="@+id/txtTableCategory"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/list_item_left_margin"
         android:gravity="center_vertical"
         android:text="test"
+        android:layout_weight="2"
         android:textColor="@color/drawer"
         android:textStyle="normal" />
+
+    <ImageView
+
+        android:id="@+id/imgCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/checkmark"
+        android:layout_weight="0.2"/>
 
 </LinearLayout>

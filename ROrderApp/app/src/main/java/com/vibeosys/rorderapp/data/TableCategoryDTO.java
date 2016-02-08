@@ -14,6 +14,7 @@ public class TableCategoryDTO {
     private int mCategoryId;
     private String mTitle;
     private String mImage;
+    private boolean mSelected;
     private String mCreatedDate;
     private String mUpdatedDate;
 
@@ -60,8 +61,13 @@ public class TableCategoryDTO {
         this.mUpdatedDate = mUpdatedDate;
     }
 
+    public boolean isSelected() {
+        return mSelected;
+    }
 
-
+    public void setSelected(boolean mSelected) {
+        this.mSelected = mSelected;
+    }
 
     public ArrayList<HotelTableDTO> filterTable(ArrayList<HotelTableDTO> hotelTables, int categoryId) {
         ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
@@ -78,11 +84,23 @@ public class TableCategoryDTO {
         ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
         for (HotelTableDTO table : hotelTables) {
 
-            if(!table.ismIsOccupied()){
+            if(table.ismIsOccupied()!=unOccupied){
                 if (table.getmTableCategoryId() == categoryId) {
                     sortedTable.add(table);
                     Log.i(TAG, "" + table.toString());
                 }
+            }
+
+        }
+        return sortedTable;
+    }
+    public ArrayList<HotelTableDTO> filterTable(ArrayList<HotelTableDTO> hotelTables,boolean unOccupied) {
+        ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
+        for (HotelTableDTO table : hotelTables) {
+
+            if(table.ismIsOccupied()!=unOccupied) {
+                sortedTable.add(table);
+                Log.i(TAG, "" + table.toString());
             }
 
         }

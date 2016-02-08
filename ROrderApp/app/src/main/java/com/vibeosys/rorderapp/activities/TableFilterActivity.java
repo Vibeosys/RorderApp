@@ -69,15 +69,11 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
                 e.printStackTrace();
             }
         }
-        //filterTableList.setSelection(getPosition());
-        if(chkMyservingFlag)
-        {
-            myServingChk.setSelected(true);
-        }
-        if(chkUnoccupied)
-        {
-            unOccupy.setSelected(true);
-        }
+        tableCategoryAdapter.setItemChecked(selectedCategory);
+        tableCategoryAdapter.notifyDataSetChanged();
+        myServingChk.setChecked(chkMyservingFlag);
+        unOccupyChk.setChecked(chkUnoccupied);
+
 
 
         txtApply.setOnClickListener(this);
@@ -165,8 +161,20 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TableCategoryDTO categoryDTO= (TableCategoryDTO) tableCategoryAdapter.getItem(position);
-        selectedCategory=categoryDTO.getmCategoryId();
-        Log.d(TAG,"## "+selectedCategory);
+        //categoryDTO.setSelected(!categoryDTO.isSelected());
+        if(!categoryDTO.isSelected())
+        {
+            selectedCategory=categoryDTO.getmCategoryId();
+            tableCategoryAdapter.setItemChecked(selectedCategory);
+            tableCategoryAdapter.notifyDataSetChanged();
+        }
+        else
+        {
+            tableCategoryAdapter.setItemChecked(selectedCategory);
+            selectedCategory=0;
+            tableCategoryAdapter.notifyDataSetChanged();
+        }
+        Log.d(TAG, "## " + selectedCategory);
     }
 
     @Override

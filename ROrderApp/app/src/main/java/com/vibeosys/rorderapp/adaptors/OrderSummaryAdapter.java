@@ -83,6 +83,7 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         TextView txtOrderName = (TextView) convertView.findViewById(R.id.txtOrderName);
         TextView orderCount = (TextView) convertView.findViewById(R.id.textOrderCount);
         Button btnPlaceOrder=(Button)convertView.findViewById(R.id.btnPlaceOrder);
+        ImageView imgIndicator=(ImageView)convertView.findViewById(R.id.orderImg);
         if(orderHeaderDTO.getOrderNo()==0)
         {
             txtOrderName.setText("Order # Current");
@@ -97,6 +98,7 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         else {
             btnPlaceOrder.setVisibility(View.INVISIBLE);
         }
+        imgIndicator.setImageResource(isExpanded?R.drawable.expand_arrow:R.drawable.arrow_not_expand);
         orderCount.setText(""+orderHeaderDTO.getItemCount());
         return convertView;
     }

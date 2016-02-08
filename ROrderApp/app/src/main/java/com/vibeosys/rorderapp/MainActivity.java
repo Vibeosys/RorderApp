@@ -68,6 +68,7 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_login);
         setContentView(R.layout.activity_main);
+        setTitle("Select Table");
         ContextWrapper ctw = new ContextWrapper(getApplicationContext());
         File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
         File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
@@ -317,6 +318,14 @@ public class MainActivity extends BaseActivity
                 else if(!chkUnoccupied&&selectedCategory!=0)
                 {
                     adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory));
+                }
+                else if(chkUnoccupied&&selectedCategory<=0)
+                {
+                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(),chkUnoccupied));
+                }
+                else if(!chkUnoccupied&&selectedCategory<=0)
+                {
+                    adapter.refresh(mDbRepository.getTableRecords());
                 }
 
             }
