@@ -127,4 +127,22 @@ public class SqlContract {
         public final static String ORDER_TIME="OrderTime";
         public final static String ORDER_STATUS="OrderStatus";
     }
+
+    public abstract class SqlCustomer{
+        public final static String TABLE_NAME="customer";
+        public final static String CUST_ID="CustId";
+        public final static String CUST_NAME="CustName";
+        public final static String CUST_PHONE="CustPhone";
+        public final static String CUST_EMAIL="CustEmail";
+    }
+
+    public abstract class SqlTableTransaction{
+        public final static String TABLE_NAME="table_transaction";
+        public final static String TABLE_ID="TableId";
+        public final static String USER_ID="UserId";
+        public final static String CUST_ID="CustId";
+        public final static String IS_WAIT="IsWaiting";
+        public final static String ARRIVAL_TIME="ArrivalTime";
+        public final static String OCCUPANCY="Occupancy";
+    }
 }

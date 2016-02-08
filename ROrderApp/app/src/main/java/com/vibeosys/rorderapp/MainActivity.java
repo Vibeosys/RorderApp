@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.BillSummeryActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
@@ -86,8 +87,9 @@ public class MainActivity extends BaseActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Intent iWaitingList=new Intent(getApplicationContext(), AddCustomerActivity.class);
+                    startActivity(iWaitingList);
+                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                 }
             });
 
