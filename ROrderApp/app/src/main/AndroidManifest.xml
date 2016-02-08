@@ -66,6 +66,11 @@
             android:label="@string/order_summary"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity
+            android:name=".activities.BillPaymentOptionActivity"
+            android:label="@string/payment_option_screen"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

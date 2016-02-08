@@ -41,4 +41,12 @@
     <string name ="BillingQty">Qty</string>
     <string name ="BillingAmt">Amount</string>
     <string name ="Bill_Summary">Bill Summary</string>
+    <string name ="Payment_by">Payment by</string>
+    <string-array name="payment_String_array">
+        <item>Cash</item>
+        <item>Debit/Credit card</item>
+        <item>Cheque</item>
+    </string-array>
+    <string name="payment_option_screen">Payment Option</string>
+    <string name="Payment_close">Close</string>
 </resources>

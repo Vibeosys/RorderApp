@@ -1,7 +1,11 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
@@ -45,6 +49,7 @@ public class BillDetailsActivity extends BaseActivity {
         TextView servicesCharges = (TextView) findViewById(R.id.ServicesChrgAmt);
         TextView discountAmount = (TextView) findViewById(R.id.DiscountAmt);
         TextView totalPayableAmnount = (TextView) findViewById(R.id.TotalAmt);
+        Button payment_bill_details = (Button)findViewById(R.id.BillDetailsPayment);
         billDetailsDTOs = mDbRepository.getBillDetailsRecords();
          tableNo.setText("");
         orderNo.setText("");
@@ -58,7 +63,15 @@ public class BillDetailsActivity extends BaseActivity {
         totalPayableAmnount.setText(String.valueOf(billDetailsDTOs.getTotalPayableTaxAmt()));
 
 
+        payment_bill_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BillDetailsActivity.this, "Payment Button is clicked", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getApplicationContext(),BillPaymentOptionActivity.class);
+                startActivity(i);
 
+            }
+        });
 
 
 
