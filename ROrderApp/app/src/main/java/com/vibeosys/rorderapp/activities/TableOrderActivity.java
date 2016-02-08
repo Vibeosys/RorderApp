@@ -1,6 +1,9 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -89,5 +92,22 @@ ArrayList<OrderHeaderDTO>list=new ArrayList<>();
        orderMenu.setOrderPrice(orderMenu.getOrderQuantity()*orderMenu.getMenuUnitPrice());
         mDbRepository.insertOrUpdateTempOrder(1, 10, orderMenu.getMenuId(), orderMenu.getOrderQuantity());
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.order_summary_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        Toast.makeText(getApplicationContext(),"Button is clicke",Toast.LENGTH_LONG).show();
+        Intent i = new Intent(this,BillDetailsActivity.class);
+        startActivity(i);
+        return super.onOptionsItemSelected(item);
     }
 }

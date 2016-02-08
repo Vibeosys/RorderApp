@@ -61,6 +61,11 @@
             android:label="@string/order_summary"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity
+            android:name=".activities.BillDetailsActivity"
+            android:label="@string/order_summary"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

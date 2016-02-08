@@ -22,7 +22,20 @@ public class BillDbDTO extends BaseDTO {
     private Date updatedDate;
     private int userId;
 
+
     public BillDbDTO() {
+    }
+
+    public BillDbDTO(int billNo, Date billDate, Time billTime, double netAmount, double totalTaxAmount, double totalPayAmount, Date createdDate, Date updatedDate, int userId) {
+        this.billNo = billNo;
+        this.billDate = billDate;
+        this.billTime = billTime;
+        this.netAmount = netAmount;
+        this.totalTaxAmount = totalTaxAmount;
+        this.totalPayAmount = totalPayAmount;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+        this.userId = userId;
     }
 
     public int getBillNo() {

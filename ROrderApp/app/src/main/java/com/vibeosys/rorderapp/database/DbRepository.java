@@ -26,6 +26,7 @@ import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.SessionManager;
+import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -279,6 +280,48 @@ public class DbRepository extends SQLiteOpenHelper {
                 sqLiteDatabase.close();
         }
         return hotelTables;
+    }
+
+
+    public BillDetailsDTO  getBillDetailsRecords()//08/02/2016 put where condition for table no and custer id and from sharder preference take user name ann user id
+    {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        BillDetailsDTO billDetailsRecords = null;
+        try
+        {
+            sqLiteDatabase = getReadableDatabase();
+            cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount,bill.TotalTaxAmount,bill.TotalPayAmount,users.UserName from bill INNER Join users On users.UserId = bill.UserId;", null);
+
+            if(cursor !=null) {
+                if(cursor.getCount() > 0 )
+                    cursor.moveToFirst();
+                {
+                   do
+                   {
+                       int billNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlBill.BILL_NO));
+                       Date billDate = Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlBill.BILL_DATE)));
+                       double netAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.NET_AMOUNT));
+                       double totalTaxAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.TOATL_TAX_AMT));
+                       double totalPayAbleTax = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.TOTAL_PAY_AMT));
+                       String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+
+                       billDetailsRecords = new BillDetailsDTO(billNo,billDate,netAmount,totalTaxAmount,totalPayAbleTax,userName);
+
+                   }while (cursor.moveToNext());
+
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+        }
+        return billDetailsRecords;
     }
 
     public ArrayList<TableCategoryDTO> getTableCategories() {

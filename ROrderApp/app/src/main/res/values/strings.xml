@@ -40,4 +40,5 @@
     <string name ="MenuItem">Order</string>
     <string name ="BillingQty">Qty</string>
     <string name ="BillingAmt">Amount</string>
+    <string name ="Bill_Summary">Bill Summary</string>
 </resources>
