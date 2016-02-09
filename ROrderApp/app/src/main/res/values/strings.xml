@@ -51,4 +51,8 @@
     <string name="payment_option_screen">Payment Option</string>
     <string name="add_customer">Add Customer</string>
     <string name="Payment_close">Close</string>
+    <string name="table_no_hint">Table Number</string>
+    <string name="table_hint_customer_name">Customer Name</string>
+    <string name="dialog_title_Allocate">Allocate Table</string>
+    <string name="error_table_no">Table Number is required</string>
 </resources>

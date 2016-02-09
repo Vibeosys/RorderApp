@@ -13,6 +13,7 @@ import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by akshay on 08-02-2016.
@@ -27,12 +28,17 @@ public class CustomerAdapter extends BaseAdapter {
         this.mContext = mContext;
         this.waitingList = waitingList;
     }
-
+    public void refresh(ArrayList<WaitingUserDTO> waiting)
+    {
+        this.waitingList.clear();
+        this.waitingList=waiting;
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         if(waitingList!=null)
-        return 0;
-        else return waitingList.size();
+        return waitingList.size();
+        else return 0;
     }
 
     @Override
@@ -65,8 +71,8 @@ public class CustomerAdapter extends BaseAdapter {
 
         WaitingUserDTO waitingUserDTO = waitingList.get(position);
         Log.d(TAG, waitingUserDTO.toString());
-        viewHolder.txtCustName.setText("" + waitingUserDTO.getmCustomerName());
-        viewHolder.txtCount.setText(""+waitingUserDTO.getmOccupancy());
+        viewHolder.txtCustName.setText(waitingUserDTO.getmCustomerName());
+        viewHolder.txtCount.setText(String.valueOf(waitingUserDTO.getmOccupancy()));
         viewHolder.txtArrivalTime.setText(waitingUserDTO.getmArrivalTime().toString());
 
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());

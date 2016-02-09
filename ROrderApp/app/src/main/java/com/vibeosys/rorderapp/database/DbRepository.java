@@ -295,7 +295,6 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getReadableDatabase();
             cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount,bill.TotalTaxAmount,bill.TotalPayAmount,users.UserName from bill INNER Join users On users.UserId = bill.UserId;", null);
 
-
             if (cursor != null) {
                 if (cursor.getCount() > 0)
                     cursor.moveToFirst();
@@ -720,14 +719,14 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
-    public boolean clearUpdateTempData(int tableId, int tableNo,int custId) {
+    public boolean clearUpdateTempData(int tableId, int tableNo, int custId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
 
         try {
-            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo),String.valueOf(custId)};
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo), String.valueOf(custId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
                     SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND" + SqlContract.SqlTempOrder.CUST_ID + "=?",
                     whereClause);
@@ -742,32 +741,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count != -1;
     }
-/*
-* clearTableTransaction(int custId,int tableId) this function clears the table_transaction from sqlite
-* */
-    public boolean clearTableTransaction(int custId,int tableId)
-    {
-        SQLiteDatabase sqLiteDatabase = null;
-        ContentValues contentValues = null;
-        sqLiteDatabase = getWritableDatabase();
-        long count =-1;
-        try
-        {
-            String [] whereClasuse = new String[]{String.valueOf(custId),String.valueOf(tableId)};
-            count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
-                    SqlContract.SqlTableTransaction.CUST_ID +"=? AND"
-                            +SqlContract.SqlTableTransaction.TABLE_ID+"=?",whereClasuse);
-            contentValues.clear();
-            sqLiteDatabase.close();
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-            sqLiteDatabase.close();
-        }finally {
-            sqLiteDatabase.close();
-        }
-        return count != -1;
-    }
+
     public boolean setOccupied(boolean value, int tableId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
@@ -965,7 +939,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getWritableDatabase();
             contentValues = new ContentValues();
-            contentValues.put(SqlContract.SqlCustomer.CUST_ID,customer.getCustId());
+            contentValues.put(SqlContract.SqlCustomer.CUST_ID, customer.getCustId());
             contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customer.getCustName());
             contentValues.put(SqlContract.SqlCustomer.CUST_PHONE, customer.getCustPhone());
             contentValues.put(SqlContract.SqlCustomer.CUST_EMAIL, customer.getCustEmail());
@@ -990,7 +964,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getWritableDatabase();
             contentValues = new ContentValues();
-            contentValues.put(SqlContract.SqlTableTransaction.TABLE_ID,tableTransaction.getTableId());
+            contentValues.put(SqlContract.SqlTableTransaction.TABLE_ID, tableTransaction.getTableId());
             contentValues.put(SqlContract.SqlTableTransaction.USER_ID, tableTransaction.getUserId());
             contentValues.put(SqlContract.SqlTableTransaction.CUST_ID, tableTransaction.getCustId());
             contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
@@ -1018,21 +992,21 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getReadableDatabase();
 
             cursor = sqLiteDatabase.rawQuery("Select table_transaction.CustId," +
-                    "table_transaction.Occupancy,table_transaction.ArrivalTime," +
-                    "customer.CustName from table_transaction left join customer where " +
-                    "table_transaction.CustId=customer.CustId and table_transaction.IsWaiting=1",
+                            "table_transaction.Occupancy,table_transaction.ArrivalTime," +
+                            "customer.CustName from table_transaction left join customer where " +
+                            "table_transaction.CustId=customer.CustId and table_transaction.IsWaiting=1",
                     null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
 
                     do {
-                        String mCustomerId=cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
-                        int mOccupancy=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableTransaction.OCCUPANCY));
-                        Date mArrivalTime=Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.ARRIVAL_TIME)));
-                        String mCustomerName=cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_NAME));
+                        String mCustomerId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
+                        int mOccupancy = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableTransaction.OCCUPANCY));
+                        Date mArrivalTime = Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.ARRIVAL_TIME)));
+                        String mCustomerName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_NAME));
 
-                        WaitingUserDTO waiting=new WaitingUserDTO(mCustomerId,mOccupancy,mArrivalTime,mCustomerName);
+                        WaitingUserDTO waiting = new WaitingUserDTO(mCustomerId, mOccupancy, mArrivalTime, mCustomerName);
                         waitingList.add(waiting);
                     } while (cursor.moveToNext());
                 }
@@ -1052,5 +1026,92 @@ public class DbRepository extends SQLiteOpenHelper {
             }
         }
         return waitingList;
+    }
+
+    public boolean updateTableTransaction(TableTransactionDbDTO tableTransaction) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        String[] whereClause = new String[]{tableTransaction.getCustId()};
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            contentValues.put(SqlContract.SqlTableTransaction.TABLE_ID, tableTransaction.getTableId());
+            contentValues.put(SqlContract.SqlTableTransaction.USER_ID, tableTransaction.getUserId());
+            contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
+            count = sqLiteDatabase.update(SqlContract.SqlTableTransaction.TABLE_NAME, contentValues,
+                    SqlContract.SqlTableTransaction.CUST_ID + "=?", whereClause);
+            contentValues.clear();
+            Log.d(TAG, "##Table Transaction is Updated successfully" + tableTransaction.getCustId());
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at Table Transaction" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public int getTaleId(int tableNo) {
+        SQLiteDatabase sqLiteDatabase = null;
+        String[] whereClause = new String[]{String.valueOf(tableNo)};
+        Cursor cursor = null;
+        int tableId = 0;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+
+            cursor = sqLiteDatabase.rawQuery("Select r_tables.TableId,r_tables.IsOccupied from " +
+                    "r_tables where r_tables.TableNo=?", whereClause);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    int iOccupied=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
+
+                    tableId = iOccupied==0?cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_ID)):-1;
+                }
+            }
+
+            cursor.close();
+            sqLiteDatabase.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error at getTableId function " + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+        }
+        return tableId;
+    }
+    /*
+            * clearTableTransaction(int custId,int tableId) this function clears the table_transaction from sqlite
+    * */
+    public boolean clearTableTransaction(int custId,int tableId)
+    {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count =-1;
+        try
+        {
+            String [] whereClasuse = new String[]{String.valueOf(custId),String.valueOf(tableId)};
+            count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
+                    SqlContract.SqlTableTransaction.CUST_ID +"=? AND"
+                            +SqlContract.SqlTableTransaction.TABLE_ID+"=?",whereClasuse);
+            contentValues.clear();
+            sqLiteDatabase.close();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            sqLiteDatabase.close();
+        }finally {
+            sqLiteDatabase.close();
+        }
+        return count != -1;
     }
 }

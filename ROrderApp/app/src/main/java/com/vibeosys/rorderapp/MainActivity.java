@@ -119,7 +119,11 @@ public class MainActivity extends BaseActivity
     protected void onPostResume() {
         super.onPostResume();
     }
-
+    @Override
+    protected void onResume(){
+        super.onResume();
+        adapter.refresh(mDbRepository.getTableRecords());
+    }
     @Override
     public void onBackPressed() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
