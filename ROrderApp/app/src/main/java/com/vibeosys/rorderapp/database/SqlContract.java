@@ -82,6 +82,8 @@ public class SqlContract {
         public final static String CATEGORY_TITLE="CategoryTitle";
         public final static String CATEGORY_IMG="CategoryImage";
         public final static String ACTIVE="Active";
+        public final static String COLOUR="Colour";
+        public final static String IMG_URL="ImgUrl";
         public final static String CREATED_DATE="CreatedDate";
         public final static String UPDATED_DATE="UpdatedDate";
     }
@@ -106,6 +108,7 @@ public class SqlContract {
         public final static String TABLE_NAME="orders";
         public final static String ORDER_ID="OrderId";
         public final static String ORDER_NO="OrderNo";
+        public final static String CUST_ID="CustId";
         public final static String ORDER_STATUS="OrderStatus";
         public final static String ORDER_DATE="Orderdate";
         public final static String ORDER_TIME="OrderTime";
@@ -119,6 +122,7 @@ public class SqlContract {
     public abstract class SqlTempOrder{
         public final static String TABLE_NAME="temp_order";
         public final static String TEMP_ORDER_ID="TempOrderId";
+        public final static String CUST_ID="CustId";
         public final static String TABLE_ID="TableId";
         public final static String TABLE_NO="TableNo";
         public final static String MENU_ID="MenuId";

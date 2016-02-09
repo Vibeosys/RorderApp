@@ -63,7 +63,7 @@
         </activity>
         <activity
             android:name=".activities.BillDetailsActivity"
-            android:label="@string/order_summary"
+            android:label="@string/bill_details"
             android:parentActivityName=".MainActivity">
         </activity>
         <activity

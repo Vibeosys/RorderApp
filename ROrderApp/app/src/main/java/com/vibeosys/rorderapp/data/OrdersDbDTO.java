@@ -14,6 +14,7 @@ public class OrdersDbDTO extends BaseDTO {
 
     private String orderId;
     private int OrderNo;
+    private String custId;
     private boolean OrderStatus;
     private Date orderDate;
     private Time orderTime;
@@ -119,6 +120,14 @@ public class OrdersDbDTO extends BaseDTO {
 
     public void setOrderAmount(double orderAmount) {
         this.orderAmount = orderAmount;
+    }
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
     }
 
     public static List<OrdersDbDTO> deserializeOrders(List<String> serializedStringList) {

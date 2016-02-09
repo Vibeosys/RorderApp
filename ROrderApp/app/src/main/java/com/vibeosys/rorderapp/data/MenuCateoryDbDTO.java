@@ -15,6 +15,8 @@ public class MenuCateoryDbDTO extends BaseDTO {
     private String categoryTitle;
     private String categoryImage;
     private boolean active;
+    private String colour;
+    private String imgUrl;
     private Date createdDate;
     private Date updatedDate;
 
@@ -67,6 +69,23 @@ public class MenuCateoryDbDTO extends BaseDTO {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public static List<MenuCateoryDbDTO> deserializeMenuCateory(List<String> serializedStringList) {
