@@ -107,10 +107,14 @@ ArrayList<OrderHeaderDTO>list=new ArrayList<>();
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        if(item.getItemId() ==R.id.billDetials)
+        {
+            //Toast.makeText(getApplicationContext(),"Button is clicke",Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this,BillDetailsActivity.class);
+            startActivity(i);
+        }
 
-        Toast.makeText(getApplicationContext(),"Button is clicke",Toast.LENGTH_LONG).show();
-        Intent i = new Intent(this,BillDetailsActivity.class);
-        startActivity(i);
+
         return super.onOptionsItemSelected(item);
     }
 }

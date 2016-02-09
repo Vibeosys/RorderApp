@@ -55,4 +55,5 @@
     <string name="table_hint_customer_name">Customer Name</string>
     <string name="dialog_title_Allocate">Allocate Table</string>
     <string name="error_table_no">Table Number is required</string>
+    <string name ="BillDetails">Bill Details</string>
 </resources>
