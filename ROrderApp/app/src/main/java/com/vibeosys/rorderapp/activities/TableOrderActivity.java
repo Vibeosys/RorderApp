@@ -6,13 +6,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.OrderSummaryAdapter;
 import com.vibeosys.rorderapp.data.OrderDetailsDTO;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
+import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 
 import java.util.ArrayList;
 
@@ -27,6 +27,9 @@ ArrayList<OrderHeaderDTO>list=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TableCommonInfoDTO tableCommonInfo = getIntent().getParcelableExtra("tableCustInfo");
+        int tableNo = tableCommonInfo.getTableNo();
+
         setContentView(R.layout.activity_table_order);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ordersList=(ExpandableListView)findViewById(R.id.expListViewForTableOrder);

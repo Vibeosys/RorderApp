@@ -1,21 +1,11 @@
 package com.vibeosys.rorderapp.activities;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,16 +13,11 @@ import android.widget.Toast;
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.OrderListAdapter;
-import com.vibeosys.rorderapp.data.MenuDbDTO;
-import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
-import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.SelectedMenusDTO;
+import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -180,7 +165,10 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
             orderDetailsDbDTOList.add(new OrderDetailsDbDTO(4,36,1,Date.valueOf("2016-02-02"),Date.valueOf("2016-02-02"),""+2,4,"Garlic Bread"));
             mDbRepository.insertOrderDetails(orderDetailsDbDTOList);*/
 
-            startActivity(new Intent(getApplicationContext(), TableOrderActivity.class));
+            TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO("ABC", "DEF", 10);
+            Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
+            tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
+            startActivity(tableOrderIntent);
         }
     }
 }
