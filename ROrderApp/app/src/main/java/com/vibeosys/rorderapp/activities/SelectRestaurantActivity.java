@@ -4,38 +4,26 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.RestaurantListAdapter;
-import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.RestaurantDbDTO;
-import com.vibeosys.rorderapp.data.RestaurantDbDTOList;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
 import com.vibeosys.rorderapp.util.NetworkUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,7 +32,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -52,12 +39,12 @@ import java.util.UUID;
  */
 public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener{
 
-    ArrayList<RestaurantDbDTO> mRestaurantList;
+    private ArrayList<RestaurantDbDTO> mRestaurantList;
     private Context mContext=this;
-    ProgressDialog progress;
+    private ProgressDialog mProgress;
     //ListView listResto;
-    RestaurantListAdapter adapter;
-    Spinner spnRestaurant;
+    private RestaurantListAdapter mAdapter;
+    private Spinner mSpnRestaurant;
     private int mSelectedRestoId;
     private String mSelectedRestaurantName;
     @Override
@@ -69,11 +56,9 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         getRestaurant(mSessionManager.getRestaurantUrl());
 
 
-       spnRestaurant=(Spinner)findViewById(R.id.spnRestaurant);
-        /*spnRestaurant.setAdapter(adapter);*/
-        spnRestaurant.setOnItemSelectedListener(this);
+       mSpnRestaurant =(Spinner)findViewById(R.id.spnRestaurant);
+        mSpnRestaurant.setOnItemSelectedListener(this);
 
-       // adapter.notifyDataSetChanged();
         btnOk.setOnClickListener(this);
     }
 
@@ -163,18 +148,18 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     }
     private void getRestaurant(String Url) {
         RequestQueue vollyRequest = Volley.newRequestQueue(mContext);
-        progress=ProgressDialog.show(mContext,"Loading","Wait");
+        mProgress =ProgressDialog.show(mContext,"Loading","Wait");
         StringRequest restoRequest = new StringRequest(Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
                 displayRestaurant(response);
-                progress.dismiss();
+                mProgress.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progress.dismiss();
+                mProgress.dismiss();
             }
         });
         restoRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
@@ -187,16 +172,16 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     private void displayRestaurant(String result) {
         RestaurantDbDTO restaurantDbDTO=new RestaurantDbDTO();
         mRestaurantList=restaurantDbDTO.getArrayList(result);
-        adapter=new RestaurantListAdapter(mRestaurantList,this);
-        spnRestaurant.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        mAdapter =new RestaurantListAdapter(mRestaurantList,this);
+        mSpnRestaurant.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
         Log.i(TAG,"##"+mRestaurantList.toString());
     }
 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        RestaurantDbDTO restaurant= (RestaurantDbDTO) adapter.getItem(position);
+        RestaurantDbDTO restaurant= (RestaurantDbDTO) mAdapter.getItem(position);
         mSelectedRestoId=restaurant.getRestaurantId();
         mSelectedRestaurantName=restaurant.getTitle();
         Log.i(TAG,"##"+mSelectedRestoId);

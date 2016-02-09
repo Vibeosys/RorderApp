@@ -31,28 +31,28 @@ import java.util.UUID;
  */
 public class AddCustomerActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener{
 
-    EditText txtName,txtCount;
-    Button btnAdd;
-    ListView listCustomer;
-    CustomerAdapter customerAdapter;
-    ArrayList<WaitingUserDTO> waitingList;
+    private EditText mTxtName, mTxtCount;
+    private Button mBtnAdd;
+    private ListView mListCustomer;
+    private CustomerAdapter mCustomerAdapter;
+    private ArrayList<WaitingUserDTO> mWaitingList;
     private Context mContext=this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer);
         setTitle("Waiting List");
-        waitingList=mDbRepository.getWaitingList();
+        mWaitingList =mDbRepository.getWaitingList();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        txtCount=(EditText)findViewById(R.id.txtCustCount);
-        txtName=(EditText)findViewById(R.id.txtCustomerName);
-        btnAdd=(Button)findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(this);
-        listCustomer=(ListView)findViewById(R.id.customerList);
-        customerAdapter=new CustomerAdapter(getApplicationContext(),waitingList);
-        listCustomer.setAdapter(customerAdapter);
-        customerAdapter.notifyDataSetChanged();
-        listCustomer.setOnItemClickListener(this);
+        mTxtCount =(EditText)findViewById(R.id.txtCustCount);
+        mTxtName =(EditText)findViewById(R.id.txtCustomerName);
+        mBtnAdd =(Button)findViewById(R.id.btnAdd);
+        mBtnAdd.setOnClickListener(this);
+        mListCustomer =(ListView)findViewById(R.id.customerList);
+        mCustomerAdapter =new CustomerAdapter(getApplicationContext(), mWaitingList);
+        mListCustomer.setAdapter(mCustomerAdapter);
+        mCustomerAdapter.notifyDataSetChanged();
+        mListCustomer.setOnItemClickListener(this);
     }
 
     @Override
@@ -67,22 +67,22 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private void addUser() {
         boolean wrongCredential=false;
         View focus=null;
-        txtName.setError(null);
-        txtCount.setError(null);
+        mTxtName.setError(null);
+        mTxtCount.setError(null);
 
-        String customerName=txtName.getText().toString();
-        String strCount=txtCount.getText().toString();
+        String customerName= mTxtName.getText().toString();
+        String strCount= mTxtCount.getText().toString();
 
         if(TextUtils.isEmpty(customerName))
         {
-            txtName.setError("Customer Name is Required");
-            focus=txtName;
+            mTxtName.setError("Customer Name is Required");
+            focus= mTxtName;
             wrongCredential=true;
         }
         if(TextUtils.isEmpty(strCount))
         {
-            txtCount.setError("Customer Count is Required");
-            focus=txtCount;
+            mTxtCount.setError("Customer Count is Required");
+            focus= mTxtCount;
             wrongCredential=true;
         }
 
@@ -107,9 +107,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             TableTransactionDbDTO tableTransaction=new TableTransactionDbDTO(custid.toString(),true, Date.valueOf(currentDate),customerCount);
             mDbRepository.insertTableTransaction(tableTransaction);
             Toast.makeText(getApplicationContext(),"Customer is Added successfully",Toast.LENGTH_SHORT).show();
-            customerAdapter.refresh(mDbRepository.getWaitingList());
-            txtCount.setText("");
-            txtName.setText("");
+            mCustomerAdapter.refresh(mDbRepository.getWaitingList());
+            mTxtCount.setText("");
+            mTxtName.setText("");
         }
     }
 
@@ -148,7 +148,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                         mDbRepository.updateTableTransaction(tableTransactionDbDTO);
                         mDbRepository.setOccupied(true, tableId);
                         dialog.dismiss();
-                        customerAdapter.refresh(mDbRepository.getWaitingList());
+                        mCustomerAdapter.refresh(mDbRepository.getWaitingList());
                         Intent iMain=new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(iMain);
                         finish();
@@ -170,7 +170,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        WaitingUserDTO waiting=(WaitingUserDTO)customerAdapter.getItem(position);
+        WaitingUserDTO waiting=(WaitingUserDTO) mCustomerAdapter.getItem(position);
         showMyDialog(waiting);
     }
 }

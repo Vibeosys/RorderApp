@@ -5,16 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
-import com.vibeosys.rorderapp.data.BillDetailsDTO;
-import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
-
-import org.w3c.dom.Text;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -26,7 +21,7 @@ import java.util.List;
  */
 public class BillDetailsActivity extends BaseActivity {
 
-    BillDetailsDTO billDetailsDTOs ;
+    private BillDetailsDTO mBillDetailsDTOs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +45,17 @@ public class BillDetailsActivity extends BaseActivity {
         TextView discountAmount = (TextView) findViewById(R.id.DiscountAmt);
         TextView totalPayableAmnount = (TextView) findViewById(R.id.TotalAmt);
         Button payment_bill_details = (Button)findViewById(R.id.BillDetailsPayment);
-        billDetailsDTOs = mDbRepository.getBillDetailsRecords();
+        mBillDetailsDTOs = mDbRepository.getBillDetailsRecords();
         tableNo.setText("");
         orderNo.setText("");
-        servedBy.setText(billDetailsDTOs.getServedByName());
-        billDate.setText(billDetailsDTOs.getBillDate().toString());
-        netAmount.setText(String.valueOf(billDetailsDTOs.getNetAmount()));
-        totalTaxes.setText(String.valueOf(billDetailsDTOs.getTotalTax()));
+        servedBy.setText(mBillDetailsDTOs.getServedByName());
+        billDate.setText(mBillDetailsDTOs.getBillDate().toString());
+        netAmount.setText(String.valueOf(mBillDetailsDTOs.getNetAmount()));
+        totalTaxes.setText(String.valueOf(mBillDetailsDTOs.getTotalTax()));
 
         servicesCharges.setText("");
         discountAmount.setText("");
-        totalPayableAmnount.setText(String.valueOf(billDetailsDTOs.getTotalPayableTaxAmt()));
+        totalPayableAmnount.setText(String.valueOf(mBillDetailsDTOs.getTotalPayableTaxAmt()));
 
 
         payment_bill_details.setOnClickListener(new View.OnClickListener() {
