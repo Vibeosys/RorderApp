@@ -29,6 +29,7 @@ public class BillPaymentOptionActivity extends BaseActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"Close Table button is clicked ",Toast.LENGTH_LONG).show();
                 mDbRepository.setOccupied(false,4);
+                mDbRepository.clearUpdateTempData(1,2,2);
                 finish();
             }
         });

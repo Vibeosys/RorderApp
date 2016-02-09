@@ -51,10 +51,10 @@ public class BillDetailsActivity extends BaseActivity {
         TextView totalPayableAmnount = (TextView) findViewById(R.id.TotalAmt);
         Button payment_bill_details = (Button)findViewById(R.id.BillDetailsPayment);
         billDetailsDTOs = mDbRepository.getBillDetailsRecords();
-         tableNo.setText("");
+        tableNo.setText("");
         orderNo.setText("");
-       servedBy.setText(billDetailsDTOs.getServedByName());
-       billDate.setText(billDetailsDTOs.getBillDate().toString());
+        servedBy.setText(billDetailsDTOs.getServedByName());
+        billDate.setText(billDetailsDTOs.getBillDate().toString());
         netAmount.setText(String.valueOf(billDetailsDTOs.getNetAmount()));
         totalTaxes.setText(String.valueOf(billDetailsDTOs.getTotalTax()));
 

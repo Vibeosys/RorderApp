@@ -719,20 +719,22 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
-    public boolean clearUpdateTempData(int tableId, int tableNo) {
+    public boolean clearUpdateTempData(int tableId, int tableNo,int custId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
 
         try {
-            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo)};
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo),String.valueOf(custId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
-                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=?",
+                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND" + SqlContract.SqlTempOrder.TEMP_ORDER_CUST_ID + "=?",
                     whereClause);
             contentValues.clear();
             sqLiteDatabase.close();
         } catch (Exception e) {
+            e.printStackTrace();
+            sqLiteDatabase.close();
 
         } finally {
             sqLiteDatabase.close();
