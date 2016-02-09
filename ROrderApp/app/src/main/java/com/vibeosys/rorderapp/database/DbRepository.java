@@ -1101,8 +1101,8 @@ public class DbRepository extends SQLiteOpenHelper {
         {
             String [] whereClasuse = new String[]{String.valueOf(custId),String.valueOf(tableId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
-                    SqlContract.SqlTableTransaction.CUST_ID +"=? AND"
-                            +SqlContract.SqlTableTransaction.TABLE_ID+"=?",whereClasuse);
+                    SqlContract.SqlTableTransaction.CUST_ID + "=? AND"
+                            + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
             contentValues.clear();
             sqLiteDatabase.close();
         }catch (Exception e)
@@ -1113,5 +1113,36 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase.close();
         }
         return count != -1;
+    }
+    /*
+    getCustmerIdFromTransaction(int tableId,int userId) this function
+    returns custmerId from table transaction 
+
+    * */
+    public String getCustmerIdFromTransaction(int tableId,int userId)
+    {
+        String custId ="";
+        SQLiteDatabase sqLiteDatabase = null;
+        String[]whereClasuse = new String[]{String.valueOf(tableId),String.valueOf(userId)};
+        Cursor cursor = null;
+        try
+        {
+            cursor = sqLiteDatabase.rawQuery("select table_transaction.CustId from table_transaction " +
+                    "where table_transaction.TableId=? AND table_transaction.UserId =?",whereClasuse);
+            custId =cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
+
+            cursor.close();
+            sqLiteDatabase.close();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            sqLiteDatabase.close();
+        }finally
+        {
+            sqLiteDatabase.close();
+
+        }
+        return custId;
+
     }
 }
