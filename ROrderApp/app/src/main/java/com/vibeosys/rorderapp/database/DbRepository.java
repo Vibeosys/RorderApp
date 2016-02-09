@@ -1127,6 +1127,7 @@ public class DbRepository extends SQLiteOpenHelper {
         Cursor cursor = null;
         try
         {
+            sqLiteDatabase=getReadableDatabase();
             cursor = sqLiteDatabase.rawQuery("select table_transaction.CustId from table_transaction " +
                     "where table_transaction.TableId=? AND table_transaction.UserId =?",whereClasuse);
             custId =cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
@@ -1139,7 +1140,10 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase.close();
         }finally
         {
+            if(sqLiteDatabase!=null)
             sqLiteDatabase.close();
+            if(cursor!=null)
+                cursor.close();
 
         }
         return custId;
