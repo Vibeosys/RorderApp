@@ -38,7 +38,7 @@ public class BillDetailsActivity extends BaseActivity {
         List<BillDbDTO> bill = new ArrayList<>();
         bill.add(db);
 
-       // mDbRepository.insertBills(bill);
+        mDbRepository.insertBills(bill);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Tool bar intitilization
         TextView tableNo = (TextView) findViewById(R.id.TableNumber);
         TextView orderNo = (TextView) findViewById(R.id.OrderNumber);
@@ -66,9 +66,10 @@ public class BillDetailsActivity extends BaseActivity {
         payment_bill_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BillDetailsActivity.this, "Payment Button is clicked", Toast.LENGTH_LONG).show();
+
                 Intent i = new Intent(getApplicationContext(),BillPaymentOptionActivity.class);
                 startActivity(i);
+                finish();
 
             }
         });

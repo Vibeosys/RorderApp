@@ -76,6 +76,11 @@
             android:label="@string/payment_option_screen"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity
+            android:name=".activities.CustomerFeedBackActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

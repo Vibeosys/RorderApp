@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,10 +28,13 @@ public class BillPaymentOptionActivity extends BaseActivity {
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Close Table button is clicked ",Toast.LENGTH_LONG).show();
-                mDbRepository.setOccupied(false,4);
+
+                mDbRepository.setOccupied(false, 4);
                 mDbRepository.clearUpdateTempData(1,2,2);
+                mDbRepository.clearTableTransaction(1,1);
                 finish();
+//                Intent i = new Intent(getApplicationContext(),CustomerFeedBackActivity.class);
+//                startActivity(i);
             }
         });
 

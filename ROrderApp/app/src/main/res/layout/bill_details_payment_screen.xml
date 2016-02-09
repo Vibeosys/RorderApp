@@ -15,7 +15,8 @@
    <Spinner
        android:id="@+id/paymentBy"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+       android:layout_height="wrap_content"
+       android:background="@drawable/billing_spineer_border">
 
    </Spinner>
     <Button
@@ -24,6 +25,8 @@
         android:layout_height="wrap_content"
         android:text="@string/Payment_close"
         android:gravity="center"
+        android:layout_margin="4dp"
+        android:layout_marginTop="4dp"
         android:textColor="@color/White"
         android:background="@drawable/button_custom"/>
 </LinearLayout>

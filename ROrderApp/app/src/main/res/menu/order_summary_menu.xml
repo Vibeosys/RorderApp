@@ -4,6 +4,6 @@
     <item
         android:id="@+id/search1"
         android:title="@string/search_table"
-        android:icon ="@drawable/place_order"
+        android:icon ="@drawable/ico_new_servedby"
         app:showAsAction="collapseActionView|ifRoom"/>
 </menu>

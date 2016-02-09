@@ -295,6 +295,7 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getReadableDatabase();
             cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount,bill.TotalTaxAmount,bill.TotalPayAmount,users.UserName from bill INNER Join users On users.UserId = bill.UserId;", null);
 
+
             if (cursor != null) {
                 if (cursor.getCount() > 0)
                     cursor.moveToFirst();
@@ -728,7 +729,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo),String.valueOf(custId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
-                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND" + SqlContract.SqlTempOrder.TEMP_ORDER_CUST_ID + "=?",
+                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND" + SqlContract.SqlTempOrder.CUST_ID + "=?",
                     whereClause);
             contentValues.clear();
             sqLiteDatabase.close();
@@ -741,7 +742,32 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count != -1;
     }
-
+/*
+* clearTableTransaction(int custId,int tableId) this function clears the table_transaction from sqlite
+* */
+    public boolean clearTableTransaction(int custId,int tableId)
+    {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count =-1;
+        try
+        {
+            String [] whereClasuse = new String[]{String.valueOf(custId),String.valueOf(tableId)};
+            count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
+                    SqlContract.SqlTableTransaction.CUST_ID +"=? AND"
+                            +SqlContract.SqlTableTransaction.TABLE_ID+"=?",whereClasuse);
+            contentValues.clear();
+            sqLiteDatabase.close();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            sqLiteDatabase.close();
+        }finally {
+            sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
     public boolean setOccupied(boolean value, int tableId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
