@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.data;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class MenuCateoryDbDTO extends BaseDTO {
     }
 
     public static List<MenuCateoryDbDTO> deserializeMenuCateory(List<String> serializedStringList) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
         ArrayList<MenuCateoryDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

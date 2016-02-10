@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.data;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -145,7 +146,7 @@ public class OrdersDbDTO extends BaseDTO {
     }
 
     public static List<OrdersDbDTO> deserializeOrders(List<String> serializedStringList) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
         ArrayList<OrdersDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

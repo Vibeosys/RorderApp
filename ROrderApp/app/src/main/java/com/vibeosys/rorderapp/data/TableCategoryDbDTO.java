@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.data;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class TableCategoryDbDTO {
     }
 
     public static List<TableCategoryDbDTO> deserializeTableCateory(List<String> serializedStringList) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
         ArrayList<TableCategoryDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

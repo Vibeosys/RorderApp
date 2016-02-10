@@ -387,19 +387,19 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getWritableDatabase();
             contentValues = new ContentValues();
-            for (BillDbDTO dbTable : billInserts) {
-                contentValues.put(SqlContract.SqlBill.BILL_NO, dbTable.getBillNo());
-                contentValues.put(SqlContract.SqlBill.BILL_DATE, dbTable.getBillDate().toString());
-                contentValues.put(SqlContract.SqlBill.BILL_TIME, dbTable.getBillTime().toString());
-                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, dbTable.getNetAmount());
-                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, dbTable.getTotalTaxAmount());
-                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, dbTable.getTotalPayAmount());
-                contentValues.put(SqlContract.SqlBill.CREATED_DATE, dbTable.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlBill.UPDATED_DATE, dbTable.getUpdatedDate().toString());
-                contentValues.put(SqlContract.SqlBill.USER_ID, dbTable.getUserId());
+            for (BillDbDTO bill : billInserts) {
+                contentValues.put(SqlContract.SqlBill.BILL_NO, bill.getBillNo());
+                contentValues.put(SqlContract.SqlBill.BILL_DATE, bill.getBillDate().toString());
+                contentValues.put(SqlContract.SqlBill.BILL_TIME, bill.getBillTime().toString());
+                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmount());
+                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmount());
+                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmount());
+                contentValues.put(SqlContract.SqlBill.CREATED_DATE, bill.getCreatedDate().toString());
+                contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
+                contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
                 count = sqLiteDatabase.insert(SqlContract.SqlBill.TABLE_NAME, null, contentValues);
                 contentValues.clear();
-                Log.d(TAG, "## Bill is Added Successfully" + dbTable.getBillNo());
+                Log.d(TAG, "## Bill is Added Successfully" + bill.getBillNo());
             }
         } catch (Exception e) {
             Log.e(TAG, "Error while adding Bills " + e.toString());
@@ -1188,7 +1188,7 @@ public class DbRepository extends SQLiteOpenHelper {
         String whereClause[] = new String[]{custId,String.valueOf(tableId)};
         try {
             sqLiteDatabase = getWritableDatabase();
-            cursor =sqLiteDatabase.rawQuery("select temp_order.MenuId from temp_order where temp_order.CustId =? and temp_order.TableId =?",whereClause);
+            cursor =sqLiteDatabase.rawQuery("select temp_order.MenuId from temp_order where temp_order.CustId =? and temp_order.TableId =?", whereClause);
             count =cursor.getCount();
         }catch (Exception e) {
 
@@ -1201,5 +1201,61 @@ public class DbRepository extends SQLiteOpenHelper {
         }
        return count;
 
+    }
+
+    public boolean updateBills(List<BillDbDTO> billUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (BillDbDTO bill : billUpdates) {
+                String[] whereClause=new String[]{String.valueOf(bill.getBillNo())};
+                contentValues.put(SqlContract.SqlBill.BILL_DATE, bill.getBillDate().toString());
+                contentValues.put(SqlContract.SqlBill.BILL_TIME, bill.getBillTime().toString());
+                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmount());
+                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmount());
+                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmount());
+                contentValues.put(SqlContract.SqlBill.CREATED_DATE, bill.getCreatedDate().toString());
+                contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
+                contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
+                count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues,SqlContract.SqlBill.BILL_NO+"=?",whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Bill is Updated Successfully" + bill.getBillNo());
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error while updating Bills " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateBillDetails(List<BillDetailsDbDTO> billDetailUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (BillDetailsDbDTO billDetails : billDetailUpdates) {
+                String[] whereClause=new String[]{String.valueOf(billDetails.getAutoId())};
+                contentValues.put(SqlContract.SqlBillDetails.ORDER_ID, billDetails.getOrderId());
+                contentValues.put(SqlContract.SqlBillDetails.BILL_NO, billDetails.getBillNo());
+                contentValues.put(SqlContract.SqlBillDetails.CREATED_DATE, billDetails.getCreateDate().toString());
+                contentValues.put(SqlContract.SqlBillDetails.UPDATED_DATE, billDetails.getUpdatedDate().toString());
+                count = sqLiteDatabase.update(SqlContract.SqlBillDetails.TABLE_NAME, contentValues,SqlContract.SqlBillDetails.AUTO_ID+"=?",whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Bill Details is Updated successfully" + billDetails.getBillNo());
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error While updating Bill details" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+        }
+        return count != -1;
     }
 }

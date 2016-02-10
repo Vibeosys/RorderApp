@@ -98,8 +98,9 @@ public class MainActivity extends BaseActivity
                     overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                 }
             });
-            Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-            startService(syncServiceIntent);
+          /*  Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+            startService(syncServiceIntent);*/
+            mServerSyncManager.syncDataWithServer(false);
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
