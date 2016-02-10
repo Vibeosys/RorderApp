@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/billDetials"
+        android:id="@+id/placeOrder"
         android:title="@string/BillDetails"
         android:icon ="@drawable/ico_new_servedby"
         app:showAsAction="collapseActionView|ifRoom"/>

@@ -48,7 +48,9 @@ public class ServerSyncManager
     private Context mContext;
     private boolean mIsWorkInProgress;
     private OnDownloadReceived mOnDownloadReceived;
-    private String TAG=ServerSyncManager.class.getSimpleName();
+    private OnStringResultReceived mOnStringResultReceived;
+    private String TAG = ServerSyncManager.class.getSimpleName();
+
     public ServerSyncManager() {
 
     }
@@ -61,7 +63,7 @@ public class ServerSyncManager
 
     public void syncDataWithServer(final boolean aShowProgressDlg) {
         Log.d("BaseActivity", "IN Base");
-        String downloadUrl = mSessionManager.getDownloadUrl(mSessionManager.getUserId(),mSessionManager.getUserRestaurantId());
+        String downloadUrl = mSessionManager.getDownloadUrl(mSessionManager.getUserId(), mSessionManager.getUserRestaurantId());
         String uploadJson = getUploadSyncJson();
         SyncDataDTO syncData = new SyncDataDTO();
         syncData.setDownloadUrl(downloadUrl);
@@ -79,14 +81,14 @@ public class ServerSyncManager
         }
 
         final ProgressDialog progress = new ProgressDialog(mContext);
-        if (mSessionManager.getUserId() == 0 || mSessionManager.getUserEmailId() == null
-                || mSessionManager.getUserName() == null ||mSessionManager.getUserEmailId().isEmpty()
+        if (mSessionManager.getUserId() == 0 || mSessionManager.getUserName() == null
                 || mSessionManager.getUserName().isEmpty()) {
             Log.e("UserNotAuth", "User is not authenticated before upload");
             return;
         }
         String uploadJson = prepareUploadJsonFromData(params);
         String uploadURL = mSessionManager.getUploadUrl();
+        Log.i(TAG,"##"+uploadJson);
         uploadJsonToServer(uploadJson, uploadURL, progress);
     }
 
@@ -106,13 +108,16 @@ public class ServerSyncManager
     public void setOnDownloadReceived(OnDownloadReceived onDownloadReceived) {
         mOnDownloadReceived = onDownloadReceived;
     }
-
+    public void setOnStringResultReceived(OnStringResultReceived stringResultReceived)
+    {
+        mOnStringResultReceived=stringResultReceived;
+    }
     private String prepareUploadJsonFromData(TableDataDTO... params) {
 
         Upload uploadToServer = new Upload();
         uploadToServer.setUser(new UploadUser(
                 mSessionManager.getUserId(),
-                mSessionManager.getUserRestaurantId(),mDbRepository.getPassword(mSessionManager.getUserId())));
+                mSessionManager.getUserRestaurantId(), mDbRepository.getPassword(mSessionManager.getUserId())));
         uploadToServer.setData(Arrays.asList(params));
         String uploadJson = uploadToServer.serializeString();
         return uploadJson;
@@ -128,7 +133,8 @@ public class ServerSyncManager
             public void onResponse(JSONObject response) {
                 Log.d("Upload Response", "" + response.toString());
 
-
+                if(mOnStringResultReceived!=null)
+                    mOnStringResultReceived.onStingResultReceived(response);
                 if (progress != null)
                     progress.dismiss();
 
@@ -139,6 +145,7 @@ public class ServerSyncManager
             public void onErrorResponse(VolleyError error) {
                 if (progress != null)
                     progress.dismiss();
+                Log.i(TAG,"##"+error.toString());
             }
         });
         uploadRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
@@ -151,8 +158,8 @@ public class ServerSyncManager
     protected String getUploadSyncJson() {
         Upload uploadToServer = new Upload();
         uploadToServer.setUser(new UploadUser(
-                SessionManager.Instance().getUserId(),SessionManager.Instance().getUserRestaurantId()
-                ,mDbRepository.getPassword(mSessionManager.getUserId())));
+                SessionManager.Instance().getUserId(), SessionManager.Instance().getUserRestaurantId()
+                , mDbRepository.getPassword(mSessionManager.getUserId())));
         List<Sync> syncRecordsInDb = mDbRepository.getPendingSyncRecords();
         ArrayList<TableDataDTO> tableDataList = new ArrayList<>();
 
@@ -214,7 +221,7 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.BILL, jsonInsertList.size());
             dbOperations.addOrUpdateBills(jsonInsertList, tableValue.getUpdateJsonList());
-            Log.d("TableDataDTO", "##" +DbTableNameConstants.BILL);
+            Log.d("TableDataDTO", "##" + DbTableNameConstants.BILL);
         }
         if (theTableData.containsKey(DbTableNameConstants.BILL_DETAILS)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.BILL_DETAILS);
@@ -288,7 +295,7 @@ public class ServerSyncManager
 
         for (TableDataDTO tableData : downloadData.getTableData()) {
             String theTableName = tableData.getTableName();
-            Log.d(TAG,"##"+tableData.toString());
+            Log.d(TAG, "##" + tableData.toString());
             String theTableValue = tableData.getTableData().replaceAll("\\\\", "");
 
             TableJsonCollectionDTO tableJsonCollectionDTO;
@@ -372,6 +379,10 @@ public class ServerSyncManager
 
     public interface OnDownloadReceived {
         void onDownloadResultReceived(@NonNull Map<String, Integer> results);
+    }
+
+    public interface OnStringResultReceived{
+        void onStingResultReceived(@NonNull JSONObject data);
     }
 
 }

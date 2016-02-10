@@ -2,43 +2,69 @@ package com.vibeosys.rorderapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.OrderSummaryAdapter;
 import com.vibeosys.rorderapp.data.OrderDetailsDTO;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
+import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
+import com.vibeosys.rorderapp.data.TableDataDTO;
+import com.vibeosys.rorderapp.data.UploadOrderDetails;
+import com.vibeosys.rorderapp.data.UploadOrderHeader;
+import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.NetworkUtils;
+import com.vibeosys.rorderapp.util.ROrderDateUtils;
+import com.vibeosys.rorderapp.util.ServerSyncManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by akshay on 04-02-2016.
  */
-public class TableOrderActivity extends BaseActivity implements OrderSummaryAdapter.ButtonListener {
+public class TableOrderActivity extends BaseActivity implements OrderSummaryAdapter.ButtonListener, ServerSyncManager.OnStringResultReceived {
 
     ExpandableListView ordersList;
     OrderSummaryAdapter adapter;
-ArrayList<OrderHeaderDTO>list=new ArrayList<>();
+    ArrayList<OrderHeaderDTO> list = new ArrayList<>();
+    TableCommonInfoDTO tableCommonInfo;
+    private int mTableNo;
+    private int mTableId;
+    private String mCustId;
+    private OrderHeaderDTO mCurrentOrder;
+    private UUID orderId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TableCommonInfoDTO tableCommonInfo = getIntent().getParcelableExtra("tableCustInfo");
-        int tableNo = tableCommonInfo.getTableNo();
-
+        tableCommonInfo = getIntent().getParcelableExtra("tableCustInfo");
+        mTableNo = tableCommonInfo.getTableNo();
+        mTableId = tableCommonInfo.getTableId();
+        mCustId = tableCommonInfo.getCustId();
         setContentView(R.layout.activity_table_order);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ordersList=(ExpandableListView)findViewById(R.id.expListViewForTableOrder);
+        ordersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
         //ordersList.setGroupIndicator(getResources().getDrawable(R.drawable.expand_indicator));
-        list=mDbRepository.getOrdersOfTable(1);
-        OrderHeaderDTO currentOrder=mDbRepository.getOrederDetailsFromTemp(1,mSessionManager.getUserId());
+        list = mDbRepository.getOrdersOfTable(mTableId);
+        mCurrentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
         mDbRepository.getOrederDetailsGroupByID(list);
-        list.add(0, currentOrder);
-        adapter=new OrderSummaryAdapter(getApplicationContext(),list);
+        list.add(0, mCurrentOrder);
+        adapter = new OrderSummaryAdapter(getApplicationContext(), list);
         ordersList.setAdapter(adapter);
         ordersList.expandGroup(0);
         ordersList.setDividerHeight(2);
@@ -47,7 +73,7 @@ ArrayList<OrderHeaderDTO>list=new ArrayList<>();
         adapter.setButtonListner(this);
         //adapter.onGroupExpanded(0);
         adapter.notifyDataSetChanged();
-
+        mServerSyncManager.setOnStringResultReceived(this);
         ordersList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -92,8 +118,8 @@ ArrayList<OrderHeaderDTO>list=new ArrayList<>();
         if (id == R.id.imgOrderPluse)
             orderMenu.setOrderQuantity(value + 1);
         //Collections.sort(allMenus);
-       orderMenu.setOrderPrice(orderMenu.getOrderQuantity()*orderMenu.getMenuUnitPrice());
-        mDbRepository.insertOrUpdateTempOrder(1, 10, orderMenu.getMenuId(), orderMenu.getOrderQuantity());
+        orderMenu.setOrderPrice(orderMenu.getOrderQuantity() * orderMenu.getMenuUnitPrice());
+        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getMenuId(), orderMenu.getOrderQuantity(), mCustId);
         adapter.notifyDataSetChanged();
     }
 
@@ -107,14 +133,64 @@ ArrayList<OrderHeaderDTO>list=new ArrayList<>();
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() ==R.id.billDetials)
-        {
+
+        if (item.getItemId() == R.id.placeOrder) {
             //Toast.makeText(getApplicationContext(),"Button is clicke",Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this,BillDetailsActivity.class);
-            startActivity(i);
+            /*Intent i = new Intent(this, BillDetailsActivity.class);
+            startActivity(i);*/
+            if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
+                placeOrder();
+            } else {
+                /* Show setting alert to connet to the internet*/
+            }
         }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void placeOrder() {
+        // OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId());
+        List<OrderDetailsDTO> orderDetailsDTOs = mCurrentOrder.getOrderDetailsDTOs();
+        ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+        for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
+            UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity());
+            sendDetails.add(sendOrder);
+        }
+        orderId = UUID.randomUUID();
+        UploadOrderHeader sendOrder = new UploadOrderHeader(orderId.toString(), mTableId, mCustId, sendDetails);
+        Gson gson = new Gson();
+
+        String serializedJsonString = gson.toJson(sendOrder);
+        Log.d(TAG, "##" + serializedJsonString);
+        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+    }
+
+    @Override
+    public void onStingResultReceived(@NonNull JSONObject data) {
+        int errorCode = -1;
+        String message = null;
+        try {
+            errorCode = data.getInt("errorCode");
+            message = data.getString("message");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (errorCode == 0) {
+            // Order is Successfully Placed. Delete all temp entry and add data in order table.
+            String currentDate = new ROrderDateUtils().getGMTCurrentDate();
+            String currentTime = new ROrderDateUtils().getGMTCurrentTime();
+            ArrayList<OrdersDbDTO> orders = new ArrayList<>();
+            orders.add(new OrdersDbDTO(orderId.toString(), Integer.parseInt(message), mCustId,
+                    Date.valueOf(currentDate), Time.valueOf(currentTime), Date.valueOf(currentDate),
+                    Date.valueOf(currentDate), mTableId, String.valueOf(mSessionManager.getUserId())));
+            mDbRepository.insertOrders(orders);
+            mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
+            Intent iMenu=new Intent(getApplicationContext(),TableMenusActivity.class);
+            iMenu.putExtra("tableCustInfo", tableCommonInfo);
+            startActivity(iMenu);
+            finish();
+        }
     }
 }

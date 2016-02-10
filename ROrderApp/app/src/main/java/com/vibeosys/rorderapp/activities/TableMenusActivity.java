@@ -21,26 +21,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TableMenusActivity extends BaseActivity implements OrderListAdapter.CustomButtonListener,View.OnClickListener{
+public class TableMenusActivity extends BaseActivity implements OrderListAdapter.CustomButtonListener, View.OnClickListener {
 
-   private  TableCommonInfoDTO tableCommonInfoDTO;
-    OrderListAdapter orderListAdapter;
-    List<OrderMenuDTO> allMenus;
-    ListView listMenus;
-    TextView txtTotalAmount, txtTotalItems;
-    int mTableId, mTableNo;
-    String custId;
-    LinearLayout llCurrentOrder;
+    private TableCommonInfoDTO tableCommonInfoDTO;
+    private OrderListAdapter orderListAdapter;
+    private List<OrderMenuDTO> allMenus;
+    private ListView listMenus;
+    private TextView txtTotalAmount, txtTotalItems;
+    private int mTableId, mTableNo;
+    private String custId;
+    private LinearLayout llCurrentOrder;
+    private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
+
     //List<OrderMenuDTO> sortingMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_menus);
         tableCommonInfoDTO = getIntent().getParcelableExtra("tableCustInfo");
-         mTableId = tableCommonInfoDTO.getTableId();
-         mTableNo = tableCommonInfoDTO.getTableNo();
+        mTableId = tableCommonInfoDTO.getTableId();
+        mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
-
 
 
         listMenus = (ListView) findViewById(R.id.listMenus);
@@ -50,7 +51,7 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
         //sortingMenu=mDbRepository.getOrderMenu();
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
-        llCurrentOrder=(LinearLayout)findViewById(R.id.llCurrentOrder);
+        llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
@@ -82,13 +83,13 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
 
 
     private void displayMenuPriceAndItems() {
-        ArrayList<OrderMenuDTO> selectedItems = new ArrayList<>();
+       // mSelectedItems
         for (OrderMenuDTO menu : allMenus) {
             if (menu.getmQuantity() > 0) {
-                selectedItems.add(menu);
+                mSelectedItems.add(menu);
             }
         }
-        SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(selectedItems);
+        SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(mSelectedItems);
         txtTotalAmount.setText(String.format(String.format("%.2f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
         txtTotalItems.setText(selectedMenusDTO.getTotalItems() + " Items are selected");
     }
@@ -104,7 +105,7 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
             orderMenu.setmQuantity(value + 1);
         //Collections.sort(allMenus);
         displayMenuPriceAndItems();
-        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(), orderMenu.getmQuantity());
+        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(), orderMenu.getmQuantity(), custId);
         orderListAdapter.notifyDataSetChanged();
     }
 
@@ -160,9 +161,8 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
 
     @Override
     public void onClick(View v) {
-        int id=v.getId();
-        if(id==R.id.llCurrentOrder)
-        {
+        int id = v.getId();
+        if (id == R.id.llCurrentOrder) {
             /*List<OrdersDbDTO> orderInserts=new ArrayList<>();
             orderInserts.add(new OrdersDbDTO("" + 2, 1234, true, Date.valueOf("2016-02-02"),
                     Time.valueOf("8:50:22"), Date.valueOf("2016-02-02"), Date.valueOf("2016-02-02"), 1, "" + 1, 61));
@@ -173,10 +173,21 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
             orderDetailsDbDTOList.add(new OrderDetailsDbDTO(4,36,1,Date.valueOf("2016-02-02"),Date.valueOf("2016-02-02"),""+2,4,"Garlic Bread"));
             mDbRepository.insertOrderDetails(orderDetailsDbDTOList);*/
 
-           // TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(1, "DEF", 10);
-            Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
-            tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
-            startActivity(tableOrderIntent);
+            // TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(1, "DEF", 10);
+            if (mSelectedItems.size() == 0) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_item_selected), Toast.LENGTH_SHORT).show();
+            } else {
+                Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
+                tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
+                startActivity(tableOrderIntent);
+                finish();
+            }
+
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

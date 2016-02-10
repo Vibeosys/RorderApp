@@ -27,6 +27,20 @@ public class OrdersDbDTO extends BaseDTO {
     public OrdersDbDTO() {
     }
 
+
+    public OrdersDbDTO(String orderId, int orderNo, String custId, Date orderDate, Time orderTime,
+                       Date createdDate, Date updatedDate, int tableNo, String userId) {
+        this.orderId = orderId;
+        OrderNo = orderNo;
+        this.custId = custId;
+        this.orderDate = orderDate;
+        this.orderTime = orderTime;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+        this.tableNo = tableNo;
+        this.userId = userId;
+    }
+
     public OrdersDbDTO(String orderId, int orderNo, boolean orderStatus, Date orderDate,
                        Time orderTime, Date createdDate, Date updatedDate, int tableNo,
                        String userId, double orderAmount) {

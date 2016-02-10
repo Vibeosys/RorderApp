@@ -9,11 +9,17 @@ public class TableDataDTO {
     private String tableName;
     private String tableData;
     private String operation;
+    private String operationData;
 
     public TableDataDTO(String tableName, String tableData, @Nullable String operation) {
         this.tableName = tableName;
         this.tableData = tableData;
         this.operation = operation;
+    }
+
+    public TableDataDTO(String operation, String operationData) {
+        this.operation = operation;
+        this.operationData = operationData;
     }
 
     public TableDataDTO() {
@@ -45,12 +51,11 @@ public class TableDataDTO {
         this.operation = operation;
     }
 
-    @Override
-    public String toString() {
-        return "TableDataDTO{" +
-                "tableName='" + tableName + '\'' +
-                ", tableData='" + tableData + '\'' +
-                ", operation='" + operation + '\'' +
-                '}';
+    public String getOperationData() {
+        return operationData;
+    }
+
+    public void setOperationData(String operationData) {
+        this.operationData = operationData;
     }
 }

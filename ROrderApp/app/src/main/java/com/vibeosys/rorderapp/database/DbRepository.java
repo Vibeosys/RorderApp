@@ -671,7 +671,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return orderMenus;
     }
 
-    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty) {
+    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty,String custId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -692,6 +692,7 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTempOrder.TABLE_ID, tableId);
             contentValues.put(SqlContract.SqlTempOrder.MENU_ID, menuId);
             contentValues.put(SqlContract.SqlTempOrder.QUANTITY, qty);
+            contentValues.put(SqlContract.SqlTempOrder.CUST_ID, custId);
             contentValues.put(SqlContract.SqlTempOrder.ORDER_DATE, rOrderDateUtils.getGMTCurrentDate());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_TIME, rOrderDateUtils.getGMTCurrentTime());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
@@ -721,21 +722,21 @@ public class DbRepository extends SQLiteOpenHelper {
 
     public boolean clearUpdateTempData(int tableId, int tableNo, String custId) {
         SQLiteDatabase sqLiteDatabase = null;
-        ContentValues contentValues = null;
+       // ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
 
         try {
-            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo),(custId)};
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo),custId};
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
-                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND" + SqlContract.SqlTempOrder.CUST_ID + "=?",
+                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND " + SqlContract.SqlTempOrder.CUST_ID + "=?",
                     whereClause);
-            contentValues.clear();
+           // contentValues.clear();
             sqLiteDatabase.close();
-            Log.d(TAG," ## clear update sucessfully");
+            Log.d(TAG, " ## clear update sucessfully");
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG,"## clear update is not sucessfully");
+            Log.d(TAG, "## clear update is not sucessfully" + e.toString());
             sqLiteDatabase.close();
 
         } finally {
@@ -757,7 +758,7 @@ public class DbRepository extends SQLiteOpenHelper {
             count = sqLiteDatabase.update(SqlContract.SqlHotelTable.TABLE_NAME, contentValues,
                     SqlContract.SqlHotelTable.TABLE_ID + "=?", whereClause);
             sqLiteDatabase.close();
-            Log.e(TAG, "##  Occupied sucessfully " );
+            Log.e(TAG, "##  Occupied sucessfully ");
         } catch (Exception e) {
             Log.e(TAG, "## error at set Occupied " + e.toString());
             e.printStackTrace();
@@ -884,7 +885,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return count;
     }
 
-    public OrderHeaderDTO getOrederDetailsFromTemp(int tableId, int userId) {
+    public OrderHeaderDTO getOrederDetailsFromTemp(int tableId, int userId,String custId) {
 
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -892,12 +893,12 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             List<OrderDetailsDTO> orderDetailsList = new ArrayList<>();
-            String[] whereClause = new String[]{String.valueOf(tableId)};
+            String[] whereClause = new String[]{String.valueOf(tableId),custId};
             double orderAmount = 0;
             cursor = sqLiteDatabase.rawQuery("Select temp_order.TempOrderId,temp_order.Quantity," +
                     "temp_order.MenuId,temp_order.OrderDate,temp_order.OrderTime,menu.MenuTitle," +
                     "menu.Price from temp_order left join menu where " +
-                    "temp_order.MenuId=menu.MenuId and temp_order.TableId=?", whereClause);
+                    "temp_order.MenuId=menu.MenuId and temp_order.TableId=? and temp_order.CustId=?", whereClause);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
@@ -1106,7 +1107,7 @@ public class DbRepository extends SQLiteOpenHelper {
                             + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
             contentValues.clear();
             sqLiteDatabase.close();
-            Log.d(TAG,"## Data deledted from transcation table");
+            Log.d(TAG, "## Data deledted from transcation table");
         } catch (Exception e) {
             e.printStackTrace();
             sqLiteDatabase.close();

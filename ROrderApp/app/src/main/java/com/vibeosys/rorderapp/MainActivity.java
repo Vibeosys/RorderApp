@@ -93,12 +93,13 @@ public class MainActivity extends BaseActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent iWaitingList=new Intent(getApplicationContext(), AddCustomerActivity.class);
+                    Intent iWaitingList = new Intent(getApplicationContext(), AddCustomerActivity.class);
                     startActivity(iWaitingList);
-                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                 }
             });
-
+            Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+            startService(syncServiceIntent);
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

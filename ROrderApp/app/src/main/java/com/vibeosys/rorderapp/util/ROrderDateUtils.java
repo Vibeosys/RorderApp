@@ -10,7 +10,7 @@ import java.util.TimeZone;
 public class ROrderDateUtils {
 
     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss zzz");
+    final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     public String getGMTCurrentDate() {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
