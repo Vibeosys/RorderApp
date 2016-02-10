@@ -4,24 +4,25 @@ package com.vibeosys.rorderapp.data;
  * Created by mahesh on 10/23/2015.
  */
 public class UploadUser extends BaseDTO {
-    protected String userId;
+    protected int userId;
     protected String emailId;
     protected String userName;
-    protected String restaurantId;
+    protected String password;
+    protected int restaurantId;
 
     public UploadUser() {
 
     }
 
-    public UploadUser(String userId, String restaurantId) {
+    public UploadUser(int userId, int restaurantId) {
         this.userId = userId;
         this.restaurantId = restaurantId;
     }
 
-    public UploadUser(String userId, String emailId, String userName) {
+    public UploadUser(int userId, int restaurantId, String password) {
         this.userId = userId;
-        this.emailId = emailId;
-        this.userName = userName;
+        this.restaurantId = restaurantId;
+        this.password = password;
     }
 
     public String getUserName() {
@@ -32,11 +33,11 @@ public class UploadUser extends BaseDTO {
         this.userName = userName;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -48,11 +49,11 @@ public class UploadUser extends BaseDTO {
         this.emailId = emailId;
     }
 
-    public String getRestaurantId() {
+    public int getRestaurantId() {
         return restaurantId;
     }
 
-    public void setRestaurantId(String restaurantId) {
+    public void setRestaurantId(int restaurantId) {
         this.restaurantId = restaurantId;
     }
 }

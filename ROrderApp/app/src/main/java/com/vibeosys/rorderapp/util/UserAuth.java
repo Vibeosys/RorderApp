@@ -68,7 +68,7 @@ public class UserAuth {
         theSessionManager.setUserActive(userInfo.ismActive());
         theSessionManager.setUserRollId(userInfo.getmRoleId());
         theSessionManager.setUserRestaurantId(userInfo.getmRestaurantId());
-        theSessionManager.setUserId(String.valueOf(userInfo.getmUserId()));
+        theSessionManager.setUserId(userInfo.getmUserId());
         //theSessionManager.setUserRegdApiKey(userInfo.getApiKey());
 
         //updateUserDetailsOnServer(context, userInfo);
@@ -85,7 +85,7 @@ public class UserAuth {
 
         SessionManager theSessionManager = SessionManager.Instance();
         theSessionManager.setUserName(null);
-        theSessionManager.setUserId(null);
+        theSessionManager.setUserId(0);
         theSessionManager.setUserActive(false);
         theSessionManager.setUserRollId(0);
         theSessionManager.setUserRestaurantId(0);

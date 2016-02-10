@@ -79,8 +79,9 @@ public class ServerSyncManager
         }
 
         final ProgressDialog progress = new ProgressDialog(mContext);
-        if (mSessionManager.getUserId() == null || mSessionManager.getUserEmailId() == null || mSessionManager.getUserName() == null ||
-                mSessionManager.getUserId().isEmpty() || mSessionManager.getUserEmailId().isEmpty() || mSessionManager.getUserName().isEmpty()) {
+        if (mSessionManager.getUserId() == 0 || mSessionManager.getUserEmailId() == null
+                || mSessionManager.getUserName() == null ||mSessionManager.getUserEmailId().isEmpty()
+                || mSessionManager.getUserName().isEmpty()) {
             Log.e("UserNotAuth", "User is not authenticated before upload");
             return;
         }
@@ -111,8 +112,7 @@ public class ServerSyncManager
         Upload uploadToServer = new Upload();
         uploadToServer.setUser(new UploadUser(
                 mSessionManager.getUserId(),
-                mSessionManager.getUserEmailId(),
-                mSessionManager.getUserName()));
+                mSessionManager.getUserRestaurantId(),mDbRepository.getPassword(mSessionManager.getUserId())));
         uploadToServer.setData(Arrays.asList(params));
         String uploadJson = uploadToServer.serializeString();
         return uploadJson;
@@ -151,8 +151,8 @@ public class ServerSyncManager
     protected String getUploadSyncJson() {
         Upload uploadToServer = new Upload();
         uploadToServer.setUser(new UploadUser(
-                SessionManager.Instance().getUserId(),
-                String.valueOf(SessionManager.Instance().getUserRestaurantId())));
+                SessionManager.Instance().getUserId(),SessionManager.Instance().getUserRestaurantId()
+                ,mDbRepository.getPassword(mSessionManager.getUserId())));
         List<Sync> syncRecordsInDb = mDbRepository.getPendingSyncRecords();
         ArrayList<TableDataDTO> tableDataList = new ArrayList<>();
 

@@ -165,7 +165,7 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
             orderDetailsDbDTOList.add(new OrderDetailsDbDTO(4,36,1,Date.valueOf("2016-02-02"),Date.valueOf("2016-02-02"),""+2,4,"Garlic Bread"));
             mDbRepository.insertOrderDetails(orderDetailsDbDTOList);*/
 
-            TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO("ABC", "DEF", 10);
+            TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(1, "DEF", 10);
             Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
             tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
             startActivity(tableOrderIntent);

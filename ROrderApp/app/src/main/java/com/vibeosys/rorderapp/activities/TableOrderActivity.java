@@ -35,7 +35,7 @@ ArrayList<OrderHeaderDTO>list=new ArrayList<>();
         ordersList=(ExpandableListView)findViewById(R.id.expListViewForTableOrder);
         //ordersList.setGroupIndicator(getResources().getDrawable(R.drawable.expand_indicator));
         list=mDbRepository.getOrdersOfTable(1);
-        OrderHeaderDTO currentOrder=mDbRepository.getOrederDetailsFromTemp(1,Integer.parseInt(mSessionManager.getUserId()));
+        OrderHeaderDTO currentOrder=mDbRepository.getOrederDetailsFromTemp(1,mSessionManager.getUserId());
         mDbRepository.getOrederDetailsGroupByID(list);
         list.add(0, currentOrder);
         adapter=new OrderSummaryAdapter(getApplicationContext(),list);

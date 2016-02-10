@@ -1137,7 +1137,6 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase.close();
         } catch (Exception e) {
             e.printStackTrace();
-            sqLiteDatabase.close();
         } finally {
             if (sqLiteDatabase != null)
                 sqLiteDatabase.close();
@@ -1147,5 +1146,31 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return custId;
 
+    }
+
+    public String getPassword(int userId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        String password="@password";
+        String whereClause[] = new String[]{String.valueOf(userId)};
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            cursor = sqLiteDatabase.rawQuery("Select Password from users where UserId=?", whereClause);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    password = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.PASSWORD));
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+            if (cursor != null)
+                cursor.close();
+        }
+        return password;
     }
 }

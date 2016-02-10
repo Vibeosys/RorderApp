@@ -249,7 +249,7 @@ public class MainActivity extends BaseActivity
         HotelTableDTO hotelTableDTO = (HotelTableDTO) adapter.getItem(position);
         if(hotelTableDTO.ismIsOccupied())
         {
-            String custId=mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId(),Integer.parseInt(mSessionManager.getUserId()));
+            String custId=mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId(),mSessionManager.getUserId());
             Log.i(TAG,"## Customer Id "+custId);
             callToMenuIntent(hotelTableDTO.getmTableNo(),hotelTableDTO.getmTableId());
         }

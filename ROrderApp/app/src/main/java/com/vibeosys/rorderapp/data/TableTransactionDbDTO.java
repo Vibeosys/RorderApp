@@ -8,7 +8,7 @@ import java.sql.Date;
 public class TableTransactionDbDTO extends BaseDTO {
 
     private int tableId;
-    private String userId;
+    private int userId;
     private String custId;
     private boolean isWaiting;
     private Date arrivalTime;
@@ -24,7 +24,7 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.occupancy = occupancy;
     }
 
-    public TableTransactionDbDTO(int tableId, String userId, String custId, boolean isWaiting, Date arrivalTime, int occupancy) {
+    public TableTransactionDbDTO(int tableId, int userId, String custId, boolean isWaiting, Date arrivalTime, int occupancy) {
         this.tableId = tableId;
         this.userId = userId;
         this.custId = custId;
@@ -41,11 +41,11 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.tableId = tableId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

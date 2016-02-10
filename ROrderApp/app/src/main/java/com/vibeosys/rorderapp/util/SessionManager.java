@@ -103,8 +103,8 @@ public class SessionManager {
         return downloadDbUrl + userId;
     }
 
-    public String getDownloadUrl(String userId,int restaurantId) {
-        if (userId == null || userId.equals(""))
+    public String getDownloadUrl(int userId,int restaurantId) {
+        if (userId == 0)
             Log.e("SessionManager", "User id in download URL is blank");
 
         String downloadUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_DOWNLOAD_URI, null);
@@ -124,11 +124,11 @@ public class SessionManager {
         return mProjectSharedPref.getString(PropertyTypeConstants.DATABASE_DEVICE_FULLPATH, null);
     }
 
-    public String getUserId() {
-        return mProjectSharedPref.getString(PropertyTypeConstants.USER_ID, null);
+    public int getUserId() {
+        return mProjectSharedPref.getInt(PropertyTypeConstants.USER_ID, 0);
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         setValuesInSharedPrefs(PropertyTypeConstants.USER_ID, userId);
     }
 
@@ -210,7 +210,14 @@ public class SessionManager {
     public String getUserRegdApiKey() {
         return mProjectSharedPref.getString(PropertyTypeConstants.USER_REGD_API_KEY, null);
     }
-
+    public String getDeviceId(String deviceId)
+    {
+        return mProjectSharedPref.getString(PropertyTypeConstants.USER_DEVICE_ID,null);
+    }
+    public void setDeviceId(String deviceId)
+    {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_DEVICE_ID,deviceId);
+    }
     private static void setValuesInSharedPrefs(String sharedPrefKey, String sharedPrefValue) {
         SharedPreferences.Editor editor = mProjectSharedPref.edit();
         editor.putString(sharedPrefKey, sharedPrefValue);

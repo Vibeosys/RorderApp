@@ -70,7 +70,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
 
         String buildInfo64Based = getBuild64BasedInfo();
         UUID uuid = UUID.randomUUID();
-        mSessionManager.setUserId(uuid.toString());
+        mSessionManager.setDeviceId(uuid.toString());
         String downloadDBURL = "http://192.168.1.6/rorderwebapp/api/v1/downloadDb?restaurantId="+mSelectedRestoId;/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
         Log.i(TAG, "##" + downloadDBURL);
         try {
@@ -136,7 +136,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                 File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
                 if (!dbFile.exists()) {
                     downloadDatabase(dbFile);
-                } else if (dbFile.exists() && (mSessionManager.getUserId() == null || mSessionManager.getUserId().isEmpty())) {
+                } else if (dbFile.exists() && (mSessionManager.getUserId() == 0)) {
                     downloadDatabase(dbFile);
                 }
             }
