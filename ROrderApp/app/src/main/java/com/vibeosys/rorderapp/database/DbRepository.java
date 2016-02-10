@@ -1016,7 +1016,7 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase.close();
 
         } catch (Exception e) {
-            Log.e(TAG, "Error at getOrdersOf table " + e.toString());
+            Log.e(TAG, "Error at getWaitingList table " + e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1067,9 +1067,9 @@ public class DbRepository extends SQLiteOpenHelper {
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
-                    int iOccupied=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
+                    int iOccupied = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
 
-                    tableId = iOccupied==0?cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_ID)):-1;
+                    tableId = iOccupied == 0 ? cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_ID)) : -1;
                 }
             }
 
@@ -1088,61 +1088,60 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return tableId;
     }
+
     /*
             * clearTableTransaction(int custId,int tableId) this function clears the table_transaction from sqlite
     * */
-    public boolean clearTableTransaction(int custId,int tableId)
-    {
+    public boolean clearTableTransaction(int custId, int tableId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
-        long count =-1;
-        try
-        {
-            String [] whereClasuse = new String[]{String.valueOf(custId),String.valueOf(tableId)};
+        long count = -1;
+        try {
+            String[] whereClasuse = new String[]{String.valueOf(custId), String.valueOf(tableId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
                     SqlContract.SqlTableTransaction.CUST_ID + "=? AND"
                             + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
             contentValues.clear();
             sqLiteDatabase.close();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             sqLiteDatabase.close();
-        }finally {
+        } finally {
             sqLiteDatabase.close();
         }
         return count != -1;
     }
+
     /*
     getCustmerIdFromTransaction(int tableId,int userId) this function
     returns custmerId from table transaction 
 
     * */
-    public String getCustmerIdFromTransaction(int tableId,int userId)
-    {
-        String custId ="";
+    public String getCustmerIdFromTransaction(int tableId, int userId) {
+        String custId = "";
         SQLiteDatabase sqLiteDatabase = null;
-        String[]whereClasuse = new String[]{String.valueOf(tableId),String.valueOf(userId)};
+        String[] whereClasuse = new String[]{String.valueOf(tableId), String.valueOf(userId)};
         Cursor cursor = null;
-        try
-        {
-            sqLiteDatabase=getReadableDatabase();
+        try {
+            sqLiteDatabase = getReadableDatabase();
             cursor = sqLiteDatabase.rawQuery("select table_transaction.CustId from table_transaction " +
-                    "where table_transaction.TableId=? AND table_transaction.UserId =?",whereClasuse);
-            custId =cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
-
+                    "where table_transaction.TableId=? AND table_transaction.UserId =?", whereClasuse);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    custId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
+                }
+            }
             cursor.close();
             sqLiteDatabase.close();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             sqLiteDatabase.close();
-        }finally
-        {
-            if(sqLiteDatabase!=null)
-            sqLiteDatabase.close();
-            if(cursor!=null)
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+            if (cursor != null)
                 cursor.close();
 
         }
