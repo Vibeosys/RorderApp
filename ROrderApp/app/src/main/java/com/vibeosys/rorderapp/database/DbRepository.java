@@ -1178,4 +1178,28 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return password;
     }
+    public int checkTempOrderDetails(String custId,int tableId)
+    {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor =null;
+
+        int count=-1;
+
+        String whereClause[] = new String[]{custId,String.valueOf(tableId)};
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            cursor =sqLiteDatabase.rawQuery("select temp_order.MenuId from temp_order where temp_order.CustId =? and temp_order.TableId =?",whereClause);
+            count =cursor.getCount();
+        }catch (Exception e) {
+
+            e.printStackTrace();
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+            if (cursor != null)
+                cursor.close();
+        }
+       return count;
+
+    }
 }
