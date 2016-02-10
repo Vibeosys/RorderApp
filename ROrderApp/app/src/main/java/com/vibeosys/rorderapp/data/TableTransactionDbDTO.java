@@ -32,6 +32,14 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.arrivalTime = arrivalTime;
         this.occupancy = occupancy;
     }
+    public TableTransactionDbDTO(int tableId, int userId, String custId, boolean isWaiting, Date arrivalTime) {
+        this.tableId = tableId;
+        this.userId = userId;
+        this.custId = custId;
+        this.isWaiting = isWaiting;
+        this.arrivalTime = arrivalTime;
+
+    }
 
     public int getTableId() {
         return tableId;

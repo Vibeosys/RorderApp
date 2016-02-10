@@ -23,22 +23,30 @@ import java.util.List;
 
 public class TableMenusActivity extends BaseActivity implements OrderListAdapter.CustomButtonListener,View.OnClickListener{
 
+   private  TableCommonInfoDTO tableCommonInfoDTO;
     OrderListAdapter orderListAdapter;
     List<OrderMenuDTO> allMenus;
     ListView listMenus;
     TextView txtTotalAmount, txtTotalItems;
     int mTableId, mTableNo;
+    String custId;
     LinearLayout llCurrentOrder;
     //List<OrderMenuDTO> sortingMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_menus);
+        tableCommonInfoDTO = getIntent().getParcelableExtra("tableCustInfo");
+         mTableId = tableCommonInfoDTO.getTableId();
+         mTableNo = tableCommonInfoDTO.getTableNo();
+        custId = tableCommonInfoDTO.getCustId();
+
+
 
         listMenus = (ListView) findViewById(R.id.listMenus);
         allMenus = mDbRepository.getOrderMenu();
-        mTableId = getIntent().getIntExtra("TableId", 0);
-        mTableNo = getIntent().getExtras().getInt("TableNo");
+//        mTableId = getIntent().getIntExtra("TableId", 0);
+//        mTableNo = getIntent().getExtras().getInt("TableNo");
         //sortingMenu=mDbRepository.getOrderMenu();
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
@@ -165,7 +173,7 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
             orderDetailsDbDTOList.add(new OrderDetailsDbDTO(4,36,1,Date.valueOf("2016-02-02"),Date.valueOf("2016-02-02"),""+2,4,"Garlic Bread"));
             mDbRepository.insertOrderDetails(orderDetailsDbDTOList);*/
 
-            TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(1, "DEF", 10);
+           // TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(1, "DEF", 10);
             Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
             tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
             startActivity(tableOrderIntent);

@@ -39,17 +39,23 @@ import com.vibeosys.rorderapp.activities.TableMenusActivity;
 import com.vibeosys.rorderapp.adaptors.TableCategoryAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
+import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
+import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
+import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.service.SyncService;
+import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.UserAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener{
@@ -251,7 +257,7 @@ public class MainActivity extends BaseActivity
         {
             String custId=mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId(),mSessionManager.getUserId());
             Log.i(TAG,"## Customer Id "+custId);
-            callToMenuIntent(hotelTableDTO.getmTableNo(),hotelTableDTO.getmTableId());
+            callToMenuIntent(hotelTableDTO.getmTableNo(),hotelTableDTO.getmTableId(),custId);
         }
        else
         {
@@ -260,10 +266,14 @@ public class MainActivity extends BaseActivity
         Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
     }
 
-    private void callToMenuIntent(int tableNo, int tableId) {
+    private void callToMenuIntent(int tableNo, int tableId ,String custId) {
+
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId,custId,tableNo);
+
         Intent intentOpenTableMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-        intentOpenTableMenu.putExtra("TableNo", tableNo);
-        intentOpenTableMenu.putExtra("TableId", tableId);
+        intentOpenTableMenu.putExtra("tableCustInfo",tableCommonInfoDTO);
+//        intentOpenTableMenu.putExtra("TableNo", tableNo);
+//        intentOpenTableMenu.putExtra("TableId", tableId);
         startActivity(intentOpenTableMenu);
     }
 
@@ -272,7 +282,7 @@ public class MainActivity extends BaseActivity
         final Dialog dialog=new Dialog(mContext);
         dialog.setContentView(R.layout.dialog_table_reserve);
         dialog.setTitle("Reserve Table");
-        EditText txtCustomerName=(EditText)dialog.findViewById(R.id.txtCustomerName);
+        final EditText txtCustomerName=(EditText)dialog.findViewById(R.id.txtCustomerName);
         TextView cancel=(TextView)dialog.findViewById(R.id.txtCancel);
         TextView reserve=(TextView)dialog.findViewById(R.id.txtReserve);
 
@@ -288,9 +298,24 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Customer Entered in db", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
+
+                UUID custid = UUID.randomUUID();
+
+                String customerName = txtCustomerName.getText().toString();
+                CustomerDbDTO customer=new CustomerDbDTO(custid.toString(),customerName,"","");
+                //here inserting custmer to custmer table
+                mDbRepository.insertCustomerDetails(customer);
+                //getting current date here
+                String currentDate=new ROrderDateUtils().getGMTCurrentDate();
+
+                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId,mSessionManager.getUserId(),custid.toString(),false, Date.valueOf(currentDate));
+                //here inserting records in table transaction
+                mDbRepository.insertTableTransaction(tableTransactionDbDTO);
+
                 mDbRepository.setOccupied(true, tableId);
+
                 adapter.refresh(mDbRepository.getTableRecords());
-                callToMenuIntent(tableNo, tableId);
+                callToMenuIntent(tableNo, tableId,custid.toString());
             }
         });
         dialog.show();

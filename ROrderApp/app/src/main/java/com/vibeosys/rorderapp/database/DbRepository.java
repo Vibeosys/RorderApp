@@ -719,21 +719,23 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
-    public boolean clearUpdateTempData(int tableId, int tableNo, int custId) {
+    public boolean clearUpdateTempData(int tableId, int tableNo, String custId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
 
         try {
-            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo), String.valueOf(custId)};
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo),(custId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
                     SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND" + SqlContract.SqlTempOrder.CUST_ID + "=?",
                     whereClause);
             contentValues.clear();
             sqLiteDatabase.close();
+            Log.d(TAG," ## clear update sucessfully");
         } catch (Exception e) {
             e.printStackTrace();
+            Log.d(TAG,"## clear update is not sucessfully");
             sqLiteDatabase.close();
 
         } finally {
@@ -755,7 +757,7 @@ public class DbRepository extends SQLiteOpenHelper {
             count = sqLiteDatabase.update(SqlContract.SqlHotelTable.TABLE_NAME, contentValues,
                     SqlContract.SqlHotelTable.TABLE_ID + "=?", whereClause);
             sqLiteDatabase.close();
-
+            Log.e(TAG, "##  Occupied sucessfully " );
         } catch (Exception e) {
             Log.e(TAG, "## error at set Occupied " + e.toString());
             e.printStackTrace();
@@ -1092,21 +1094,23 @@ public class DbRepository extends SQLiteOpenHelper {
     /*
             * clearTableTransaction(int custId,int tableId) this function clears the table_transaction from sqlite
     * */
-    public boolean clearTableTransaction(int custId, int tableId) {
+    public boolean clearTableTransaction(String custId, int tableId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
         try {
-            String[] whereClasuse = new String[]{String.valueOf(custId), String.valueOf(tableId)};
+            String[] whereClasuse = new String[]{(custId), String.valueOf(tableId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
                     SqlContract.SqlTableTransaction.CUST_ID + "=? AND"
                             + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
             contentValues.clear();
             sqLiteDatabase.close();
+            Log.d(TAG,"## Data deledted from transcation table");
         } catch (Exception e) {
             e.printStackTrace();
             sqLiteDatabase.close();
+            Log.d(TAG, "## Data not deledted from transcation table");
         } finally {
             sqLiteDatabase.close();
         }

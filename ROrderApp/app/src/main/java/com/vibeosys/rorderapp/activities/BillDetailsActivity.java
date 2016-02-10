@@ -10,6 +10,7 @@ import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -22,6 +23,8 @@ import java.util.List;
 public class BillDetailsActivity extends BaseActivity {
 
     private BillDetailsDTO mBillDetailsDTOs;
+    private TableCommonInfoDTO tableCommonInfoDTO;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class BillDetailsActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.Bill_Summary));
         BillDbDTO db = new BillDbDTO(1, Date.valueOf("02-02-2016"), Time.valueOf("10:10:11"),1200.00,102.00,10.00,Date.valueOf("02-02-2016"),Date.valueOf("02-02-2016"),2);
 
-        List<BillDbDTO> bill = new ArrayList<>();
+       List<BillDbDTO> bill = new ArrayList<>();
         bill.add(db);
 
         mDbRepository.insertBills(bill);
@@ -63,6 +66,7 @@ public class BillDetailsActivity extends BaseActivity {
             public void onClick(View v) {
 
                 Intent i = new Intent(getApplicationContext(),BillPaymentOptionActivity.class);
+                i.putExtra("tableCustInfo",tableCommonInfoDTO);
                 startActivity(i);
                 finish();
 
