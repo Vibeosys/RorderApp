@@ -788,18 +788,18 @@ public class DbRepository extends SQLiteOpenHelper {
                     cursor.moveToFirst();
 
                     do {
-                        int orderId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
+                        String orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
                         int orderNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
                         //boolean orderStatus=cursor.get;
-                        String orderDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_DATE));
-                        String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
+                        //String orderDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_DATE));
+                      //  String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
                         String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.CREATED_DATE));
                         String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.UPDATED_DATE));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
                         int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.USER_ID));
                         double orderAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_AMOUNT));
                         OrderHeaderDTO orderHeaderDTO = new OrderHeaderDTO(orderId,
-                                orderNo, true, Date.valueOf(orderDate), Time.valueOf(orderTime),
+                                orderNo, true,
                                 Date.valueOf(createdDate), Date.valueOf(updatedDate), tableNo,
                                 userId, orderAmount, false);
                         orders.add(orderHeaderDTO);
@@ -830,8 +830,8 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getReadableDatabase();
             for (OrderHeaderDTO order : orders) {
                 List<OrderDetailsDTO> orderDetailsList = new ArrayList<>();
-                int orderId = order.getOrderId();
-                String[] whereClause = new String[]{String.valueOf(orderId)};
+                String orderId = order.getOrderId();
+                String[] whereClause = new String[]{orderId};
                 Cursor cursor = null;
                 cursor = sqLiteDatabase.rawQuery("Select * from order_details where order_details.OrderId=?", whereClause);
                 if (cursor != null) {

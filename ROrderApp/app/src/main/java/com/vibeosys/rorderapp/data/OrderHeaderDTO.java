@@ -8,7 +8,7 @@ import java.util.List;
  * Created by akshay on 04-02-2016.
  */
 public class OrderHeaderDTO {
-    private int mOrderId;
+    private String mOrderId;
     private int mOrderNo;
     private boolean mOrderStatus;
     private Date mOrderDate;
@@ -20,8 +20,7 @@ public class OrderHeaderDTO {
     private double mOrderAmount;
     private int mItemCount;
     private boolean mCurrent;
-
-
+    private String custId;
 
     private List<OrderDetailsDTO> orderDetailsDTOs;
 
@@ -35,9 +34,9 @@ public class OrderHeaderDTO {
         this.orderDetailsDTOs = orderDetailsDTOs;
     }
 
-    public OrderHeaderDTO(int mOrderId, int mOrderNo, boolean mOrderStatus, Date mOrderDate,
-                          Time mOrderTime, Date mCreatedDate, Date mUpdatedDate, int mTableNo,
-                          int mUserId, double mOrderAmount,boolean mCurrent) {
+    public OrderHeaderDTO(String mOrderId, int mOrderNo, boolean mOrderStatus, Date mCreatedDate,
+                          Date mUpdatedDate, int mTableNo,
+                          int mUserId, double mOrderAmount, boolean mCurrent) {
         this.mOrderId = mOrderId;
         this.mOrderNo = mOrderNo;
         this.mOrderStatus = mOrderStatus;
@@ -48,14 +47,14 @@ public class OrderHeaderDTO {
         this.mTableNo = mTableNo;
         this.mUserId = mUserId;
         this.mOrderAmount = mOrderAmount;
-        this.mCurrent=mCurrent;
+        this.mCurrent = mCurrent;
     }
 
-    public int getOrderId() {
+    public String getOrderId() {
         return mOrderId;
     }
 
-    public void setOrderId(int mOrderId) {
+    public void setOrderId(String mOrderId) {
         this.mOrderId = mOrderId;
     }
 
@@ -153,5 +152,13 @@ public class OrderHeaderDTO {
 
     public void setCurrent(boolean mCurrent) {
         this.mCurrent = mCurrent;
+    }
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
     }
 }

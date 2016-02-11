@@ -40,7 +40,7 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
         CheckBox unOccupyChk = (CheckBox) findViewById(R.id.chkUnoccupy);
         String jsonString = getIntent().getStringExtra("json");
         Log.d(TAG, "##" + jsonString);
-
+        setTitle("Filter Tables");
 
         TextView txtCancel=(TextView)findViewById(R.id.txtCancel);
         TextView txtApply=(TextView)findViewById(R.id.txtApply);
