@@ -14,35 +14,38 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp">
 
-            <CheckBox
-                android:id="@+id/chkMyserving"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"/>
             <TextView
                 android:id="@+id/myServing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/filtertextStyle"
-                android:text="@string/my_serving" />
+                android:text="@string/my_serving"
+                android:layout_weight="3"/>
+            <CheckBox
+                android:id="@+id/chkMyserving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:layout_weight="0.5"/>
         </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp">
-
-        <CheckBox
-            android:id="@+id/chkUnoccupy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"/>
         <TextView
             android:id="@+id/unOccupy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/filtertextStyle"
+            android:layout_weight="3"
             android:text="@string/my_unoccupy"/>
+        <CheckBox
+            android:id="@+id/chkUnoccupy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_weight="0.5"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

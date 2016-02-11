@@ -1,60 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llRowOrder"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="2dp"
     android:focusable="false"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
- <ImageView
+    <ImageView
         android:id="@+id/orderImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/expand_indicator" />
 
-    <TextView
-        android:id="@+id/txtOrderName"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/orderImg"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_toEndOf="@+id/orderImg"
         android:layout_weight="2"
-        android:singleLine="false"
-        android:text="Manchurian"
-        android:focusable="false"
-        android:textColor="@color/listview_item" />
+        android:gravity="center_horizontal|left"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtOrderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:padding="1dp"
+            android:singleLine="false"
+            android:text="Manchurian"
+            android:textColor="@color/listview_item" />
 
 
-    <TextView
-        android:id="@+id/textOrderCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/viewOrderBtn"
-        android:layout_weight="1"
-        android:paddingLeft="4dp"
-        android:focusable="false"
-        android:text="Small Text"
-        android:textColor="@color/black_color"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <TextView
+            android:id="@+id/textOrderCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:focusable="false"
+            android:padding="1dp"
+            android:paddingLeft="4dp"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black_color"
+            android:textSize="10sp" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btnPlaceOrder"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:layout_weight="1"
-        android:focusable="false"
         android:background="@drawable/button_custom"
+        android:focusable="false"
+        android:padding="5dp"
         android:text="Place Order"
-        android:textColor="@color/White" />
+        android:textColor="@color/White"
+        android:textSize="12sp" />
 
 
 </LinearLayout>

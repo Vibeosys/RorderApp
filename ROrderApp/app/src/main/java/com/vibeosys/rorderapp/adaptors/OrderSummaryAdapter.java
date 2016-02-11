@@ -11,6 +11,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
@@ -82,14 +83,17 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         }
         TextView txtOrderName = (TextView) convertView.findViewById(R.id.txtOrderName);
         TextView orderCount = (TextView) convertView.findViewById(R.id.textOrderCount);
+        LinearLayout llOrder=(LinearLayout)convertView.findViewById(R.id.llRowOrder);
         Button btnPlaceOrder=(Button)convertView.findViewById(R.id.btnPlaceOrder);
         ImageView imgIndicator=(ImageView)convertView.findViewById(R.id.orderImg);
         if(orderHeaderDTO.getOrderNo()==0)
         {
-            txtOrderName.setText("Order # Current");
+            txtOrderName.setText("Current Order");
+            llOrder.setBackgroundColor(mContext.getResources().getColor(R.color.ok_btn_colour));
         }
         else {
             txtOrderName.setText("Order # " + orderHeaderDTO.getOrderNo());
+            llOrder.setBackgroundColor(mContext.getResources().getColor(R.color.light_grey));
         }
         if(orderHeaderDTO.isCurrent())
         {
@@ -99,7 +103,7 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
             btnPlaceOrder.setVisibility(View.INVISIBLE);
         }
         imgIndicator.setImageResource(isExpanded?R.drawable.expand_arrow:R.drawable.arrow_not_expand);
-        orderCount.setText(""+orderHeaderDTO.getItemCount());
+        orderCount.setText(""+orderHeaderDTO.getItemCount()+" Items");
         return convertView;
     }
 

@@ -184,7 +184,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             ArrayList<OrdersDbDTO> orders = new ArrayList<>();
             orders.add(new OrdersDbDTO(orderId.toString(), Integer.parseInt(message), mCustId,
                     Date.valueOf(currentDate), Time.valueOf(currentTime), Date.valueOf(currentDate),
-                    Date.valueOf(currentDate), mTableId, String.valueOf(mSessionManager.getUserId())));
+                    Date.valueOf(currentDate), mTableId, mSessionManager.getUserId()));
             mDbRepository.insertOrders(orders);
             mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
             mServerSyncManager.syncDataWithServer(true);

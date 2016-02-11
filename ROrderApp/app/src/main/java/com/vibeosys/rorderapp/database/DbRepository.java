@@ -342,10 +342,11 @@ public class DbRepository extends SQLiteOpenHelper {
                         int categoryId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableCategory.TABLE_CATEGORY_ID));
                         String categoryTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
                         // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.));
-
+                        String url=cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.IMAGE));
                         TableCategoryDTO table = new TableCategoryDTO();
                         table.setmCategoryId(categoryId);
                         table.setmTitle(categoryTitle);
+                        table.setmImage(url);
                         //table.setJsonSync();
                         tableCategories.add(table);
                     } while (cursor.moveToNext());
@@ -579,7 +580,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
                 contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
                 contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
-                contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmount());
+                contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
                 contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
                 count = sqLiteDatabase.insert(SqlContract.SqlOrders.TABLE_NAME, null, contentValues);
                 contentValues.clear();

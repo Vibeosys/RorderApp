@@ -70,7 +70,7 @@ public class TableCategoryAdapter extends BaseAdapter {
         mImageLoader = CustomVolleyRequestQueue.getInstance(mContext)
                 .getImageLoader();
         //Image URL - This can point to any image file supported by Android
-        final String url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Android_Studio_icon.svg/2000px-Android_Studio_icon.svg.png";
+        final String url = categoryDTO.getmImage();
         mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.icon,
                 R.mipmap.ic_launcher, android.R.drawable.stat_notify_error));
         viewHolder.icon.setImageUrl(url, mImageLoader);

@@ -112,7 +112,7 @@ public class BillDbDTO extends BaseDTO {
     }
 
     public static List<BillDbDTO> deserializeBill(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
         ArrayList<BillDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

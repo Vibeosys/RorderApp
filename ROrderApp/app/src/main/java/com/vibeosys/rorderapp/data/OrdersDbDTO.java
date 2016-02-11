@@ -16,21 +16,22 @@ public class OrdersDbDTO extends BaseDTO {
     private String orderId;
     private int orderNo;
     private String custId;
-    private int OrderStatus;
+    private int orderStatus;
     private Date orderDt;
     private Time orderTm;
     private Date createdDate;
     private Date updatedDate;
     private int tableId;
-    private String userId;
-    private double orderAmount;
+    private int userId;
+    private double orderAmt;
     private int restaurantId;
+
     public OrdersDbDTO() {
     }
 
 
     public OrdersDbDTO(String orderId, int orderNo, String custId, Date orderDt, Time orderTm,
-                       Date createdDate, Date updatedDate, int tableId, String userId) {
+                       Date createdDate, Date updatedDate, int tableId, int userId) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.custId = custId;
@@ -44,17 +45,17 @@ public class OrdersDbDTO extends BaseDTO {
 
     public OrdersDbDTO(String orderId, int orderNo, int orderStatus, Date orderDt,
                        Time orderTm, Date createdDate, Date updatedDate, int tableId,
-                       String userId, double orderAmount) {
+                       int userId, double orderAmt) {
         this.orderId = orderId;
         this.orderNo = orderNo;
-        OrderStatus = orderStatus;
+        this.orderStatus = orderStatus;
         this.orderDt = orderDt;
         this.orderTm = orderTm;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.tableId = tableId;
         this.userId = userId;
-        this.orderAmount = orderAmount;
+        this.orderAmt = orderAmt;
     }
 
     public String getOrderId() {
@@ -74,7 +75,7 @@ public class OrdersDbDTO extends BaseDTO {
     }
 
     public int isOrderStatus() {
-        return OrderStatus;
+        return orderStatus;
     }
 
     public int getRestaurantId() {
@@ -86,7 +87,7 @@ public class OrdersDbDTO extends BaseDTO {
     }
 
     public void setOrderStatus(int orderStatus) {
-        OrderStatus = orderStatus;
+        this.orderStatus = orderStatus;
     }
 
     public Date getOrderDt() {
@@ -129,20 +130,20 @@ public class OrdersDbDTO extends BaseDTO {
         this.tableId = tableId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public double getOrderAmount() {
-        return orderAmount;
+    public double getOrderAmt() {
+        return orderAmt;
     }
 
-    public void setOrderAmount(double orderAmount) {
-        this.orderAmount = orderAmount;
+    public void setOrderAmt(double orderAmt) {
+        this.orderAmt = orderAmt;
     }
 
     public String getCustId() {
