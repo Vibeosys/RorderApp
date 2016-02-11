@@ -2,7 +2,9 @@ package com.vibeosys.rorderapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,28 +13,39 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.OrderListAdapter;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.SelectedMenusDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
+import com.vibeosys.rorderapp.data.TableDataDTO;
+import com.vibeosys.rorderapp.data.UploadBillGenerate;
+import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.NetworkUtils;
+import com.vibeosys.rorderapp.util.ServerSyncManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TableMenusActivity extends BaseActivity implements OrderListAdapter.CustomButtonListener, View.OnClickListener {
+public class TableMenusActivity extends BaseActivity implements
+        OrderListAdapter.CustomButtonListener, View.OnClickListener,ServerSyncManager.OnStringResultReceived {
 
     private TableCommonInfoDTO tableCommonInfoDTO;
     private OrderListAdapter orderListAdapter;
     private List<OrderMenuDTO> allMenus;
     private ListView listMenus;
-    private TextView txtTotalAmount, txtTotalItems;
+    private TextView txtTotalAmount, txtTotalItems,txtBillGenerate;
     private int mTableId, mTableNo;
     private String custId;
     private LinearLayout llCurrentOrder;
-    private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
+  //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
 
+    private int mCount =0;
     //List<OrderMenuDTO> sortingMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +64,30 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
         //sortingMenu=mDbRepository.getOrderMenu();
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
+        txtBillGenerate = (TextView)findViewById(R.id.txtGenerateBill);
         llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
         orderListAdapter.notifyDataSetChanged();
         llCurrentOrder.setOnClickListener(this);
+        txtBillGenerate.setOnClickListener(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
 
       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //visiblity for bill generate button apply this as validation
+      /*  int custIdFromOrders = mDbRepository.getCustmerCount(custId);
+        if(custIdFromOrders == 0)
+        {
+            txtBillGenerate.setVisibility(View.GONE);
+        }
+        else
+        {
+            txtBillGenerate.setVisibility(View.VISIBLE);
+        }*/
+
 
     }
 
@@ -83,12 +109,14 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
 
 
     private void displayMenuPriceAndItems() {
-       // mSelectedItems
+        mCount = 0;
+        ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
         for (OrderMenuDTO menu : allMenus) {
             if (menu.getmQuantity() > 0) {
                 mSelectedItems.add(menu);
             }
         }
+        mCount= mSelectedItems.size();
         SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(mSelectedItems);
         txtTotalAmount.setText(String.format(String.format("%.2f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
         txtTotalItems.setText(selectedMenusDTO.getTotalItems() + " Items are selected");
@@ -174,7 +202,7 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
             mDbRepository.insertOrderDetails(orderDetailsDbDTOList);*/
 
             // TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(1, "DEF", 10);
-            if (mSelectedItems.size() == 0) {
+            if (mCount == 0) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_item_selected), Toast.LENGTH_SHORT).show();
             } else {
                 Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
@@ -184,10 +212,54 @@ public class TableMenusActivity extends BaseActivity implements OrderListAdapter
             }
 
         }
+        if(id ==R.id.txtGenerateBill)
+        {
+          //  Toast.makeText(getApplicationContext(),"bill genrate is cliked",Toast.LENGTH_LONG).show();
+            if(NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
+            {
+
+                genrateBill();
+            }else
+            {
+                /* if network is not available*/
+            }
+        }
+
+    }
+    public void genrateBill()
+    {
+        UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId,custId);
+        Gson gson = new Gson();
+        String serializedJsonString = gson.toJson(uploadBillGenerate);
+        Log.d(TAG,"##"+serializedJsonString);
+        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL,serializedJsonString);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onStingResultReceived(@NonNull JSONObject data) {
+        int errorCode =-1;
+        String message = null;
+        try
+        {
+            errorCode = data.getInt("errorCode");
+            message = data.getString("messageme");
+        }catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        if(errorCode == 0)
+        {
+            /*Successfully send data*/
+            Toast.makeText(getApplicationContext(),"Data is send to server",Toast.LENGTH_LONG).show();
+            Log.d(TAG,"##"+errorCode);
+
+        }
     }
 }

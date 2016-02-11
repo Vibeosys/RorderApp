@@ -6,4 +6,5 @@ package com.vibeosys.rorderapp.util;
 public class ConstantOperations {
 
     public static final String PLACE_ORDER="placeOrder";
+    public static final String GENRATE_BILL="generateBill";
 }

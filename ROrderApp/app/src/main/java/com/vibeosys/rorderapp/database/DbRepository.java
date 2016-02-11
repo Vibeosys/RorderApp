@@ -1202,7 +1202,29 @@ public class DbRepository extends SQLiteOpenHelper {
        return count;
 
     }
+    public int getCustmerCount(String custId)
+    {
+        int count =-1;
+        SQLiteDatabase sqLiteDatabase =null;
+        Cursor cursor = null;
+        String whereCondition []= new String[]{custId};
+        try
+        {
+            sqLiteDatabase =getReadableDatabase();
+            cursor = sqLiteDatabase.rawQuery("select orders.CustId from orders where orders.CustId=?",whereCondition);
+            count= cursor.getCount();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+            if (cursor != null)
+                cursor.close();
+        }
 
+        return count;
+    }
     public boolean updateBills(List<BillDbDTO> billUpdates) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
