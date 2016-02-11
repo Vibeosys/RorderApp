@@ -60,7 +60,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ordersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
         //ordersList.setGroupIndicator(getResources().getDrawable(R.drawable.expand_indicator));
-        list = mDbRepository.getOrdersOfTable(mTableId);
+        list = mDbRepository.getOrdersOfTable(mTableId,mCustId);
         mCurrentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
         mDbRepository.getOrederDetailsGroupByID(list);
         list.add(0, mCurrentOrder);
@@ -187,6 +187,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
                     Date.valueOf(currentDate), mTableId, String.valueOf(mSessionManager.getUserId())));
             mDbRepository.insertOrders(orders);
             mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
+            mServerSyncManager.syncDataWithServer(true);
             Intent iMenu=new Intent(getApplicationContext(),TableMenusActivity.class);
             iMenu.putExtra("tableCustInfo", tableCommonInfo);
             startActivity(iMenu);

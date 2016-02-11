@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_login);
         setContentView(R.layout.activity_main);
-        setTitle("Select Table");
+        setTitle(getResources().getString(R.string.title_search_table));
         ContextWrapper ctw = new ContextWrapper(getApplicationContext());
         File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
         File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity
             });
           /*  Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
             startService(syncServiceIntent);*/
-            mServerSyncManager.syncDataWithServer(false);
+
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

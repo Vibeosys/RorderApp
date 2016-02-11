@@ -80,7 +80,7 @@ public class HotelTableDbDTO {
     }
 
     public static List<HotelTableDbDTO> deserializeHotelTables(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
         ArrayList<HotelTableDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

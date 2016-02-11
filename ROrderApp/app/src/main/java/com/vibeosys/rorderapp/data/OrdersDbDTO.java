@@ -14,45 +14,45 @@ import java.util.List;
 public class OrdersDbDTO extends BaseDTO {
 
     private String orderId;
-    private int OrderNo;
+    private int orderNo;
     private String custId;
-    private boolean OrderStatus;
-    private Date orderDate;
-    private Time orderTime;
+    private int OrderStatus;
+    private Date orderDt;
+    private Time orderTm;
     private Date createdDate;
     private Date updatedDate;
-    private int tableNo;
+    private int tableId;
     private String userId;
     private double orderAmount;
-
+    private int restaurantId;
     public OrdersDbDTO() {
     }
 
 
-    public OrdersDbDTO(String orderId, int orderNo, String custId, Date orderDate, Time orderTime,
-                       Date createdDate, Date updatedDate, int tableNo, String userId) {
+    public OrdersDbDTO(String orderId, int orderNo, String custId, Date orderDt, Time orderTm,
+                       Date createdDate, Date updatedDate, int tableId, String userId) {
         this.orderId = orderId;
-        OrderNo = orderNo;
+        this.orderNo = orderNo;
         this.custId = custId;
-        this.orderDate = orderDate;
-        this.orderTime = orderTime;
+        this.orderDt = orderDt;
+        this.orderTm = orderTm;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
-        this.tableNo = tableNo;
+        this.tableId = tableId;
         this.userId = userId;
     }
 
-    public OrdersDbDTO(String orderId, int orderNo, boolean orderStatus, Date orderDate,
-                       Time orderTime, Date createdDate, Date updatedDate, int tableNo,
+    public OrdersDbDTO(String orderId, int orderNo, int orderStatus, Date orderDt,
+                       Time orderTm, Date createdDate, Date updatedDate, int tableId,
                        String userId, double orderAmount) {
         this.orderId = orderId;
-        OrderNo = orderNo;
+        this.orderNo = orderNo;
         OrderStatus = orderStatus;
-        this.orderDate = orderDate;
-        this.orderTime = orderTime;
+        this.orderDt = orderDt;
+        this.orderTm = orderTm;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
-        this.tableNo = tableNo;
+        this.tableId = tableId;
         this.userId = userId;
         this.orderAmount = orderAmount;
     }
@@ -66,35 +66,43 @@ public class OrdersDbDTO extends BaseDTO {
     }
 
     public int getOrderNo() {
-        return OrderNo;
+        return orderNo;
     }
 
     public void setOrderNo(int orderNo) {
-        OrderNo = orderNo;
+        this.orderNo = orderNo;
     }
 
-    public boolean isOrderStatus() {
+    public int isOrderStatus() {
         return OrderStatus;
     }
 
-    public void setOrderStatus(boolean orderStatus) {
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public void setOrderStatus(int orderStatus) {
         OrderStatus = orderStatus;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
+    public Date getOrderDt() {
+        return orderDt;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderDt(Date orderDt) {
+        this.orderDt = orderDt;
     }
 
     public Time getOrderTime() {
-        return orderTime;
+        return orderTm;
     }
 
     public void setOrderTime(Time orderTime) {
-        this.orderTime = orderTime;
+        this.orderTm = orderTime;
     }
 
     public Date getCreatedDate() {
@@ -113,12 +121,12 @@ public class OrdersDbDTO extends BaseDTO {
         this.updatedDate = updatedDate;
     }
 
-    public int getTableNo() {
-        return tableNo;
+    public int getTableId() {
+        return tableId;
     }
 
-    public void setTableNo(int tableNo) {
-        this.tableNo = tableNo;
+    public void setTableId(int tableId) {
+        this.tableId = tableId;
     }
 
     public String getUserId() {
@@ -146,7 +154,7 @@ public class OrdersDbDTO extends BaseDTO {
     }
 
     public static List<OrdersDbDTO> deserializeOrders(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
         ArrayList<OrdersDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

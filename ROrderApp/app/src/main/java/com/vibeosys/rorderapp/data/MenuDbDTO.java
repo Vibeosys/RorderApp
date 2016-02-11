@@ -134,7 +134,7 @@ public class MenuDbDTO extends BaseDTO {
     }
 
     public static List<MenuDbDTO> deserializeMenu(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
         ArrayList<MenuDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

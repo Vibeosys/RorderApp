@@ -57,4 +57,6 @@
     <string name="error_table_no">Table Number is required</string>
     <string name="error_no_item_selected">You can not take empty request</string>
     <string name ="BillDetails">Bill Details</string>
+    <string name="title_search_table">Search Table</string>
+    <string name="title_search_cuisine">Search Cuisine/Category</string>
 </resources>

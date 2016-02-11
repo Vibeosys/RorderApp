@@ -90,7 +90,7 @@ public class MenuCateoryDbDTO extends BaseDTO {
     }
 
     public static List<MenuCateoryDbDTO> deserializeMenuCateory(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
         ArrayList<MenuCateoryDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

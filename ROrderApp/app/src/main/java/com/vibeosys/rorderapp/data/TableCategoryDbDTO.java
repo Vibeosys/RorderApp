@@ -64,7 +64,7 @@ public class TableCategoryDbDTO {
     }
 
     public static List<TableCategoryDbDTO> deserializeTableCateory(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
         ArrayList<TableCategoryDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

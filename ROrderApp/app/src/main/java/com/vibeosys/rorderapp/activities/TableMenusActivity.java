@@ -55,7 +55,7 @@ public class TableMenusActivity extends BaseActivity implements
         mTableId = tableCommonInfoDTO.getTableId();
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
-
+        setTitle(getResources().getString(R.string.title_search_cuisine));
 
         listMenus = (ListView) findViewById(R.id.listMenus);
         allMenus = mDbRepository.getOrderMenu();

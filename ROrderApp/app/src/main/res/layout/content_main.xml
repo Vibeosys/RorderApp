@@ -20,9 +20,8 @@
     android:text="Total Tables"
     android:gravity="center"
     android:padding="8dp"
-    android:textColor="@color/White"
-    android:background="@color/drawer"
-    />
+    android:textColor="@color/black_color"
+    android:background="@color/colorPrimaryLight"    />
         <GridView
             android:id="@+id/gridview"
 

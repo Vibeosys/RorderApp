@@ -102,7 +102,7 @@ public class OrderDetailsDbDTO extends BaseDTO {
     }
 
     public static List<OrderDetailsDbDTO> deserializeOrderDetail(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ssZ").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
         ArrayList<OrderDetailsDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

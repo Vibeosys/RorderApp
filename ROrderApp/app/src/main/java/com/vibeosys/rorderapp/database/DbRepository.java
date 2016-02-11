@@ -573,13 +573,14 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlOrders.ORDER_ID, order.getOrderId());
                 contentValues.put(SqlContract.SqlOrders.ORDER_NO, order.getOrderNo());
                 contentValues.put(SqlContract.SqlOrders.ORDER_STATUS, order.isOrderStatus());
-                contentValues.put(SqlContract.SqlOrders.ORDER_DATE, order.getOrderDate().toString());
-                contentValues.put(SqlContract.SqlOrders.ORDER_TIME, order.getOrderTime().toString());
-                contentValues.put(SqlContract.SqlOrders.CREATED_DATE, order.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, order.getUpdatedDate().toString());
-                contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableNo());
+                contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
+                contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
+                contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
+                contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
+                contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
                 contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
                 contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmount());
+                contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
                 count = sqLiteDatabase.insert(SqlContract.SqlOrders.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Order is added successfully" + order.getOrderId());
@@ -607,8 +608,8 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlTableCategory.TABLE_CATEGORY_ID, tableCategory.getTableCategoryId());
                 contentValues.put(SqlContract.SqlTableCategory.CATEGORY_TITLE, tableCategory.getCategoryTitle());
                 contentValues.put(SqlContract.SqlTableCategory.IMAGE, tableCategory.getImage());
-                contentValues.put(SqlContract.SqlTableCategory.CREATED_DATE, tableCategory.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlTableCategory.UPDATED_DATE, tableCategory.getUpdatedDate().toString());
+                contentValues.put(SqlContract.SqlTableCategory.CREATED_DATE, String.valueOf(tableCategory.getCreatedDate()));
+                contentValues.put(SqlContract.SqlTableCategory.UPDATED_DATE, String.valueOf(tableCategory.getUpdatedDate()));
                 count = sqLiteDatabase.insert(SqlContract.SqlTableCategory.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Table Category is added successfully" + tableCategory.getTableCategoryId());
@@ -769,15 +770,15 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<OrderHeaderDTO> getOrdersOfTable(int tableId) {
+    public ArrayList<OrderHeaderDTO> getOrdersOfTable(int tableId,String custId) {
         ArrayList<OrderHeaderDTO> orders = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
-        String[] whereClause = new String[]{String.valueOf(tableId)};
+        String[] whereClause = new String[]{String.valueOf(tableId),custId};
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
 
-            cursor = sqLiteDatabase.rawQuery("select * from orders where " + SqlContract.SqlOrders.TABLE_NO + "=?", whereClause);
+            cursor = sqLiteDatabase.rawQuery("select * from orders where " + SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID+"=?", whereClause);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();

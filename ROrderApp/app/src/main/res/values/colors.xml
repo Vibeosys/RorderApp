@@ -11,6 +11,7 @@
 
     <color name="colorPrimary">#9C27B0</color>
     <color name="colorPrimaryDark">#6A1B9A</color>
+    <color name="colorPrimaryLight">#E1BEE7</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
