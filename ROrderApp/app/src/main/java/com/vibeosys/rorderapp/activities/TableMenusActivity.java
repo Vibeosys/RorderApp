@@ -72,6 +72,7 @@ public class TableMenusActivity extends BaseActivity implements
         orderListAdapter.notifyDataSetChanged();
         llCurrentOrder.setOnClickListener(this);
         txtBillGenerate.setOnClickListener(this);
+        mServerSyncManager.setOnStringResultReceived(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
 
       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -246,10 +247,13 @@ public class TableMenusActivity extends BaseActivity implements
     public void onStingResultReceived(@NonNull JSONObject data) {
         int errorCode =-1;
         String message = null;
+
+
         try
         {
             errorCode = data.getInt("errorCode");
             message = data.getString("messageme");
+            Log.d(TAG, "##" + errorCode);
         }catch (JSONException e)
         {
             e.printStackTrace();
@@ -257,9 +261,13 @@ public class TableMenusActivity extends BaseActivity implements
         if(errorCode == 0)
         {
             /*Successfully send data*/
-            Toast.makeText(getApplicationContext(),"Data is send to server",Toast.LENGTH_LONG).show();
-            Log.d(TAG,"##"+errorCode);
 
+            Toast.makeText(getApplicationContext(),"Data is send to server",Toast.LENGTH_LONG).show();
+            Log.d(TAG, "##" + errorCode);
+
+        }else
+        {
+            Toast.makeText(getApplicationContext(),"response "+errorCode,Toast.LENGTH_LONG).show();
         }
     }
 }
