@@ -43,7 +43,7 @@
             android:paddingLeft="4dp"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black_color"
+            android:textColor="@color/black_overlay"
             android:textSize="10sp" />
     </LinearLayout>
 

@@ -96,9 +96,8 @@ public class DbOperations {
         List<OrdersDbDTO> orderUpdates = OrdersDbDTO.deserializeOrders(updateJsonList);
 
         boolean isInserted = dbRepository.insertOrders(orderInserts);
-        // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateOrders(orderUpdates);
-        return isInserted;// & isUpdated;
+        boolean isUpdated = dbRepository.updateOrders(orderUpdates);
+        return isInserted & isUpdated;
     }
 
     public boolean addOrUpdateRTable(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {

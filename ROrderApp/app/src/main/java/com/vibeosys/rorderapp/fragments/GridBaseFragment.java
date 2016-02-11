@@ -11,6 +11,7 @@ import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
+import com.vibeosys.rorderapp.data.RestaurantTables;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class GridBaseFragment extends BaseFragment implements AdapterView.OnItem
 
     }
 
-    protected void setGridAdapter(View v,ArrayList<HotelTableDTO> hotels){
+    protected void setGridAdapter(View v,ArrayList<RestaurantTables> hotels){
         gridView=(GridView)v.findViewById(R.id.gridview);
         gridView.setOnItemClickListener(this);
         adapter=new TableGridAdapter(getContext(),hotels);
@@ -38,7 +39,7 @@ public class GridBaseFragment extends BaseFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        HotelTableDTO hotelTableDTO= (HotelTableDTO) adapter.getItem(position);
+        RestaurantTables hotelTableDTO= (RestaurantTables) adapter.getItem(position);
 
         Intent intentOpenTableMenu=new Intent(getActivity(), TableMenusActivity.class);
         intentOpenTableMenu.putExtra("TableNo",hotelTableDTO.getmTableNo());

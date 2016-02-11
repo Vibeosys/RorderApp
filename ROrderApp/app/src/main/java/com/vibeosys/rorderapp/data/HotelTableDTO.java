@@ -17,23 +17,17 @@ public class HotelTableDTO {
     public HotelTableDTO() {
     }
 
-    public HotelTableDTO(int mTableNo, int mTableCategoryId, int mCapacity) {
-        this.mTableNo = mTableNo;
-        this.mTableCategoryId = mTableCategoryId;
-        this.mCapacity = mCapacity;
+
+    public HotelTableDTO(int tableId, int tableNo, int tableCategoryId,
+                         String tableCategoryName, int capacity, boolean isOccupied) {
+        this.mTableId = tableId;
+        this.mTableNo = tableNo;
+        this.mTableCategoryId = tableCategoryId;
+        this.mTableCategoryName = tableCategoryName;
+        this.mCapacity = capacity;
+        this.mIsOccupied = isOccupied;
     }
 
-    public HotelTableDTO(int mTableId, int mTableNo, int mTableCategoryId,String mTableCategoryName ,
-                         int mCapacity, String mCreatedDate, String mUpdatedDate, boolean mIsOccupied) {
-        this.mTableId = mTableId;
-        this.mTableNo = mTableNo;
-        this.mTableCategoryId = mTableCategoryId;
-        this.mTableCategoryName = mTableCategoryName;
-        this.mCapacity = mCapacity;
-        this.mCreatedDate = mCreatedDate;
-        this.mUpdatedDate = mUpdatedDate;
-        this.mIsOccupied = mIsOccupied;
-    }
 
     public int getmTableId() {
         return mTableId;

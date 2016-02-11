@@ -2,18 +2,12 @@ package com.vibeosys.rorderapp.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import com.vibeosys.rorderapp.R;
-import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
-import com.vibeosys.rorderapp.data.TableCategoryDTO;
-
-import java.util.ArrayList;
 
 /**
  * Created by kiran on 20-01-2016.

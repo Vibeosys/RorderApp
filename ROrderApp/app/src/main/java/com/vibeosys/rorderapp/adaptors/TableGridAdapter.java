@@ -1,7 +1,7 @@
 package com.vibeosys.rorderapp.adaptors;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
+import com.vibeosys.rorderapp.data.RestaurantTables;
 
 import java.util.List;
 
@@ -27,9 +28,9 @@ public class TableGridAdapter extends BaseAdapter {
     private Context mContext;
 
     // table list
-    private List<HotelTableDTO> mHotelTables;
+    private List<RestaurantTables> mHotelTables;
 
-    public TableGridAdapter(Context mContext, List<HotelTableDTO> mHotelTables) {
+    public TableGridAdapter(Context mContext, List<RestaurantTables> mHotelTables) {
         this.mContext = mContext;
         this.mHotelTables = mHotelTables;
     }
@@ -45,19 +46,20 @@ public class TableGridAdapter extends BaseAdapter {
         else return 0;
     }
 
-    public List<HotelTableDTO> getmHotelTables() {
+    public List<RestaurantTables> getHotelTables() {
         return mHotelTables;
     }
 
-    public void setmHotelTables(List<HotelTableDTO> mHotelTables) {
+    public void setHotelTables(List<RestaurantTables> mHotelTables) {
         this.mHotelTables = mHotelTables;
     }
-    public void refresh(List<HotelTableDTO> tables)
-    {
+
+    public void refresh(List<RestaurantTables> tables) {
         this.mHotelTables.clear();
-        this.mHotelTables=tables;
+        this.mHotelTables = tables;
         notifyDataSetChanged();
     }
+
     /**
      * Get the item of the given position
      *
@@ -86,11 +88,11 @@ public class TableGridAdapter extends BaseAdapter {
 
     }
 
-    public void clearData()
-    {
+    public void clearData() {
         mHotelTables.clear();
         notifyDataSetChanged();
     }
+
     /**
      * Get the view for the layout
      *
@@ -109,36 +111,45 @@ public class TableGridAdapter extends BaseAdapter {
                     (Context.LAYOUT_INFLATER_SERVICE);
             row = theLayoutInflator.inflate(R.layout.row_add_table, null);
             viewHolder = new TableGridAdapter.ViewHolder();
-           viewHolder.layoutIsOccupied = (LinearLayout) row.findViewById(R.id.isOccupied);
+            viewHolder.layoutIsOccupied = (LinearLayout) row.findViewById(R.id.isOccupied);
             viewHolder.txtCapacity = (TextView) row.findViewById(R.id.txtCapacity);
             viewHolder.txtTableNumber = (TextView) row.findViewById(R.id.txtTableNumber);
-            viewHolder.textTableCategory  = (TextView) row.findViewById(R.id.txtCategory);
-           // viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
+            viewHolder.textTableCategory = (TextView) row.findViewById(R.id.txtCategory);
+            viewHolder.txtUserName = (TextView) row.findViewById(R.id.txtUserName);
+            viewHolder.imgUserLogo = (ImageView) row.findViewById(R.id.imgUserLogo);
+            // viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
             row.setTag(viewHolder);
 
         } else viewHolder = (TableGridAdapter.ViewHolder) row.getTag();
 
-        HotelTableDTO hotelTableDTO = mHotelTables.get(position);
+        RestaurantTables hotelTableDTO = mHotelTables.get(position);
         Log.d(TAG, hotelTableDTO.toString());
         viewHolder.txtCapacity.setText("" + hotelTableDTO.getmCapacity());
-        viewHolder.txtTableNumber.setText(""+hotelTableDTO.getmTableNo());
+        viewHolder.txtTableNumber.setText("" + hotelTableDTO.getmTableNo());
         viewHolder.textTableCategory.setText(hotelTableDTO.getmTableCategoryName().toUpperCase());
-        if(hotelTableDTO.ismIsOccupied())
-        {
+        if (hotelTableDTO.ismIsOccupied()) {
             viewHolder.layoutIsOccupied.setBackgroundColor(mContext.getResources().getColor(R.color.red));
-        }
-        else {
+        } else {
             viewHolder.layoutIsOccupied.setBackgroundColor(mContext.getResources().getColor(R.color.dark_green_color));
+        }
+        if (hotelTableDTO.getUserName() != null && !TextUtils.isEmpty(hotelTableDTO.getUserName())) {
+            viewHolder.txtUserName.setText(hotelTableDTO.getUserName());
+            viewHolder.imgUserLogo.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.txtUserName.setText("");
+            viewHolder.imgUserLogo.setVisibility(View.INVISIBLE);
         }
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }
 
     private static class ViewHolder {
-       LinearLayout layoutIsOccupied;
+        LinearLayout layoutIsOccupied;
         TextView txtCapacity;
         ImageView imgGroup;
         TextView txtTableNumber;
         TextView textTableCategory;//shrinivas
+        TextView txtUserName;
+        ImageView imgUserLogo;
     }
 }

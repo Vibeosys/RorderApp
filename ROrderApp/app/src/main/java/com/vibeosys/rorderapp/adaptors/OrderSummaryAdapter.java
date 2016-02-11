@@ -89,7 +89,7 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         if(orderHeaderDTO.getOrderNo()==0)
         {
             txtOrderName.setText("Current Order");
-            llOrder.setBackgroundColor(mContext.getResources().getColor(R.color.ok_btn_colour));
+            llOrder.setBackgroundColor(mContext.getResources().getColor(R.color.light_green));
         }
         else {
             txtOrderName.setText("Order # " + orderHeaderDTO.getOrderNo());

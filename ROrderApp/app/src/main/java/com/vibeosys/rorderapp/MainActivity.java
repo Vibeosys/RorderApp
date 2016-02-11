@@ -4,14 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
@@ -20,31 +16,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
-import com.vibeosys.rorderapp.activities.BillSummeryActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.activities.TableFilterActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
-import com.vibeosys.rorderapp.adaptors.TableCategoryAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
-import com.vibeosys.rorderapp.adaptors.TablePagerAdapter;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
+import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
-import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.UserAuth;
 
@@ -64,8 +55,8 @@ public class MainActivity extends BaseActivity
     DrawerLayout drawer;
     GridView gridView;
     TableGridAdapter adapter;
-    List<HotelTableDTO> hotelTableDTOs;
-    List<HotelTableDTO> sortedTables;
+    List<RestaurantTables> hotelTableDTOs;
+    List<RestaurantTables> sortedTables;
     private Context mContext=this;
     TextView txtTotalCount;
     static int selectedCategory=0;
@@ -179,11 +170,11 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    public List<HotelTableDTO> sortAdapter(int tableNo)
+    public List<RestaurantTables> sortAdapter(int tableNo)
     {
-        List<HotelTableDTO> mHotelTables=new ArrayList<>();
+        List<RestaurantTables> mHotelTables=new ArrayList<>();
 
-        for(HotelTableDTO table:mDbRepository.getTableRecords())
+        for(RestaurantTables table:mDbRepository.getTableRecords())
         {
             if(table.getmTableNo()==tableNo)
             {

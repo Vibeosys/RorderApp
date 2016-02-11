@@ -69,9 +69,9 @@ public class TableCategoryDTO {
         this.mSelected = mSelected;
     }
 
-    public ArrayList<HotelTableDTO> filterTable(ArrayList<HotelTableDTO> hotelTables, int categoryId) {
-        ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
-        for (HotelTableDTO table : hotelTables) {
+    public ArrayList<RestaurantTables> filterTable(ArrayList<RestaurantTables> hotelTables, int categoryId) {
+        ArrayList<RestaurantTables> sortedTable = new ArrayList<>();
+        for (RestaurantTables table : hotelTables) {
 
             if (table.getmTableCategoryId() == categoryId) {
                 sortedTable.add(table);
@@ -80,9 +80,9 @@ public class TableCategoryDTO {
         }
         return sortedTable;
     }
-    public ArrayList<HotelTableDTO> filterTable(ArrayList<HotelTableDTO> hotelTables, int categoryId,boolean unOccupied) {
-        ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
-        for (HotelTableDTO table : hotelTables) {
+    public ArrayList<RestaurantTables> filterTable(ArrayList<RestaurantTables> hotelTables, int categoryId,boolean unOccupied) {
+        ArrayList<RestaurantTables> sortedTable = new ArrayList<>();
+        for (RestaurantTables table : hotelTables) {
 
             if(table.ismIsOccupied()!=unOccupied){
                 if (table.getmTableCategoryId() == categoryId) {
@@ -94,9 +94,9 @@ public class TableCategoryDTO {
         }
         return sortedTable;
     }
-    public ArrayList<HotelTableDTO> filterTable(ArrayList<HotelTableDTO> hotelTables,boolean unOccupied) {
-        ArrayList<HotelTableDTO> sortedTable = new ArrayList<>();
-        for (HotelTableDTO table : hotelTables) {
+    public ArrayList<RestaurantTables> filterTable(ArrayList<RestaurantTables> hotelTables,boolean unOccupied) {
+        ArrayList<RestaurantTables> sortedTable = new ArrayList<>();
+        for (RestaurantTables table : hotelTables) {
 
             if(table.ismIsOccupied()!=unOccupied) {
                 sortedTable.add(table);

@@ -20,6 +20,7 @@ import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
+import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
@@ -240,14 +241,18 @@ public class DbRepository extends SQLiteOpenHelper {
         return user;
     }
 
-    public ArrayList<HotelTableDTO> getTableRecords() {//changes
+    public ArrayList<RestaurantTables> getTableRecords() {//changes
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
-        ArrayList<HotelTableDTO> hotelTables = null;
+        ArrayList<RestaurantTables> hotelTables = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             //  cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME + " ORDER BY " + SqlContract.SqlHotelTable.TABLE_NO, null);
-            cursor = sqLiteDatabase.rawQuery("select TableId ,TableNo,r_tables.TableCategoryId,CategoryTitle,Capacity,IsOccupied,r_tables.CreatedDate,r_tables.UpdatedDate From r_tables LEFT Join table_category  On r_tables.TableCategoryId = table_category.TableCategoryId ORder by r_tables.TableNo", null);
+            cursor = sqLiteDatabase.rawQuery("select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
+                    " From r_tables as rs LEFT Join table_category as tc  On rs.TableCategoryId = tc.TableCategoryId" +
+                    " Left Join table_transaction as tt on rs.tableId=tt.tableId" +
+                    " left join users as us on tt.userId=us.userId" +
+                    " ORder by rs.TableNo", null);
 
             hotelTables = new ArrayList<>();
             if (cursor != null) {
@@ -261,13 +266,11 @@ public class DbRepository extends SQLiteOpenHelper {
                         int tableCtegory = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_CATEGORY));
                         String tableCtegoryName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
                         int capacity = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.CAPACITY));
-                        String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.CREATED_DATE));
-                        String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlHotelTable.UPDATED_DATE));
                         int isOccupied = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
                         boolean occupied = isOccupied == 1 ? true : false;
-                        HotelTableDTO table = new HotelTableDTO(tableId, tableNo, tableCtegory,
-                                tableCtegoryName, capacity, createdDate, updatedDate,
-                                occupied);
+                        String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                        RestaurantTables table = new RestaurantTables(tableId, tableNo, tableCtegory,
+                                tableCtegoryName, capacity, occupied, userName);
                         //table.setJsonSync();
                         hotelTables.add(table);
                     } while (cursor.moveToNext());
@@ -342,7 +345,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         int categoryId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableCategory.TABLE_CATEGORY_ID));
                         String categoryTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
                         // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.));
-                        String url=cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.IMAGE));
+                        String url = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.IMAGE));
                         TableCategoryDTO table = new TableCategoryDTO();
                         table.setmCategoryId(categoryId);
                         table.setmTitle(categoryTitle);
@@ -673,7 +676,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return orderMenus;
     }
 
-    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty,String custId) {
+    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -724,16 +727,16 @@ public class DbRepository extends SQLiteOpenHelper {
 
     public boolean clearUpdateTempData(int tableId, int tableNo, String custId) {
         SQLiteDatabase sqLiteDatabase = null;
-       // ContentValues contentValues = null;
+        // ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
 
         try {
-            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo),custId};
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo), custId};
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
                     SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND " + SqlContract.SqlTempOrder.CUST_ID + "=?",
                     whereClause);
-           // contentValues.clear();
+            // contentValues.clear();
             sqLiteDatabase.close();
             Log.d(TAG, " ## clear update sucessfully");
         } catch (Exception e) {
@@ -771,15 +774,15 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<OrderHeaderDTO> getOrdersOfTable(int tableId,String custId) {
+    public ArrayList<OrderHeaderDTO> getOrdersOfTable(int tableId, String custId) {
         ArrayList<OrderHeaderDTO> orders = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
-        String[] whereClause = new String[]{String.valueOf(tableId),custId};
+        String[] whereClause = new String[]{String.valueOf(tableId), custId};
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
 
-            cursor = sqLiteDatabase.rawQuery("select * from orders where " + SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID+"=?", whereClause);
+            cursor = sqLiteDatabase.rawQuery("select * from orders where " + SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID + "=?", whereClause);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
@@ -887,7 +890,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return count;
     }
 
-    public OrderHeaderDTO getOrederDetailsFromTemp(int tableId, int userId,String custId) {
+    public OrderHeaderDTO getOrederDetailsFromTemp(int tableId, int userId, String custId) {
 
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -895,7 +898,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             List<OrderDetailsDTO> orderDetailsList = new ArrayList<>();
-            String[] whereClause = new String[]{String.valueOf(tableId),custId};
+            String[] whereClause = new String[]{String.valueOf(tableId), custId};
             double orderAmount = 0;
             cursor = sqLiteDatabase.rawQuery("Select temp_order.TempOrderId,temp_order.Quantity," +
                     "temp_order.MenuId,temp_order.OrderDate,temp_order.OrderTime,menu.MenuTitle," +
@@ -1158,7 +1161,7 @@ public class DbRepository extends SQLiteOpenHelper {
     public String getPassword(int userId) {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
-        String password="@password";
+        String password = "@password";
         String whereClause[] = new String[]{String.valueOf(userId)};
         try {
             sqLiteDatabase = getReadableDatabase();
@@ -1180,19 +1183,19 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return password;
     }
-    public int checkTempOrderDetails(String custId,int tableId)
-    {
+
+    public int checkTempOrderDetails(String custId, int tableId) {
         SQLiteDatabase sqLiteDatabase = null;
-        Cursor cursor =null;
+        Cursor cursor = null;
 
-        int count=-1;
+        int count = -1;
 
-        String whereClause[] = new String[]{custId,String.valueOf(tableId)};
+        String whereClause[] = new String[]{custId, String.valueOf(tableId)};
         try {
             sqLiteDatabase = getWritableDatabase();
-            cursor =sqLiteDatabase.rawQuery("select temp_order.MenuId from temp_order where temp_order.CustId =? and temp_order.TableId =?", whereClause);
-            count =cursor.getCount();
-        }catch (Exception e) {
+            cursor = sqLiteDatabase.rawQuery("select temp_order.MenuId from temp_order where temp_order.CustId =? and temp_order.TableId =?", whereClause);
+            count = cursor.getCount();
+        } catch (Exception e) {
 
             e.printStackTrace();
         } finally {
@@ -1201,24 +1204,22 @@ public class DbRepository extends SQLiteOpenHelper {
             if (cursor != null)
                 cursor.close();
         }
-       return count;
+        return count;
 
     }
-    public int getCustmerCount(String custId)
-    {
-        int count =-1;
-        SQLiteDatabase sqLiteDatabase =null;
+
+    public int getCustmerCount(String custId) {
+        int count = -1;
+        SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
-        String whereCondition []= new String[]{custId};
-        try
-        {
-            sqLiteDatabase =getReadableDatabase();
-            cursor = sqLiteDatabase.rawQuery("select orders.CustId from orders where orders.CustId=?",whereCondition);
-            count= cursor.getCount();
-        }catch (Exception e)
-        {
+        String whereCondition[] = new String[]{custId};
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            cursor = sqLiteDatabase.rawQuery("select orders.CustId from orders where orders.CustId=?", whereCondition);
+            count = cursor.getCount();
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (sqLiteDatabase != null)
                 sqLiteDatabase.close();
             if (cursor != null)
@@ -1227,6 +1228,7 @@ public class DbRepository extends SQLiteOpenHelper {
 
         return count;
     }
+
     public boolean updateBills(List<BillDbDTO> billUpdates) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
@@ -1235,7 +1237,7 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getWritableDatabase();
             contentValues = new ContentValues();
             for (BillDbDTO bill : billUpdates) {
-                String[] whereClause=new String[]{String.valueOf(bill.getBillNo())};
+                String[] whereClause = new String[]{String.valueOf(bill.getBillNo())};
                 contentValues.put(SqlContract.SqlBill.BILL_DATE, bill.getBillDate().toString());
                 contentValues.put(SqlContract.SqlBill.BILL_TIME, bill.getBillTime().toString());
                 contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmount());
@@ -1244,7 +1246,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlBill.CREATED_DATE, bill.getCreatedDate().toString());
                 contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
                 contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
-                count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues,SqlContract.SqlBill.BILL_NO+"=?",whereClause);
+                count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues, SqlContract.SqlBill.BILL_NO + "=?", whereClause);
                 contentValues.clear();
                 Log.d(TAG, "## Bill is Updated Successfully" + bill.getBillNo());
             }
@@ -1265,12 +1267,12 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getWritableDatabase();
             contentValues = new ContentValues();
             for (BillDetailsDbDTO billDetails : billDetailUpdates) {
-                String[] whereClause=new String[]{String.valueOf(billDetails.getAutoId())};
+                String[] whereClause = new String[]{String.valueOf(billDetails.getAutoId())};
                 contentValues.put(SqlContract.SqlBillDetails.ORDER_ID, billDetails.getOrderId());
                 contentValues.put(SqlContract.SqlBillDetails.BILL_NO, billDetails.getBillNo());
                 contentValues.put(SqlContract.SqlBillDetails.CREATED_DATE, billDetails.getCreateDate().toString());
                 contentValues.put(SqlContract.SqlBillDetails.UPDATED_DATE, billDetails.getUpdatedDate().toString());
-                count = sqLiteDatabase.update(SqlContract.SqlBillDetails.TABLE_NAME, contentValues,SqlContract.SqlBillDetails.AUTO_ID+"=?",whereClause);
+                count = sqLiteDatabase.update(SqlContract.SqlBillDetails.TABLE_NAME, contentValues, SqlContract.SqlBillDetails.AUTO_ID + "=?", whereClause);
                 contentValues.clear();
                 Log.d(TAG, "## Bill Details is Updated successfully" + billDetails.getBillNo());
             }
@@ -1279,6 +1281,42 @@ public class DbRepository extends SQLiteOpenHelper {
         } finally {
             if (sqLiteDatabase != null)
                 sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateOrders(List<OrdersDbDTO> orderUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (OrdersDbDTO order : orderUpdates) {
+                String[] whereClause = new String[]{order.getOrderId()};
+                contentValues.put(SqlContract.SqlOrders.ORDER_NO, order.getOrderNo());
+                contentValues.put(SqlContract.SqlOrders.ORDER_STATUS, order.isOrderStatus());
+                contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
+                contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
+                contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
+                contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
+                contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
+                contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
+                contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
+                contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
+                count = sqLiteDatabase.update(SqlContract.SqlOrders.TABLE_NAME, contentValues,
+                        SqlContract.SqlOrders.ORDER_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Order is update successfully" + order.getOrderId());
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at update Orders" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
         }
         return count != -1;
     }
