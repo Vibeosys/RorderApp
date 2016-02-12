@@ -14,12 +14,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.CustomerAdapter;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
+import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
+import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
 import java.sql.Date;
@@ -100,7 +104,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 Log.e(TAG, "## Insert Count null pointer" + e.toString());
             }
 
-            CustomerDbDTO customer=new CustomerDbDTO(custid.toString(),customerName,"","");
+            CustomerDbDTO customer=new CustomerDbDTO(custid.toString(),customerName);
             mDbRepository.insertCustomerDetails(customer);
             String currentDate=new ROrderDateUtils().getGMTCurrentDate();
             Log.d(TAG, "##" + currentDate);
@@ -110,7 +114,20 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             mCustomerAdapter.refresh(mDbRepository.getWaitingList());
             mTxtCount.setText("");
             mTxtName.setText("");
+            uploadToServer(customer, tableTransaction);
+
         }
+    }
+
+    private void uploadToServer(CustomerDbDTO customer, TableTransactionDbDTO tableTransaction) {
+        Gson gson=new Gson();
+        String serializedJsonString = gson.toJson(customer);
+        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+
+        /*String serializedTableTransaction=gson.toJson(tableTransaction);
+        tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedTableTransaction);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);*/
     }
 
     private void showMyDialog(final WaitingUserDTO waiting) {
@@ -147,6 +164,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                                 waiting.getmArrivalTime(),waiting.getmOccupancy());
                         mDbRepository.updateTableTransaction(tableTransactionDbDTO);
                         mDbRepository.setOccupied(true, tableId);
+                        UploadOccupiedDTO occupiedDTO=new UploadOccupiedDTO(tableId,1);
+                        Gson gson=new Gson();
+                        String serializedJsonString = gson.toJson(occupiedDTO);
+                        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
+                        mServerSyncManager.uploadDataToServer(tableDataDTO);
                         dialog.dismiss();
                         mCustomerAdapter.refresh(mDbRepository.getWaitingList());
                         Intent iMain=new Intent(getApplicationContext(), MainActivity.class);

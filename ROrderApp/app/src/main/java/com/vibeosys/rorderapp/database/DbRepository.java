@@ -952,8 +952,6 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues = new ContentValues();
             contentValues.put(SqlContract.SqlCustomer.CUST_ID, customer.getCustId());
             contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customer.getCustName());
-            contentValues.put(SqlContract.SqlCustomer.CUST_PHONE, customer.getCustPhone());
-            contentValues.put(SqlContract.SqlCustomer.CUST_EMAIL, customer.getCustEmail());
             count = sqLiteDatabase.insert(SqlContract.SqlCustomer.TABLE_NAME, null, contentValues);
             contentValues.clear();
             Log.d(TAG, "##Customer is added successfully" + customer.getCustId());

@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
@@ -35,7 +36,10 @@ import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
+import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
+import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.UserAuth;
 
@@ -291,7 +295,7 @@ public class MainActivity extends BaseActivity
                 UUID custid = UUID.randomUUID();
 
                 String customerName = txtCustomerName.getText().toString();
-                CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), customerName, "", "");
+                CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), customerName);
                 //here inserting custmer to custmer table
                 mDbRepository.insertCustomerDetails(customer);
                 //getting current date here
@@ -302,12 +306,27 @@ public class MainActivity extends BaseActivity
                 mDbRepository.insertTableTransaction(tableTransactionDbDTO);
 
                 mDbRepository.setOccupied(true, tableId);
-
+                uploadToServer(customer, tableTransactionDbDTO, tableId);
                 adapter.refresh(mDbRepository.getTableRecords());
                 callToMenuIntent(tableNo, tableId, custid.toString());
             }
         });
         dialog.show();
+    }
+
+    private void uploadToServer(CustomerDbDTO customer, TableTransactionDbDTO tableTransaction, int tableId) {
+        Gson gson = new Gson();
+        String serializedJsonString = gson.toJson(customer);
+        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 1);
+        String serializedTableString = gson.toJson(occupiedDTO);
+        tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedTableString);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+
+        /*String serializedTableTransaction=gson.toJson(tableTransaction);
+        tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedTableTransaction);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);*/
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.vibeosys.rorderapp.data;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by akshay on 08-02-2016.

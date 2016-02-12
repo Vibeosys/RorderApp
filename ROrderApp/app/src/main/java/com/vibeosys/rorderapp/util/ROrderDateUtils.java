@@ -12,7 +12,7 @@ import java.util.TimeZone;
  */
 public class ROrderDateUtils {
 
-    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-dd");
     final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     public String getGMTCurrentDate() {

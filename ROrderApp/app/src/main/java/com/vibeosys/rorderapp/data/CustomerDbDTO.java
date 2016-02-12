@@ -7,17 +7,13 @@ public class CustomerDbDTO extends BaseDTO {
 
     private String custId;
     private String custName;
-    private String custPhone;
-    private String custEmail;
 
     public CustomerDbDTO() {
     }
 
-    public CustomerDbDTO(String custId, String custName, String custPhone, String custEmail) {
+    public CustomerDbDTO(String custId, String custName) {
         this.custId = custId;
         this.custName = custName;
-        this.custPhone = custPhone;
-        this.custEmail = custEmail;
     }
 
     public String getCustId() {
@@ -34,21 +30,5 @@ public class CustomerDbDTO extends BaseDTO {
 
     public void setCustName(String custName) {
         this.custName = custName;
-    }
-
-    public String getCustPhone() {
-        return custPhone;
-    }
-
-    public void setCustPhone(String custPhone) {
-        this.custPhone = custPhone;
-    }
-
-    public String getCustEmail() {
-        return custEmail;
-    }
-
-    public void setCustEmail(String custEmail) {
-        this.custEmail = custEmail;
     }
 }
