@@ -88,7 +88,7 @@ public class ServerSyncManager
         }
         String uploadJson = prepareUploadJsonFromData(params);
         String uploadURL = mSessionManager.getUploadUrl();
-        Log.i(TAG,"##"+uploadJson);
+        Log.i(TAG, "##" + uploadJson);
         uploadJsonToServer(uploadJson, uploadURL, progress);
     }
 
@@ -108,10 +108,11 @@ public class ServerSyncManager
     public void setOnDownloadReceived(OnDownloadReceived onDownloadReceived) {
         mOnDownloadReceived = onDownloadReceived;
     }
-    public void setOnStringResultReceived(OnStringResultReceived stringResultReceived)
-    {
-        mOnStringResultReceived=stringResultReceived;
+
+    public void setOnStringResultReceived(OnStringResultReceived stringResultReceived) {
+        mOnStringResultReceived = stringResultReceived;
     }
+
     private String prepareUploadJsonFromData(TableDataDTO... params) {
 
         Upload uploadToServer = new Upload();
@@ -133,7 +134,7 @@ public class ServerSyncManager
             public void onResponse(JSONObject response) {
                 Log.d("Upload Response", "" + response.toString());
 
-                if(mOnStringResultReceived!=null)
+                if (mOnStringResultReceived != null)
                     mOnStringResultReceived.onStingResultReceived(response);
                 if (progress != null)
                     progress.dismiss();
@@ -145,7 +146,7 @@ public class ServerSyncManager
             public void onErrorResponse(VolleyError error) {
                 if (progress != null)
                     progress.dismiss();
-                Log.i(TAG,"##"+error.toString());
+                Log.i(TAG, "##" + error.toString());
             }
         });
         uploadRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
@@ -381,7 +382,7 @@ public class ServerSyncManager
         void onDownloadResultReceived(@NonNull Map<String, Integer> results);
     }
 
-    public interface OnStringResultReceived{
+    public interface OnStringResultReceived {
         void onStingResultReceived(@NonNull JSONObject data);
     }
 

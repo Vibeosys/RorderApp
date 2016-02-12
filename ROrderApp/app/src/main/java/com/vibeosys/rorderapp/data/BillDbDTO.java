@@ -1,7 +1,8 @@
 package com.vibeosys.rorderapp.data;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -14,26 +15,30 @@ import java.util.List;
 public class BillDbDTO extends BaseDTO {
 
     private int billNo;
-    private Date billDate;
-    private Time billTime;
-    private double netAmount;
-    private double totalTaxAmount;
-    private double totalPayAmount;
-    private Date createdDate;
-    private Date updatedDate;
+    private String billDate;
+    private String billTime;
+    private double netAmt;
+    private double totalTaxAmt;
+    private double totalPayAmt;
+    private String createdDate;
+    private String updatedDate;
     private int userId;
+    private String custId;
+    private int tableId;
+     private int isPayed;
+    private int payedBy;
 
 
     public BillDbDTO() {
     }
 
-    public BillDbDTO(int billNo, Date billDate, Time billTime, double netAmount, double totalTaxAmount, double totalPayAmount, Date createdDate, Date updatedDate, int userId) {
+    public BillDbDTO(int billNo, String billDate, String billTime, double netAmt, double totalTaxAmt, double totalPayAmt, String createdDate, String updatedDate, int userId) {
         this.billNo = billNo;
         this.billDate = billDate;
         this.billTime = billTime;
-        this.netAmount = netAmount;
-        this.totalTaxAmount = totalTaxAmount;
-        this.totalPayAmount = totalPayAmount;
+        this.netAmt = netAmt;
+        this.totalTaxAmt = totalTaxAmt;
+        this.totalPayAmt = totalPayAmt;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.userId = userId;
@@ -47,59 +52,59 @@ public class BillDbDTO extends BaseDTO {
         this.billNo = billNo;
     }
 
-    public Date getBillDate() {
+    public String getBillDate() {
         return billDate;
     }
 
-    public void setBillDate(Date billDate) {
+    public void setBillDate(String billDate) {
         this.billDate = billDate;
     }
 
-    public Time getBillTime() {
+    public String getBillTime() {
         return billTime;
     }
 
-    public void setBillTime(Time billTime) {
+    public void setBillTime(String billTime) {
         this.billTime = billTime;
     }
 
-    public double getNetAmount() {
-        return netAmount;
+    public double getNetAmt() {
+        return netAmt;
     }
 
-    public void setNetAmount(double netAmount) {
-        this.netAmount = netAmount;
+    public void setNetAmt(double netAmt) {
+        this.netAmt = netAmt;
     }
 
-    public double getTotalTaxAmount() {
-        return totalTaxAmount;
+    public double getTotalTaxAmt() {
+        return totalTaxAmt;
     }
 
-    public void setTotalTaxAmount(double totalTaxAmount) {
-        this.totalTaxAmount = totalTaxAmount;
+    public void setTotalTaxAmt(double totalTaxAmt) {
+        this.totalTaxAmt = totalTaxAmt;
     }
 
-    public double getTotalPayAmount() {
-        return totalPayAmount;
+    public double getTotalPayAmt() {
+        return totalPayAmt;
     }
 
-    public void setTotalPayAmount(double totalPayAmount) {
-        this.totalPayAmount = totalPayAmount;
+    public void setTotalPayAmt(double totalPayAmt) {
+        this.totalPayAmt = totalPayAmt;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getUpdatedDate() {
+    public String getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
+    public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
     }
 
@@ -111,14 +116,51 @@ public class BillDbDTO extends BaseDTO {
         this.userId = userId;
     }
 
-    public static List<BillDbDTO> deserializeBill(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
-        ArrayList<BillDbDTO> objectList = new ArrayList<>();
+    public String getCustId() {
+        return custId;
+    }
 
-        for (String serializedString : serializedStringList) {
-            BillDbDTO deserializeObject = gson.fromJson(serializedString, BillDbDTO.class);
-            objectList.add(deserializeObject);
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
+
+    public int getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(int tableId) {
+        this.tableId = tableId;
+    }
+
+    public int isPayed() {
+        return isPayed;
+    }
+
+    public void setIsPayed(int isPayed) {
+        this.isPayed = isPayed;
+    }
+
+    public int getPayedBy() {
+        return payedBy;
+    }
+
+    public void setPayedBy(int payedBy) {
+        this.payedBy = payedBy;
+    }
+
+    public static List<BillDbDTO> deserializeBill(List<String> serializedStringList) {
+        Gson gson = new Gson();
+        ArrayList<BillDbDTO> objectList = new ArrayList<>();
+        try {
+
+            for (String serializedString : serializedStringList) {
+                BillDbDTO deserializeObject = gson.fromJson(serializedString, BillDbDTO.class);
+                objectList.add(deserializeObject);
+            }
+        } catch (Exception e) {
+            Log.d("TAG", "##" + e.toString());
         }
+
         return objectList;
     }
 }

@@ -3,26 +3,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_action_rain"
-            android:title="Garden View" />
+            android:id="@+id/nav_waiting_list"
+            android:icon="@drawable/waiting_list"
+            android:title="Waiting List" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_my_profile"
             android:icon="@drawable/ic_action_mist"
-            android:title="Pool Side View" />
+            android:title="My Profile" />
 
     </group>
 
     <item android:title="Other">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_action_link"
-                android:title="Occupied Tables" />
-            <item
                 android:id="@+id/nav_log_out"
                 android:icon="@drawable/ic_action_cancel"
-                android:title="Exit" />
+                android:title="Log Out" />
         </menu>
     </item>
 

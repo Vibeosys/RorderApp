@@ -43,8 +43,8 @@ public class DbOperations {
 
         boolean isInserted = dbRepository.insertBillDetails(billDetailInserts);
         boolean isUpdated = dbRepository.updateBillDetails(billDetailUpdates);
-        //return isInserted & isUpdated;
-        return isInserted;
+        return isInserted & isUpdated;
+
     }
 
     public boolean addOrUpdateMenu(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -87,7 +87,7 @@ public class DbOperations {
 
         boolean isInserted = dbRepository.insertOrderDetails(orderDetailInserts);
         // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateOrderDetails(orderDetailUpdates);
+        boolean isUpdated = dbRepository.updateOrderDetails(orderDetailUpdates);
         return isInserted;// & isUpdated;
     }
 

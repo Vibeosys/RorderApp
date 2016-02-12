@@ -49,6 +49,10 @@ public class SqlContract {
         public final static String CREATED_DATE="CreatedDate";
         public final static String UPDATED_DATE="UpdatedDate";
         public final static String USER_ID="userId";
+        public final static String CUST_ID="CustId";
+        public final static String TABLE_ID="TableId";
+        public final static String IS_PAYED="IsPayed";
+        public final static String PAID_BY="PayedBy";
     }
 
     public abstract class SqlBillDetails{

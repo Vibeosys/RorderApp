@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     TabLayout tab_layout;
     DrawerLayout drawer;
@@ -57,10 +57,11 @@ public class MainActivity extends BaseActivity
     TableGridAdapter adapter;
     List<RestaurantTables> hotelTableDTOs;
     List<RestaurantTables> sortedTables;
-    private Context mContext=this;
+    private Context mContext = this;
     TextView txtTotalCount;
-    static int selectedCategory=0;
-    static boolean btnCancelFlag =false , chkMyservingFlag =false ,chkUnoccupied =false ;
+    static int selectedCategory = 0;
+    static boolean btnCancelFlag = false, chkMyservingFlag = false, chkUnoccupied = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,10 +102,10 @@ public class MainActivity extends BaseActivity
             txtRestaurantName.setText("");*/
             drawer.setDrawerListener(toggle);
             toggle.syncState();
-            txtTotalCount=(TextView)findViewById(R.id.txtCount);
+            txtTotalCount = (TextView) findViewById(R.id.txtCount);
             gridView = (GridView) findViewById(R.id.gridview);
             gridView.setOnItemClickListener(this);
-            hotelTableDTOs=mDbRepository.getTableRecords();
+            hotelTableDTOs = mDbRepository.getTableRecords();
             adapter = new TableGridAdapter(getApplicationContext(), hotelTableDTOs);
             gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -118,11 +119,13 @@ public class MainActivity extends BaseActivity
     protected void onPostResume() {
         super.onPostResume();
     }
+
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         adapter.refresh(mDbRepository.getTableRecords());
     }
+
     @Override
     public void onBackPressed() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -147,10 +150,10 @@ public class MainActivity extends BaseActivity
 
                 } else {
                     try {
-                        sortedTables= sortAdapter(Integer.parseInt(s));
+                        sortedTables = sortAdapter(Integer.parseInt(s));
                         adapter.refresh(sortedTables);
                     } catch (Exception e) {
-                        Log.e(TAG,"##"+e.toString());
+                        Log.e(TAG, "##" + e.toString());
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "You should Enter number", Toast.LENGTH_SHORT).show();
                     }
@@ -170,19 +173,17 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    public List<RestaurantTables> sortAdapter(int tableNo)
-    {
-        List<RestaurantTables> mHotelTables=new ArrayList<>();
+    public List<RestaurantTables> sortAdapter(int tableNo) {
+        List<RestaurantTables> mHotelTables = new ArrayList<>();
 
-        for(RestaurantTables table:mDbRepository.getTableRecords())
-        {
-            if(table.getmTableNo()==tableNo)
-            {
+        for (RestaurantTables table : mDbRepository.getTableRecords()) {
+            if (table.getmTableNo() == tableNo) {
                 mHotelTables.add(table);
             }
         }
-       return mHotelTables;
+        return mHotelTables;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -193,20 +194,20 @@ public class MainActivity extends BaseActivity
         //noinspection SimplifiableIfStatement
         /*if (id == R.id.action_settings) {
             return true;
-        }*/if(id == R.id.filter)
-        {
-                Intent iFilter = new Intent(this, TableFilterActivity.class);
+        }*/
+        if (id == R.id.filter) {
+            Intent iFilter = new Intent(this, TableFilterActivity.class);
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("Category", selectedCategory);
                 jsonObject.put("chkMyservingFlag", chkMyservingFlag);
-                jsonObject.put("chkUnoccupied",chkUnoccupied);
-                jsonObject.put("btnFlag",true);
+                jsonObject.put("chkUnoccupied", chkUnoccupied);
+                jsonObject.put("btnFlag", true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            iFilter.putExtra("json",jsonObject.toString());
-                startActivityForResult(iFilter, 2);
+            iFilter.putExtra("json", jsonObject.toString());
+            startActivityForResult(iFilter, 2);
         }
 
         return super.onOptionsItemSelected(item);
@@ -218,11 +219,9 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_my_profile) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_waiting_list) {
 
         } else if (id == R.id.nav_log_out) {
             UserAuth.CleanAuthenticationInfo();
@@ -246,25 +245,22 @@ public class MainActivity extends BaseActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         HotelTableDTO hotelTableDTO = (HotelTableDTO) adapter.getItem(position);
-        if(hotelTableDTO.ismIsOccupied())
-        {
-            String custId=mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId(),mSessionManager.getUserId());
-            Log.i(TAG,"## Customer Id "+custId);
-            callToMenuIntent(hotelTableDTO.getmTableNo(),hotelTableDTO.getmTableId(),custId);
-        }
-       else
-        {
+        if (hotelTableDTO.ismIsOccupied()) {
+            String custId = mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId(), mSessionManager.getUserId());
+            Log.i(TAG, "## Customer Id " + custId);
+            callToMenuIntent(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId(), custId);
+        } else {
             showReserveDialog(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId());
         }
         Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
     }
 
-    private void callToMenuIntent(int tableNo, int tableId ,String custId) {
+    private void callToMenuIntent(int tableNo, int tableId, String custId) {
 
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId,custId,tableNo);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo);
 
         Intent intentOpenTableMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-        intentOpenTableMenu.putExtra("tableCustInfo",tableCommonInfoDTO);
+        intentOpenTableMenu.putExtra("tableCustInfo", tableCommonInfoDTO);
 //        intentOpenTableMenu.putExtra("TableNo", tableNo);
 //        intentOpenTableMenu.putExtra("TableId", tableId);
         startActivity(intentOpenTableMenu);
@@ -272,12 +268,12 @@ public class MainActivity extends BaseActivity
 
     private void showReserveDialog(final int tableNo, final int tableId) {
 
-        final Dialog dialog=new Dialog(mContext);
+        final Dialog dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.dialog_table_reserve);
         dialog.setTitle("Reserve Table");
-        final EditText txtCustomerName=(EditText)dialog.findViewById(R.id.txtCustomerName);
-        TextView cancel=(TextView)dialog.findViewById(R.id.txtCancel);
-        TextView reserve=(TextView)dialog.findViewById(R.id.txtReserve);
+        final EditText txtCustomerName = (EditText) dialog.findViewById(R.id.txtCustomerName);
+        TextView cancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        TextView reserve = (TextView) dialog.findViewById(R.id.txtReserve);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -295,72 +291,60 @@ public class MainActivity extends BaseActivity
                 UUID custid = UUID.randomUUID();
 
                 String customerName = txtCustomerName.getText().toString();
-                CustomerDbDTO customer=new CustomerDbDTO(custid.toString(),customerName,"","");
+                CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), customerName, "", "");
                 //here inserting custmer to custmer table
                 mDbRepository.insertCustomerDetails(customer);
                 //getting current date here
-                String currentDate=new ROrderDateUtils().getGMTCurrentDate();
+                String currentDate = new ROrderDateUtils().getGMTCurrentDate();
 
-                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId,mSessionManager.getUserId(),custid.toString(),false, Date.valueOf(currentDate));
+                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId, mSessionManager.getUserId(), custid.toString(), false, Date.valueOf(currentDate));
                 //here inserting records in table transaction
                 mDbRepository.insertTableTransaction(tableTransactionDbDTO);
 
                 mDbRepository.setOccupied(true, tableId);
 
                 adapter.refresh(mDbRepository.getTableRecords());
-                callToMenuIntent(tableNo, tableId,custid.toString());
+                callToMenuIntent(tableNo, tableId, custid.toString());
             }
         });
         dialog.show();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
 
-        if(requestCode==2&&data!=null)
-        {
+        if (requestCode == 2 && data != null) {
             JSONObject json;
             String jsonString = data.getStringExtra("json");
             Log.d(TAG, "##" + jsonString);
             try {
-                json =new JSONObject(jsonString);
-                btnCancelFlag=json.getBoolean("btnFlag");
-                chkMyservingFlag=json.getBoolean("chkMyservingFlag");
-                chkUnoccupied=json.getBoolean("chkUnoccupied");
-                selectedCategory=json.getInt("Category");
+                json = new JSONObject(jsonString);
+                btnCancelFlag = json.getBoolean("btnFlag");
+                chkMyservingFlag = json.getBoolean("chkMyservingFlag");
+                chkUnoccupied = json.getBoolean("chkUnoccupied");
+                selectedCategory = json.getInt("Category");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            if(btnCancelFlag)
-            {
-                if(chkUnoccupied&&selectedCategory!=0)
-                {
-                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory,chkUnoccupied));
-                }
-                else if(!chkUnoccupied&&selectedCategory!=0)
-                {
+            if (btnCancelFlag) {
+                if (chkUnoccupied && selectedCategory != 0) {
+                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory, chkUnoccupied));
+                } else if (!chkUnoccupied && selectedCategory != 0) {
                     adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory));
-                }
-                else if(chkUnoccupied&&selectedCategory<=0)
-                {
-                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(),chkUnoccupied));
-                }
-                else if(!chkUnoccupied&&selectedCategory<=0)
-                {
+                } else if (chkUnoccupied && selectedCategory <= 0) {
+                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), chkUnoccupied));
+                } else if (!chkUnoccupied && selectedCategory <= 0) {
                     adapter.refresh(mDbRepository.getTableRecords());
                 }
 
-            }
-            else {
-                Toast.makeText(getApplicationContext(),"All Filters are removed",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "All Filters are removed", Toast.LENGTH_SHORT).show();
                 adapter.refresh(mDbRepository.getTableRecords());
             }
-        }
-        else {
+        } else {
 
         }
     }

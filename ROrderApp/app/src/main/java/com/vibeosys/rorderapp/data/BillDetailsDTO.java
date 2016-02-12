@@ -1,5 +1,8 @@
 package com.vibeosys.rorderapp.data;
 
+import com.vibeosys.rorderapp.util.ROrderDateUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -8,25 +11,26 @@ import java.util.Date;
 public class BillDetailsDTO {
 
 
-
-
     private int billNo;
-    private Date billDate;
-    private double  netAmount;
+    private String billDate;
+    private double netAmount;
     private double totalTax;
     private double totalPayableTaxAmt;
     private String servedByName;
-
+    private int tableNo;
+    private Date billInDate;
     public BillDetailsDTO() {
     }
 
-    public BillDetailsDTO(int billNo, Date billDate, double netAmount, double totalTax, double totalPayableTaxAmt, String servedByName) {
+    public BillDetailsDTO(int billNo, String billDate, double netAmount, double totalTax,
+                          double totalPayableTaxAmt, String servedByName, int tableNo) {
         this.billNo = billNo;
         this.billDate = billDate;
         this.netAmount = netAmount;
         this.totalTax = totalTax;
         this.totalPayableTaxAmt = totalPayableTaxAmt;
         this.servedByName = servedByName;
+        this.tableNo = tableNo;
     }
 
     public int getBillNo() {
@@ -37,11 +41,11 @@ public class BillDetailsDTO {
         this.billNo = billNo;
     }
 
-    public Date getBillDate() {
+    public String getBillDate() {
         return billDate;
     }
 
-    public void setBillDate(Date billDate) {
+    public void setBillDate(String billDate) {
         this.billDate = billDate;
     }
 
@@ -75,5 +79,18 @@ public class BillDetailsDTO {
 
     public void setServedByName(String servedByName) {
         this.servedByName = servedByName;
+    }
+
+    public int getTableNo() {
+        return tableNo;
+    }
+
+    public void setTableNo(int tableNo) {
+        this.tableNo = tableNo;
+    }
+
+
+    public void setBillInDate(Date billInDate) {
+        this.billInDate = billInDate;
     }
 }

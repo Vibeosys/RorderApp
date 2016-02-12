@@ -31,21 +31,23 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class TableMenusActivity extends BaseActivity implements
-        OrderListAdapter.CustomButtonListener, View.OnClickListener,ServerSyncManager.OnStringResultReceived {
+        OrderListAdapter.CustomButtonListener, View.OnClickListener, ServerSyncManager.OnStringResultReceived,ServerSyncManager.OnDownloadReceived {
 
     private TableCommonInfoDTO tableCommonInfoDTO;
     private OrderListAdapter orderListAdapter;
     private List<OrderMenuDTO> allMenus;
     private ListView listMenus;
-    private TextView txtTotalAmount, txtTotalItems,txtBillGenerate;
+    private TextView txtTotalAmount, txtTotalItems, txtBillGenerate;
     private int mTableId, mTableNo;
     private String custId;
     private LinearLayout llCurrentOrder;
-  //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
+    //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
 
-    private int mCount =0;
+    private int mCount = 0;
+
     //List<OrderMenuDTO> sortingMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class TableMenusActivity extends BaseActivity implements
         //sortingMenu=mDbRepository.getOrderMenu();
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
-        txtBillGenerate = (TextView)findViewById(R.id.txtGenerateBill);
+        txtBillGenerate = (TextView) findViewById(R.id.txtGenerateBill);
         llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
@@ -73,6 +75,7 @@ public class TableMenusActivity extends BaseActivity implements
         llCurrentOrder.setOnClickListener(this);
         txtBillGenerate.setOnClickListener(this);
         mServerSyncManager.setOnStringResultReceived(this);
+        mServerSyncManager.setOnDownloadReceived(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
 
       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -111,13 +114,13 @@ public class TableMenusActivity extends BaseActivity implements
 
     private void displayMenuPriceAndItems() {
         mCount = 0;
-        ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
+        ArrayList<OrderMenuDTO> mSelectedItems = new ArrayList<>();
         for (OrderMenuDTO menu : allMenus) {
             if (menu.getmQuantity() > 0) {
                 mSelectedItems.add(menu);
             }
         }
-        mCount= mSelectedItems.size();
+        mCount = mSelectedItems.size();
         SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(mSelectedItems);
         txtTotalAmount.setText(String.format(String.format("%.2f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
         txtTotalItems.setText(selectedMenusDTO.getTotalItems() + " Items are selected");
@@ -213,27 +216,24 @@ public class TableMenusActivity extends BaseActivity implements
             }
 
         }
-        if(id ==R.id.txtGenerateBill)
-        {
-          //  Toast.makeText(getApplicationContext(),"bill genrate is cliked",Toast.LENGTH_LONG).show();
-            if(NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
-            {
+        if (id == R.id.txtGenerateBill) {
+            //  Toast.makeText(getApplicationContext(),"bill genrate is cliked",Toast.LENGTH_LONG).show();
+            if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
 
                 genrateBill();
-            }else
-            {
+            } else {
                 /* if network is not available*/
             }
         }
 
     }
-    public void genrateBill()
-    {
-        UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId,custId);
+
+    public void genrateBill() {
+        UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
         Gson gson = new Gson();
         String serializedJsonString = gson.toJson(uploadBillGenerate);
-        Log.d(TAG,"##"+serializedJsonString);
-        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL,serializedJsonString);
+        Log.d(TAG, "##" + serializedJsonString);
+        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedJsonString);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
 
     }
@@ -245,29 +245,34 @@ public class TableMenusActivity extends BaseActivity implements
 
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
-        int errorCode =-1;
+        int errorCode = -1;
         String message = null;
 
 
-        try
-        {
+        try {
             errorCode = data.getInt("errorCode");
-            message = data.getString("messageme");
+            message = data.getString("message");
             Log.d(TAG, "##" + errorCode);
-        }catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        if(errorCode == 0)
-        {
+        if (errorCode == 0) {
             /*Successfully send data*/
-
-            Toast.makeText(getApplicationContext(),"Data is send to server",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Data is send to server", Toast.LENGTH_LONG).show();
             Log.d(TAG, "##" + errorCode);
+            mServerSyncManager.syncDataWithServer(true);
 
-        }else
-        {
-            Toast.makeText(getApplicationContext(),"response "+errorCode,Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(getApplicationContext(), "response " + errorCode, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onDownloadResultReceived(@NonNull Map<String, Integer> results) {
+        Intent iMenu = new Intent(getApplicationContext(), BillDetailsActivity.class);
+        iMenu.putExtra("tableCustInfo", tableCommonInfoDTO);
+        startActivity(iMenu);
+        finish();
     }
 }

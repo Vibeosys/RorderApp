@@ -59,4 +59,5 @@
     <string name ="BillDetails">Bill Details</string>
     <string name="title_search_table">Search Table</string>
     <string name="title_search_cuisine">Search Cuisine/Category</string>
+    <string name="btn_pay_now">Pay Now</string>
 </resources>

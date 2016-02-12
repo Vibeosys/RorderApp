@@ -1,7 +1,10 @@
 package com.vibeosys.rorderapp.util;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -9,7 +12,7 @@ import java.util.TimeZone;
  */
 public class ROrderDateUtils {
 
-    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
     final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     public String getGMTCurrentDate() {
@@ -21,7 +24,7 @@ public class ROrderDateUtils {
         return dateFormat.format(new java.util.Date());
     }
 
-    public String getLocalDateInFormat(Date date) {
+    public String getLocalDateInFormat(java.util.Date date) {
         return dateFormat.format(date);
     }
 
@@ -35,6 +38,7 @@ public class ROrderDateUtils {
         return timeFormat.format(new java.util.Date());
     }
 
+
     public String getLocalCurrentTime() {
         return timeFormat.format(new java.util.Date());
     }
@@ -45,5 +49,16 @@ public class ROrderDateUtils {
 
     public String getGMTTimeInFormat(Date date) {
         return timeFormat.format(date);
+    }
+
+    public java.util.Date getFormattedDate(String strDate) {
+        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        java.util.Date date = null;
+        try {
+            date = df2.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }

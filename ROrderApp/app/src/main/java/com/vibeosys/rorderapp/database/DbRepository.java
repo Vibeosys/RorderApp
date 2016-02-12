@@ -10,7 +10,6 @@ import android.util.Log;
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
-import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.HotelTableDbDTO;
 import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
 import com.vibeosys.rorderapp.data.MenuDbDTO;
@@ -33,7 +32,6 @@ import com.vibeosys.rorderapp.util.SessionManager;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -289,31 +287,32 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
 
-    public BillDetailsDTO getBillDetailsRecords()//08/02/2016 put where condition for table no and custer id and from sharder preference take user name ann user id
+    public BillDetailsDTO getBillDetailsRecords(String custId)//08/02/2016 put where condition for table no and custer id and from sharder preference take user name ann user id
     {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         BillDetailsDTO billDetailsRecords = null;
         try {
             sqLiteDatabase = getReadableDatabase();
-            cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount,bill.TotalTaxAmount,bill.TotalPayAmount,users.UserName from bill INNER Join users On users.UserId = bill.UserId;", null);
+            String[] whereclause = new String[]{custId};
+            cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount," +
+                    "bill.TotalTaxAmount,bill.TotalPayAmount,users.UserName,r_tables.TableNo" +
+                    " from bill left Join users On users.UserId = bill.UserId" +
+                    " Left join r_tables on bill.TableId=r_tables.TableId where bill.CustId=?", whereclause);
 
             if (cursor != null) {
                 if (cursor.getCount() > 0)
                     cursor.moveToFirst();
                 {
-                    do {
-                        int billNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlBill.BILL_NO));
-                        Date billDate = Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlBill.BILL_DATE)));
-                        double netAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.NET_AMOUNT));
-                        double totalTaxAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.TOATL_TAX_AMT));
-                        double totalPayAbleTax = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.TOTAL_PAY_AMT));
-                        String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
-
-                        billDetailsRecords = new BillDetailsDTO(billNo, billDate, netAmount, totalTaxAmount, totalPayAbleTax, userName);
-
-                    } while (cursor.moveToNext());
-
+                    int billNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlBill.BILL_NO));
+                    String billDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlBill.BILL_DATE));
+                    double netAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.NET_AMOUNT));
+                    double totalTaxAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.TOATL_TAX_AMT));
+                    double totalPayAbleTax = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.TOTAL_PAY_AMT));
+                    String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                    int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
+                    billDetailsRecords = new BillDetailsDTO(billNo, billDate, netAmount,
+                            totalTaxAmount, totalPayAbleTax, userName, tableNo);
                 }
 
             }
@@ -393,14 +392,18 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues = new ContentValues();
             for (BillDbDTO bill : billInserts) {
                 contentValues.put(SqlContract.SqlBill.BILL_NO, bill.getBillNo());
-                contentValues.put(SqlContract.SqlBill.BILL_DATE, bill.getBillDate().toString());
+                contentValues.put(SqlContract.SqlBill.BILL_DATE, String.valueOf(bill.getBillDate()));
                 contentValues.put(SqlContract.SqlBill.BILL_TIME, bill.getBillTime().toString());
-                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmount());
-                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmount());
-                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmount());
+                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmt());
+                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmt());
+                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmt());
                 contentValues.put(SqlContract.SqlBill.CREATED_DATE, bill.getCreatedDate().toString());
                 contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
                 contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
+                contentValues.put(SqlContract.SqlBill.CUST_ID, bill.getCustId());
+                contentValues.put(SqlContract.SqlBill.TABLE_ID, bill.getTableId());
+                contentValues.put(SqlContract.SqlBill.IS_PAYED, bill.isPayed());
+                contentValues.put(SqlContract.SqlBill.PAID_BY, bill.getPayedBy());
                 count = sqLiteDatabase.insert(SqlContract.SqlBill.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Bill is Added Successfully" + bill.getBillNo());
@@ -792,7 +795,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         int orderNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
                         //boolean orderStatus=cursor.get;
                         //String orderDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_DATE));
-                      //  String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
+                        //  String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
                         String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.CREATED_DATE));
                         String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.UPDATED_DATE));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
@@ -1240,9 +1243,9 @@ public class DbRepository extends SQLiteOpenHelper {
                 String[] whereClause = new String[]{String.valueOf(bill.getBillNo())};
                 contentValues.put(SqlContract.SqlBill.BILL_DATE, bill.getBillDate().toString());
                 contentValues.put(SqlContract.SqlBill.BILL_TIME, bill.getBillTime().toString());
-                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmount());
-                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmount());
-                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmount());
+                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmt());
+                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmt());
+                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmt());
                 contentValues.put(SqlContract.SqlBill.CREATED_DATE, bill.getCreatedDate().toString());
                 contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
                 contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
@@ -1294,16 +1297,26 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues = new ContentValues();
             for (OrdersDbDTO order : orderUpdates) {
                 String[] whereClause = new String[]{order.getOrderId()};
-                contentValues.put(SqlContract.SqlOrders.ORDER_NO, order.getOrderNo());
-                contentValues.put(SqlContract.SqlOrders.ORDER_STATUS, order.isOrderStatus());
-                contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
-                contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
-                contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
-                contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
-                contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
-                contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
-                contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
-                contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
+                if (order.getOrderNo() != 0)
+                    contentValues.put(SqlContract.SqlOrders.ORDER_NO, order.getOrderNo());
+                if (order.isOrderStatus() != 0)
+                    contentValues.put(SqlContract.SqlOrders.ORDER_STATUS, order.isOrderStatus());
+                if (order.getOrderDt() != null)
+                    contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
+                if (order.getOrderTime() != null)
+                    contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
+                if (order.getCreatedDate() != null)
+                    contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
+                if (order.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
+                if (order.getTableId() != 0)
+                    contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
+                if (order.getUserId() != 0)
+                    contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
+                if (order.getOrderAmt() != 0.0)
+                    contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
+                if (order.getCustId() != null && !order.getCustId().isEmpty())
+                    contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
                 count = sqLiteDatabase.update(SqlContract.SqlOrders.TABLE_NAME, contentValues,
                         SqlContract.SqlOrders.ORDER_ID + "=?", whereClause);
                 contentValues.clear();
@@ -1312,6 +1325,47 @@ public class DbRepository extends SQLiteOpenHelper {
 
         } catch (Exception e) {
             Log.d(TAG, "## Error at update Orders" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public boolean updateOrderDetails(List<OrderDetailsDbDTO> orderDetailUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (OrderDetailsDbDTO orderDetail : orderDetailUpdates) {
+                String[] whereClause = new String[]{orderDetail.getOrderId()};
+                if (orderDetail.getOrderPrice() != 0.0)
+                    contentValues.put(SqlContract.SqlOrderDetails.ORDER_PRICE, orderDetail.getOrderPrice());
+                if (orderDetail.getOrderQuantity() != 0)
+                    contentValues.put(SqlContract.SqlOrderDetails.ORDER_QUANTITY, orderDetail.getOrderQuantity());
+                if (orderDetail.getCreatedDate() != null)
+                    contentValues.put(SqlContract.SqlOrderDetails.CREATED_DATE, orderDetail.getCreatedDate().toString());
+                if (orderDetail.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlOrderDetails.UPDATE_DATE, orderDetail.getUpdatedDate().toString());
+                if (!orderDetail.getOrderId().isEmpty() && orderDetail.getOrderId() != null)
+                    contentValues.put(SqlContract.SqlOrderDetails.ORDER_ID, orderDetail.getOrderId());
+                if (orderDetail.getMenuId() != 0)
+                    contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
+                if (orderDetail.getMenuTitle() != null && orderDetail.getMenuTitle().isEmpty())
+                    contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
+                count = sqLiteDatabase.update(SqlContract.SqlOrderDetails.TABLE_NAME, contentValues,
+                        SqlContract.SqlOrderDetails.ORDER_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Order detail is Updated successfully" + orderDetail.getOrderDetailsId());
+
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at updatedOrderDetails" + e.toString());
         } finally {
             {
                 if (sqLiteDatabase != null)
