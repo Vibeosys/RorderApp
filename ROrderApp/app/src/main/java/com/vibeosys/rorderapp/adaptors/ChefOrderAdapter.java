@@ -142,7 +142,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             groupHolder = (GroupHolder)convertView.getTag();
         }
 
-        groupHolder.getGroupTableNo.setText("Table No :"+chefOrderDetailsDTO.getmTableNo());
+        groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
         groupHolder.orderDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
