@@ -2,6 +2,7 @@ package com.vibeosys.rorderapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
@@ -37,7 +38,7 @@ import java.util.UUID;
 /**
  * Created by akshay on 04-02-2016.
  */
-public class TableOrderActivity extends BaseActivity implements OrderSummaryAdapter.ButtonListener, ServerSyncManager.OnStringResultReceived {
+public class TableOrderActivity extends BaseActivity implements OrderSummaryAdapter.ButtonListener, ServerSyncManager.OnStringResultReceived, OrderSummaryAdapter.PlaceOrderListener {
 
     ExpandableListView ordersList;
     OrderSummaryAdapter adapter;
@@ -60,7 +61,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ordersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
         //ordersList.setGroupIndicator(getResources().getDrawable(R.drawable.expand_indicator));
-        list = mDbRepository.getOrdersOfTable(mTableId,mCustId);
+        list = mDbRepository.getOrdersOfTable(mTableId, mCustId);
         mCurrentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
         mDbRepository.getOrederDetailsGroupByID(list);
         list.add(0, mCurrentOrder);
@@ -73,6 +74,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
         adapter.setButtonListner(this);
         //adapter.onGroupExpanded(0);
         adapter.notifyDataSetChanged();
+        adapter.setPlaceOrderClick(this);
         mServerSyncManager.setOnStringResultReceived(this);
         ordersList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -138,11 +140,9 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             //Toast.makeText(getApplicationContext(),"Button is clicke",Toast.LENGTH_LONG).show();
             /*Intent i = new Intent(this, BillDetailsActivity.class);
             startActivity(i);*/
-            if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
-                placeOrder();
-            } else {
-                /* Show setting alert to connet to the internet*/
-            }
+
+            placeOrder();
+
         }
 
 
@@ -151,20 +151,24 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
 
     private void placeOrder() {
         // OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId());
-        List<OrderDetailsDTO> orderDetailsDTOs = mCurrentOrder.getOrderDetailsDTOs();
-        ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
-        for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
-            UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity());
-            sendDetails.add(sendOrder);
-        }
-        orderId = UUID.randomUUID();
-        UploadOrderHeader sendOrder = new UploadOrderHeader(orderId.toString(), mTableId, mCustId, sendDetails);
-        Gson gson = new Gson();
+        if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
+            List<OrderDetailsDTO> orderDetailsDTOs = mCurrentOrder.getOrderDetailsDTOs();
+            ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+            for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
+                UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity());
+                sendDetails.add(sendOrder);
+            }
+            orderId = UUID.randomUUID();
+            UploadOrderHeader sendOrder = new UploadOrderHeader(orderId.toString(), mTableId, mCustId, sendDetails);
+            Gson gson = new Gson();
 
-        String serializedJsonString = gson.toJson(sendOrder);
-        Log.d(TAG, "##" + serializedJsonString);
-        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+            String serializedJsonString = gson.toJson(sendOrder);
+            Log.d(TAG, "##" + serializedJsonString);
+            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
+            mServerSyncManager.uploadDataToServer(tableDataDTO);
+        } else {
+            startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
+        }
     }
 
     @Override
@@ -188,10 +192,19 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             mDbRepository.insertOrders(orders);
             mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
             mServerSyncManager.syncDataWithServer(true);
-            Intent iMenu=new Intent(getApplicationContext(),TableMenusActivity.class);
+            Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
             iMenu.putExtra("tableCustInfo", tableCommonInfo);
             startActivity(iMenu);
             finish();
+            Toast.makeText(getApplicationContext(), getResources().getString
+                    (R.string.order_place_success), Toast.LENGTH_SHORT).show();
         }
+
+
+    }
+
+    @Override
+    public void onPlaceOrderClick() {
+        placeOrder();
     }
 }

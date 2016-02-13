@@ -55,7 +55,8 @@ public class TableGridAdapter extends BaseAdapter {
     }
 
     public void refresh(List<RestaurantTables> tables) {
-        this.mHotelTables.clear();
+        if (mHotelTables != null)
+            this.mHotelTables.clear();
         this.mHotelTables = tables;
         notifyDataSetChanged();
     }

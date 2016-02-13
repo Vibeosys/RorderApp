@@ -60,7 +60,7 @@ public class TableMenusActivity extends BaseActivity implements
         setTitle(getResources().getString(R.string.title_search_cuisine));
 
         listMenus = (ListView) findViewById(R.id.listMenus);
-        allMenus = mDbRepository.getOrderMenu();
+        allMenus = mDbRepository.getOrderMenu(custId);
 //        mTableId = getIntent().getIntExtra("TableId", 0);
 //        mTableNo = getIntent().getExtras().getInt("TableNo");
         //sortingMenu=mDbRepository.getOrderMenu();
@@ -77,7 +77,7 @@ public class TableMenusActivity extends BaseActivity implements
         mServerSyncManager.setOnStringResultReceived(this);
         mServerSyncManager.setOnDownloadReceived(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
-
+        displayMenuPriceAndItems();
       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

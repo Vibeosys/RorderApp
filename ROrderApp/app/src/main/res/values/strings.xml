@@ -31,18 +31,18 @@
     <string name="search_table">Search Table</string>
     <string name="reserve_table">Reserve</string>
     <string name="cancel_string">Cancel</string>
-    <string name ="my_serving">My Serving</string>
-    <string name ="my_unoccupy">Unoccupied</string>
-    <string name ="apply">APPLY</string>
-    <string name ="reset">RESET</string>
-    <string name = "title_filter_menu">My Filter</string>
-    <string name = "filter_category">Select Category</string>
-    <string name ="Bill_details_title">Billing Details</string>
-    <string name ="MenuItem">Order</string>
-    <string name ="BillingQty">Qty</string>
-    <string name ="BillingAmt">Amount</string>
-    <string name ="Bill_Summary">Bill Summary</string>
-    <string name ="Payment_by">Payment by</string>
+    <string name="my_serving">My Serving</string>
+    <string name="my_unoccupy">Unoccupied</string>
+    <string name="apply">APPLY</string>
+    <string name="reset">RESET</string>
+    <string name="title_filter_menu">My Filter</string>
+    <string name="filter_category">Select Category</string>
+    <string name="Bill_details_title">Billing Details</string>
+    <string name="MenuItem">Order</string>
+    <string name="BillingQty">Qty</string>
+    <string name="BillingAmt">Amount</string>
+    <string name="Bill_Summary">Bill Summary</string>
+    <string name="Payment_by">Payment by</string>
     <string-array name="payment_String_array">
         <item>Cash</item>
         <item>Debit/Credit card</item>
@@ -56,8 +56,9 @@
     <string name="dialog_title_Allocate">Allocate Table</string>
     <string name="error_table_no">Table Number is required</string>
     <string name="error_no_item_selected">You can not take empty request</string>
-    <string name ="BillDetails">Bill Details</string>
+    <string name="BillDetails">Bill Details</string>
     <string name="title_search_table">Search Table</string>
     <string name="title_search_cuisine">Search Cuisine/Category</string>
     <string name="btn_pay_now">Pay Now</string>
+    <string name="order_place_success">Order Place Successfully</string>
 </resources>

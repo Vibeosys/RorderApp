@@ -239,7 +239,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return user;
     }
 
-    public ArrayList<RestaurantTables> getTableRecords() {//changes
+    public ArrayList<RestaurantTables> getTableRecords(String where) {//changes
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         ArrayList<RestaurantTables> hotelTables = null;
@@ -249,9 +249,13 @@ public class DbRepository extends SQLiteOpenHelper {
             cursor = sqLiteDatabase.rawQuery("select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
                     " From r_tables as rs LEFT Join table_category as tc  On rs.TableCategoryId = tc.TableCategoryId" +
                     " Left Join table_transaction as tt on rs.tableId=tt.tableId" +
-                    " left join users as us on tt.userId=us.userId" +
-                    " ORder by rs.TableNo", null);
-
+                    " left join users as us on tt.userId=us.userId " + where+
+                    " ORder by rs.TableNo ", null);
+            Log.d(TAG,"## select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
+                    " From r_tables as rs LEFT Join table_category as tc  On rs.TableCategoryId = tc.TableCategoryId" +
+                    " Left Join table_transaction as tt on rs.tableId=tt.tableId" +
+                    " left join users as us on tt.userId=us.userId " + where+
+                    " ORder by rs.TableNo ");
             hotelTables = new ArrayList<>();
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -634,16 +638,17 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
-    public ArrayList<OrderMenuDTO> getOrderMenu() {
+    public ArrayList<OrderMenuDTO> getOrderMenu(String custId) {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         ArrayList<OrderMenuDTO> orderMenus = null;
         try {
+            String[] whereClause = new String[]{custId};
             sqLiteDatabase = getReadableDatabase();
-            cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType," +
-                    "menu.Image,menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle," +
-                    "menu.Price From menu Left Join menu_category " +
-                    "where menu.CategoryId=menu_category.CategoryId", null);
+            cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType,menu.Image,menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle," +
+                    "menu.Price ,(Select temp_order.Quantity from temp_order   where menu.MenuId=temp_order.MenuId and temp_order.CustId=?) as Quantity " +
+                    "From menu Left Join menu_category on menu.CategoryId=menu_category.CategoryId " +
+                    "left join temp_order on menu.MenuId=temp_order.MenuId", whereClause);
             orderMenus = new ArrayList<>();
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -661,7 +666,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         int iSpicy = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.IS_SPICY));
                         boolean isSpicy = iSpicy == 1 ? true : false;
                         double menuPrice = Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
-                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, 0, OrderMenuDTO.SHOW, isSpicy);
+                        int quantity = cursor.getInt(cursor.getColumnIndex("Quantity"));
+                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, quantity, OrderMenuDTO.SHOW, isSpicy);
                         //table.setJsonSync();
                         orderMenus.add(orderMenu);
                     } while (cursor.moveToNext());

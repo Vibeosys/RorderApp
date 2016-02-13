@@ -22,7 +22,7 @@ public class FragmentAllServing extends GridBaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.layout_all_table, container, false);
 
-        setGridAdapter(v,mDbRepository.getTableRecords());
+        setGridAdapter(v,mDbRepository.getTableRecords(""));
         return v;
     }
 }

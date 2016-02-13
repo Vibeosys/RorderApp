@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity
             txtTotalCount = (TextView) findViewById(R.id.txtCount);
             gridView = (GridView) findViewById(R.id.gridview);
             gridView.setOnItemClickListener(this);
-            hotelTableDTOs = mDbRepository.getTableRecords();
+            hotelTableDTOs = mDbRepository.getTableRecords("");
             adapter = new TableGridAdapter(getApplicationContext(), hotelTableDTOs);
             gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.refresh(mDbRepository.getTableRecords());
+        //adapter.refresh(mDbRepository.getTableRecords(""));
     }
 
     @Override
@@ -169,7 +169,7 @@ public class MainActivity extends BaseActivity
 
             @Override
             public boolean onQueryTextChange(String s) {
-                adapter.refresh(mDbRepository.getTableRecords());
+                adapter.refresh(mDbRepository.getTableRecords(""));
                 return false;
             }
         });
@@ -180,7 +180,7 @@ public class MainActivity extends BaseActivity
     public List<RestaurantTables> sortAdapter(int tableNo) {
         List<RestaurantTables> mHotelTables = new ArrayList<>();
 
-        for (RestaurantTables table : mDbRepository.getTableRecords()) {
+        for (RestaurantTables table : mDbRepository.getTableRecords("")) {
             if (table.getmTableNo() == tableNo) {
                 mHotelTables.add(table);
             }
@@ -307,7 +307,7 @@ public class MainActivity extends BaseActivity
 
                 mDbRepository.setOccupied(true, tableId);
                 uploadToServer(customer, tableTransactionDbDTO, tableId);
-                adapter.refresh(mDbRepository.getTableRecords());
+                adapter.refresh(mDbRepository.getTableRecords(""));
                 callToMenuIntent(tableNo, tableId, custid.toString());
             }
         });
@@ -324,9 +324,9 @@ public class MainActivity extends BaseActivity
         tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedTableString);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
 
-        /*String serializedTableTransaction=gson.toJson(tableTransaction);
+        String serializedTableTransaction = gson.toJson(tableTransaction);
         tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedTableTransaction);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);*/
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
     }
 
     @Override
@@ -349,19 +349,39 @@ public class MainActivity extends BaseActivity
             }
 
             if (btnCancelFlag) {
-                if (chkUnoccupied && selectedCategory != 0) {
-                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory, chkUnoccupied));
-                } else if (!chkUnoccupied && selectedCategory != 0) {
-                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), selectedCategory));
-                } else if (chkUnoccupied && selectedCategory <= 0) {
-                    adapter.refresh(new TableCategoryDTO().filterTable(mDbRepository.getTableRecords(), chkUnoccupied));
-                } else if (!chkUnoccupied && selectedCategory <= 0) {
-                    adapter.refresh(mDbRepository.getTableRecords());
+                String where = null;
+                if (chkMyservingFlag) {
+                    if (where == null) {
+                        where = " where tt.userId=" + mSessionManager.getUserId();
+                    } else {
+                        where = where + " and tt.userId=" + mSessionManager.getUserId();
+                    }
+
                 }
+                if (chkUnoccupied) {
+                    if (where == null) {
+                        where = " where rs.IsOccupied=0";
+                    } else {
+                        where = where + " and rs.IsOccupied=0";
+                    }
+
+                }
+                if (selectedCategory != -1 && selectedCategory!=0) {
+                    if (where == null) {
+                        where = " where rs.TableCategoryId=" + selectedCategory;
+                    } else {
+                        where = where + " and rs.TableCategoryId=" + selectedCategory;
+                    }
+
+                }
+                if (!chkMyservingFlag && !chkUnoccupied && selectedCategory == 0||selectedCategory==-1) {
+                    adapter.refresh(mDbRepository.getTableRecords(""));
+                }
+                adapter.refresh(mDbRepository.getTableRecords(where));
 
             } else {
                 Toast.makeText(getApplicationContext(), "All Filters are removed", Toast.LENGTH_SHORT).show();
-                adapter.refresh(mDbRepository.getTableRecords());
+                adapter.refresh(mDbRepository.getTableRecords(""));
             }
         } else {
 
