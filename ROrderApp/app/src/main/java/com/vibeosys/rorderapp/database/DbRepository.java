@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
+import com.vibeosys.rorderapp.data.ChefMenuDetailsDTO;
+import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.HotelTableDbDTO;
 import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
@@ -1377,5 +1379,96 @@ public class DbRepository extends SQLiteOpenHelper {
             }
         }
         return count != -1;
+    }
+    /*chef order header function*/
+    public ArrayList<ChefOrderDetailsDTO> getOrderHeadesInAsc() {
+        ArrayList<ChefOrderDetailsDTO> AscindingOrdres = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+
+            cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime,users.UserName from  orders left join users on orders.UserId =users.UserId where orders.OrderStatus=1 order by  orders.OrderTime Asc  ", null);
+            //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
+
+            if (cursor != null) {
+
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    do {
+
+
+
+                        String  orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
+                        int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
+                        String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                        // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
+                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo,userName);
+                        AscindingOrdres.add(chefOrderDetailsDTO);
+                    } while (cursor.moveToNext());
+                }
+            }
+            cursor.close();
+            sqLiteDatabase.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Log.e(TAG, "Error in ChefDb Headre" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+            return AscindingOrdres;
+        }
+    }
+
+
+
+
+
+    public ArrayList<ChefMenuDetailsDTO> getChefMenu(String orderId) {
+        ArrayList<ChefMenuDetailsDTO> menudetails = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            String[] whereClause = new String[]{String.valueOf(orderId)};
+            cursor = sqLiteDatabase.rawQuery("select order_details.OrderId,orders.OrderId,order_details.MenuId,menu.MenuTitle,order_details.OrderQuantity from orders inner join order_details on order_details.OrderId= orders.OrderId  inner join  menu on menu.MenuId = order_details.MenuId where order_details.OrderId =?", whereClause);
+            //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
+
+            if (cursor != null) {
+
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    do {
+
+
+                        int mMenuQty = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_QUANTITY));
+                        int mMenuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_ID));
+                        String mMenuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
+                        // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
+                        ChefMenuDetailsDTO chefMenuDetailsDTO = new ChefMenuDetailsDTO(mMenuId, mMenuName, mMenuQty);
+                        menudetails.add(chefMenuDetailsDTO);
+                    } while (cursor.moveToNext());
+                }
+            }
+            cursor.close();
+            sqLiteDatabase.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Log.e(TAG, "Error in ChefDb MenuLog" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+            return menudetails;
+        }
     }
 }

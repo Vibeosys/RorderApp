@@ -81,6 +81,10 @@
             android:theme="@android:style/Theme.Holo.NoActionBar"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity
+            android:name=".activities.ChefOrdersDisplayActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>
