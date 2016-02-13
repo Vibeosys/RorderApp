@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
+import com.vibeosys.rorderapp.activities.ChefOrdersDisplayActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.activities.TableFilterActivity;
@@ -39,6 +40,7 @@ import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
+import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.UserAuth;
@@ -75,6 +77,8 @@ public class MainActivity extends BaseActivity
         ContextWrapper ctw = new ContextWrapper(getApplicationContext());
         File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
         File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
+        Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+        startService(syncServiceIntent);
         if (!dbFile.exists()) {
             Intent selectRestoIntent = new Intent(getApplicationContext(), SelectRestaurantActivity.class);
             selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -82,6 +86,11 @@ public class MainActivity extends BaseActivity
             finish();
         } else if (!UserAuth.isUserLoggedIn()) {
             callLogin();
+        } else if (mSessionManager.getUserRollId() == 2) {
+            Intent selectRestoIntent = new Intent(getApplicationContext(), ChefOrdersDisplayActivity.class);
+            selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(selectRestoIntent);
+            finish();
         } else {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -94,8 +103,7 @@ public class MainActivity extends BaseActivity
                     overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                 }
             });
-          /*  Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-            startService(syncServiceIntent);*/
+
 
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -319,13 +327,14 @@ public class MainActivity extends BaseActivity
         String serializedJsonString = gson.toJson(customer);
         TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
+
         UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 1);
         String serializedTableString = gson.toJson(occupiedDTO);
         tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedTableString);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
 
         String serializedTableTransaction = gson.toJson(tableTransaction);
-        tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedTableTransaction);
+        tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
     }
 
@@ -366,7 +375,7 @@ public class MainActivity extends BaseActivity
                     }
 
                 }
-                if (selectedCategory != -1 && selectedCategory!=0) {
+                if (selectedCategory != -1 && selectedCategory != 0) {
                     if (where == null) {
                         where = " where rs.TableCategoryId=" + selectedCategory;
                     } else {
@@ -374,7 +383,7 @@ public class MainActivity extends BaseActivity
                     }
 
                 }
-                if (!chkMyservingFlag && !chkUnoccupied && selectedCategory == 0||selectedCategory==-1) {
+                if (!chkMyservingFlag && !chkUnoccupied && selectedCategory == 0 || selectedCategory == -1) {
                     adapter.refresh(mDbRepository.getTableRecords(""));
                 }
                 adapter.refresh(mDbRepository.getTableRecords(where));

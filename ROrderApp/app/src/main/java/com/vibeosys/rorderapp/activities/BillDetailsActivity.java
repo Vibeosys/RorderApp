@@ -78,6 +78,7 @@ public class BillDetailsActivity extends BaseActivity {
 
                 Intent i = new Intent(getApplicationContext(), BillPaymentOptionActivity.class);
                 i.putExtra("tableCustInfo", tableCommonInfoDTO);
+                i.putExtra("BillNo",mBillDetailsDTOs.getBillNo());
                 startActivity(i);
                 finish();
 

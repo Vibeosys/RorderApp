@@ -1,6 +1,12 @@
 package com.vibeosys.rorderapp.data;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by akshay on 08-02-2016.
@@ -15,6 +21,11 @@ public class TableTransactionDbDTO extends BaseDTO {
     private int occupancy;
 
     public TableTransactionDbDTO() {
+    }
+
+    public TableTransactionDbDTO(int tableId, String custId) {
+        this.tableId = tableId;
+        this.custId = custId;
     }
 
     public TableTransactionDbDTO(String custId, boolean isWaiting, Date arrivalTime, int occupancy) {
@@ -32,6 +43,7 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.arrivalTime = arrivalTime;
         this.occupancy = occupancy;
     }
+
     public TableTransactionDbDTO(int tableId, int userId, String custId, boolean isWaiting, Date arrivalTime) {
         this.tableId = tableId;
         this.userId = userId;
@@ -87,5 +99,21 @@ public class TableTransactionDbDTO extends BaseDTO {
 
     public void setOccupancy(int occupancy) {
         this.occupancy = occupancy;
+    }
+
+    public static List<TableTransactionDbDTO> deserializeTableTransaction(List<String> serializedStringList) {
+        Gson gson = new Gson();
+        ArrayList<TableTransactionDbDTO> objectList = new ArrayList<>();
+        try {
+
+            for (String serializedString : serializedStringList) {
+                TableTransactionDbDTO deserializeObject = gson.fromJson(serializedString, TableTransactionDbDTO.class);
+                objectList.add(deserializeObject);
+            }
+        } catch (Exception e) {
+            Log.d("TAG", "##" + e.toString());
+        }
+
+        return objectList;
     }
 }

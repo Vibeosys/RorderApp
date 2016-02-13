@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class TableJsonCollectionDTO {
     private ArrayList<String> mInsertJsonList;
     private ArrayList<String> mUpdateJsonList;
+    private ArrayList<String> mDeleteJsonList;
 
     public ArrayList<String> getInsertJsonList() {
         if (mInsertJsonList == null)
@@ -22,4 +23,11 @@ public class TableJsonCollectionDTO {
 
         return mUpdateJsonList;
     }
+
+    public ArrayList<String> getDeleteJsonList() {
+        if (mDeleteJsonList == null)
+            mDeleteJsonList = new ArrayList<>();
+        return mDeleteJsonList;
+    }
+
 }

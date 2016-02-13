@@ -213,6 +213,9 @@ public class ServerSyncManager
 
             if (tableData.getOperation().compareToIgnoreCase("update") == 0)
                 theTableData.get(theTableName).getUpdateJsonList().add(theTableValue);
+
+            if (tableData.getOperation().compareToIgnoreCase("delete") == 0)
+                theTableData.get(theTableName).getDeleteJsonList().add(theTableValue);
         }
 
         DbOperations dbOperations = new DbOperations(mDbRepository);
@@ -230,6 +233,13 @@ public class ServerSyncManager
             downloadResults.put(DbTableNameConstants.BILL_DETAILS, jsonInsertList.size());
             dbOperations.addOrUpdateBillDetails(jsonInsertList, tableValue.getUpdateJsonList());
             Log.d("TableDataDTO", "##" + DbTableNameConstants.BILL_DETAILS);
+        }
+        if (theTableData.containsKey(DbTableNameConstants.CUSTOMER)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.CUSTOMER);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.CUSTOMER, jsonInsertList.size());
+            dbOperations.addOrUpdateCustomerDetails(jsonInsertList, tableValue.getUpdateJsonList());
+            Log.d("TableDataDTO", "##" + DbTableNameConstants.CUSTOMER);
         }
         if (theTableData.containsKey(DbTableNameConstants.MENU)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.MENU);
@@ -274,6 +284,13 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.TABLE_CATEGORY, jsonInsertList.size());
             dbOperations.addOrUpdateTableCategory(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.containsKey(DbTableNameConstants.TABLE_TRANSACTION)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TABLE_TRANSACTION);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.TABLE_TRANSACTION, jsonInsertList.size());
+            dbOperations.addOrUpdateTableTransaction(jsonInsertList, tableValue.getUpdateJsonList(),tableValue.getDeleteJsonList());
+            Log.d("TableDataDTO", "##" + DbTableNameConstants.TABLE_TRANSACTION);
         }
         if (theTableData.containsKey(DbTableNameConstants.USER)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.USER);

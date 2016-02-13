@@ -4,6 +4,7 @@ import android.view.Menu;
 
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
+import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.HotelTableDbDTO;
 import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
 import com.vibeosys.rorderapp.data.MenuDbDTO;
@@ -11,6 +12,7 @@ import com.vibeosys.rorderapp.data.MenuTagsDbDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
+import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 
@@ -130,5 +132,25 @@ public class DbOperations {
         // Remove Comment after update schema will done
         //boolean isUpdated = dbRepository.updateUsers(userUpdates);
         return isInserted;// & isUpdated;
+    }
+
+    public boolean addOrUpdateCustomerDetails(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
+        List<CustomerDbDTO> customerInserts = CustomerDbDTO.deserializeCustomer(jsonInsertList);
+        List<CustomerDbDTO> customerUpdates = CustomerDbDTO.deserializeCustomer(updateJsonList);
+
+        boolean isInserted = dbRepository.insertListCustomerDetails(customerInserts);
+        boolean isUpdated = dbRepository.updateCustomer(customerUpdates);
+        return isInserted & isUpdated;
+    }
+
+    public boolean addOrUpdateTableTransaction(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList,ArrayList<String> delete) {
+        List<TableTransactionDbDTO> tableTransactionInserts = TableTransactionDbDTO.deserializeTableTransaction(jsonInsertList);
+        List<TableTransactionDbDTO> tableTransactionUpdates = TableTransactionDbDTO.deserializeTableTransaction(updateJsonList);
+        List<TableTransactionDbDTO> tableTransactionDelete=TableTransactionDbDTO.deserializeTableTransaction(delete);
+        boolean isInserted = dbRepository.insertTableTransactionList(tableTransactionInserts);
+        boolean isUpdated = dbRepository.updateTableTransactionList(tableTransactionUpdates);
+        boolean isDeleted=dbRepository.deleteTableTranscation(tableTransactionDelete);
+
+        return isInserted & isUpdated;
     }
 }

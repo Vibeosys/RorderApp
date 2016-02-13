@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,8 +21,8 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
@@ -42,8 +43,8 @@
         <activity
             android:name=".activities.TableMenusActivity"
             android:label="@string/title_activity_table_menus"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.BillSummeryActivity"
             android:label="@string/title_activity_table_menus"
@@ -59,32 +60,30 @@
         <activity
             android:name=".activities.TableOrderActivity"
             android:label="@string/order_summary"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".activities.BillDetailsActivity"
             android:label="@string/bill_details"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".activities.BillPaymentOptionActivity"
             android:label="@string/payment_option_screen"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".activities.AddCustomerActivity"
             android:label="@string/payment_option_screen"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".activities.CustomerFeedBackActivity"
-            android:theme="@android:style/Theme.Holo.NoActionBar"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
         <activity
             android:name=".activities.ChefOrdersDisplayActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
+
+        <service
+            android:name=".service.SyncService"
+            android:exported="false" />
     </application>
 
 </manifest>

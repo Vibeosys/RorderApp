@@ -21,6 +21,7 @@ import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
+import com.vibeosys.rorderapp.data.PaymentModeDbDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
@@ -251,12 +252,12 @@ public class DbRepository extends SQLiteOpenHelper {
             cursor = sqLiteDatabase.rawQuery("select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
                     " From r_tables as rs LEFT Join table_category as tc  On rs.TableCategoryId = tc.TableCategoryId" +
                     " Left Join table_transaction as tt on rs.tableId=tt.tableId" +
-                    " left join users as us on tt.userId=us.userId " + where+
+                    " left join users as us on tt.userId=us.userId " + where +
                     " ORder by rs.TableNo ", null);
-            Log.d(TAG,"## select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
+            Log.d(TAG, "## select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
                     " From r_tables as rs LEFT Join table_category as tc  On rs.TableCategoryId = tc.TableCategoryId" +
                     " Left Join table_transaction as tt on rs.tableId=tt.tableId" +
-                    " left join users as us on tt.userId=us.userId " + where+
+                    " left join users as us on tt.userId=us.userId " + where +
                     " ORder by rs.TableNo ");
             hotelTables = new ArrayList<>();
             if (cursor != null) {
@@ -1380,6 +1381,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count != -1;
     }
+
     /*chef order header function*/
     public ArrayList<ChefOrderDetailsDTO> getOrderHeadesInAsc() {
         ArrayList<ChefOrderDetailsDTO> AscindingOrdres = new ArrayList<>();
@@ -1398,12 +1400,11 @@ public class DbRepository extends SQLiteOpenHelper {
                     do {
 
 
-
-                        String  orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
+                        String orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo,userName);
+                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName);
                         AscindingOrdres.add(chefOrderDetailsDTO);
                     } while (cursor.moveToNext());
                 }
@@ -1424,9 +1425,6 @@ public class DbRepository extends SQLiteOpenHelper {
             return AscindingOrdres;
         }
     }
-
-
-
 
 
     public ArrayList<ChefMenuDetailsDTO> getChefMenu(String orderId) {
@@ -1470,5 +1468,189 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             return menudetails;
         }
+    }
+
+    public boolean insertListCustomerDetails(List<CustomerDbDTO> customer) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            for (CustomerDbDTO customerDbDTO : customer) {
+                contentValues = new ContentValues();
+                contentValues.put(SqlContract.SqlCustomer.CUST_ID, customerDbDTO.getCustId());
+                contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customerDbDTO.getCustName());
+                count = sqLiteDatabase.insert(SqlContract.SqlCustomer.TABLE_NAME, null, contentValues);
+                contentValues.clear();
+                Log.d(TAG, "##Customer is added successfully" + customerDbDTO.getCustId());
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at Customer" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public boolean updateCustomer(List<CustomerDbDTO> customerUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            for (CustomerDbDTO customerDbDTO : customerUpdates) {
+                String[] where = new String[]{customerDbDTO.getCustId()};
+                contentValues = new ContentValues();
+                if (customerDbDTO.getCustName() != null)
+                    contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customerDbDTO.getCustName());
+                count = sqLiteDatabase.update(SqlContract.SqlCustomer.TABLE_NAME, contentValues,
+                        SqlContract.SqlCustomer.CUST_ID + "=", where);
+                contentValues.clear();
+                Log.d(TAG, "##Customer is Updated successfully" + customerDbDTO.getCustId());
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at Customer" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public boolean insertTableTransactionList(List<TableTransactionDbDTO> tableTransactionInserts) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            for (TableTransactionDbDTO tableTransaction : tableTransactionInserts) {
+                contentValues = new ContentValues();
+                contentValues.put(SqlContract.SqlTableTransaction.TABLE_ID, tableTransaction.getTableId());
+                contentValues.put(SqlContract.SqlTableTransaction.USER_ID, tableTransaction.getUserId());
+                contentValues.put(SqlContract.SqlTableTransaction.CUST_ID, tableTransaction.getCustId());
+                contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
+                contentValues.put(SqlContract.SqlTableTransaction.ARRIVAL_TIME, String.valueOf(tableTransaction.getArrivalTime()));
+                contentValues.put(SqlContract.SqlTableTransaction.OCCUPANCY, tableTransaction.getOccupancy());
+                count = sqLiteDatabase.insert(SqlContract.SqlTableTransaction.TABLE_NAME, null, contentValues);
+                contentValues.clear();
+                Log.d(TAG, "##Table Transaction is added successfully" + tableTransaction.getCustId());
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at Table Transaction" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public boolean updateTableTransactionList(List<TableTransactionDbDTO> tableTransactionUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+
+
+        long count = -1;
+        try {
+            for (TableTransactionDbDTO tableTransaction : tableTransactionUpdates) {
+                String[] whereClause = new String[]{tableTransaction.getCustId()};
+                sqLiteDatabase = getWritableDatabase();
+                contentValues = new ContentValues();
+                if (tableTransaction.getTableId() != 0)
+                    contentValues.put(SqlContract.SqlTableTransaction.TABLE_ID, tableTransaction.getTableId());
+                if (tableTransaction.getUserId() != 0)
+                    contentValues.put(SqlContract.SqlTableTransaction.USER_ID, tableTransaction.getUserId());
+                contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
+                count = sqLiteDatabase.update(SqlContract.SqlTableTransaction.TABLE_NAME, contentValues,
+                        SqlContract.SqlTableTransaction.CUST_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "##Table Transaction is Updated successfully" + tableTransaction.getCustId());
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at Table Transaction" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public ArrayList<PaymentModeDbDTO> getPaymentList() {
+        ArrayList<PaymentModeDbDTO> paymentModeList = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+
+            cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlPaymentMode.TABLE_NAME,
+                    null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+
+                    do {
+                        int paymentModeId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlPaymentMode.PAYMENT_MODE_ID));
+                        String paymentModeTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlPaymentMode.PAYMENT_MODE_TITLE));
+                        int isactive = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlPaymentMode.ACTIVE));
+                        boolean active = isactive == 0 ? false : true;
+                        PaymentModeDbDTO paymentModeDbDTO = new PaymentModeDbDTO(paymentModeId, paymentModeTitle, active);
+                        paymentModeList.add(paymentModeDbDTO);
+                    } while (cursor.moveToNext());
+                }
+            }
+
+            cursor.close();
+            sqLiteDatabase.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error at getWaitingList table " + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+        }
+        return paymentModeList;
+    }
+
+    public boolean deleteTableTranscation(List<TableTransactionDbDTO> tableTransactionDelete) {
+
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+        try {
+            for (TableTransactionDbDTO table : tableTransactionDelete) {
+                String[] whereClasuse = new String[]{table.getCustId(), String.valueOf(table.getTableId())};
+                count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
+                        SqlContract.SqlTableTransaction.CUST_ID + "=? AND"
+                                + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
+                contentValues.clear();
+                sqLiteDatabase.close();
+                Log.d(TAG, "## Data deledted from transcation table");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            sqLiteDatabase.close();
+            Log.d(TAG, "## Data not deledted from transcation table");
+        } finally {
+            sqLiteDatabase.close();
+        }
+        return count != -1;
     }
 }

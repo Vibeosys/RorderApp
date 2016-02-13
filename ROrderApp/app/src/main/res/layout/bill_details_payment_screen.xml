@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_margin="4dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="4dp"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22dp"
         android:padding="2dp"
-        android:text="@string/Payment_by"/>
+        android:text="@string/Payment_by"
+        android:textSize="22dp" />
 
-   <Spinner
-       android:id="@+id/paymentBy"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:background="@drawable/billing_spineer_border">
+    <Spinner
+        android:id="@+id/paymentBy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/billing_spineer_border"
+        android:drawSelectorOnTop="true">
 
-   </Spinner>
+    </Spinner>
+
     <Button
         android:id="@+id/closeTableBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Payment_close"
-        android:gravity="center"
         android:layout_margin="4dp"
         android:layout_marginTop="4dp"
-        android:textColor="@color/White"
-        android:background="@drawable/button_custom"/>
+        android:background="@drawable/button_custom"
+        android:gravity="center"
+        android:text="@string/Payment_close"
+        android:textColor="@color/White" />
 </LinearLayout>

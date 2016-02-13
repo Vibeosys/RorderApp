@@ -46,9 +46,11 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
 
                     if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
                         mServerSyncManager.syncDataWithServer(false);
+                    Log.d("SyncService", "##In service");
+
 
                 } catch (Exception e) {
-                    Log.e("SyncService", "Error occurred in background service " + e.toString());
+                    Log.e("SyncService", "##Error occurred in background service " + e.toString());
                 }
             }
         }
