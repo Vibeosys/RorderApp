@@ -14,6 +14,12 @@ public class WaitingUserDTO {
     public WaitingUserDTO() {
     }
 
+    public WaitingUserDTO(String mCustomerId, int mOccupancy, String mCustomerName) {
+        this.mCustomerId = mCustomerId;
+        this.mOccupancy = mOccupancy;
+        this.mCustomerName = mCustomerName;
+    }
+
     public WaitingUserDTO(String mCustomerId, int mOccupancy, Date mArrivalTime, String mCustomerName) {
         this.mCustomerId = mCustomerId;
         this.mOccupancy = mOccupancy;

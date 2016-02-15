@@ -13,21 +13,22 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_margin="25dp"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
+        android:layout_margin="25dp"
         android:text="Select your restaurent"
         android:textColor="@color/White"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
-   <Spinner
-        android:id="@+id/spnRestaurant"
+    <EditText
+        android:id="@+id/txtRestaurantId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:drawSelectorOnTop="true"
-        android:background="@drawable/border_spinner"
-        />
+        android:hint="@string/hint_restaurant_id"
+        android:inputType="number"
+        android:textColor="@color/White"
+        android:textColorHint="@color/White" />
 
     <!--<ListView
         android:layout_width="wrap_content"
@@ -38,9 +39,9 @@
 
     <Button
         android:id="@+id/btnOk"
-        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:background="@drawable/button_custom"
         android:text="Ok"
         android:textColor="@color/White" />

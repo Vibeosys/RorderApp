@@ -648,10 +648,13 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             String[] whereClause = new String[]{custId};
             sqLiteDatabase = getReadableDatabase();
-            cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType,menu.Image,menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle," +
-                    "menu.Price ,(Select temp_order.Quantity from temp_order   where menu.MenuId=temp_order.MenuId and temp_order.CustId=?) as Quantity " +
-                    "From menu Left Join menu_category on menu.CategoryId=menu_category.CategoryId " +
-                    "left join temp_order on menu.MenuId=temp_order.MenuId", whereClause);
+            cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType,menu.Image," +
+                    "menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle," +
+                    "menu.AvailabilityStatus,menu.Active,menu.Price ,(Select temp_order.Quantity " +
+                    "from temp_order   where menu.MenuId=temp_order.MenuId and temp_order.CustId=?)" +
+                    " as Quantity From menu Left Join menu_category on menu.CategoryId=" +
+                    "menu_category.CategoryId left join temp_order on menu.MenuId=temp_order.MenuId " +
+                    "where menu.Active=1", whereClause);
             orderMenus = new ArrayList<>();
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -670,7 +673,9 @@ public class DbRepository extends SQLiteOpenHelper {
                         boolean isSpicy = iSpicy == 1 ? true : false;
                         double menuPrice = Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
                         int quantity = cursor.getInt(cursor.getColumnIndex("Quantity"));
-                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, quantity, OrderMenuDTO.SHOW, isSpicy);
+                        int iAvail = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.AVAIL_STATUS));
+                        boolean isAvail = iAvail == 1 ? true : false;
+                        OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, quantity, OrderMenuDTO.SHOW, isSpicy, isAvail);
                         //table.setJsonSync();
                         orderMenus.add(orderMenu);
                     } while (cursor.moveToNext());
@@ -718,11 +723,13 @@ public class DbRepository extends SQLiteOpenHelper {
                 count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);
             else if (qty == 0)
 
-                count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME, SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
-                        + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+                count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
+                        SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
+                                + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
             else
-                count = sqLiteDatabase.update(SqlContract.SqlTempOrder.TABLE_NAME, contentValues, SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
-                        + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+                count = sqLiteDatabase.update(SqlContract.SqlTempOrder.TABLE_NAME, contentValues,
+                        SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
+                                + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
 
             contentValues.clear();
             sqLiteDatabase.close();
@@ -746,7 +753,8 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo), custId};
             count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
-                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO + "=? AND " + SqlContract.SqlTempOrder.CUST_ID + "=?",
+                    SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
+                            + "=? AND " + SqlContract.SqlTempOrder.CUST_ID + "=?",
                     whereClause);
             // contentValues.clear();
             sqLiteDatabase.close();
@@ -794,7 +802,8 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
 
-            cursor = sqLiteDatabase.rawQuery("select * from orders where " + SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID + "=?", whereClause);
+            cursor = sqLiteDatabase.rawQuery("select * from orders where " +
+                    SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID + "=?", whereClause);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
@@ -986,7 +995,7 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTableTransaction.USER_ID, tableTransaction.getUserId());
             contentValues.put(SqlContract.SqlTableTransaction.CUST_ID, tableTransaction.getCustId());
             contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
-            contentValues.put(SqlContract.SqlTableTransaction.ARRIVAL_TIME, String.valueOf(tableTransaction.getArrivalTime()));
+            //contentValues.put(SqlContract.SqlTableTransaction.ARRIVAL_TIME, String.valueOf(tableTransaction.getArrivalTime()));
             contentValues.put(SqlContract.SqlTableTransaction.OCCUPANCY, tableTransaction.getOccupancy());
             count = sqLiteDatabase.insert(SqlContract.SqlTableTransaction.TABLE_NAME, null, contentValues);
             contentValues.clear();
@@ -1118,7 +1127,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             String[] whereClasuse = new String[]{(custId), String.valueOf(tableId)};
             count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
-                    SqlContract.SqlTableTransaction.CUST_ID + "=? AND"
+                    SqlContract.SqlTableTransaction.CUST_ID + "=? AND "
                             + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
             contentValues.clear();
             sqLiteDatabase.close();
@@ -1203,7 +1212,8 @@ public class DbRepository extends SQLiteOpenHelper {
         String whereClause[] = new String[]{custId, String.valueOf(tableId)};
         try {
             sqLiteDatabase = getWritableDatabase();
-            cursor = sqLiteDatabase.rawQuery("select temp_order.MenuId from temp_order where temp_order.CustId =? and temp_order.TableId =?", whereClause);
+            cursor = sqLiteDatabase.rawQuery("select temp_order.MenuId from temp_order where " +
+                    "temp_order.CustId =? and temp_order.TableId =?", whereClause);
             count = cursor.getCount();
         } catch (Exception e) {
 
@@ -1248,14 +1258,22 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues = new ContentValues();
             for (BillDbDTO bill : billUpdates) {
                 String[] whereClause = new String[]{String.valueOf(bill.getBillNo())};
-                contentValues.put(SqlContract.SqlBill.BILL_DATE, bill.getBillDate().toString());
-                contentValues.put(SqlContract.SqlBill.BILL_TIME, bill.getBillTime().toString());
-                contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmt());
-                contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmt());
-                contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmt());
-                contentValues.put(SqlContract.SqlBill.CREATED_DATE, bill.getCreatedDate().toString());
-                contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
-                contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
+                if (bill.getBillDate() != null)
+                    contentValues.put(SqlContract.SqlBill.BILL_DATE, bill.getBillDate().toString());
+                if (bill.getBillTime() != null)
+                    contentValues.put(SqlContract.SqlBill.BILL_TIME, bill.getBillTime().toString());
+                if (bill.getNetAmt() != 0)
+                    contentValues.put(SqlContract.SqlBill.NET_AMOUNT, bill.getNetAmt());
+                if (bill.getTotalTaxAmt() != 0)
+                    contentValues.put(SqlContract.SqlBill.TOATL_TAX_AMT, bill.getTotalTaxAmt());
+                if (bill.getTotalPayAmt() != 0)
+                    contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmt());
+                if (bill.getCreatedDate() != null)
+                    contentValues.put(SqlContract.SqlBill.CREATED_DATE, bill.getCreatedDate().toString());
+                if (bill.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
+                if (bill.getUserId() != 0)
+                    contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
                 count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues, SqlContract.SqlBill.BILL_NO + "=?", whereClause);
                 contentValues.clear();
                 Log.d(TAG, "## Bill is Updated Successfully" + bill.getBillNo());
@@ -1278,10 +1296,14 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues = new ContentValues();
             for (BillDetailsDbDTO billDetails : billDetailUpdates) {
                 String[] whereClause = new String[]{String.valueOf(billDetails.getAutoId())};
-                contentValues.put(SqlContract.SqlBillDetails.ORDER_ID, billDetails.getOrderId());
-                contentValues.put(SqlContract.SqlBillDetails.BILL_NO, billDetails.getBillNo());
-                contentValues.put(SqlContract.SqlBillDetails.CREATED_DATE, billDetails.getCreateDate().toString());
-                contentValues.put(SqlContract.SqlBillDetails.UPDATED_DATE, billDetails.getUpdatedDate().toString());
+                if (billDetails.getOrderId() != null && billDetails.getOrderId().isEmpty())
+                    contentValues.put(SqlContract.SqlBillDetails.ORDER_ID, billDetails.getOrderId());
+                if (billDetails.getBillNo() != 0)
+                    contentValues.put(SqlContract.SqlBillDetails.BILL_NO, billDetails.getBillNo());
+                if (billDetails.getCreateDate() != null)
+                    contentValues.put(SqlContract.SqlBillDetails.CREATED_DATE, billDetails.getCreateDate().toString());
+                if (billDetails.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlBillDetails.UPDATED_DATE, billDetails.getUpdatedDate().toString());
                 count = sqLiteDatabase.update(SqlContract.SqlBillDetails.TABLE_NAME, contentValues, SqlContract.SqlBillDetails.AUTO_ID + "=?", whereClause);
                 contentValues.clear();
                 Log.d(TAG, "## Bill Details is Updated successfully" + billDetails.getBillNo());
@@ -1508,7 +1530,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 if (customerDbDTO.getCustName() != null)
                     contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customerDbDTO.getCustName());
                 count = sqLiteDatabase.update(SqlContract.SqlCustomer.TABLE_NAME, contentValues,
-                        SqlContract.SqlCustomer.CUST_ID + "=", where);
+                        SqlContract.SqlCustomer.CUST_ID + "=?", where);
                 contentValues.clear();
                 Log.d(TAG, "##Customer is Updated successfully" + customerDbDTO.getCustId());
             }
@@ -1627,7 +1649,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return paymentModeList;
     }
 
-    public boolean deleteTableTranscation(List<TableTransactionDbDTO> tableTransactionDelete) {
+    public boolean deleteTableTransaction(List<TableTransactionDbDTO> tableTransactionDelete) {
 
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
@@ -1637,19 +1659,231 @@ public class DbRepository extends SQLiteOpenHelper {
             for (TableTransactionDbDTO table : tableTransactionDelete) {
                 String[] whereClasuse = new String[]{table.getCustId(), String.valueOf(table.getTableId())};
                 count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
-                        SqlContract.SqlTableTransaction.CUST_ID + "=? AND"
+                        SqlContract.SqlTableTransaction.CUST_ID + "=? AND "
                                 + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
                 contentValues.clear();
                 sqLiteDatabase.close();
-                Log.d(TAG, "## Data deledted from transcation table");
+                Log.d(TAG, "## Data deleted from transaction table");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             sqLiteDatabase.close();
-            Log.d(TAG, "## Data not deledted from transcation table");
+            Log.d(TAG, "## Data not deleted from transaction table");
         } finally {
             sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateRTables(List<HotelTableDbDTO> rTableUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (HotelTableDbDTO dbTable : rTableUpdates) {
+                String[] whereClause = new String[]{String.valueOf(dbTable.getTableId())};
+                if (dbTable.getTableNo() != 0)
+                    contentValues.put(SqlContract.SqlHotelTable.TABLE_NO, dbTable.getTableNo());
+                if (dbTable.getTableCategoryId() != 0)
+                    contentValues.put(SqlContract.SqlHotelTable.TABLE_CATEGORY, dbTable.getTableCategoryId());
+                if (dbTable.getCapacity() != 0)
+                    contentValues.put(SqlContract.SqlHotelTable.CAPACITY, dbTable.getCapacity());
+                if (dbTable.getCreatedDate() != null)
+                    contentValues.put(SqlContract.SqlHotelTable.CREATED_DATE, "" + dbTable.getCreatedDate());
+                if (dbTable.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlHotelTable.UPDATED_DATE, "" + dbTable.getUpdatedDate());
+                contentValues.put(SqlContract.SqlHotelTable.IS_OCCUPIED, dbTable.isOccupied());
+
+                count = sqLiteDatabase.update(SqlContract.SqlHotelTable.TABLE_NAME, contentValues,
+                        SqlContract.SqlHotelTable.TABLE_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Table is updated Successfully");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error while updating Tables " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateTableCategories(List<TableCategoryDbDTO> tableCategoryUpdate) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (TableCategoryDbDTO tableCategory : tableCategoryUpdate) {
+                String[] whereClause = new String[]{String.valueOf(tableCategory.getTableCategoryId())};
+
+                if (tableCategory.getCategoryTitle() != null && !tableCategory.getCategoryTitle().isEmpty())
+                    contentValues.put(SqlContract.SqlTableCategory.CATEGORY_TITLE, tableCategory.getCategoryTitle());
+                if (tableCategory.getImage() != null && !tableCategory.getImage().isEmpty())
+                    contentValues.put(SqlContract.SqlTableCategory.IMAGE, tableCategory.getImage());
+                if (tableCategory.getCreatedDate() != null)
+                    contentValues.put(SqlContract.SqlTableCategory.CREATED_DATE, String.valueOf(tableCategory.getCreatedDate()));
+                if (tableCategory.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlTableCategory.UPDATED_DATE, String.valueOf(tableCategory.getUpdatedDate()));
+
+                count = sqLiteDatabase.update(SqlContract.SqlTableCategory.TABLE_NAME, contentValues
+                        , SqlContract.SqlTableCategory.TABLE_CATEGORY_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Table Category is updated successfully" + tableCategory.getTableCategoryId());
+
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at updating table" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public boolean updateMenus(List<MenuDbDTO> menuUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (MenuDbDTO menu : menuUpdates) {
+                String[] whereClause = new String[]{String.valueOf(menu.getMenuId())};
+                if (menu.getMenuTitle() != null && menu.getMenuTitle().isEmpty())
+                    contentValues.put(SqlContract.SqlMenu.MENU_TITLE, menu.getMenuTitle());
+                if (menu.getImage() != null)
+                    contentValues.put(SqlContract.SqlMenu.IMAGE, menu.getImage());
+                if (menu.getPrice() != 0)
+                    contentValues.put(SqlContract.SqlMenu.PRICE, menu.getPrice());
+                if (menu.getIngredients() != null && menu.getIngredients().isEmpty())
+                    contentValues.put(SqlContract.SqlMenu.INGREDIENTS, menu.getIngredients());
+                if (menu.getTags() != null && menu.getTags().isEmpty())
+                    contentValues.put(SqlContract.SqlMenu.TAGS, menu.getTags());
+                contentValues.put(SqlContract.SqlMenu.AVAIL_STATUS, menu.isAvailabilityStatus());
+                contentValues.put(SqlContract.SqlMenu.ACTIVE, menu.isActive());
+                contentValues.put(SqlContract.SqlMenu.FOOD_TYPE, menu.isFoodType());
+                if (menu.getCreatedDate() != null)
+                    contentValues.put(SqlContract.SqlMenu.CREATED_DATE, menu.getCreatedDate().toString());
+                if (menu.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlMenu.UPDATED_DATE, menu.getUpdatedDate().toString());
+                if (menu.getCategoryId() != 0)
+                    contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
+                contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.isSpicy());
+                count = sqLiteDatabase.update(SqlContract.SqlMenu.TABLE_NAME, contentValues,
+                        SqlContract.SqlMenu.MENU_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Menu is Updated successfully" + menu.getMenuId());
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "## Error at Updated Menu" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateMenuCategory(List<MenuCateoryDbDTO> menuCategoryUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (MenuCateoryDbDTO menuCateory : menuCategoryUpdates) {
+                String[] whereClause = new String[]{String.valueOf(menuCateory.getCategoryId())};
+                if (menuCateory.getCategoryTitle() != null && menuCateory.getCategoryTitle().isEmpty())
+                    contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_TITLE, menuCateory.getCategoryTitle());
+                if (menuCateory.getCategoryImage() != null && menuCateory.getCategoryImage().isEmpty())
+                    contentValues.put(SqlContract.SqlMenuCategory.CATEGORY_IMG, menuCateory.getCategoryImage());
+
+                contentValues.put(SqlContract.SqlMenuCategory.ACTIVE, menuCateory.isActive());
+                if (menuCateory.getCreatedDate() != null)
+                    contentValues.put(SqlContract.SqlMenuCategory.CREATED_DATE, menuCateory.getCreatedDate().toString());
+                if (menuCateory.getUpdatedDate() != null)
+                    contentValues.put(SqlContract.SqlMenuCategory.UPDATED_DATE, menuCateory.getUpdatedDate().toString());
+                count = sqLiteDatabase.update(SqlContract.SqlMenuCategory.TABLE_NAME, contentValues,
+                        SqlContract.SqlMenuCategory.CATEGORY_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Menu Category is updated successfully" + menuCateory.getCategoryId());
+
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at updated Menu Category" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public boolean updateMenuTags(List<MenuTagsDbDTO> menuTagUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (MenuTagsDbDTO menuTag : menuTagUpdates) {
+                String[] whereClause = new String[]{String.valueOf(menuTag.getTagId())};
+                if (menuTag.getTagTitle() != null && menuTag.getTagTitle().isEmpty())
+                    contentValues.put(SqlContract.SqlMenuTags.TAG_TITLE, menuTag.getTagTitle());
+                count = sqLiteDatabase.update(SqlContract.SqlMenuTags.TABLE_NAME, contentValues,
+                        SqlContract.SqlMenuTags.TAG_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## Menu Tag is updated successfully" + menuTag.getTagId());
+
+            }
+
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at update Menu Tag" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
+    }
+
+    public boolean updateUsers(List<UserDbDTO> userUpdates) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            contentValues = new ContentValues();
+            for (UserDbDTO dbUser : userUpdates) {
+                String[] whereClause = new String[]{String.valueOf(dbUser.getUserId())};
+                if (dbUser.getUserName() != null && dbUser.getUserName().isEmpty())
+                    contentValues.put(SqlContract.SqlUser.USER_NAME, dbUser.getUserName());
+                contentValues.put(SqlContract.SqlUser.ACTIVE, dbUser.isActive());
+                if (dbUser.getRoleId() != 0)
+                    contentValues.put(SqlContract.SqlUser.ROLE_ID, dbUser.getRoleId());
+                if (dbUser.getRestaurantId() != 0)
+                    contentValues.put(SqlContract.SqlUser.RESTAURANTID, dbUser.getRestaurantId());
+                count = sqLiteDatabase.update(SqlContract.SqlUser.TABLE_NAME, contentValues,
+                        SqlContract.SqlUser.USER_ID + "=?", whereClause);
+                contentValues.clear();
+                Log.d(TAG, "## User is update Successfully");
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while update users " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null)
+                sqLiteDatabase.close();
         }
         return count != -1;
     }

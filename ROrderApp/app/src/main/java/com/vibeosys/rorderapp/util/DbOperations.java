@@ -1,7 +1,5 @@
 package com.vibeosys.rorderapp.util;
 
-import android.view.Menu;
-
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
@@ -55,10 +53,10 @@ public class DbOperations {
         List<MenuDbDTO> menuUpdates = MenuDbDTO.deserializeMenu(updateJsonList);
 
         boolean isInserted = dbRepository.insertMenus(menuInserts);
-        // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateDestinations(menuUpdates);
-        //return isInserted & isUpdated;
-        return isInserted;
+
+        boolean isUpdated = dbRepository.updateMenus(menuUpdates);
+        return isInserted & isUpdated;
+
     }
 
     public boolean addOrUpdateMenuCategory(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -67,10 +65,8 @@ public class DbOperations {
         List<MenuCateoryDbDTO> menuCategoryUpdates = MenuCateoryDbDTO.deserializeMenuCateory(updateJsonList);
 
         boolean isInserted = dbRepository.insertMenuCategory(menuCategoryInserts);
-        // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateMenuCategory(menuCategoryUpdates);
-        //return isInserted & isUpdated;
-        return isInserted;
+        boolean isUpdated = dbRepository.updateMenuCategory(menuCategoryUpdates);
+        return isInserted & isUpdated;
     }
 
     public boolean addOrUpdateMenuTags(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -78,9 +74,8 @@ public class DbOperations {
         List<MenuTagsDbDTO> menuTagUpdates = MenuTagsDbDTO.deserializeMenuTag(updateJsonList);
 
         boolean isInserted = dbRepository.insertMenuTags(menuTagInserts);
-        // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateMenuTags(menuTagUpdates);
-        return isInserted;// & isUpdated;
+        boolean isUpdated = dbRepository.updateMenuTags(menuTagUpdates);
+        return isInserted & isUpdated;
     }
 
     public boolean addOrUpdateOrderDetails(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -88,9 +83,9 @@ public class DbOperations {
         List<OrderDetailsDbDTO> orderDetailUpdates = OrderDetailsDbDTO.deserializeOrderDetail(updateJsonList);
 
         boolean isInserted = dbRepository.insertOrderDetails(orderDetailInserts);
-        // Remove Comment after update schema will done
+
         boolean isUpdated = dbRepository.updateOrderDetails(orderDetailUpdates);
-        return isInserted;// & isUpdated;
+        return isInserted & isUpdated;
     }
 
     public boolean addOrUpdateOrder(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -108,9 +103,9 @@ public class DbOperations {
         List<HotelTableDbDTO> rTableUpdates = HotelTableDbDTO.deserializeHotelTables(updateJsonList);
 
         boolean isInserted = dbRepository.insertTables(rTableInserts);
-        // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateRTables(rTableUpdates);
-        return isInserted;// & isUpdated;
+
+        boolean isUpdated = dbRepository.updateRTables(rTableUpdates);
+        return isInserted & isUpdated;
     }
 
     public boolean addOrUpdateTableCategory(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -118,9 +113,9 @@ public class DbOperations {
         List<TableCategoryDbDTO> tableCategoryUpdate = TableCategoryDbDTO.deserializeTableCateory(updateJsonList);
 
         boolean isInserted = dbRepository.insertTableCategories(tableCategoryInsert);
-        // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateTableCategories(tableCategoryUpdate);
-        return isInserted;// & isUpdated;
+
+        boolean isUpdated = dbRepository.updateTableCategories(tableCategoryUpdate);
+        return isInserted & isUpdated;
     }
 
     public boolean addOrUpdateUser(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -129,9 +124,8 @@ public class DbOperations {
         List<UserDbDTO> userUpdates = UserDbDTO.deserializeUser(updateJsonList);
 
         boolean isInserted = dbRepository.insertUsers(userInserts);
-        // Remove Comment after update schema will done
-        //boolean isUpdated = dbRepository.updateUsers(userUpdates);
-        return isInserted;// & isUpdated;
+        boolean isUpdated = dbRepository.updateUsers(userUpdates);
+        return isInserted & isUpdated;
     }
 
     public boolean addOrUpdateCustomerDetails(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
@@ -149,7 +143,7 @@ public class DbOperations {
         List<TableTransactionDbDTO> tableTransactionDelete=TableTransactionDbDTO.deserializeTableTransaction(delete);
         boolean isInserted = dbRepository.insertTableTransactionList(tableTransactionInserts);
         boolean isUpdated = dbRepository.updateTableTransactionList(tableTransactionUpdates);
-        boolean isDeleted=dbRepository.deleteTableTranscation(tableTransactionDelete);
+        boolean isDeleted=dbRepository.deleteTableTransaction(tableTransactionDelete);
 
         return isInserted & isUpdated;
     }

@@ -16,7 +16,7 @@ public class TableTransactionDbDTO extends BaseDTO {
     private int tableId;
     private int userId;
     private String custId;
-    private boolean isWaiting;
+    private int isWaiting;
     private Date arrivalTime;
     private int occupancy;
 
@@ -28,14 +28,20 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.custId = custId;
     }
 
-    public TableTransactionDbDTO(String custId, boolean isWaiting, Date arrivalTime, int occupancy) {
+    public TableTransactionDbDTO(String custId, int isWaiting, int occupancy) {
+        this.custId = custId;
+        this.isWaiting = isWaiting;
+        this.occupancy = occupancy;
+    }
+
+    public TableTransactionDbDTO(String custId, int isWaiting, Date arrivalTime, int occupancy) {
         this.custId = custId;
         this.isWaiting = isWaiting;
         this.arrivalTime = arrivalTime;
         this.occupancy = occupancy;
     }
 
-    public TableTransactionDbDTO(int tableId, int userId, String custId, boolean isWaiting, Date arrivalTime, int occupancy) {
+    public TableTransactionDbDTO(int tableId, int userId, String custId, int isWaiting, Date arrivalTime, int occupancy) {
         this.tableId = tableId;
         this.userId = userId;
         this.custId = custId;
@@ -44,7 +50,7 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.occupancy = occupancy;
     }
 
-    public TableTransactionDbDTO(int tableId, int userId, String custId, boolean isWaiting, Date arrivalTime) {
+    public TableTransactionDbDTO(int tableId, int userId, String custId, int isWaiting, Date arrivalTime) {
         this.tableId = tableId;
         this.userId = userId;
         this.custId = custId;
@@ -77,11 +83,11 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.custId = custId;
     }
 
-    public boolean isWaiting() {
+    public int isWaiting() {
         return isWaiting;
     }
 
-    public void setIsWaiting(boolean isWaiting) {
+    public void setIsWaiting(int isWaiting) {
         this.isWaiting = isWaiting;
     }
 

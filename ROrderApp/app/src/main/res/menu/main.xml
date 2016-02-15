@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-   <!-- <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />-->
+    <!-- <item
+         android:id="@+id/action_settings"
+         android:orderInCategory="100"
+         android:title="@string/action_settings"
+         app:showAsAction="never" />-->
     <item
         android:id="@+id/search"
-        android:title="@string/search_table"
         android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
-        app:showAsAction="collapseActionView|ifRoom"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        android:title="@string/search_table"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always" />
     <item
         android:id="@+id/filter"
-        android:title ="Filter Menu"
-        android:icon ="@drawable/ic_action_filter"
-        app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget"/>
+        android:icon="@drawable/ic_action_filter"
+        android:title="Filter Menu"
+        app:actionViewClass="android.support.v7.widget"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/notification"
+        android:icon="@drawable/ic_action_bell"
+        android:title="@string/notification"
+        app:actionViewClass="android.support.v7.widget"
+        app:showAsAction="always" />
+
 </menu>

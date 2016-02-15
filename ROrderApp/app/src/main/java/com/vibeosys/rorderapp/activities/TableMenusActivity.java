@@ -2,6 +2,7 @@ package com.vibeosys.rorderapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -34,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TableMenusActivity extends BaseActivity implements
-        OrderListAdapter.CustomButtonListener, View.OnClickListener, ServerSyncManager.OnStringResultReceived,ServerSyncManager.OnDownloadReceived {
+        OrderListAdapter.CustomButtonListener, View.OnClickListener, ServerSyncManager.OnStringResultReceived, ServerSyncManager.OnDownloadReceived {
 
     private TableCommonInfoDTO tableCommonInfoDTO;
     private OrderListAdapter orderListAdapter;
@@ -129,12 +130,19 @@ public class TableMenusActivity extends BaseActivity implements
     @Override
     public void onButtonClickListener(int id, int position, int value, OrderMenuDTO orderMenu) {
         if (id == R.id.imgMinus)
-            if (value > 0)
-                orderMenu.setmQuantity(value - 1);
-            else
-                Toast.makeText(getApplicationContext(), "Quantity Should be greater than 0", Toast.LENGTH_LONG).show();
+            if (orderMenu.isAvail()) {
+                if (value > 0)
+                    orderMenu.setmQuantity(value - 1);
+                else
+                    Toast.makeText(getApplicationContext(), "Quantity Should be greater than 0", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "This item is not available now", Toast.LENGTH_SHORT).show();
+            }
         if (id == R.id.imgPlus)
-            orderMenu.setmQuantity(value + 1);
+            if (orderMenu.isAvail())
+                orderMenu.setmQuantity(value + 1);
+            else
+                Toast.makeText(getApplicationContext(), "This item is not available now", Toast.LENGTH_SHORT).show();
         //Collections.sort(allMenus);
         displayMenuPriceAndItems();
         mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(), orderMenu.getmQuantity(), custId);
@@ -222,7 +230,7 @@ public class TableMenusActivity extends BaseActivity implements
 
                 genrateBill();
             } else {
-                /* if network is not available*/
+                startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
             }
         }
 

@@ -309,7 +309,7 @@ public class MainActivity extends BaseActivity
                 //getting current date here
                 String currentDate = new ROrderDateUtils().getGMTCurrentDate();
 
-                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId, mSessionManager.getUserId(), custid.toString(), false, Date.valueOf(currentDate));
+                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId, mSessionManager.getUserId(), custid.toString(), 0, Date.valueOf(currentDate));
                 //here inserting records in table transaction
                 mDbRepository.insertTableTransaction(tableTransactionDbDTO);
 

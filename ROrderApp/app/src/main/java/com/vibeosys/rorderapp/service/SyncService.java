@@ -66,7 +66,26 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
                 msgKey = "Table";
             else if (key.equals(DbTableNameConstants.MENU))
                 msgKey = "Menu";
+            else if (key.equals(DbTableNameConstants.BILL))
+                msgKey = "Bill";
+            else if (key.equals(DbTableNameConstants.BILL_DETAILS))
+                msgKey = "Bill Details";
+            else if (key.equals(DbTableNameConstants.CUSTOMER))
+                msgKey = "Customer";
+            else if (key.equals(DbTableNameConstants.MENU_CATEGORY))
+                msgKey = "Menu Category";
+            else if (key.equals(DbTableNameConstants.MENU_TAGS))
+                msgKey = "Menu Tag";
+            else if (key.equals(DbTableNameConstants.ORDER))
+                msgKey = "Order";
+            else if (key.equals(DbTableNameConstants.ORDER_DETAILS))
+                msgKey = "Order Details";
+            else if (key.equals(DbTableNameConstants.TABLE_CATEGORY))
+                msgKey = "Table Category";
+            else if (key.equals(DbTableNameConstants.USER))
+                msgKey = "User";
             showMessage += entry.getValue() + " new " + msgKey + " are added\n";
+
         }
 
         NotificationCompat.Builder mBuilder =

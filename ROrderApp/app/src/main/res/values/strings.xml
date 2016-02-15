@@ -29,6 +29,8 @@
     <string name="order_summary">Order Summary</string>
     <string name="bill_details">Order Summary</string>
     <string name="search_table">Search Table</string>
+    <string name="filter_table">Filter Table</string>
+    <string name="notification">Notifications</string>
     <string name="reserve_table">Reserve</string>
     <string name="cancel_string">Cancel</string>
     <string name="my_serving">My Serving</string>
@@ -61,4 +63,11 @@
     <string name="title_search_cuisine">Search Cuisine/Category</string>
     <string name="btn_pay_now">Pay Now</string>
     <string name="order_place_success">Order Place Successfully</string>
+    <string name="nav_waiting_list">Waiting List</string>
+    <string name="nav_my_profile">My Profile</string>
+    <string name="nav_log_out">Log Out</string>
+    <string name="nav_about_us">About Us</string>
+    <string name="hint_restaurant_id">Enter Restaurant Id</string>
+    <string name="error_select_restaurant">Id Must be a Number</string>
+    <string name="error_select_restaurant_id">Restaurant Id is needed</string>
 </resources>

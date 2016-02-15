@@ -95,21 +95,22 @@ public class SessionManager {
     private SessionManager() {
     }
 
-    public String getDownloadDbUrl(String userId) {
-        if (userId == null || userId.equals(""))
+    public String getDownloadDbUrl(int restaurantId) {
+        if (restaurantId == 0)
             Log.e("SessionManager", "User id in download DB URL is blank");
 
         String downloadDbUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_DOWNLOAD_DB_URI, null);
-        return downloadDbUrl + userId;
+        return downloadDbUrl+restaurantId;
     }
 
-    public String getDownloadUrl(int userId,int restaurantId) {
+    public String getDownloadUrl(int userId, int restaurantId) {
         if (userId == 0)
             Log.e("SessionManager", "User id in download URL is blank");
 
         String downloadUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_DOWNLOAD_URI, null);
-        return downloadUrl + userId+"&restaurantId="+restaurantId;
+        return downloadUrl + userId + "&restaurantId=" + restaurantId;
     }
+
     public String getRestaurantUrl() {
         String downloadUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_RESTAURANT_URI, null);
         return downloadUrl;
@@ -180,13 +181,13 @@ public class SessionManager {
         return mProjectSharedPref.getString(PropertyTypeConstants.USER_RESTO_NAME, null);
     }
 
-  /*  public void setIntUserId(int userId) {
-        setValuesInSharedPrefs(PropertyTypeConstants.USER_ID, userId);
-    }
+    /*  public void setIntUserId(int userId) {
+          setValuesInSharedPrefs(PropertyTypeConstants.USER_ID, userId);
+      }
 
-    public int getIntUserId() {
-        return mProjectSharedPref.getInt(PropertyTypeConstants.USER_RESTO_ID, 0);
-    }*/
+      public int getIntUserId() {
+          return mProjectSharedPref.getInt(PropertyTypeConstants.USER_RESTO_ID, 0);
+      }*/
     public String getDatabaseDirPath() {
         return mProjectSharedPref.getString(PropertyTypeConstants.DATABASE_DIR_PATH, null);
     }
@@ -210,14 +211,15 @@ public class SessionManager {
     public String getUserRegdApiKey() {
         return mProjectSharedPref.getString(PropertyTypeConstants.USER_REGD_API_KEY, null);
     }
-    public String getDeviceId(String deviceId)
-    {
-        return mProjectSharedPref.getString(PropertyTypeConstants.USER_DEVICE_ID,null);
+
+    public String getDeviceId(String deviceId) {
+        return mProjectSharedPref.getString(PropertyTypeConstants.USER_DEVICE_ID, null);
     }
-    public void setDeviceId(String deviceId)
-    {
-        setValuesInSharedPrefs(PropertyTypeConstants.USER_DEVICE_ID,deviceId);
+
+    public void setDeviceId(String deviceId) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_DEVICE_ID, deviceId);
     }
+
     private static void setValuesInSharedPrefs(String sharedPrefKey, String sharedPrefValue) {
         SharedPreferences.Editor editor = mProjectSharedPref.edit();
         editor.putString(sharedPrefKey, sharedPrefValue);

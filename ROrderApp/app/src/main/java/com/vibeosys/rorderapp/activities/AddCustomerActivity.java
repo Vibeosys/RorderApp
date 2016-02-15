@@ -103,7 +103,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             mDbRepository.insertCustomerDetails(customer);
             String currentDate = new ROrderDateUtils().getGMTCurrentDate();
             Log.d(TAG, "##" + currentDate);
-            TableTransactionDbDTO tableTransaction = new TableTransactionDbDTO(custid.toString(), true, Date.valueOf(currentDate), customerCount);
+            TableTransactionDbDTO tableTransaction = new TableTransactionDbDTO(custid.toString(), 1, customerCount);
             mDbRepository.insertTableTransaction(tableTransaction);
             Toast.makeText(getApplicationContext(), "Customer is Added successfully", Toast.LENGTH_SHORT).show();
             mCustomerAdapter.refresh(mDbRepository.getWaitingList());
@@ -120,9 +120,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
 
-        /*String serializedTableTransaction=gson.toJson(tableTransaction);
-        tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedTableTransaction);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);*/
+        String serializedTableTransaction = gson.toJson(tableTransaction);
+        tableDataDTO = new TableDataDTO(ConstantOperations.ADD_WAITING_CUSTOMER, serializedTableTransaction);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
     }
 
     private void showMyDialog(final WaitingUserDTO waiting) {
@@ -149,7 +149,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                         Toast.makeText(getApplicationContext(), "No Such Table found", Toast.LENGTH_SHORT).show();
                     } else {
                         TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId,
-                                mSessionManager.getUserId(), waiting.getmCustomerId(), false,
+                                mSessionManager.getUserId(), waiting.getmCustomerId(), 0,
                                 waiting.getmArrivalTime(), waiting.getmOccupancy());
                         mDbRepository.updateTableTransaction(tableTransactionDbDTO);
                         mDbRepository.setOccupied(true, tableId);

@@ -6,12 +6,14 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
@@ -37,28 +39,26 @@ import java.util.UUID;
 /**
  * Created by kiran on 21-01-2016.
  */
-public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener{
+public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener {
 
     private ArrayList<RestaurantDbDTO> mRestaurantList;
-    private Context mContext=this;
+    private Context mContext = this;
     private ProgressDialog mProgress;
-    //ListView listResto;
     private RestaurantListAdapter mAdapter;
-    private Spinner mSpnRestaurant;
+    private TextView mTxtRestaurant;
     private int mSelectedRestoId;
     private String mSelectedRestaurantName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_restaurent);
-        Button btnOk=(Button)findViewById(R.id.btnOk);
+        Button btnOk = (Button) findViewById(R.id.btnOk);
         //listResto=(ListView)findViewById(R.id.listView);
         getRestaurant(mSessionManager.getRestaurantUrl());
 
 
-       mSpnRestaurant =(Spinner)findViewById(R.id.spnRestaurant);
-        mSpnRestaurant.setOnItemSelectedListener(this);
-
+        mTxtRestaurant = (TextView) findViewById(R.id.txtRestaurantId);
         btnOk.setOnClickListener(this);
     }
 
@@ -71,7 +71,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         String buildInfo64Based = getBuild64BasedInfo();
         UUID uuid = UUID.randomUUID();
         mSessionManager.setDeviceId(uuid.toString());
-        String downloadDBURL = "http://192.168.1.6/rorderwebapp/api/v1/downloadDb?restaurantId="+mSelectedRestoId;/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
+        String downloadDBURL = mSessionManager.getDownloadDbUrl(mSelectedRestoId);/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
         Log.i(TAG, "##" + downloadDBURL);
         try {
             URL url = new URL(downloadDBURL);
@@ -126,34 +126,54 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        int id=v.getId();
-        if(id==R.id.btnOk)
-        {
-            mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
-            if (NetworkUtils.isActiveNetworkAvailable(this)) {
-                ContextWrapper ctw = new ContextWrapper(getApplicationContext());
-                File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
-                File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
-                if (!dbFile.exists()) {
-                    downloadDatabase(dbFile);
-                } else if (dbFile.exists() && (mSessionManager.getUserId() == 0)) {
-                    downloadDatabase(dbFile);
-                }
-            }
-            Intent intentLogin=new Intent(getApplicationContext(),LoginActivity.class);
-            intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intentLogin);
-            finish();
+        int id = v.getId();
+        if (id == R.id.btnOk) {
+            if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
+                getDataBase();
+            else
+                startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
         }
     }
+
+    private void getDataBase() {
+        mTxtRestaurant.setError(null);
+        String strRestId = mTxtRestaurant.getText().toString();
+
+        if (strRestId != null && !strRestId.isEmpty()) {
+            try {
+                mSelectedRestoId = Integer.parseInt(strRestId);
+            } catch (NumberFormatException e) {
+                mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant));
+                Log.e(TAG, "Error at select Restaurant Id" + e.toString());
+            }
+        } else {
+            mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant_id));
+        }
+        mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
+        if (NetworkUtils.isActiveNetworkAvailable(this)) {
+            ContextWrapper ctw = new ContextWrapper(getApplicationContext());
+            File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
+            File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
+            if (!dbFile.exists()) {
+                downloadDatabase(dbFile);
+            } else if (dbFile.exists() && (mSessionManager.getUserId() == 0)) {
+                downloadDatabase(dbFile);
+            }
+        }
+        Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+        intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intentLogin);
+        finish();
+    }
+
     private void getRestaurant(String Url) {
         RequestQueue vollyRequest = Volley.newRequestQueue(mContext);
-        mProgress =ProgressDialog.show(mContext,"Loading","Wait");
+        mProgress = ProgressDialog.show(mContext, "Loading", "Wait");
         StringRequest restoRequest = new StringRequest(Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                displayRestaurant(response);
+                // displayRestaurant(response);
                 mProgress.dismiss();
             }
         }, new Response.ErrorListener() {
@@ -169,11 +189,11 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         vollyRequest.add(restoRequest);
     }
 
-    private void displayRestaurant(String result) {
+  /*  private void displayRestaurant(String result) {
         RestaurantDbDTO restaurantDbDTO=new RestaurantDbDTO();
         mRestaurantList=restaurantDbDTO.getArrayList(result);
         mAdapter =new RestaurantListAdapter(mRestaurantList,this);
-        mSpnRestaurant.setAdapter(mAdapter);
+        mTxtRestaurant.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         Log.i(TAG,"##"+mRestaurantList.toString());
     }
@@ -190,5 +210,5 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
+    }*/
 }

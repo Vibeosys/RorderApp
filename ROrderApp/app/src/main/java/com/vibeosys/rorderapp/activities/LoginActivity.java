@@ -93,7 +93,13 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 attemptLogin();
             }
         });
-
+        Button btnChefLogin = (Button) findViewById(R.id.email_sign_in_chef);
+        btnChefLogin.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptLogin();
+            }
+        });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -293,10 +299,12 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
+
     @Override
     public void onBackPressed() {
-            finish();
+        finish();
     }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -305,7 +313,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
         private final String mEmail;
         private final String mPassword;
-        UserDTO user=null;
+        UserDTO user = null;
+
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -321,14 +330,12 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             } catch (InterruptedException e) {
                 return false;
             }
-            user=mDbRepository.autheticateUser(mEmail,mPassword);
+            user = mDbRepository.autheticateUser(mEmail, mPassword);
 
             // TODO: register the new account here.
-            if(user!=null)
-            {
+            if (user != null) {
                 return true;
-            }
-            else
+            } else
                 return false;
         }
 
@@ -338,8 +345,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             showProgress(false);
 
             if (success) {
-                UserAuth userAuth=new UserAuth();
-                userAuth.saveAuthenticationInfo(user,getApplicationContext());
+                UserAuth userAuth = new UserAuth();
+                userAuth.saveAuthenticationInfo(user, getApplicationContext());
                 Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
                 mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(mainIntent);
