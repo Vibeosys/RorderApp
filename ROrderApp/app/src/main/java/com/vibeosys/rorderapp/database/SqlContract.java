@@ -110,6 +110,7 @@ public class SqlContract {
         public final static String ORDER_ID = "OrderId";
         public final static String MENU_ID = "MenuId";
         public final static String MENU_TITLE = "MenuTitle";
+        public final static String NOTE = "Note";
     }
 
     public abstract class SqlOrders {
@@ -138,6 +139,8 @@ public class SqlContract {
         public final static String ORDER_DATE = "OrderDate";
         public final static String ORDER_TIME = "OrderTime";
         public final static String ORDER_STATUS = "OrderStatus";
+        public final static String NOTE = "Note";
+
     }
 
     public abstract class SqlCustomer {
@@ -162,6 +165,13 @@ public class SqlContract {
         public final static String TABLE_NAME = "payment_mode_master";
         public final static String PAYMENT_MODE_ID = "PaymentModeId";
         public final static String PAYMENT_MODE_TITLE = "PaymentModeTitle";
+        public final static String ACTIVE = "Active";
+    }
+
+    public abstract class SqlMenuNoteMaster {
+        public final static String TABLE_NAME = "menu_note_master";
+        public final static String NOTE_ID = "NoteId";
+        public final static String NOTE_TITLE = "NoteTitle";
         public final static String ACTIVE = "Active";
     }
 }

@@ -28,6 +28,7 @@ public class OrderListAdapter extends BaseAdapter {
     private Context mContext;
     CustomButtonListener customButtonListener;
     private ImageLoader mImageLoader;
+
     public OrderListAdapter(List<OrderMenuDTO> mMenus, Context mContext) {
         this.mMenus = mMenus;
         this.mContext = mContext;
@@ -49,70 +50,62 @@ public class OrderListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return mMenus.get(position).getmMenuId();
     }
+
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
     }
 
-    public void refresh(List<OrderMenuDTO> menus)
-    {
+    public void refresh(List<OrderMenuDTO> menus) {
         this.mMenus.clear();
-        this.mMenus=menus;
+        this.mMenus = menus;
         notifyDataSetChanged();
     }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View row=convertView;
-        ViewHolder viewHolder=null;
+        View row = convertView;
+        ViewHolder viewHolder = null;
         if (row == null) {
             LayoutInflater theLayoutInflator = (LayoutInflater) mContext.getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
             row = theLayoutInflator.inflate(R.layout.row_table_menu, null);
             viewHolder = new ViewHolder();
-            viewHolder.rowElement=(LinearLayout)row.findViewById(R.id.row_menu_item);
-           // viewHolder.menuImage=(ImageView)row.findViewById(R.id.imgMenu);
-            viewHolder.imgFoodType= (ImageView)row.findViewById(R.id.imgFoodType);
-            viewHolder.imgSpicy=(ImageView)row.findViewById(R.id.imgSpicy);
-            viewHolder.txtMenuTitle=(TextView)row.findViewById(R.id.txtMenuName);
-            viewHolder.txtMenuTags=(TextView)row.findViewById(R.id.txtMenuTag);
-            viewHolder.txtMenuCategory=(TextView)row.findViewById(R.id.txtCategory);
-            viewHolder.txtPrice=(TextView)row.findViewById(R.id.txtMenuPrice);
-            viewHolder.imgPlus=(ImageView)row.findViewById(R.id.imgPlus);
-            viewHolder.imgMinus=(ImageView)row.findViewById(R.id.imgMinus);
-            viewHolder.txtQuantity=(TextView)row.findViewById(R.id.txtMenuQty);
-            viewHolder.networkImageView =(NetworkImageView)row.findViewById(R.id.menuImageLoader);
+            viewHolder.rowElement = (LinearLayout) row.findViewById(R.id.row_menu_item);
+            // viewHolder.menuImage=(ImageView)row.findViewById(R.id.imgMenu);
+            viewHolder.imgFoodType = (ImageView) row.findViewById(R.id.imgFoodType);
+            viewHolder.imgSpicy = (ImageView) row.findViewById(R.id.imgSpicy);
+            viewHolder.txtMenuTitle = (TextView) row.findViewById(R.id.txtMenuName);
+            viewHolder.txtMenuTags = (TextView) row.findViewById(R.id.txtMenuTag);
+            viewHolder.txtMenuCategory = (TextView) row.findViewById(R.id.txtCategory);
+            viewHolder.txtPrice = (TextView) row.findViewById(R.id.txtMenuPrice);
+            viewHolder.imgPlus = (ImageView) row.findViewById(R.id.imgPlus);
+            viewHolder.imgMinus = (ImageView) row.findViewById(R.id.imgMinus);
+            viewHolder.txtQuantity = (TextView) row.findViewById(R.id.txtMenuQty);
+            viewHolder.networkImageView = (NetworkImageView) row.findViewById(R.id.menuImageLoader);
+            viewHolder.imgNote = (ImageView) row.findViewById(R.id.imgNote);
             row.setTag(viewHolder);
 
         } else viewHolder = (ViewHolder) row.getTag();
 
-        final OrderMenuDTO menu=mMenus.get(position);
-        if(menu.getmShow()==1)
-        {
+        final OrderMenuDTO menu = mMenus.get(position);
+        if (menu.getmShow() == 1) {
             viewHolder.rowElement.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             viewHolder.rowElement.setVisibility(View.GONE);
             viewHolder.rowElement.setMinimumHeight(0);
         }
         Log.d(TAG, menu.toString());
         viewHolder.txtMenuTitle.setText(menu.getmMenuTitle());
-        if(menu.ismFoodType())
-        {
+        if (menu.ismFoodType()) {
             viewHolder.imgFoodType.setImageResource(R.drawable.veg_icon);
-        }
-
-        else if(!menu.ismFoodType())
-        {
+        } else if (!menu.ismFoodType()) {
             viewHolder.imgFoodType.setImageResource(R.drawable.non_veg_icon);
         }
 
-        if(menu.isSpicy())
-        {
+        if (menu.isSpicy()) {
             viewHolder.imgSpicy.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             viewHolder.imgSpicy.setVisibility(View.INVISIBLE);
         }
         mImageLoader = CustomVolleyRequestQueue.getInstance(mContext)
@@ -126,7 +119,7 @@ public class OrderListAdapter extends BaseAdapter {
         viewHolder.txtMenuTags.setText(menu.getmTags());
         viewHolder.txtMenuCategory.setText(menu.getmCategory());
         viewHolder.txtPrice.setText(String.format("%.2f", menu.getmPrice()));
-        viewHolder.txtQuantity.setText(""+menu.getmQuantity());
+        viewHolder.txtQuantity.setText("" + menu.getmQuantity());
         viewHolder.imgMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,10 +135,17 @@ public class OrderListAdapter extends BaseAdapter {
                     customButtonListener.onButtonClickListener(v.getId(), position, menu.getmQuantity(), menu);
             }
         });
+        viewHolder.imgNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (customButtonListener != null)
+                    customButtonListener.onButtonClickListener(v.getId(), position, menu.getmMenuId(), menu);
+            }
+        });
         return row;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         LinearLayout rowElement;
         ImageView menuImage;
         ImageView imgFoodType;
@@ -158,11 +158,14 @@ public class OrderListAdapter extends BaseAdapter {
         ImageView imgMinus;
         TextView txtQuantity;
         NetworkImageView networkImageView;
+        ImageView imgNote;
     }
+
     public void setCustomButtonListner(CustomButtonListener listener) {
         this.customButtonListener = listener;
     }
-    public interface CustomButtonListener{
-        public void onButtonClickListener(int id,int position,int value,OrderMenuDTO orderMenu);
+
+    public interface CustomButtonListener {
+        public void onButtonClickListener(int id, int position, int value, OrderMenuDTO orderMenu);
     }
 }

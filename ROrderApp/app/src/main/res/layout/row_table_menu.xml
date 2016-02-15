@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row_menu_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="@dimen/list_item_padding"
-    android:id="@+id/row_menu_item">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_gravity="fill|left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill|left"
         android:background="@drawable/table_border"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_margin="4dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
             <!--<com.vibeosys.rorderapp.views.RoundedImageView
                 android:id="@+id/imgMenu"
                 android:layout_width="50dp"
@@ -32,7 +32,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/button_custom"/>
+                android:background="@drawable/button_custom" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -43,14 +44,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="10dp"
+                android:padding="2dp">
+
                 <TextView
                     android:id="@+id/txtMenuName"
                     android:layout_width="wrap_content"
@@ -65,102 +67,113 @@
                     android:id="@+id/txtMenuTag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:layout_weight="1"
                     android:layout_margin="3dp"
+                    android:layout_weight="1"
                     android:singleLine="false"
                     android:text="Chinese"
-                    android:textColor="@color/listview_item" />
+                    android:textColor="@color/listview_item"
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/txtCategory"
-                    android:layout_weight="1"
-                    android:textSize="10sp"
-                    android:layout_margin="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
                     android:singleLine="false"
                     android:text="Starters"
-                    android:textColor="@color/listview_item" />
+                    android:textColor="@color/listview_item"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/imgNote"
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_action_bookmark" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="15dp"
-                android:gravity="left">
+                android:layout_marginRight="10dp"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
                 <ImageView
                     android:id="@+id/imgFoodType"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:src="@drawable/veg_icon"/>
+                    android:src="@drawable/veg_icon" />
+
                 <ImageView
                     android:id="@+id/imgSpicy"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:src="@drawable/spicy_food"/>
+                    android:src="@drawable/spicy_food" />
+
                 <ImageView
                     android:layout_width="12dp"
-                    android:layout_weight="1"
                     android:layout_height="12dp"
                     android:layout_marginTop="3dp"
+                    android:layout_weight="1"
                     android:src="@drawable/rupee_icon" />
 
                 <TextView
                     android:id="@+id/txtMenuPrice"
-                    android:layout_weight="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
+                    android:layout_weight="2"
                     android:text="90"
-                    android:textSize="12sp"
-                    android:textColor="@color/listview_item" />
+                    android:textColor="@color/listview_item"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/imgMinus"
-                    android:layout_weight="1"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_action_minus"
-                    android:background="@drawable/menu_row_button_theme"/>
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_row_button_theme"
+                    android:src="@drawable/ic_action_minus" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:layout_weight="2"
-                    android:text="Qty:"
-                    android:textSize="12sp"
                     android:layout_margin="3dp"
-                    android:textColor="@color/listview_item" />
+                    android:layout_weight="2"
+                    android:gravity="right"
+                    android:text="Qty:"
+                    android:textColor="@color/listview_item"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/txtMenuQty"
-                    android:layout_weight="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
                     android:layout_margin="3dp"
+                    android:layout_weight="2"
+                    android:gravity="left"
                     android:singleLine="true"
                     android:text="0"
+                    android:textColor="@color/listview_item"
                     android:textSize="12sp"
-                    android:translationZ="3dp"
-                    android:textColor="@color/listview_item" />
+                    android:translationZ="3dp" />
 
                 <ImageView
                     android:id="@+id/imgPlus"
-                    android:layout_weight="1"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="3dp"
+                    android:layout_weight="1"
                     android:background="@drawable/menu_row_button_theme"
                     android:src="@drawable/ic_action_add" />
 

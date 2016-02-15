@@ -31,6 +31,7 @@
     <string name="search_table">Search Table</string>
     <string name="filter_table">Filter Table</string>
     <string name="notification">Notifications</string>
+    <string name="dialog_title_select_note">Select Note</string>
     <string name="reserve_table">Reserve</string>
     <string name="cancel_string">Cancel</string>
     <string name="my_serving">My Serving</string>

@@ -20,7 +20,7 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
     private int mQuantity;
     private int mShow;
     private boolean mSpicy;
-
+    private String mNote;
 
     public OrderMenuDTO() {
     }
@@ -129,10 +129,19 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
         this.mAvail = mAvail;
     }
 
+    public String getNote() {
+        return mNote;
+    }
+
+    public void setNote(String mNote) {
+        this.mNote = mNote;
+    }
+
     @Override
     public String toString() {
         return "OrderMenuDTO{" +
                 "mMenuId=" + mMenuId +
+                ", mAvail=" + mAvail +
                 ", mMenuTitle='" + mMenuTitle + '\'' +
                 ", mImage='" + mImage + '\'' +
                 ", mFoodType=" + mFoodType +
@@ -140,9 +149,11 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
                 ", mCategory='" + mCategory + '\'' +
                 ", mPrice=" + mPrice +
                 ", mQuantity=" + mQuantity +
+                ", mShow=" + mShow +
+                ", mSpicy=" + mSpicy +
+                ", mNote='" + mNote + '\'' +
                 '}';
     }
-
 
     @Override
     public int compareTo(OrderMenuDTO another) {

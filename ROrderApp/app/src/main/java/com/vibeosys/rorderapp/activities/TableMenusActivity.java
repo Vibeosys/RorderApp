@@ -1,5 +1,7 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -9,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,7 +20,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.adaptors.NoteAdapter;
 import com.vibeosys.rorderapp.adaptors.OrderListAdapter;
+import com.vibeosys.rorderapp.data.NoteDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.SelectedMenusDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
@@ -46,8 +52,9 @@ public class TableMenusActivity extends BaseActivity implements
     private String custId;
     private LinearLayout llCurrentOrder;
     //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
-
+    private String selectedNote = "";
     private int mCount = 0;
+    private final Context mContext = this;
 
     //List<OrderMenuDTO> sortingMenu;
     @Override
@@ -129,7 +136,7 @@ public class TableMenusActivity extends BaseActivity implements
 
     @Override
     public void onButtonClickListener(int id, int position, int value, OrderMenuDTO orderMenu) {
-        if (id == R.id.imgMinus)
+        if (id == R.id.imgMinus) {
             if (orderMenu.isAvail()) {
                 if (value > 0)
                     orderMenu.setmQuantity(value - 1);
@@ -138,16 +145,30 @@ public class TableMenusActivity extends BaseActivity implements
             } else {
                 Toast.makeText(getApplicationContext(), "This item is not available now", Toast.LENGTH_SHORT).show();
             }
-        if (id == R.id.imgPlus)
-            if (orderMenu.isAvail())
+            displayMenuPriceAndItems();
+            mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
+                    orderMenu.getmQuantity(), custId, selectedNote);
+            orderListAdapter.notifyDataSetChanged();
+        } else if (id == R.id.imgPlus) {
+            if (orderMenu.isAvail()) {
                 orderMenu.setmQuantity(value + 1);
-            else
+                displayMenuPriceAndItems();
+                mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
+                        orderMenu.getmQuantity(), custId, selectedNote);
+                orderListAdapter.notifyDataSetChanged();
+            } else
                 Toast.makeText(getApplicationContext(), "This item is not available now", Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.imgNote) {
+            showMyDialog(orderMenu);
+            Log.d(TAG, "##" + orderMenu.getNote());
+            displayMenuPriceAndItems();
+
+        }
         //Collections.sort(allMenus);
-        displayMenuPriceAndItems();
-        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(), orderMenu.getmQuantity(), custId);
-        orderListAdapter.notifyDataSetChanged();
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -282,5 +303,46 @@ public class TableMenusActivity extends BaseActivity implements
         iMenu.putExtra("tableCustInfo", tableCommonInfoDTO);
         startActivity(iMenu);
         finish();
+    }
+
+
+    private void showMyDialog(final OrderMenuDTO orderMenu) {
+        final String[] orderNote = {""};
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setTitle(getResources().getString(R.string.dialog_title_select_note));
+        dialog.setContentView(R.layout.dialog_select_note);
+        ArrayList<NoteDTO> notes = mDbRepository.getNoteList();
+        final NoteAdapter noteadapter = new NoteAdapter(dialog.getContext(), notes);
+        ListView listNotes = (ListView) dialog.findViewById(R.id.noteList);
+        TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        TextView txtOrder = (TextView) dialog.findViewById(R.id.txtOrder);
+        listNotes.setAdapter(noteadapter);
+        listNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                NoteDTO noteDto = (NoteDTO) noteadapter.getItem(position);
+                selectedNote = noteDto.getNoteTitle();
+                noteadapter.setItemChecked(noteDto.getNoteId());
+                mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
+                        orderMenu.getmQuantity(), custId, noteDto.getNoteTitle());
+                orderListAdapter.notifyDataSetChanged();
+            }
+        });
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
+                        orderMenu.getmQuantity(), custId, "");
+                orderListAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        txtOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

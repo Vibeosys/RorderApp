@@ -11,10 +11,12 @@ import java.util.List;
 public class UploadOrderDetails extends BaseDTO {
     private int menuId;
     private int orderQty;
+    private String note;
 
-    public UploadOrderDetails(int menuId, int orderQty) {
+    public UploadOrderDetails(int menuId, int orderQty, String note) {
         this.menuId = menuId;
         this.orderQty = orderQty;
+        this.note = note;
     }
 
     public int getMenuId() {
@@ -31,6 +33,14 @@ public class UploadOrderDetails extends BaseDTO {
 
     public void setOrderQty(int orderQty) {
         this.orderQty = orderQty;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public static List<UploadOrderDetails> deserializeOrders(List<String> serializedStringList) {

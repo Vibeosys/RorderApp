@@ -121,7 +121,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             orderMenu.setOrderQuantity(value + 1);
         //Collections.sort(allMenus);
         orderMenu.setOrderPrice(orderMenu.getOrderQuantity() * orderMenu.getMenuUnitPrice());
-        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getMenuId(), orderMenu.getOrderQuantity(), mCustId);
+        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getMenuId(), orderMenu.getOrderQuantity(), mCustId, orderMenu.getmNote());
         adapter.notifyDataSetChanged();
     }
 
@@ -155,7 +155,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             List<OrderDetailsDTO> orderDetailsDTOs = mCurrentOrder.getOrderDetailsDTOs();
             ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
             for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
-                UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity());
+                UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
                 sendDetails.add(sendOrder);
             }
             orderId = UUID.randomUUID();

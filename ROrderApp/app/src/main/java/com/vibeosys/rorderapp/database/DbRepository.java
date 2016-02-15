@@ -16,6 +16,7 @@ import com.vibeosys.rorderapp.data.HotelTableDbDTO;
 import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
 import com.vibeosys.rorderapp.data.MenuDbDTO;
 import com.vibeosys.rorderapp.data.MenuTagsDbDTO;
+import com.vibeosys.rorderapp.data.NoteDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
@@ -693,7 +694,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return orderMenus;
     }
 
-    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId) {
+    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId,String note) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -718,7 +719,7 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTempOrder.ORDER_DATE, rOrderDateUtils.getGMTCurrentDate());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_TIME, rOrderDateUtils.getGMTCurrentTime());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
-
+            contentValues.put(SqlContract.SqlTempOrder.NOTE,note);
             if (rowCount == 0 && qty != 0)
                 count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);
             else if (qty == 0)
@@ -868,10 +869,10 @@ public class DbRepository extends SQLiteOpenHelper {
                             String myOrderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_ID));
                             int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_ID));
                             String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_TITLE));
-
+                            String note = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.NOTE));
                             OrderDetailsDTO orderDetails = new OrderDetailsDTO(orderDetailsId,
                                     orderPrice, orderQuantity, Date.valueOf(createdDate),
-                                    Date.valueOf(updatedDate), myOrderId, menuId, menuTitle, 0);
+                                    Date.valueOf(updatedDate), myOrderId, menuId, menuTitle, 0, note);
                             orderDetailsList.add(orderDetails);
                         } while (cursor.moveToNext());
                     }
@@ -921,7 +922,7 @@ public class DbRepository extends SQLiteOpenHelper {
             List<OrderDetailsDTO> orderDetailsList = new ArrayList<>();
             String[] whereClause = new String[]{String.valueOf(tableId), custId};
             double orderAmount = 0;
-            cursor = sqLiteDatabase.rawQuery("Select temp_order.TempOrderId,temp_order.Quantity," +
+            cursor = sqLiteDatabase.rawQuery("Select temp_order.TempOrderId,temp_order.Quantity,temp_order.Note," +
                     "temp_order.MenuId,temp_order.OrderDate,temp_order.OrderTime,menu.MenuTitle," +
                     "menu.Price from temp_order left join menu where " +
                     "temp_order.MenuId=menu.MenuId and temp_order.TableId=? and temp_order.CustId=?", whereClause);
@@ -937,11 +938,12 @@ public class DbRepository extends SQLiteOpenHelper {
                         //String myOrderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_ID));
                         int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.MENU_ID));
                         String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
+                        String note = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTempOrder.NOTE));
                         double orderPice = menuPrice * orderQuantity;
                         orderAmount = orderAmount + orderPice;
                         OrderDetailsDTO orderDetails = new OrderDetailsDTO(orderDetailsTempId, orderPice
                                 , orderQuantity, Date.valueOf(createdDate),
-                                Date.valueOf(createdDate), "", menuId, menuTitle, menuPrice);
+                                Date.valueOf(createdDate), "", menuId, menuTitle, menuPrice, note);
                         orderDetailsList.add(orderDetails);
                     } while (cursor.moveToNext());
                 }
@@ -949,7 +951,7 @@ public class DbRepository extends SQLiteOpenHelper {
             orderHeaderDTO = new OrderHeaderDTO(tableId, userId, orderAmount, orderDetailsList.size(), true, orderDetailsList);
             cursor.close();
         } catch (Exception e) {
-
+        Log.e(TAG,e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1886,5 +1888,45 @@ public class DbRepository extends SQLiteOpenHelper {
                 sqLiteDatabase.close();
         }
         return count != -1;
+    }
+
+    public ArrayList<NoteDTO> getNoteList() {
+        ArrayList<NoteDTO> noteList = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+
+            cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlMenuNoteMaster.TABLE_NAME
+                            + " WHERE " + SqlContract.SqlMenuNoteMaster.ACTIVE + "=1",
+                    null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+
+                    do {
+                        int noteIdId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenuNoteMaster.NOTE_ID));
+                        String paymentModeTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenuNoteMaster.NOTE_TITLE));
+                        int isactive = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenuNoteMaster.ACTIVE));
+                        NoteDTO paymentModeDbDTO = new NoteDTO(noteIdId, paymentModeTitle, isactive);
+                        noteList.add(paymentModeDbDTO);
+                    } while (cursor.moveToNext());
+                }
+            }
+
+            cursor.close();
+            sqLiteDatabase.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error at getoteList table " + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+        }
+        return noteList;
     }
 }
