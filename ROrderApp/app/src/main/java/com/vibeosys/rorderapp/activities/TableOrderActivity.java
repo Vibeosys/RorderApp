@@ -1,5 +1,7 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -9,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -49,6 +52,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
     private String mCustId;
     private OrderHeaderDTO mCurrentOrder;
     private UUID orderId;
+    private Context mContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,9 +171,10 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
         } else {
-            startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
+            showMyDialog();
         }
     }
+
 
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
@@ -206,5 +211,21 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
     @Override
     public void onPlaceOrderClick() {
         placeOrder();
+    }
+
+    private void showMyDialog() {
+
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.show_network_alert);
+        dialog.setTitle("Network " + getResources().getString(R.string.alert_dialog));
+        TextView txtOk = (TextView) dialog.findViewById(R.id.txtOk);
+        txtOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+            }
+        });
+        dialog.show();
     }
 }

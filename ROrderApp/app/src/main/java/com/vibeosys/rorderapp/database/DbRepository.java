@@ -36,6 +36,7 @@ import com.vibeosys.rorderapp.util.SessionManager;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1429,7 +1430,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         int orderNumber = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName,orderNumber);
+                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber);
                         AscindingOrdres.add(chefOrderDetailsDTO);
                     } while (cursor.moveToNext());
                 }
@@ -1929,5 +1930,82 @@ public class DbRepository extends SQLiteOpenHelper {
             }
         }
         return noteList;
+    }
+
+    public OrdersDbDTO getOrderDetails(String orderId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        String[] whereClause = new String[]{orderId};
+        OrdersDbDTO order = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+
+            cursor = sqLiteDatabase.rawQuery("select * from orders where " +
+                    SqlContract.SqlOrders.ORDER_ID + "=?", whereClause);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    //String orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
+                    int orderNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
+                    int orderStatus = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_STATUS));
+                    String custId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.CUST_ID));
+                    //String orderDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_DATE));
+                    //String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
+                    // String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.CREATED_DATE));
+                    //String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.UPDATED_DATE));
+                    int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
+                    int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.USER_ID));
+                    double orderAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_AMOUNT));
+                    order = new OrdersDbDTO(orderId, orderNo, custId, orderStatus, tableNo, userId);
+                }
+            }
+
+            cursor.close();
+            sqLiteDatabase.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error at getOrdersOf table " + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+        }
+        return order;
+    }
+
+    public int getTaleNo(int tableId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        String[] whereClause = new String[]{String.valueOf(tableId)};
+        Cursor cursor = null;
+        int tableNo = 0;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+
+            cursor = sqLiteDatabase.rawQuery("Select r_tables.TableNo,r_tables.IsOccupied from " +
+                    "r_tables where r_tables.TableId=?", whereClause);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
+                }
+            }
+
+            cursor.close();
+            sqLiteDatabase.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error at getTableNo function " + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+        }
+        return tableNo;
     }
 }

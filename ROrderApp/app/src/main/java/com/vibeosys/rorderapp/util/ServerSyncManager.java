@@ -14,6 +14,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.vibeosys.rorderapp.data.NotificationOrderDTO;
+import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.ServerSync;
 import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.SyncDataDTO;
@@ -50,6 +52,7 @@ public class ServerSyncManager
     private OnDownloadReceived mOnDownloadReceived;
     private OnStringResultReceived mOnStringResultReceived;
     private String TAG = ServerSyncManager.class.getSimpleName();
+    private OnNotifyUser mNotifyUser;
 
     public ServerSyncManager() {
 
@@ -271,6 +274,10 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.ORDER, jsonInsertList.size());
             dbOperations.addOrUpdateOrder(jsonInsertList, tableValue.getUpdateJsonList());
+            if (mSessionManager.getUserRollId() == 1)
+                notifyWaiter(jsonInsertList, tableValue.getUpdateJsonList());
+            if (mSessionManager.getUserRollId() == 2)
+                notifyChef(jsonInsertList, tableValue.getUpdateJsonList());
         }
         if (theTableData.containsKey(DbTableNameConstants.R_TABLES)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_TABLES);
@@ -289,7 +296,7 @@ public class ServerSyncManager
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TABLE_TRANSACTION);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.TABLE_TRANSACTION, jsonInsertList.size());
-            dbOperations.addOrUpdateTableTransaction(jsonInsertList, tableValue.getUpdateJsonList(),tableValue.getDeleteJsonList());
+            dbOperations.addOrUpdateTableTransaction(jsonInsertList, tableValue.getUpdateJsonList(), tableValue.getDeleteJsonList());
             Log.d("TableDataDTO", "##" + DbTableNameConstants.TABLE_TRANSACTION);
         }
         if (theTableData.containsKey(DbTableNameConstants.USER)) {
@@ -305,6 +312,7 @@ public class ServerSyncManager
 
         mIsWorkInProgress = false;
     }
+
 
     @NonNull
     private Map<String, Integer> updateDownloadedData(ServerSync downloadData) {
@@ -403,4 +411,58 @@ public class ServerSyncManager
         void onStingResultReceived(@NonNull JSONObject data);
     }
 
+    public interface OnNotifyUser {
+        void onNotificationReceived(@NonNull String message);
+    }
+
+    public void setOnNotifyUser(OnNotifyUser notifyUser) {
+        mNotifyUser = notifyUser;
+    }
+
+    private void notifyWaiter(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
+        if (updateJsonList.size() != 0) {
+            List<OrdersDbDTO> orderUpdates = OrdersDbDTO.deserializeOrders(updateJsonList);
+            String message = "";
+            for (OrdersDbDTO order : orderUpdates) {
+                if (order.isOrderStatus() == 2) {
+                    OrdersDbDTO myOrder = mDbRepository.getOrderDetails(order.getOrderId());
+                    if (myOrder.getUserId() == mSessionManager.getUserId()) {
+                        int tableNo = mDbRepository.getTaleNo(myOrder.getTableId());
+                        message = "Table # " + tableNo + " order ready to pickup";
+                        NotificationOrderDTO notificationOrderDTO = new NotificationOrderDTO(
+                                myOrder.getOrderNo(), myOrder.getUserId(), myOrder.isOrderStatus(),
+                                message, tableNo);
+                        if (mNotifyUser != null) {
+
+                            mNotifyUser.onNotificationReceived(message);
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    private void notifyChef(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
+        if (jsonInsertList.size() != 0) {
+            int count = 0;
+            List<OrdersDbDTO> orderUpdates = OrdersDbDTO.deserializeOrders(jsonInsertList);
+            String message = "";
+            for (OrdersDbDTO order : orderUpdates) {
+                if (order.isOrderStatus() == 1) {
+                    count = count + 1;
+                }
+            }
+            if (mNotifyUser != null) {
+                if (count == 1) {
+                    message = count + " new order has arrived";
+                } else {
+                    message = count + " new orders are waiting";
+                }
+
+                mNotifyUser.onNotificationReceived(message);
+            }
+        }
+    }
 }

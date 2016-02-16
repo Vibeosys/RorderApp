@@ -58,6 +58,15 @@ public class OrdersDbDTO extends BaseDTO {
         this.orderAmt = orderAmt;
     }
 
+    public OrdersDbDTO(String orderId, int orderNo, String custId, int orderStatus, int tableId, int userId) {
+        this.orderId = orderId;
+        this.orderNo = orderNo;
+        this.custId = custId;
+        this.orderStatus = orderStatus;
+        this.tableId = tableId;
+        this.userId = userId;
+    }
+
     public String getOrderId() {
         return orderId;
     }

@@ -52,7 +52,6 @@ public class TableMenusActivity extends BaseActivity implements
     private String custId;
     private LinearLayout llCurrentOrder;
     //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
-    private String selectedNote = "";
     private int mCount = 0;
     private final Context mContext = this;
 
@@ -147,23 +146,26 @@ public class TableMenusActivity extends BaseActivity implements
             }
             displayMenuPriceAndItems();
             mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
-                    orderMenu.getmQuantity(), custId, selectedNote);
+                    orderMenu.getmQuantity(), custId, orderMenu.getNote());
             orderListAdapter.notifyDataSetChanged();
-        } else if (id == R.id.imgPlus) {
+        }
+        if (id == R.id.imgPlus) {
             if (orderMenu.isAvail()) {
                 orderMenu.setmQuantity(value + 1);
                 displayMenuPriceAndItems();
                 mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
-                        orderMenu.getmQuantity(), custId, selectedNote);
+                        orderMenu.getmQuantity(), custId, orderMenu.getNote());
                 orderListAdapter.notifyDataSetChanged();
             } else
                 Toast.makeText(getApplicationContext(), "This item is not available now", Toast.LENGTH_SHORT).show();
 
-        } else if (id == R.id.imgNote) {
+        }
+        if (id == R.id.imgNote) {
             showMyDialog(orderMenu);
             Log.d(TAG, "##" + orderMenu.getNote());
             displayMenuPriceAndItems();
 
+            orderListAdapter.notifyDataSetChanged();
         }
         //Collections.sort(allMenus);
 
@@ -196,6 +198,7 @@ public class TableMenusActivity extends BaseActivity implements
                 if (s.length() >= 3) {
                     sortList(s.toString());
                     orderListAdapter.notifyDataSetChanged();
+
                 }
                 displayMenuPriceAndItems();
                 return false;
@@ -321,20 +324,18 @@ public class TableMenusActivity extends BaseActivity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NoteDTO noteDto = (NoteDTO) noteadapter.getItem(position);
-                selectedNote = noteDto.getNoteTitle();
-                noteadapter.setItemChecked(noteDto.getNoteId());
+                String selectedNote = noteDto.getNoteTitle();
+                orderMenu.setNote(selectedNote);
                 mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
-                        orderMenu.getmQuantity(), custId, noteDto.getNoteTitle());
-                orderListAdapter.notifyDataSetChanged();
+                        orderMenu.getmQuantity(), custId, orderMenu.getNote());
+                noteadapter.setItemChecked(noteDto.getNoteId());
             }
         });
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
-                        orderMenu.getmQuantity(), custId, "");
-                orderListAdapter.notifyDataSetChanged();
                 dialog.dismiss();
+                orderMenu.setNote("");
             }
         });
         txtOrder.setOnClickListener(new View.OnClickListener() {

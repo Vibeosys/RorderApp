@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.NotificationOrderDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
 import com.vibeosys.rorderapp.util.DbTableNameConstants;
@@ -19,12 +20,13 @@ import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 import com.vibeosys.rorderapp.util.SessionManager;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by akshay on 23-01-2016.
  */
-public class SyncService extends IntentService implements ServerSyncManager.OnDownloadReceived {
+public class SyncService extends IntentService implements ServerSyncManager.OnDownloadReceived, ServerSyncManager.OnNotifyUser {
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
@@ -40,7 +42,7 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
         SessionManager mSessionManager = SessionManager.getInstance(getApplicationContext());
         ServerSyncManager mServerSyncManager = new ServerSyncManager(getApplicationContext(), mSessionManager);
         mServerSyncManager.setOnDownloadReceived(this);
-
+        mServerSyncManager.setOnNotifyUser(this);
         while (true) {
             synchronized (this) {
                 try {
@@ -102,6 +104,10 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
 
         }
 
+        //showNotification(showMessage);
+    }
+
+    private void showNotification(String showMessage) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.hotel_logo)
@@ -133,4 +139,8 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
         mNotificationManager.notify(notifyId, mBuilder.build());
     }
 
+    @Override
+    public void onNotificationReceived(@NonNull String message) {
+        showNotification(message);
+    }
 }

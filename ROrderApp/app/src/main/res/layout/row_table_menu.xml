@@ -32,7 +32,9 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/button_custom" />
+                android:background="@drawable/menu_list_image_back"
+                android:padding="8dp"
+                android:src="@drawable/ic_menu_gallery" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -91,7 +93,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_action_bookmark" />
+                    android:src="@drawable/ic_note" />
             </LinearLayout>
 
             <LinearLayout

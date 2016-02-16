@@ -9,20 +9,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:padding="4dp"
-        android:gravity="right|center_vertical">
+        android:padding="4dp">
 
 
-        <TextView
-            android:id="@+id/txtMenuName"
+        <LinearLayout
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
+            android:layout_margin="1dp"
             android:layout_weight="3"
-            android:singleLine="false"
-            android:text="Manchurian"
-            android:textColor="@color/listview_item" />
+            android:orientation="vertical"
+            android:padding="1dp">
+
+            <TextView
+                android:id="@+id/txtMenuName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                android:text="Manchurian"
+                android:textColor="@color/listview_item" />
+
+            <TextView
+                android:id="@+id/txtNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Note"
+                android:textColor="@color/black_overlay"
+                android:textSize="10sp" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/txtMenuPrice"
@@ -45,19 +62,19 @@
             android:id="@+id/txtOderQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black_overlay"
             android:layout_margin="5dp"
-            android:text="Qty" />
+            android:text="Qty"
+            android:textColor="@color/black_overlay" />
 
         <TextView
             android:id="@+id/txtQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_marginLeft="3dp"
             android:layout_weight="2"
             android:singleLine="true"
             android:text="0"
-            android:layout_margin="5dp"
             android:textColor="@color/black_color"
             android:textSize="12sp" />
 
@@ -66,9 +83,16 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_margin="5dp"
-            android:padding="1dp"
             android:layout_marginLeft="5dp"
+            android:padding="1dp"
             android:src="@drawable/ic_action_add"
             android:translationZ="3dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
     </LinearLayout>
 </LinearLayout>

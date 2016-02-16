@@ -129,9 +129,11 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         ImageView imgPlus = (ImageView) convertView.findViewById(R.id.imgOrderPluse);
         ImageView imgMinus = (ImageView) convertView.findViewById(R.id.imgOrderMinus);
         TextView txtPrice = (TextView) convertView.findViewById(R.id.txtMenuPrice);
+        TextView txtNote = (TextView) convertView.findViewById(R.id.txtNote);
         txtMenuName.setText(orderDetail.getMenuTitle());
         txtQuantity.setText("" + orderDetail.getOrderQuantity());
         txtPrice.setText(String.valueOf(orderDetail.getOrderPrice()));
+        txtNote.setText(orderDetail.getmNote());
         OrderHeaderDTO header = orderHeaderDTOs.get(groupPosition);
         if (header.isCurrent()) {
             imgPlus.setVisibility(View.VISIBLE);
