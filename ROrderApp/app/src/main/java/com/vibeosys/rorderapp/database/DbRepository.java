@@ -1415,7 +1415,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             String[] where = new String[]{String.valueOf(status)};
-            cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName from  orders left join users on orders.UserId =users.UserId where orders.OrderStatus=? order by  orders.OrderTime Asc  ", where);
+            cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName,r_tables.TableNo from  orders left join users on orders.UserId =users.UserId left join r_tables on r_tables.TableId = orders.TableNo where orders.OrderStatus=? order by  orders.OrderTime Asc    ", where);
             //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
 
             if (cursor != null) {
@@ -1426,11 +1426,12 @@ public class DbRepository extends SQLiteOpenHelper {
 
 
                         String orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
-                        int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
+                        int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         int orderNumber = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
+                        int orderStatus = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_STATUS));
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber);
+                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber,orderStatus);
                         AscindingOrdres.add(chefOrderDetailsDTO);
                     } while (cursor.moveToNext());
                 }

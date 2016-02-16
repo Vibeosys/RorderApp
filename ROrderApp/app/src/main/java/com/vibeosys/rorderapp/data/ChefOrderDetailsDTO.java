@@ -17,6 +17,7 @@ public class ChefOrderDetailsDTO {
     private String mNewOrderId;
     private String mUserName;
     private int mTableNo;
+    private int mNewOrderStatus;
     private int mOrderNumner;
     private Date mplacedOrderDate;
     private Time morderTime;
@@ -35,11 +36,12 @@ public class ChefOrderDetailsDTO {
         this.morderTime = morderTime;
         this.mOrderStatus =mOrderStatus;
     }
-    public ChefOrderDetailsDTO(String mNewOrderId,  int mTableNo,String mUserName,int mOrderNumner) {
+    public ChefOrderDetailsDTO(String mNewOrderId,  int mTableNo,String mUserName,int mOrderNumner,int mNewOrderStatus ) {
         this.mNewOrderId =mNewOrderId;
         this.mTableNo = mTableNo;
         this.mUserName =mUserName;
         this.mOrderNumner = mOrderNumner;
+        this.mNewOrderStatus =mNewOrderStatus;
     }
     public int getmChefOrderId() {
         return mChefOrderId;
@@ -116,5 +118,12 @@ public class ChefOrderDetailsDTO {
 
     public void setmOrderNumner(int mOrderNumner) {
         this.mOrderNumner = mOrderNumner;
+    }
+    public int getmNewOrderStatus() {
+        return mNewOrderStatus;
+    }
+
+    public void setmNewOrderStatus(int mNewOrderStatus) {
+        this.mNewOrderStatus = mNewOrderStatus;
     }
 }

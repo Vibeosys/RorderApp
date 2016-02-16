@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
+    android:paddingTop="2dp"
     android:background="@drawable/custom_border"
     android:focusable="false"
     android:gravity="center_vertical"
@@ -85,6 +86,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:focusable="false"
+                android:paddingLeft="60dp"
                 android:text="DemoName"
                 android:textColor="@color/listview_item"
                 android:textSize="18sp" />
@@ -100,11 +102,10 @@
                 android:id="@+id/orderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:gravity="center"
+                android:paddingLeft="8dp"
                 android:text="29 mins ago"
                 android:textColor="@color/listview_item" />
             <TextView
@@ -113,17 +114,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-
                 android:focusable="false"
                 android:gravity="center"
+                android:textSize="12sp"
                 android:text="Click To Expand"
-
+                android:layout_weight="1"
                 android:textColor="@color/blue" />
 
             <Button
                 android:id="@+id/OrderDoneChef"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"

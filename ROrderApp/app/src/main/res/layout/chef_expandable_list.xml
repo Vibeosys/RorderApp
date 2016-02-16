@@ -9,10 +9,12 @@
         android:id="@+id/expListViewForChef"
         android:layout_width="match_parent"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:groupIndicator="@null"
         android:childDivider="#00000000"
+        android:groupIndicator="@null"
+        android:choiceMode="singleChoice"
         android:background="@color/White"
         android:dividerHeight="10.5sp"
+        android:divider="@color/White"
         android:layout_height="match_parent"
         android:clickable="true" />
 </LinearLayout>

@@ -45,6 +45,7 @@ public class FragmentChefMyServing extends BaseFragment implements
         list = mDbRepository.getOrderHeadesInAsc(1);
         chefOrderAdapter = new ChefOrderAdapter(getActivity().getApplicationContext(),list,mDbRepository);
         chefOrderList.setAdapter(chefOrderAdapter);
+
         chefOrderAdapter.setOnDoneClickListener(this);
        mServerSyncManager.setOnStringResultReceived(this);
         chefOrderAdapter.notifyDataSetChanged();
@@ -57,7 +58,8 @@ public class FragmentChefMyServing extends BaseFragment implements
     public void onDonClick(String ChefOrderId) {
         //       Log.d(TAG,"## button click"+ChefOrderId);
         sendToServer(ChefOrderId);
-       
+
+
 //        chefOrderAdapter.refresh(1);
 //        chefOrderAdapter.notifyDataSetChanged();
 

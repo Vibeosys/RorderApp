@@ -74,13 +74,10 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             }
 
         }
-//        if(expHashMap.size() == 0)
-//        {
-//            return 0;
-//        }
+
 
        return 0;
-      // return 2;
+
     }
 
     @Override
@@ -133,7 +130,12 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
             groupHolder = (GroupHolder)convertView.getTag();
         }
-
+        if(chefOrderDetailsDTO.getmNewOrderStatus() == 1)
+        {
+            groupHolder.orderDoneBtn.setVisibility(View.VISIBLE);
+        }
+        else
+        {groupHolder.orderDoneBtn.setVisibility(View.INVISIBLE);}
         groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
         groupHolder.getGroupOrderNo.setText(""+chefOrderDetailsDTO.getmOrderNumner());
@@ -167,6 +169,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         {
             childHolder = (ChildHolder)convertView.getTag();
         }
+
         childHolder.childTextView.setText(""+chefMenuDetailsDTO.getmChefMenuTitle());
         childHolder.childQty.setText(""+chefMenuDetailsDTO.getmChefQty());
         return convertView;
@@ -179,15 +182,25 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
     @Override
     public void onGroupExpanded(int groupPosition) {
-        super.onGroupExpanded(groupPosition);
 
-       ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
-       String selectedOrderId= String.valueOf(chefOrderDetailsDTO.getmNewOrderId());
-        child.clear();
-        child=  mDbRepository.getChefMenu(selectedOrderId);
-        expHashMap.put(groupPosition,child);
-        notifyDataSetChanged();
+        int currentPosition  =-1;
+        if(currentPosition !=-1 &&currentPosition != groupPosition )
+        {
 
+            onGroupCollapsed(groupPosition);
+            notifyDataSetChanged();
+
+        }
+        else {
+            super.onGroupExpanded(groupPosition);
+            currentPosition = groupPosition;
+            ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
+            String selectedOrderId = String.valueOf(chefOrderDetailsDTO.getmNewOrderId());
+            child.clear();
+            child = mDbRepository.getChefMenu(selectedOrderId);
+            expHashMap.put(groupPosition, child);
+            notifyDataSetChanged();
+        }
 
     }
 
@@ -196,6 +209,8 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         super.onGroupCollapsed(groupPosition);
 
         expHashMap.remove(groupPosition);
+
+
         notifyDataSetChanged();
     }
 
@@ -235,4 +250,5 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         notifyDataSetChanged();
 
     }
+
 }
