@@ -1,14 +1,12 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.media.MediaBrowserCompat;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.MainActivity;
@@ -21,6 +19,7 @@ import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 
 /**
  * Created by shrinivas on 08-02-2016.
@@ -30,6 +29,10 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
     PaymentModeAdapter adapter;
     private int mPaymentModeId;
     private int mBillNo;
+    private int mTableId;
+    private int mTableNo;
+    private String mCustId;
+    private Context mContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +42,9 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         Button closeBtn = (Button) findViewById(R.id.closeTableBtn);
         tableCommonInfoDTO = getIntent().getParcelableExtra("tableCustInfo");
         mBillNo = getIntent().getIntExtra("BillNo", 0);
-        final int tableId = tableCommonInfoDTO.getTableId();
-        final int tableNo = tableCommonInfoDTO.getTableNo();
-        final String custId = tableCommonInfoDTO.getCustId();
+        mTableId = tableCommonInfoDTO.getTableId();
+        mTableNo = tableCommonInfoDTO.getTableNo();
+        mCustId = tableCommonInfoDTO.getCustId();
         adapter = new PaymentModeAdapter(mDbRepository.getPaymentList(), getApplicationContext());
         spineer.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -49,35 +52,43 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mDbRepository.setOccupied(false, tableId);
-                mDbRepository.clearUpdateTempData(tableId, tableNo, custId);
-                mDbRepository.clearTableTransaction(custId, tableId);
-                UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 0);
-                Gson gson = new Gson();
-                String serializedJsonString = gson.toJson(occupiedDTO);
-                TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
-                mServerSyncManager.uploadDataToServer(tableDataDTO);
-
-                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId, custId);
-                String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
-                tableDataDTO = new TableDataDTO(ConstantOperations.CLOSE_TABLE, serializedTableTransaction);
-                mServerSyncManager.uploadDataToServer(tableDataDTO);
-                // finish();
-
-                BillPaidUpload billPaidUpload = new BillPaidUpload(mBillNo, 1, mPaymentModeId);
-                String serializedBillPaid = gson.toJson(billPaidUpload);
-                tableDataDTO = new TableDataDTO(ConstantOperations.PAID_BILL, serializedBillPaid);
-                mServerSyncManager.uploadDataToServer(tableDataDTO);
-
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                startActivity(i);
+                if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
+                    closeTable();
+                } else {
+                    showMyDialog(mContext);
+                }
                 //
             }
         });
 
+    }
+
+    private void closeTable() {
+
+        mDbRepository.setOccupied(false, mTableId);
+        mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
+        mDbRepository.clearTableTransaction(mCustId, mTableId);
+        UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(mTableId, 0);
+        Gson gson = new Gson();
+        String serializedJsonString = gson.toJson(occupiedDTO);
+        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+
+        TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(mTableId, mCustId);
+        String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
+        tableDataDTO = new TableDataDTO(ConstantOperations.CLOSE_TABLE, serializedTableTransaction);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        // finish();
+
+        BillPaidUpload billPaidUpload = new BillPaidUpload(mBillNo, 1, mPaymentModeId);
+        String serializedBillPaid = gson.toJson(billPaidUpload);
+        tableDataDTO = new TableDataDTO(ConstantOperations.PAID_BILL, serializedBillPaid);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+
+        Intent i = new Intent(getApplicationContext(), FeedbackActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        startActivity(i);
     }
 
     @Override

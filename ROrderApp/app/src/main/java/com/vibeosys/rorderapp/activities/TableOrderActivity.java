@@ -171,7 +171,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
         } else {
-            showMyDialog();
+            showMyDialog(mContext);
         }
     }
 
@@ -213,19 +213,5 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
         placeOrder();
     }
 
-    private void showMyDialog() {
 
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.show_network_alert);
-        dialog.setTitle("Network " + getResources().getString(R.string.alert_dialog));
-        TextView txtOk = (TextView) dialog.findViewById(R.id.txtOk);
-        txtOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
-            }
-        });
-        dialog.show();
-    }
 }

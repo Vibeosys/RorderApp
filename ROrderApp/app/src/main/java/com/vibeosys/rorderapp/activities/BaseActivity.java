@@ -2,20 +2,26 @@ package com.vibeosys.rorderapp.activities;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -143,10 +149,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }).create().show();
     }
 
-    protected String getImei(){
-        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+    protected String getImei() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();
     }
+
     protected boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -157,4 +164,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         return false;
     }
 
+    protected void showMyDialog(Context context) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.show_network_alert);
+        dialog.setTitle("Network " + getResources().getString(R.string.alert_dialog));
+        TextView txtOk = (TextView) dialog.findViewById(R.id.txtOk);
+        txtOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+            }
+        });
+        dialog.show();
+    }
 }

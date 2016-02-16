@@ -80,6 +80,9 @@
         <activity
             android:name=".activities.ChefOrdersDisplayActivity"
             android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".activities.FeedbackActivity"
+            android:parentActivityName=".MainActivity"></activity>
 
         <service
             android:name=".service.SyncService"

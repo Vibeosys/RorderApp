@@ -73,5 +73,7 @@
     <string name="error_select_restaurant_id">Restaurant Id is needed</string>
     <string name="network_error">Please Check Internet Connection</string>
     <string name="Ok">Ok</string>
+    <string name="feed_back_btn">Thank You</string>
     <string name="alert_dialog">Alert</string>
+    <string name="feedback_activity_name">Give Feedback</string>
 </resources>

@@ -12,6 +12,7 @@ import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
 import com.vibeosys.rorderapp.data.ChefMenuDetailsDTO;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
+import com.vibeosys.rorderapp.data.FeedBackDTO;
 import com.vibeosys.rorderapp.data.HotelTableDbDTO;
 import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
 import com.vibeosys.rorderapp.data.MenuDbDTO;
@@ -1431,7 +1432,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         int orderNumber = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
                         int orderStatus = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_STATUS));
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber,orderStatus);
+                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus);
                         AscindingOrdres.add(chefOrderDetailsDTO);
                     } while (cursor.moveToNext());
                 }
@@ -2008,5 +2009,45 @@ public class DbRepository extends SQLiteOpenHelper {
             }
         }
         return tableNo;
+    }
+
+    public ArrayList<FeedBackDTO> getFeedBackList() {
+        ArrayList<FeedBackDTO> feebackList = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+
+            cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlFeedbackMaster.TABLE_NAME
+                            + " WHERE " + SqlContract.SqlFeedbackMaster.ACTIVE + "=1",
+                    null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+
+                    do {
+                        int feedbackId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlFeedbackMaster.FEEDBACK_ID));
+                        String feedbackTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlFeedbackMaster.FEEDBACK_TITLE));
+                        int isactive = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlFeedbackMaster.ACTIVE));
+                        FeedBackDTO feedback = new FeedBackDTO(feedbackId, feedbackTitle, isactive);
+                        feebackList.add(feedback);
+                    } while (cursor.moveToNext());
+                }
+            }
+
+            cursor.close();
+            sqLiteDatabase.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error at feedbackList table " + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null) {
+                sqLiteDatabase.close();
+            }
+        }
+        return feebackList;
     }
 }
