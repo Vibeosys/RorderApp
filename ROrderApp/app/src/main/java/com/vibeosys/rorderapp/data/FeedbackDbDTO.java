@@ -16,6 +16,7 @@ public class FeedbackDbDTO extends BaseDTO {
     private String feedbackTitle;
     private int active;
 
+
     public int getFeedbackId() {
         return feedbackId;
     }

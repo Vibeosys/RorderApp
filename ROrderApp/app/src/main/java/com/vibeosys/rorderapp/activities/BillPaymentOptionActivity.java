@@ -86,9 +86,9 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         mServerSyncManager.uploadDataToServer(tableDataDTO);
 
         Intent i = new Intent(getApplicationContext(), FeedbackActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
+        i.putExtra("tableCustInfo", tableCommonInfoDTO);
         startActivity(i);
+        finish();
     }
 
     @Override
