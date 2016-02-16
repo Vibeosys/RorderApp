@@ -12,6 +12,8 @@ import android.util.Log;
 
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.database.DbRepository;
+import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
 import com.vibeosys.rorderapp.util.DbTableNameConstants;
 import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -34,6 +36,7 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
         SessionManager mSessionManager = SessionManager.getInstance(getApplicationContext());
         ServerSyncManager mServerSyncManager = new ServerSyncManager(getApplicationContext(), mSessionManager);
         mServerSyncManager.setOnDownloadReceived(this);
@@ -47,13 +50,24 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
                     if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
                         mServerSyncManager.syncDataWithServer(false);
                     Log.d("SyncService", "##In service");
+                    FragmentChefMyServing.runOnUI(new Runnable() {
+                        public void run() {
+                            try {
+                                FragmentChefMyServing.chefOrderAdapter.refresh(1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
+                        }
+                    });
 
                 } catch (Exception e) {
                     Log.e("SyncService", "##Error occurred in background service " + e.toString());
                 }
             }
         }
+
+
     }
 
     @Override

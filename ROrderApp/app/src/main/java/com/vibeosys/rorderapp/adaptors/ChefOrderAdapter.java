@@ -9,22 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.ChefMenuDetailsDTO;
-import com.vibeosys.rorderapp.data.ChefOrderCompleted;
-import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
-import com.vibeosys.rorderapp.data.ServerSync;
-import com.vibeosys.rorderapp.data.TableDataDTO;
-import com.vibeosys.rorderapp.database.DbRepository;
-import com.vibeosys.rorderapp.util.ConstantOperations;
-import com.vibeosys.rorderapp.util.ServerSyncManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
+
+import com.vibeosys.rorderapp.database.DbRepository;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,20 +34,19 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     private GroupHolder groupHolder;
     private ChildHolder childHolder;
     private DbRepository mDbRepository;
-    private  ServerSyncManager mserverSyncManager;
     private OnDoneClickListener onDoneClickListener;
     ArrayList<ChefMenuDetailsDTO> child;
     ArrayList<ChefMenuDetailsDTO> child1;
     HashMap<Integer ,ArrayList<ChefMenuDetailsDTO>> expHashMap ;
 
 
-   public ChefOrderAdapter(Context context,ArrayList<ChefOrderDetailsDTO>chefOrderDetailsDTOs,DbRepository dbRepository,ServerSyncManager mserverSyncManager)
+   public ChefOrderAdapter(Context context,ArrayList<ChefOrderDetailsDTO>chefOrderDetailsDTOs,
+                           DbRepository dbRepository)
     {
         this.context = context;
         this.chefOrderDetailsDTOs =chefOrderDetailsDTOs;
         child = new ArrayList<>();
         this.mDbRepository =dbRepository;
-        this.mserverSyncManager =mserverSyncManager;
         expHashMap = new HashMap<>();
 
     }
@@ -65,10 +59,6 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-    //     expHashMap.get(groupPosition).size();
-//        Toast.makeText(context,"size is"+expHashMap.get(groupPosition).size(),Toast.LENGTH_LONG).show();
-
-
 
         if(expHashMap.size()>0) {
             if (expHashMap.containsKey(groupPosition))
@@ -84,10 +74,10 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             }
 
         }
-        if(expHashMap.size() == 0)
-        {
-            return 0;
-        }
+//        if(expHashMap.size() == 0)
+//        {
+//            return 0;
+//        }
 
        return 0;
       // return 2;
@@ -95,26 +85,26 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
     @Override
     public Object getGroup(int groupPosition) {
-       // return null;
+
         return  this.chefOrderDetailsDTOs.get(groupPosition);
 
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-       // return null;
+
         return chefOrderDetailsDTOs.get(groupPosition).getmMenuChild().get(childPosition);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-       // return 0;
+
         return groupPosition;
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        //return 0;
+
         return childPosition;
     }
 
@@ -134,6 +124,8 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             groupHolder.groupTextView = (TextView)convertView.findViewById(R.id.orderFromTableNo);
             groupHolder.getGroupTableNo = (TextView)convertView.findViewById(R.id.orderTakenBy);
             groupHolder.orderDoneBtn = (Button)convertView.findViewById(R.id.OrderDoneChef);
+            groupHolder.getGroupOrderNo = (TextView)convertView.findViewById(R.id.cheforderNo);
+
             convertView.setTag(groupHolder);
         }
         else
@@ -144,15 +136,14 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
         groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
+        groupHolder.getGroupOrderNo.setText(""+chefOrderDetailsDTO.getmOrderNumner());
         groupHolder.orderDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onDoneClickListener !=null)
-                {
+                if (onDoneClickListener != null) {
                     onDoneClickListener.onDonClick(chefOrderDetailsDTO.getmNewOrderId());
                 }
-//                String OrderId = chefOrderDetailsDTO.getmNewOrderId();
-//                sendToServer(OrderId);
+
 
             }
         });
@@ -183,23 +174,18 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+        return false;
     }
 
     @Override
     public void onGroupExpanded(int groupPosition) {
         super.onGroupExpanded(groupPosition);
-        // String str =""+groupPosition;
+
        ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
        String selectedOrderId= String.valueOf(chefOrderDetailsDTO.getmNewOrderId());
         child.clear();
         child=  mDbRepository.getChefMenu(selectedOrderId);
         expHashMap.put(groupPosition,child);
-        //Toast.makeText(context,""+expHashMap.size(),Toast.LENGTH_LONG);
-       // expHashMap.put(groupPosition,child);
-     //   Toast.makeText(context,"database order id "+selectedOrderId,Toast.LENGTH_LONG).show();
-//        ChefOrderDetailsDTO mChefOrderDetailsDTO = (ChefOrderDetailsDTO) chefOrderDetailsDTOs.get(groupPosition);
-//        mChefOrderDetailsDTO.setmMenuChild(mDbRepository.getChefMenu(mChefOrderDetailsDTO.getmNewOrderId()));
         notifyDataSetChanged();
 
 
@@ -208,7 +194,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
-      //  child.clear();
+
         expHashMap.remove(groupPosition);
         notifyDataSetChanged();
     }
@@ -220,6 +206,8 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         TextView groupTextView;
         TextView getGroupTableNo;
         Button orderDoneBtn;
+        ImageView imgIndicator;
+        TextView getGroupOrderNo;
     }
     public final class ChildHolder
     {
@@ -235,5 +223,16 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     public void setOnDoneClickListener(OnDoneClickListener listener)
     {
        this.onDoneClickListener=listener;
+    }
+    public void refresh(int status)
+    {
+
+        this.chefOrderDetailsDTOs.clear();
+        this.child.clear();
+        this.onGroupCollapsed(getGroupCount());
+
+        this.chefOrderDetailsDTOs = mDbRepository.getOrderHeadesInAsc(status);
+        notifyDataSetChanged();
+
     }
 }

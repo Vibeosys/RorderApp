@@ -694,7 +694,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return orderMenus;
     }
 
-    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId,String note) {
+    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId, String note) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -719,7 +719,7 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTempOrder.ORDER_DATE, rOrderDateUtils.getGMTCurrentDate());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_TIME, rOrderDateUtils.getGMTCurrentTime());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
-            contentValues.put(SqlContract.SqlTempOrder.NOTE,note);
+            contentValues.put(SqlContract.SqlTempOrder.NOTE, note);
             if (rowCount == 0 && qty != 0)
                 count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);
             else if (qty == 0)
@@ -951,7 +951,7 @@ public class DbRepository extends SQLiteOpenHelper {
             orderHeaderDTO = new OrderHeaderDTO(tableId, userId, orderAmount, orderDetailsList.size(), true, orderDetailsList);
             cursor.close();
         } catch (Exception e) {
-        Log.e(TAG,e.toString());
+            Log.e(TAG, e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1407,14 +1407,14 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     /*chef order header function*/
-    public ArrayList<ChefOrderDetailsDTO> getOrderHeadesInAsc() {
+    public ArrayList<ChefOrderDetailsDTO> getOrderHeadesInAsc(int status) {
         ArrayList<ChefOrderDetailsDTO> AscindingOrdres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
-
-            cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime,users.UserName from  orders left join users on orders.UserId =users.UserId where orders.OrderStatus=1 order by  orders.OrderTime Asc  ", null);
+            String[] where = new String[]{String.valueOf(status)};
+            cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName from  orders left join users on orders.UserId =users.UserId where orders.OrderStatus=? order by  orders.OrderTime Asc  ", where);
             //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
 
             if (cursor != null) {
@@ -1427,8 +1427,9 @@ public class DbRepository extends SQLiteOpenHelper {
                         String orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                        int orderNumber = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName);
+                        ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName,orderNumber);
                         AscindingOrdres.add(chefOrderDetailsDTO);
                     } while (cursor.moveToNext());
                 }

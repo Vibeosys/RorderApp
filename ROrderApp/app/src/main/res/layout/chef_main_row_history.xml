@@ -15,7 +15,7 @@
 
 
         <TextView
-            android:id="@+id/chefMenuName"
+            android:id="@+id/chefMenuNameHistory"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="veg Manchurain"
@@ -24,14 +24,14 @@
             android:textSize="16sp"
             android:layout_weight="1"/>
         <TextView
-            android:id="@+id/commentForChef"
+            android:id="@+id/commentForChefHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" "
             android:textColor="@color/listview_item"
             android:layout_weight="1"/>
         <TextView
-            android:id="@+id/chefQty"
+            android:id="@+id/chefQtyHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" "

@@ -29,27 +29,27 @@
                 android:layout_marginLeft="4dp"
                 android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txtTableName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="No"
-                        android:textSize="10sp"
-                        android:textColor="@android:color/darker_gray"/>
-
-                    <TextView
-                        android:id="@+id/orderTakenBy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:layout_weight="1"
-                        android:text="1"
-                        android:textColor="@color/black_color"
-                        android:textSize="22sp" />
                 <TextView
-                    android:id="@+id/txtHash"
+                    android:id="@+id/txtHistryTableName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="No"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/darker_gray"/>
+
+                <TextView
+                    android:id="@+id/orderTakenHistryBy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="4dp"
+                    android:layout_weight="1"
+                    android:text="1"
+                    android:textColor="@color/black_color"
+                    android:textSize="22sp" />
+                <TextView
+                    android:id="@+id/txtHashHistry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -58,7 +58,7 @@
                     android:textSize="16sp"
                     android:textColor="@android:color/darker_gray"/>
                 <TextView
-                    android:id="@+id/cheforderNo"
+                    android:id="@+id/orderNoHistry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="4dp"
@@ -70,15 +70,15 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/txtServedName"
+                android:id="@+id/txtServedNameHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Served by"
-                android:textSize="10sp"
+                android:textSize="16sp"
                 android:textColor="@android:color/darker_gray"/>
             <TextView
-                android:id="@+id/orderFromTableNo"
+                android:id="@+id/orderFromTableNoHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
@@ -87,7 +87,7 @@
                 android:focusable="false"
                 android:text="DemoName"
                 android:textColor="@color/listview_item"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,7 +97,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/orderTime"
+                android:id="@+id/orderTimeHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
@@ -108,30 +108,19 @@
                 android:text="29 mins ago"
                 android:textColor="@color/listview_item" />
             <TextView
-                android:id="@+id/txtExpLink"
+                android:id="@+id/txtExpLinkHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-
+                android:layout_weight="1"
                 android:focusable="false"
                 android:gravity="center"
                 android:text="Click To Expand"
 
                 android:textColor="@color/blue" />
 
-            <Button
-                android:id="@+id/OrderDoneChef"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_custom"
-                android:focusable="false"
-                android:text="Complete"
-                android:textColor="@color/White"
-                android:textSize="13sp" />
+
         </LinearLayout>
     </LinearLayout>
 

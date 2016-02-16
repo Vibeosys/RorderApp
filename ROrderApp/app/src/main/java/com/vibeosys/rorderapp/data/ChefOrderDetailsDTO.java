@@ -17,9 +17,10 @@ public class ChefOrderDetailsDTO {
     private String mNewOrderId;
     private String mUserName;
     private int mTableNo;
+    private int mOrderNumner;
     private Date mplacedOrderDate;
     private Time morderTime;
-private ArrayList<ChefMenuDetailsDTO> mMenuChild;
+    private ArrayList<ChefMenuDetailsDTO> mMenuChild;
 
 
 
@@ -34,10 +35,11 @@ private ArrayList<ChefMenuDetailsDTO> mMenuChild;
         this.morderTime = morderTime;
         this.mOrderStatus =mOrderStatus;
     }
-    public ChefOrderDetailsDTO(String mNewOrderId,  int mTableNo,String mUserName) {
+    public ChefOrderDetailsDTO(String mNewOrderId,  int mTableNo,String mUserName,int mOrderNumner) {
         this.mNewOrderId =mNewOrderId;
         this.mTableNo = mTableNo;
         this.mUserName =mUserName;
+        this.mOrderNumner = mOrderNumner;
     }
     public int getmChefOrderId() {
         return mChefOrderId;
@@ -106,5 +108,13 @@ private ArrayList<ChefMenuDetailsDTO> mMenuChild;
 
     public void setmMenuChild(ArrayList<ChefMenuDetailsDTO> mMenuChild) {
         this.mMenuChild = mMenuChild;
+    }
+
+    public int getmOrderNumner() {
+        return mOrderNumner;
+    }
+
+    public void setmOrderNumner(int mOrderNumner) {
+        this.mOrderNumner = mOrderNumner;
     }
 }
