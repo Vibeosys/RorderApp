@@ -52,9 +52,9 @@ public class ChefOrdersDisplayActivity  extends AppCompatActivity{
 
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
 
-        tab_layout.addTab(tab_layout.newTab().setText("Current Orders"));
+        tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
 
-        tab_layout.addTab(tab_layout.newTab().setText("Order History"));
+        tab_layout.addTab(tab_layout.newTab().setText("ORDER HISTORY"));
 
 
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);

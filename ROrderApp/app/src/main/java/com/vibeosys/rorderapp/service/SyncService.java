@@ -15,6 +15,7 @@ import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.NotificationOrderDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
+import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
 import com.vibeosys.rorderapp.util.DbTableNameConstants;
 import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -59,7 +60,12 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
+                            FragmentChefPlacedOrder.runOnUI(new Runnable() {
+                                @Override
+                                public void run() {
+                                    FragmentChefPlacedOrder.chefOrderAdapter.refresh(2);
+                                }
+                            });
                         }
                     });
 

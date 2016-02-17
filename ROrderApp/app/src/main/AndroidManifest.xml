@@ -79,11 +79,13 @@
             android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
         <activity
             android:name=".activities.ChefOrdersDisplayActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".activities.FlashScreenActivity"></activity>
         <activity
             android:name=".activities.FeedbackActivity"
             android:parentActivityName=".MainActivity"></activity>
-
+        <activity
+            android:name=".activities.AboutUsActivity"
+            android:parentActivityName=".activities.FlashScreenActivity"></activity>
         <service
             android:name=".service.SyncService"
             android:exported="false" />

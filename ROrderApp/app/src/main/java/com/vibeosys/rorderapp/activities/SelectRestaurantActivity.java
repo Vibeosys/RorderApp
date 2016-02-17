@@ -54,9 +54,18 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk = (Button) findViewById(R.id.btnOk);
+        TextView aboutUs = (TextView) findViewById(R.id.about_us);
         //listResto=(ListView)findViewById(R.id.listView);
         getRestaurant(mSessionManager.getRestaurantUrl());
+        aboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Intent i = new Intent(getApplicationContext(),AboutUsActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
 
+            }
+        });
 
         mTxtRestaurant = (TextView) findViewById(R.id.txtRestaurantId);
         btnOk.setOnClickListener(this);

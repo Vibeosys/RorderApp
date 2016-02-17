@@ -1,6 +1,8 @@
 package com.vibeosys.rorderapp.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -23,8 +25,9 @@ import java.util.ArrayList;
 public class FragmentChefPlacedOrder extends BaseFragment
 {
     private ExpandableListView chefOrderListHistory;
-    private ChefOrderAdapter chefOrderAdapter;
+    public static ChefOrderAdapter chefOrderAdapter;
     private ArrayList<ChefOrderDetailsDTO> listHistory  =new ArrayList<>();
+    public static Handler UIHandler;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +42,12 @@ public class FragmentChefPlacedOrder extends BaseFragment
 
         return view;
     }
+    static {
+        UIHandler = new Handler(Looper.getMainLooper());
+    }
 
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
+    }
 
 }
