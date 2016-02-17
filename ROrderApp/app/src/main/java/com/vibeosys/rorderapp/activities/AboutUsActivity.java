@@ -22,7 +22,7 @@ public class AboutUsActivity extends BaseActivity {
                 " \n" +
                 "For more information or tie-ups, please visit our website www.vibeosys.com or send an inquiry to info@vibeosys.com\n" +
                 "\n" +
-                "Please add the text for ABOUT US link in our APP.\n" +"</font>"));
+                 "</font>"));
 
     }
 }
