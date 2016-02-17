@@ -136,4 +136,9 @@
         <item name="android:gravity">center</item>
 
     </style>
+    <style name="tab_layout_text" parent="Widget.Design.TabLayout">
+        <item name ="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black_color</item>
+
+    </style>
 </resources>

@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +19,7 @@ import com.vibeosys.rorderapp.data.ChefOrderCompleted;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 
 import org.json.JSONException;
@@ -30,9 +32,11 @@ import java.util.ArrayList;
  */
 public class FragmentChefMyServing extends BaseFragment implements
         ChefOrderAdapter.OnDoneClickListener,ServerSyncManager.OnStringResultReceived{
+
     private ExpandableListView chefOrderList;
     public static ChefOrderAdapter chefOrderAdapter;
     public static Handler UIHandler;
+    private Context mContext =this.getContext();
     private ArrayList<ChefOrderDetailsDTO> list  =new ArrayList<>();
     @Nullable
 
@@ -47,7 +51,7 @@ public class FragmentChefMyServing extends BaseFragment implements
         chefOrderList.setAdapter(chefOrderAdapter);
 
         chefOrderAdapter.setOnDoneClickListener(this);
-       mServerSyncManager.setOnStringResultReceived(this);
+        mServerSyncManager.setOnStringResultReceived(this);
         chefOrderAdapter.notifyDataSetChanged();
 
 
@@ -58,7 +62,7 @@ public class FragmentChefMyServing extends BaseFragment implements
     public void onDonClick(String ChefOrderId) {
         //       Log.d(TAG,"## button click"+ChefOrderId);
         sendToServer(ChefOrderId);
-
+        chefOrderList.invalidateViews();
 
 //        chefOrderAdapter.refresh(1);
 //        chefOrderAdapter.notifyDataSetChanged();
@@ -68,14 +72,22 @@ public class FragmentChefMyServing extends BaseFragment implements
     }
     public void sendToServer(String OrderId)
     {
+        if(NetworkUtils.isActiveNetworkAvailable(getContext()))
+        {
+            ChefOrderCompleted chefOrderCompleted = new ChefOrderCompleted(OrderId);
+            Gson gson = new Gson();
+            String serializedJsonString = gson.toJson(chefOrderCompleted);
+            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE,serializedJsonString);
+            mServerSyncManager.uploadDataToServer(tableDataDTO);
+            mServerSyncManager.syncDataWithServer(true);
+            //  finish();
+        }else
+        {
+            showMyDialog(mContext);
+        }
 
-        ChefOrderCompleted chefOrderCompleted = new ChefOrderCompleted(OrderId);
-        Gson gson = new Gson();
-        String serializedJsonString = gson.toJson(chefOrderCompleted);
-        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE,serializedJsonString);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
-        mServerSyncManager.syncDataWithServer(true);
-        //  finish();
+
+
     }
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
@@ -100,8 +112,8 @@ public class FragmentChefMyServing extends BaseFragment implements
             chefOrderAdapter.notifyDataSetChanged();
         }
 */
-        chefOrderAdapter.refresh(1);
-        chefOrderAdapter.notifyDataSetChanged();
+//        chefOrderAdapter.refresh(1);
+//        chefOrderAdapter.notifyDataSetChanged();
     }
 
 

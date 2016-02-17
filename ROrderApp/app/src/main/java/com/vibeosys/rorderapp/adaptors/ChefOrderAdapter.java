@@ -163,6 +163,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             childHolder = new ChildHolder();
             childHolder.childTextView = (TextView)convertView.findViewById(R.id.chefMenuName);
             childHolder.childQty = (TextView)convertView.findViewById(R.id.chefQty);
+            childHolder.menuNo = (TextView)convertView.findViewById(R.id.chefMenuNo);
             convertView.setTag(childHolder);
         }
         else
@@ -172,6 +173,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
         childHolder.childTextView.setText(""+chefMenuDetailsDTO.getmChefMenuTitle());
         childHolder.childQty.setText(""+chefMenuDetailsDTO.getmChefQty());
+        childHolder.menuNo.setText(""+(childPosition+1));
         return convertView;
     }
 
@@ -228,6 +230,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     {
         TextView childTextView;
         TextView childQty;
+        TextView menuNo;
     }
 
 

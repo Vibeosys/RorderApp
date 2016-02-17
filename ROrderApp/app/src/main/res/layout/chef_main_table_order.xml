@@ -74,7 +74,8 @@
                 android:id="@+id/txtServedName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="end"
+                android:layout_weight="1"
                 android:text="Served by"
                 android:textSize="10sp"
                 android:textColor="@android:color/darker_gray"/>
@@ -86,7 +87,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:paddingLeft="60dp"
+                android:paddingLeft="2dp"
                 android:text="DemoName"
                 android:textColor="@color/listview_item"
                 android:textSize="18sp" />

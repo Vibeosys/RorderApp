@@ -6,8 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ExpandableListView;
-
+import android.widget.TextView;
 
 
 import com.vibeosys.rorderapp.R;
@@ -40,17 +42,19 @@ public class ChefOrdersDisplayActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chef_main_screen);
         getSupportActionBar();
-        setTitle("Chef");
+        setTitle("Chef dashboard");
 
 
         chefOrderList = (ExpandableListView) findViewById(R.id.expListViewForChef);
         getSupportActionBar();
-
-
+//        TextView textView = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_text_view,null);
+//        textView.setText("Current Orders");
 
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
+
         tab_layout.addTab(tab_layout.newTab().setText("Current Orders"));
-        tab_layout.addTab(tab_layout.newTab().setText("History"));
+
+        tab_layout.addTab(tab_layout.newTab().setText("Order History"));
 
 
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
