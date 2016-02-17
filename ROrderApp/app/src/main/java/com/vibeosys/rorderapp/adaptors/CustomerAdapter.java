@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class CustomerAdapter extends BaseAdapter {
 
-    private static final String TAG =CustomerAdapter.class.getSimpleName() ;
+    private static final String TAG = CustomerAdapter.class.getSimpleName();
     private Context mContext;
     private ArrayList<WaitingUserDTO> waitingList;
 
@@ -28,16 +28,17 @@ public class CustomerAdapter extends BaseAdapter {
         this.mContext = mContext;
         this.waitingList = waitingList;
     }
-    public void refresh(ArrayList<WaitingUserDTO> waiting)
-    {
+
+    public void refresh(ArrayList<WaitingUserDTO> waiting) {
         this.waitingList.clear();
-        this.waitingList=waiting;
+        this.waitingList = waiting;
         notifyDataSetChanged();
     }
+
     @Override
     public int getCount() {
-        if(waitingList!=null)
-        return waitingList.size();
+        if (waitingList != null)
+            return waitingList.size();
         else return 0;
     }
 
@@ -63,7 +64,7 @@ public class CustomerAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.txtCustName = (TextView) row.findViewById(R.id.txtCustomerName);
             viewHolder.txtCount = (TextView) row.findViewById(R.id.txtCount);
-            viewHolder.txtArrivalTime  = (TextView) row.findViewById(R.id.txtArrivalTime);
+            //viewHolder.txtArrivalTime  = (TextView) row.findViewById(R.id.txtArrivalTime);
             // viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
             row.setTag(viewHolder);
 
@@ -73,13 +74,13 @@ public class CustomerAdapter extends BaseAdapter {
         Log.d(TAG, waitingUserDTO.toString());
         viewHolder.txtCustName.setText(waitingUserDTO.getmCustomerName());
         viewHolder.txtCount.setText(String.valueOf(waitingUserDTO.getmOccupancy()));
-        viewHolder.txtArrivalTime.setText(waitingUserDTO.getmArrivalTime().toString());
+        //viewHolder.txtArrivalTime.setText(waitingUserDTO.getmArrivalTime().toString());
 
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }
 
-    public class ViewHolder{
+    public class ViewHolder {
         TextView txtCustName;
         TextView txtCount;
         TextView txtArrivalTime;

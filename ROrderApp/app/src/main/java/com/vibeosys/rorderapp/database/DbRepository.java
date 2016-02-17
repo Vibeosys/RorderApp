@@ -1034,10 +1034,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     do {
                         String mCustomerId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
                         int mOccupancy = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableTransaction.OCCUPANCY));
-                        Date mArrivalTime = Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.ARRIVAL_TIME)));
+                       // Date mArrivalTime = Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.ARRIVAL_TIME)));
                         String mCustomerName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_NAME));
 
-                        WaitingUserDTO waiting = new WaitingUserDTO(mCustomerId, mOccupancy, mArrivalTime, mCustomerName);
+                        WaitingUserDTO waiting = new WaitingUserDTO(mCustomerId, mOccupancy, mCustomerName);
                         waitingList.add(waiting);
                     } while (cursor.moveToNext());
                 }

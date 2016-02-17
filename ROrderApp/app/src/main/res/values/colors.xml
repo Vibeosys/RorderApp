@@ -4,7 +4,7 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="White">#fff</color>
-
+    <color name="amber">#FF8F00</color>
     <color name="transperent">#80000000</color>
     <color name="light_grey">#d1cdcd</color>
     <color name="light_yello">#CD853F</color>

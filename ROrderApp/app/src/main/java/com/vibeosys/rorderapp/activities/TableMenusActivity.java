@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -34,6 +35,7 @@ import com.vibeosys.rorderapp.util.ServerSyncManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -312,14 +314,17 @@ public class TableMenusActivity extends BaseActivity implements
     private void showMyDialog(final OrderMenuDTO orderMenu) {
         final String[] orderNote = {""};
         final Dialog dialog = new Dialog(mContext);
-        dialog.setTitle(getResources().getString(R.string.dialog_title_select_note));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+       // dialog.setTitle(orderMenu.getmMenuTitle());
         dialog.setContentView(R.layout.dialog_select_note);
         ArrayList<NoteDTO> notes = mDbRepository.getNoteList();
         final NoteAdapter noteadapter = new NoteAdapter(dialog.getContext(), notes);
         ListView listNotes = (ListView) dialog.findViewById(R.id.noteList);
         TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        TextView txtMenuName = (TextView) dialog.findViewById(R.id.txtMenuName);
         TextView txtOrder = (TextView) dialog.findViewById(R.id.txtOrder);
         listNotes.setAdapter(noteadapter);
+        txtMenuName.setText(orderMenu.getmMenuTitle());
         listNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

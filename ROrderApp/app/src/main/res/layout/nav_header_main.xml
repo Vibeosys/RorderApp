@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/nav_bar_back"
+    android:background="@drawable/nav_bar_back_new"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -15,17 +15,17 @@
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:layout_gravity="right"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/hotel_logo" />
 
     <TextView
         android:id="@+id/txtHeaderWaiterName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="right"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="ABC XYZ"
-        android:gravity="right"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView

@@ -77,8 +77,7 @@ public class MainActivity extends BaseActivity
         ContextWrapper ctw = new ContextWrapper(getApplicationContext());
         File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
         File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
-        Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-        startService(syncServiceIntent);
+
         if (!dbFile.exists()) {
             Intent selectRestoIntent = new Intent(getApplicationContext(), SelectRestaurantActivity.class);
             selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -91,6 +90,8 @@ public class MainActivity extends BaseActivity
             selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(selectRestoIntent);
             finish();
+            Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+            startService(syncServiceIntent);
         } else {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -98,20 +99,17 @@ public class MainActivity extends BaseActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent iWaitingList = new Intent(getApplicationContext(), AddCustomerActivity.class);
-                    startActivity(iWaitingList);
-                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                    callWaitingIntent();
                 }
             });
-
+            Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+            startService(syncServiceIntent);
 
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-           /* TextView txtUserName = (TextView) findViewById(R.id.txtHeaderWaiterName);
-            txtUserName.setText("");
-            TextView txtRestaurantName = (TextView)findViewById(R.id.txtHeaderHotelName);
-            txtRestaurantName.setText("");*/
+
+
             drawer.setDrawerListener(toggle);
             toggle.syncState();
             txtTotalCount = (TextView) findViewById(R.id.txtCount);
@@ -122,10 +120,16 @@ public class MainActivity extends BaseActivity
             gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+            View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+            TextView txtUserName = (TextView) headerView.findViewById(R.id.txtHeaderWaiterName);
+            txtUserName.setText(mSessionManager.getUserName());
+            TextView txtRestaurantName = (TextView) headerView.findViewById(R.id.txtHeaderHotelName);
+            //txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
             txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + hotelTableDTOs.size() + " tables are occupied");
         }
 
     }
+
 
     @Override
     protected void onPostResume() {
@@ -234,7 +238,7 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_my_profile) {
             // Handle the camera action
         } else if (id == R.id.nav_waiting_list) {
-
+            callWaitingIntent();
         } else if (id == R.id.nav_log_out) {
             UserAuth.CleanAuthenticationInfo();
             callLogin();
@@ -395,5 +399,11 @@ public class MainActivity extends BaseActivity
         } else {
 
         }
+    }
+
+    private void callWaitingIntent() {
+        Intent iWaitingList = new Intent(getApplicationContext(), AddCustomerActivity.class);
+        startActivity(iWaitingList);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
     }
 }
