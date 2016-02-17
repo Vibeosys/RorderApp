@@ -16,13 +16,11 @@
         android:id="@+id/filter"
         android:icon="@drawable/ic_action_filter"
         android:title="Filter Menu"
-        app:actionViewClass="android.support.v7.widget"
         app:showAsAction="always" />
     <item
         android:id="@+id/notification"
         android:icon="@drawable/ic_action_bell"
         android:title="@string/notification"
-        app:actionViewClass="android.support.v7.widget"
         app:showAsAction="always" />
 
 </menu>
