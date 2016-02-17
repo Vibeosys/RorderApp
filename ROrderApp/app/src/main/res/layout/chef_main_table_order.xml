@@ -20,6 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
             android:orientation="horizontal">
 
 
@@ -36,6 +37,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:layout_marginTop="5dp"
                         android:text="No"
                         android:textSize="10sp"
                         android:textColor="@android:color/darker_gray"/>
@@ -46,6 +48,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
                         android:layout_weight="1"
+                        android:layout_marginTop="5dp"
                         android:text="1"
                         android:textColor="@color/black_color"
                         android:textSize="22sp" />
@@ -54,6 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:text="#"
                     android:textSize="16sp"
@@ -62,6 +66,7 @@
                     android:id="@+id/cheforderNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:paddingLeft="4dp"
                     android:layout_weight="1"
                     android:text="112"
@@ -70,7 +75,7 @@
 
             </LinearLayout>
 
-            <TextView
+         <!--   <TextView
                 android:id="@+id/txtServedName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,15 +83,22 @@
                 android:layout_weight="1"
                 android:text="Served by"
                 android:textSize="10sp"
-                android:textColor="@android:color/darker_gray"/>
+                android:textColor="@android:color/darker_gray"/>-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:id="@+id/servedByIcon"
+                android:layout_weight="0.5"
+                android:layout_gravity="center"
+                android:src="@drawable/ico_served_by_black"/>
             <TextView
                 android:id="@+id/orderFromTableNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
+                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:focusable="false"
                 android:paddingLeft="2dp"
                 android:text="DemoName"
                 android:textColor="@color/listview_item"
@@ -99,14 +111,24 @@
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="9dp"
+                android:id="@+id/hrsGlassIcon"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/icon_hours_glass"/>
             <TextView
                 android:id="@+id/orderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:paddingLeft="3dp"
                 android:focusable="false"
-                android:paddingLeft="8dp"
+                android:layout_marginBottom="1dp"
                 android:text="29 mins ago"
                 android:textColor="@color/listview_item" />
             <TextView
@@ -115,8 +137,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
+                android:layout_marginBottom="1dp"
                 android:focusable="false"
-                android:gravity="center"
+                android:layout_gravity="bottom"
                 android:textSize="12sp"
                 android:text="Click To Expand"
                 android:layout_weight="1"
@@ -134,6 +157,13 @@
                 android:text="Complete"
                 android:textColor="@color/White"
                 android:textSize="13sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:id="@+id/chefOrderDonIcon"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_action_tick_chef"/>
         </LinearLayout>
     </LinearLayout>
 
