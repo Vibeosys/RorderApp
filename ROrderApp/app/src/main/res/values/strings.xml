@@ -76,4 +76,5 @@
     <string name="feed_back_btn">Thank You</string>
     <string name="alert_dialog">Alert</string>
     <string name="feedback_activity_name">Give Feedback</string>
+    <string name="btn_proceed">Proceed</string>
 </resources>

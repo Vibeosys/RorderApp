@@ -15,11 +15,11 @@
     <!-- The navigation drawer -->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
+        class="android.support.design.widget.NavigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:actionViewClass="android.support.design.widget.NavigationView"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
