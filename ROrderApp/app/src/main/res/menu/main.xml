@@ -21,6 +21,6 @@
         android:id="@+id/notification"
         android:icon="@drawable/ic_action_bell"
         android:title="@string/notification"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
 
 </menu>

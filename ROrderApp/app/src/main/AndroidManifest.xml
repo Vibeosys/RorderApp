@@ -86,6 +86,9 @@
         <activity
             android:name=".activities.AboutUsActivity"
             android:parentActivityName=".activities.FlashScreenActivity"></activity>
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:parentActivityName=".MainActivity"></activity>
         <service
             android:name=".service.SyncService"
             android:exported="false" />

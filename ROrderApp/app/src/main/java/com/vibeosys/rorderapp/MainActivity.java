@@ -28,6 +28,7 @@ import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.ChefOrdersDisplayActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
+import com.vibeosys.rorderapp.activities.NotificationActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.activities.TableFilterActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
@@ -90,8 +91,6 @@ public class MainActivity extends BaseActivity
             selectRestoIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(selectRestoIntent);
             finish();
-            Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-            startService(syncServiceIntent);
         } else {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -225,7 +224,10 @@ public class MainActivity extends BaseActivity
             iFilter.putExtra("json", jsonObject.toString());
             startActivityForResult(iFilter, 2);
         }
-
+        if (id == R.id.notification) {
+            Intent iWaitingList = new Intent(getApplicationContext(), NotificationActivity.class);
+            startActivity(iWaitingList);
+        }
         return super.onOptionsItemSelected(item);
     }
 

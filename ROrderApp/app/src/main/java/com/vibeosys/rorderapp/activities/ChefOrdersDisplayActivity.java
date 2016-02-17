@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -17,6 +18,8 @@ import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefPagerAdapter;
 
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
+import com.vibeosys.rorderapp.service.ChefService;
+import com.vibeosys.rorderapp.service.SyncService;
 
 
 import org.json.JSONException;
@@ -27,11 +30,11 @@ import java.util.ArrayList;
 /**
  * Created by shrinivas on 12-02-2016.
  */
-public class ChefOrdersDisplayActivity  extends AppCompatActivity{
+public class ChefOrdersDisplayActivity extends AppCompatActivity {
 
-   private ExpandableListView chefOrderList;
+    private ExpandableListView chefOrderList;
     private ChefOrderAdapter chefOrderAdapter;
-    private  ArrayList<ChefOrderDetailsDTO> list  =new ArrayList<>();
+    private ArrayList<ChefOrderDetailsDTO> list = new ArrayList<>();
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -49,7 +52,8 @@ public class ChefOrdersDisplayActivity  extends AppCompatActivity{
         getSupportActionBar();
 //        TextView textView = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_text_view,null);
 //        textView.setText("Current Orders");
-
+        Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, ChefService.class);
+        startService(syncServiceIntent);
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
 
         tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
@@ -83,7 +87,6 @@ public class ChefOrdersDisplayActivity  extends AppCompatActivity{
         });
 
     }
-
 
 
 }

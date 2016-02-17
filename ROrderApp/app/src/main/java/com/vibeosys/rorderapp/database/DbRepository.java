@@ -206,7 +206,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
-    public UserDTO autheticateUser(String userName, String password) {
+    public UserDTO autheticateUser(String userName, String password, int roleId) {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         int userId = 0;
@@ -218,8 +218,8 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             String query = "SELECT * FROM " + SqlContract.SqlUser.TABLE_NAME + " WHERE " + SqlContract.SqlUser.USER_NAME
-                    + "=? AND " + SqlContract.SqlUser.PASSWORD + "=? LIMIT 1";
-            cursor = sqLiteDatabase.rawQuery(query, new String[]{userName, password});
+                    + "=? AND " + SqlContract.SqlUser.PASSWORD + "=? AND " + SqlContract.SqlUser.ROLE_ID + "=? LIMIT 1";
+            cursor = sqLiteDatabase.rawQuery(query, new String[]{userName, password, String.valueOf(roleId)});
 
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -1034,7 +1034,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     do {
                         String mCustomerId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.CUST_ID));
                         int mOccupancy = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableTransaction.OCCUPANCY));
-                       // Date mArrivalTime = Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.ARRIVAL_TIME)));
+                        // Date mArrivalTime = Date.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableTransaction.ARRIVAL_TIME)));
                         String mCustomerName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_NAME));
 
                         WaitingUserDTO waiting = new WaitingUserDTO(mCustomerId, mOccupancy, mCustomerName);

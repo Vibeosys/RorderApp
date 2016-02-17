@@ -53,22 +53,6 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
                     if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
                         mServerSyncManager.syncDataWithServer(false);
                     Log.d("SyncService", "##In service");
-                    FragmentChefMyServing.runOnUI(new Runnable() {
-                        public void run() {
-                            try {
-                                FragmentChefMyServing.chefOrderAdapter.refresh(1);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            FragmentChefPlacedOrder.runOnUI(new Runnable() {
-                                @Override
-                                public void run() {
-                                    FragmentChefPlacedOrder.chefOrderAdapter.refresh(2);
-                                }
-                            });
-                        }
-                    });
-
                 } catch (Exception e) {
                     Log.e("SyncService", "##Error occurred in background service " + e.toString());
                 }

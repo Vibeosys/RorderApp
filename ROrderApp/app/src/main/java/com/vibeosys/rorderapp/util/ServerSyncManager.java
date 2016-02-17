@@ -14,6 +14,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.vibeosys.rorderapp.activities.NotificationActivity;
 import com.vibeosys.rorderapp.data.NotificationOrderDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.ServerSync;
@@ -432,6 +433,7 @@ public class ServerSyncManager
                         NotificationOrderDTO notificationOrderDTO = new NotificationOrderDTO(
                                 myOrder.getOrderNo(), myOrder.getUserId(), myOrder.isOrderStatus(),
                                 message, tableNo);
+                        NotificationActivity.notifications.add(notificationOrderDTO);
                         if (mNotifyUser != null) {
 
                             mNotifyUser.onNotificationReceived(message);
