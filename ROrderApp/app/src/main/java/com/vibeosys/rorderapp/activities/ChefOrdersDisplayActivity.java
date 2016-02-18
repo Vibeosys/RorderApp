@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.vibeosys.rorderapp.adaptors.ChefPagerAdapter;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.service.ChefService;
 import com.vibeosys.rorderapp.service.SyncService;
+import com.vibeosys.rorderapp.util.UserAuth;
 
 
 import org.json.JSONException;
@@ -91,5 +94,34 @@ public class ChefOrdersDisplayActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+       // return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main, menu);
+        menu.findItem(R.id.search).setVisible(false);
+        menu.findItem(R.id.filter).setVisible(false);
+        menu.findItem(R.id.notification).setVisible(false);
+        menu.findItem(R.id.signoutChef).setVisible(true);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == R.id.signoutChef)
+        {
+            UserAuth.CleanAuthenticationInfo();
+            chefCallLogin();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public void chefCallLogin() {
+        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
+        finish();
+    }
 }

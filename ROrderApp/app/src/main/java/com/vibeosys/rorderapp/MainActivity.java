@@ -248,6 +248,7 @@ public class MainActivity extends BaseActivity
         }else if(id ==R.id.about_us)
         {
             Intent aboutUsIntent = new Intent(getApplicationContext(), AboutUsActivity.class);
+            aboutUsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(aboutUsIntent);
         }
 
