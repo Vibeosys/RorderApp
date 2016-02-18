@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
@@ -1416,6 +1417,15 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             String[] where = new String[]{String.valueOf(status)};
+//            cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus," +
+//                    "orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName," +
+//                    "r_tables.TableNo,order_details.Note \n" +
+//                    "from  orders\n" +
+//                    " left join users on orders.UserId =users.UserId\n" +
+//                    " left join r_tables on r_tables.TableId = orders.TableNo \n" +
+//                    " left join order_details on  orders.OrderId = order_details.OrderId\n" +
+//                    " where orders.OrderStatus=? order by  orders.OrderTime Asc     ", where);
+
             cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName,r_tables.TableNo from  orders left join users on orders.UserId =users.UserId left join r_tables on r_tables.TableId = orders.TableNo where orders.OrderStatus=? order by  orders.OrderTime Asc    ", where);
             //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
 
@@ -1431,6 +1441,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         int orderNumber = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
                         int orderStatus = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_STATUS));
+
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
                         ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus);
                         AscindingOrdres.add(chefOrderDetailsDTO);
@@ -1462,7 +1473,9 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             String[] whereClause = new String[]{String.valueOf(orderId)};
-            cursor = sqLiteDatabase.rawQuery("select order_details.OrderId,orders.OrderId,order_details.MenuId,menu.MenuTitle,order_details.OrderQuantity from orders inner join order_details on order_details.OrderId= orders.OrderId  inner join  menu on menu.MenuId = order_details.MenuId where order_details.OrderId =?", whereClause);
+            cursor = sqLiteDatabase.rawQuery("select order_details.OrderId,orders.OrderId,order_details.MenuId,menu.MenuTitle,order_details.OrderQuantity,order_details.Note from orders inner join order_details on order_details.OrderId= orders.OrderId  inner join  menu on menu.MenuId = order_details.MenuId where order_details.OrderId =?", whereClause);
+
+         //   cursor = sqLiteDatabase.rawQuery("select order_details.OrderId,orders.OrderId,order_details.MenuId,menu.MenuTitle,order_details.OrderQuantity from orders inner join order_details on order_details.OrderId= orders.OrderId  inner join  menu on menu.MenuId = order_details.MenuId where order_details.OrderId =?", whereClause);
             //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
 
             if (cursor != null) {
@@ -1476,7 +1489,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         int mMenuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_ID));
                         String mMenuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                        ChefMenuDetailsDTO chefMenuDetailsDTO = new ChefMenuDetailsDTO(mMenuId, mMenuName, mMenuQty);
+                        String mMenuNote = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.NOTE));
+                        ChefMenuDetailsDTO chefMenuDetailsDTO = new ChefMenuDetailsDTO(mMenuId, mMenuName, mMenuQty ,mMenuNote);
                         menudetails.add(chefMenuDetailsDTO);
                     } while (cursor.moveToNext());
                 }

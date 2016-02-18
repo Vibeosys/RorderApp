@@ -49,9 +49,9 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
                 try {
                     //TODO: Hardcoded time for now, need to read from properties
                     wait(10 * 1000);
-
                     if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
                         mServerSyncManager.syncDataWithServer(false);
+
                     Log.d("SyncService", "##In service");
                 } catch (Exception e) {
                     Log.e("SyncService", "##Error occurred in background service " + e.toString());

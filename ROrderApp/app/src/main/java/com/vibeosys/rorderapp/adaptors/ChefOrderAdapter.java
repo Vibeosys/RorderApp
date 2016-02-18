@@ -111,7 +111,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         final ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
         if(convertView ==null)
         {
@@ -170,6 +170,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             childHolder.childTextView = (TextView)convertView.findViewById(R.id.chefMenuName);
             childHolder.childQty = (TextView)convertView.findViewById(R.id.chefQty);
             childHolder.menuNo = (TextView)convertView.findViewById(R.id.chefMenuNo);
+            childHolder.childMenuNote = (TextView)convertView.findViewById(R.id.chefMenuComment);
             convertView.setTag(childHolder);
         }
         else
@@ -180,6 +181,9 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         childHolder.childTextView.setText(""+chefMenuDetailsDTO.getmChefMenuTitle());
         childHolder.childQty.setText(""+chefMenuDetailsDTO.getmChefQty());
         childHolder.menuNo.setText(""+(childPosition+1));
+        childHolder.childMenuNote.setText("" + chefMenuDetailsDTO.getmMenuNote());
+        Toast.makeText(context,""+chefMenuDetailsDTO.getmMenuNote(),Toast.LENGTH_SHORT);
+
         return convertView;
     }
 
@@ -238,6 +242,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         TextView childTextView;
         TextView childQty;
         TextView menuNo;
+        TextView childMenuNote;
     }
 
 

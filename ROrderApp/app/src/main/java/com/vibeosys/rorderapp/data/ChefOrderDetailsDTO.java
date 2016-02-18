@@ -42,6 +42,7 @@ public class ChefOrderDetailsDTO {
         this.mUserName =mUserName;
         this.mOrderNumner = mOrderNumner;
         this.mNewOrderStatus =mNewOrderStatus;
+
     }
     public int getmChefOrderId() {
         return mChefOrderId;
@@ -126,4 +127,5 @@ public class ChefOrderDetailsDTO {
     public void setmNewOrderStatus(int mNewOrderStatus) {
         this.mNewOrderStatus = mNewOrderStatus;
     }
+
 }

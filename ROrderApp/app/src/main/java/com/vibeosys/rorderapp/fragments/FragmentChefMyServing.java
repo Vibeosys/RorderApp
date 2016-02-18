@@ -1,6 +1,8 @@
 package com.vibeosys.rorderapp.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.DataSetObservable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +20,8 @@ import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
 import com.vibeosys.rorderapp.data.ChefOrderCompleted;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
+import com.vibeosys.rorderapp.service.ChefService;
+import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -44,6 +48,9 @@ public class FragmentChefMyServing extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.chef_expandable_list,container,false);
+
+        Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),ChefService.class);
+        getContext().startService(i);
 
         chefOrderList = (ExpandableListView) view.findViewById(R.id.expListViewForChef);
         list = mDbRepository.getOrderHeadesInAsc(1);
@@ -120,9 +127,25 @@ public class FragmentChefMyServing extends BaseFragment implements
 
     static {
         UIHandler = new Handler(Looper.getMainLooper());
+
     }
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
+
     }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        list.addAll(mDbRepository.getOrderHeadesInAsc(1));
+        chefOrderAdapter.notifyDataSetChanged();
+
+
+
+    }
+
 }

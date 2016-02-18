@@ -26,17 +26,18 @@ public class ChefService extends IntentService {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            FragmentChefPlacedOrder.runOnUI(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        FragmentChefPlacedOrder.chefOrderAdapter.refresh(2);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
 
-                                }
-                            });
+                        }
+                    });
+                    FragmentChefPlacedOrder.runOnUI(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                FragmentChefPlacedOrder.chefOrderAdapter.refresh(2);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     });
 

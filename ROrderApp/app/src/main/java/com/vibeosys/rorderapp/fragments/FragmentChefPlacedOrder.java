@@ -49,5 +49,14 @@ public class FragmentChefPlacedOrder extends BaseFragment
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
     }
+    public  void reload()
+    {
+        listHistory.clear();
+        listHistory.addAll(mDbRepository.getOrderHeadesInAsc(2));
+        ;
+        chefOrderListHistory.setAdapter(new ChefOrderAdapter(getActivity().getApplicationContext()
+                ,listHistory,mDbRepository));
+
+    }
 
 }

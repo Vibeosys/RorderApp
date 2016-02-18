@@ -1,5 +1,7 @@
 package com.vibeosys.rorderapp.data;
 
+import android.widget.TextView;
+
 /**
  * Created by shrinivas on 11-02-2016.
  */
@@ -9,10 +11,14 @@ public class ChefMenuDetailsDTO {
     String mChefMenuTitle;
     int mChefQty;
 
-    public ChefMenuDetailsDTO(int mChefMenuId, String mChefMenuTitle, int mChefQty) {
+
+    String mMenuNote;
+
+    public ChefMenuDetailsDTO(int mChefMenuId, String mChefMenuTitle, int mChefQty,String mMenuNote ) {
         this.mChefMenuId = mChefMenuId;
         this.mChefMenuTitle = mChefMenuTitle;
         this.mChefQty = mChefQty;
+        this.mMenuNote = mMenuNote;
     }
 
     public int getmChefMenuId() {
@@ -39,6 +45,13 @@ public class ChefMenuDetailsDTO {
         this.mChefQty = mChefQty;
     }
 
+    public String getmMenuNote() {
+        return mMenuNote;
+    }
+
+    public void setmMenuNote(String mMenuNote) {
+        this.mMenuNote = mMenuNote;
+    }
 
 
 }

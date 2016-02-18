@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity
             TextView txtUserName = (TextView) headerView.findViewById(R.id.txtHeaderWaiterName);
             txtUserName.setText(mSessionManager.getUserName());
             TextView txtRestaurantName = (TextView) headerView.findViewById(R.id.txtHeaderHotelName);
-            //txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
+       //     txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
             txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + hotelTableDTOs.size() + " tables are occupied");
         }
 

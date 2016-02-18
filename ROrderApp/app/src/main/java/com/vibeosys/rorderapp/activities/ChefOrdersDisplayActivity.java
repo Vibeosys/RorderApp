@@ -21,6 +21,7 @@ import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefPagerAdapter;
 
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
+import com.vibeosys.rorderapp.data.ServerSync;
 import com.vibeosys.rorderapp.service.ChefService;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.UserAuth;
@@ -51,15 +52,14 @@ public class ChefOrdersDisplayActivity extends AppCompatActivity {
         getSupportActionBar();
         setTitle("Chef dashboard");
 
-       Intent i = new Intent(Intent.ACTION_SYNC,null,this,ChefService.class);
+        Intent i = new Intent(Intent.ACTION_SYNC,null,this,SyncService.class);
         startService(i);
 
         chefOrderList = (ExpandableListView) findViewById(R.id.expListViewForChef);
         getSupportActionBar();
 //        TextView textView = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_text_view,null);
 //        textView.setText("Current Orders");
-        Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, ChefService.class);
-        startService(syncServiceIntent);
+
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
 
         tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
