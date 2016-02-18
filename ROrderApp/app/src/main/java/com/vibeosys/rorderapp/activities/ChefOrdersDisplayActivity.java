@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -47,6 +48,8 @@ public class ChefOrdersDisplayActivity extends AppCompatActivity {
         getSupportActionBar();
         setTitle("Chef dashboard");
 
+       Intent i = new Intent(Intent.ACTION_SYNC,null,this,ChefService.class);
+        startService(i);
 
         chefOrderList = (ExpandableListView) findViewById(R.id.expListViewForChef);
         getSupportActionBar();

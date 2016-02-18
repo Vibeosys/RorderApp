@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.vibeosys.rorderapp.activities.AboutUsActivity;
 import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.ChefOrdersDisplayActivity;
@@ -244,6 +245,10 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_log_out) {
             UserAuth.CleanAuthenticationInfo();
             callLogin();
+        }else if(id ==R.id.about_us)
+        {
+            Intent aboutUsIntent = new Intent(getApplicationContext(), AboutUsActivity.class);
+            startActivity(aboutUsIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
