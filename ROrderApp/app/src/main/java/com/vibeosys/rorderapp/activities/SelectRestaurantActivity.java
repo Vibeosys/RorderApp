@@ -55,6 +55,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk = (Button) findViewById(R.id.btnOk);
         TextView aboutUs = (TextView) findViewById(R.id.about_us);
+
         //listResto=(ListView)findViewById(R.id.listView);
         getRestaurant(mSessionManager.getRestaurantUrl());
         aboutUs.setOnClickListener(new View.OnClickListener() {

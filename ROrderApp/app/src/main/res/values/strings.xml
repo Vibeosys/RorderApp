@@ -77,4 +77,23 @@
     <string name="alert_dialog">Alert</string>
     <string name="feedback_activity_name">Give Feedback</string>
     <string name="btn_proceed">Proceed</string>
+    <string name="about_us"><u>About us</u></string>
+
+    <string name="about_us_content">
+        <![CDATA[ <p>QuickServe offers a User-friendly, Reliable and Agile restaurant ordering
+         system especially designed for the Dine-in restaurants. This App is multi-faceted,
+         effective ordering for Waiter and efficient order fulfilment for Chef.
+         App comes with variety of features like Table occupancy chart, Menu filtering,
+         Suggestive favourite menu,Bill generation, Updates for waiter and chef,
+         Waiting list preparation,Instant updates for all. </p>
+         <p> QuickServe is all-in-one app for all types of restaurants with easy-to-use functions
+         which needs lesser training for the staff. Admin panel accompanying the App, provides vital
+         strategic functions like Sales forecasting, Graphs and Charts for Billing, Food item
+         ranking based on past orders. </p>
+         <p>For more information or tie-ups, please visit our website
+          <a href ="http://www.vibeosys.com">www.vibeosys.com</a> or send an inquiry to
+          <a href ="http://info@vibeosys.com">info@vibeosys.com</a></p>
+
+        ]]>
+        </string>
 </resources>

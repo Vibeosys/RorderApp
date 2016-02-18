@@ -141,4 +141,9 @@
         <item name="android:textColor">@color/black_color</item>
 
     </style>
+    <style name="about_us_link">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:textStyle">italic</item>
+
+    </style>
 </resources>
