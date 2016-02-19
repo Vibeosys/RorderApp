@@ -49,7 +49,7 @@ public class TableMenusActivity extends BaseActivity implements
     private OrderListAdapter orderListAdapter;
     private List<OrderMenuDTO> allMenus;
     private ListView listMenus;
-    private TextView txtTotalAmount, txtTotalItems, txtBillGenerate;
+    private TextView txtTotalAmount, txtTotalItems, txtBillGenerate, txtPreviousOrder;
     private int mTableId, mTableNo;
     private String custId;
     private LinearLayout llCurrentOrder;
@@ -76,6 +76,7 @@ public class TableMenusActivity extends BaseActivity implements
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
         txtBillGenerate = (TextView) findViewById(R.id.txtGenerateBill);
+        txtPreviousOrder = (TextView) findViewById(R.id.txtPreviousOrders);
         llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
@@ -83,6 +84,7 @@ public class TableMenusActivity extends BaseActivity implements
         orderListAdapter.notifyDataSetChanged();
         llCurrentOrder.setOnClickListener(this);
         txtBillGenerate.setOnClickListener(this);
+        txtPreviousOrder.setOnClickListener(this);
         mServerSyncManager.setOnStringResultReceived(this);
         mServerSyncManager.setOnDownloadReceived(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
@@ -245,6 +247,7 @@ public class TableMenusActivity extends BaseActivity implements
             } else {
                 Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
                 tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
+                tableOrderIntent.putExtra("orderTypeFlag", 0);
                 startActivity(tableOrderIntent);
                 finish();
             }
@@ -258,6 +261,13 @@ public class TableMenusActivity extends BaseActivity implements
             } else {
                 startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
             }
+        }
+        if (id == R.id.txtPreviousOrders) {
+            Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
+            tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
+            tableOrderIntent.putExtra("orderTypeFlag", 1);
+            startActivity(tableOrderIntent);
+            finish();
         }
 
     }
@@ -315,7 +325,7 @@ public class TableMenusActivity extends BaseActivity implements
         final String[] orderNote = {""};
         final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-       // dialog.setTitle(orderMenu.getmMenuTitle());
+        // dialog.setTitle(orderMenu.getmMenuTitle());
         dialog.setContentView(R.layout.dialog_select_note);
         ArrayList<NoteDTO> notes = mDbRepository.getNoteList();
         final NoteAdapter noteadapter = new NoteAdapter(dialog.getContext(), notes);

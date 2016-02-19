@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:dividerHeight="0dp"/>
+            android:dividerHeight="0dp" />
 
     </LinearLayout>
 
@@ -65,32 +65,53 @@
         android:layout_height="match_parent"
         android:background="@color/black_color" />
 
-        <TextView
-            android:id="@+id/txtTotalItems"
+        <LinearLayout
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_table_menu_bottom"
-            android:padding="@dimen/activity_table_menu_bottom"
-            android:singleLine="false"
-            android:text="0 Items Selected"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_table_menu_bottom">
+
+            <TextView
+                android:id="@+id/txtTotalItems"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_table_menu_bottom"
+                android:singleLine="false"
+                android:text="0 Items Selected"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txtPreviousOrders"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_table_menu_bottom"
+                android:singleLine="false"
+                android:text="@string/previous_orders"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:background="@color/black_color" />
+
         <TextView
             android:id="@+id/txtGenerateBill"
+            style="@style/layout_generate_button"
             android:layout_width="match_parent"
-            android:gravity="center"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:singleLine="false"
             android:text="Generate Bill"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="13sp"
-            android:textStyle="bold"
-            style="@style/layout_generate_button"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 </LinearLayout>

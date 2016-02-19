@@ -79,8 +79,8 @@
     <string name="btn_proceed">Proceed</string>
     <string name="about_us"><u>About us</u></string>
     <string name="place_orders">Place Order</string>
-    <string name ="bill_summary"><u>Bill Summary</u></string>
-    <string name ="add_customer_wet">Add</string>
+    <string name="bill_summary"><u>Bill Summary</u></string>
+    <string name="add_customer_wet">Add</string>
     <string name="about_us_content">
         <![CDATA[ <p>QuickServe offers a User-friendly, Reliable and Agile restaurant ordering
          system especially designed for the Dine-in restaurants. This App is multi-faceted,
@@ -98,4 +98,5 @@
 
         ]]>
         </string>
+    <string name="previous_orders">Previous Orders</string>
 </resources>
