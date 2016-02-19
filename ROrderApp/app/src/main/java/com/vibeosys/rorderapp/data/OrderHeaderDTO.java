@@ -34,16 +34,11 @@ public class OrderHeaderDTO {
         this.orderDetailsDTOs = orderDetailsDTOs;
     }
 
-    public OrderHeaderDTO(String mOrderId, int mOrderNo, boolean mOrderStatus, Date mCreatedDate,
-                          Date mUpdatedDate, int mTableNo,
+    public OrderHeaderDTO(String mOrderId, int mOrderNo, boolean mOrderStatus,int mTableNo,
                           int mUserId, double mOrderAmount, boolean mCurrent) {
         this.mOrderId = mOrderId;
         this.mOrderNo = mOrderNo;
         this.mOrderStatus = mOrderStatus;
-        this.mOrderDate = mOrderDate;
-        this.mOrderTime = mOrderTime;
-        this.mCreatedDate = mCreatedDate;
-        this.mUpdatedDate = mUpdatedDate;
         this.mTableNo = mTableNo;
         this.mUserId = mUserId;
         this.mOrderAmount = mOrderAmount;

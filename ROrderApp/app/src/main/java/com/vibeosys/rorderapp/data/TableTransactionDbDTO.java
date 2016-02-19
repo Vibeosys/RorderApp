@@ -17,7 +17,7 @@ public class TableTransactionDbDTO extends BaseDTO {
     private int userId;
     private String custId;
     private int isWaiting;
-    private Date arrivalTime;
+    private String arrivalTime;
     private int occupancy;
 
     public TableTransactionDbDTO() {
@@ -34,14 +34,14 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.occupancy = occupancy;
     }
 
-    public TableTransactionDbDTO(String custId, int isWaiting, Date arrivalTime, int occupancy) {
+    public TableTransactionDbDTO(String custId, int isWaiting, String arrivalTime, int occupancy) {
         this.custId = custId;
         this.isWaiting = isWaiting;
         this.arrivalTime = arrivalTime;
         this.occupancy = occupancy;
     }
 
-    public TableTransactionDbDTO(int tableId, int userId, String custId, int isWaiting, Date arrivalTime, int occupancy) {
+    public TableTransactionDbDTO(int tableId, int userId, String custId, int isWaiting, String arrivalTime, int occupancy) {
         this.tableId = tableId;
         this.userId = userId;
         this.custId = custId;
@@ -50,7 +50,7 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.occupancy = occupancy;
     }
 
-    public TableTransactionDbDTO(int tableId, int userId, String custId, int isWaiting, Date arrivalTime) {
+    public TableTransactionDbDTO(int tableId, int userId, String custId, int isWaiting, String arrivalTime) {
         this.tableId = tableId;
         this.userId = userId;
         this.custId = custId;
@@ -91,11 +91,11 @@ public class TableTransactionDbDTO extends BaseDTO {
         this.isWaiting = isWaiting;
     }
 
-    public Date getArrivalTime() {
+    public String getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Date arrivalTime) {
+    public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
@@ -117,7 +117,7 @@ public class TableTransactionDbDTO extends BaseDTO {
                 objectList.add(deserializeObject);
             }
         } catch (Exception e) {
-            Log.d("TAG", "##" + e.toString());
+            Log.e("TAG", "##" + e.toString());
         }
 
         return objectList;

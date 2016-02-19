@@ -166,6 +166,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlUser.ACTIVE, dbUser.isActive());
                 contentValues.put(SqlContract.SqlUser.ROLE_ID, dbUser.getRoleId());
                 contentValues.put(SqlContract.SqlUser.RESTAURANTID, dbUser.getRestaurantId());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlUser.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## User is Added Successfully");
@@ -194,6 +195,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlHotelTable.CREATED_DATE, "" + dbTable.getCreatedDate());
                 contentValues.put(SqlContract.SqlHotelTable.UPDATED_DATE, "" + dbTable.getUpdatedDate());
                 contentValues.put(SqlContract.SqlHotelTable.IS_OCCUPIED, dbTable.isOccupied());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlHotelTable.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Table is Added Successfully");
@@ -415,6 +417,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlBill.TABLE_ID, bill.getTableId());
                 contentValues.put(SqlContract.SqlBill.IS_PAYED, bill.isPayed());
                 contentValues.put(SqlContract.SqlBill.PAID_BY, bill.getPayedBy());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlBill.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Bill is Added Successfully" + bill.getBillNo());
@@ -441,6 +444,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlBillDetails.BILL_NO, billDetails.getBillNo());
                 contentValues.put(SqlContract.SqlBillDetails.CREATED_DATE, billDetails.getCreateDate().toString());
                 contentValues.put(SqlContract.SqlBillDetails.UPDATED_DATE, billDetails.getUpdatedDate().toString());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlBillDetails.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Bill Details is added successfully" + billDetails.getBillNo());
@@ -475,6 +479,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlMenu.UPDATED_DATE, menu.getUpdatedDate().toString());
                 contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
                 contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.isSpicy());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlMenu.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Menu is added successfully" + menu.getMenuId());
@@ -503,6 +508,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlMenuCategory.ACTIVE, menuCateory.isActive());
                 contentValues.put(SqlContract.SqlMenuCategory.CREATED_DATE, menuCateory.getCreatedDate().toString());
                 contentValues.put(SqlContract.SqlMenuCategory.UPDATED_DATE, menuCateory.getUpdatedDate().toString());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlMenuCategory.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Menu Category is added successfully" + menuCateory.getCategoryId());
@@ -530,6 +536,7 @@ public class DbRepository extends SQLiteOpenHelper {
             for (MenuTagsDbDTO menuTag : menuTagInserts) {
                 contentValues.put(SqlContract.SqlMenuTags.TAG_ID, menuTag.getTagId());
                 contentValues.put(SqlContract.SqlMenuTags.TAG_TITLE, menuTag.getTagTitle());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlMenuTags.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Menu Tag is added successfully" + menuTag.getTagId());
@@ -563,6 +570,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlOrderDetails.ORDER_ID, orderDetail.getOrderId());
                 contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
                 contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlOrderDetails.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Order detail is added successfully" + orderDetail.getOrderDetailsId());
@@ -593,12 +601,13 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlOrders.ORDER_STATUS, order.isOrderStatus());
                 contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
                 contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
-                contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
-                contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
+                //contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
+                // contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
                 contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
                 contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
                 contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
                 contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlOrders.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Order is added successfully" + order.getOrderId());
@@ -628,6 +637,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlTableCategory.IMAGE, tableCategory.getImage());
                 contentValues.put(SqlContract.SqlTableCategory.CREATED_DATE, String.valueOf(tableCategory.getCreatedDate()));
                 contentValues.put(SqlContract.SqlTableCategory.UPDATED_DATE, String.valueOf(tableCategory.getUpdatedDate()));
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlTableCategory.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "## Table Category is added successfully" + tableCategory.getTableCategoryId());
@@ -724,16 +734,24 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
             contentValues.put(SqlContract.SqlTempOrder.NOTE, note);
             if (rowCount == 0 && qty != 0)
-                count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);
-            else if (qty == 0)
+            {if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);}
 
+            else if (qty == 0)
+            {
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
                         SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
                                 + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+            }
             else
+            {
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlTempOrder.TABLE_NAME, contentValues,
                         SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
                                 + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+            }
+
 
             contentValues.clear();
             sqLiteDatabase.close();
@@ -818,14 +836,13 @@ public class DbRepository extends SQLiteOpenHelper {
                         //boolean orderStatus=cursor.get;
                         //String orderDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_DATE));
                         //  String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
-                        String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.CREATED_DATE));
-                        String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.UPDATED_DATE));
+                        //String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.CREATED_DATE));
+                       // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.UPDATED_DATE));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
                         int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.USER_ID));
                         double orderAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_AMOUNT));
                         OrderHeaderDTO orderHeaderDTO = new OrderHeaderDTO(orderId,
-                                orderNo, true,
-                                Date.valueOf(createdDate), Date.valueOf(updatedDate), tableNo,
+                                orderNo, true, tableNo,
                                 userId, orderAmount, false);
                         orders.add(orderHeaderDTO);
                     } while (cursor.moveToNext());
@@ -975,6 +992,7 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues = new ContentValues();
             contentValues.put(SqlContract.SqlCustomer.CUST_ID, customer.getCustId());
             contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customer.getCustName());
+            if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
             count = sqLiteDatabase.insert(SqlContract.SqlCustomer.TABLE_NAME, null, contentValues);
             contentValues.clear();
             Log.d(TAG, "##Customer is added successfully" + customer.getCustId());
@@ -1002,6 +1020,7 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
             //contentValues.put(SqlContract.SqlTableTransaction.ARRIVAL_TIME, String.valueOf(tableTransaction.getArrivalTime()));
             contentValues.put(SqlContract.SqlTableTransaction.OCCUPANCY, tableTransaction.getOccupancy());
+            if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
             count = sqLiteDatabase.insert(SqlContract.SqlTableTransaction.TABLE_NAME, null, contentValues);
             contentValues.clear();
             Log.d(TAG, "##Table Transaction is added successfully" + tableTransaction.getCustId());
@@ -1071,6 +1090,7 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTableTransaction.TABLE_ID, tableTransaction.getTableId());
             contentValues.put(SqlContract.SqlTableTransaction.USER_ID, tableTransaction.getUserId());
             contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
+            if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
             count = sqLiteDatabase.update(SqlContract.SqlTableTransaction.TABLE_NAME, contentValues,
                     SqlContract.SqlTableTransaction.CUST_ID + "=?", whereClause);
             contentValues.clear();
@@ -1131,6 +1151,7 @@ public class DbRepository extends SQLiteOpenHelper {
         long count = -1;
         try {
             String[] whereClasuse = new String[]{(custId), String.valueOf(tableId)};
+            if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
             count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
                     SqlContract.SqlTableTransaction.CUST_ID + "=? AND "
                             + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
@@ -1152,15 +1173,15 @@ public class DbRepository extends SQLiteOpenHelper {
     returns custmerId from table transaction 
 
     * */
-    public String getCustmerIdFromTransaction(int tableId, int userId) {
+    public String getCustmerIdFromTransaction(int tableId) {
         String custId = "";
         SQLiteDatabase sqLiteDatabase = null;
-        String[] whereClasuse = new String[]{String.valueOf(tableId), String.valueOf(userId)};
+        String[] whereClasuse = new String[]{String.valueOf(tableId)};
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             cursor = sqLiteDatabase.rawQuery("select table_transaction.CustId from table_transaction " +
-                    "where table_transaction.TableId=? AND table_transaction.UserId =?", whereClasuse);
+                    "where table_transaction.TableId=?", whereClasuse);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
@@ -1279,6 +1300,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlBill.UPDATED_DATE, bill.getUpdatedDate().toString());
                 if (bill.getUserId() != 0)
                     contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues, SqlContract.SqlBill.BILL_NO + "=?", whereClause);
                 contentValues.clear();
                 Log.d(TAG, "## Bill is Updated Successfully" + bill.getBillNo());
@@ -1309,6 +1331,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlBillDetails.CREATED_DATE, billDetails.getCreateDate().toString());
                 if (billDetails.getUpdatedDate() != null)
                     contentValues.put(SqlContract.SqlBillDetails.UPDATED_DATE, billDetails.getUpdatedDate().toString());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlBillDetails.TABLE_NAME, contentValues, SqlContract.SqlBillDetails.AUTO_ID + "=?", whereClause);
                 contentValues.clear();
                 Log.d(TAG, "## Bill Details is Updated successfully" + billDetails.getBillNo());
@@ -1339,10 +1362,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
                 if (order.getOrderTime() != null)
                     contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
-                if (order.getCreatedDate() != null)
+               /* if (order.getCreatedDate() != null)
                     contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
                 if (order.getUpdatedDate() != null)
-                    contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
+                    contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));*/
                 if (order.getTableId() != 0)
                     contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
                 if (order.getUserId() != 0)
@@ -1351,6 +1374,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
                 if (order.getCustId() != null && !order.getCustId().isEmpty())
                     contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlOrders.TABLE_NAME, contentValues,
                         SqlContract.SqlOrders.ORDER_ID + "=?", whereClause);
                 contentValues.clear();
@@ -1391,6 +1415,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
                 if (orderDetail.getMenuTitle() != null && orderDetail.getMenuTitle().isEmpty())
                     contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlOrderDetails.TABLE_NAME, contentValues,
                         SqlContract.SqlOrderDetails.ORDER_ID + "=?", whereClause);
                 contentValues.clear();
@@ -1475,7 +1500,7 @@ public class DbRepository extends SQLiteOpenHelper {
             String[] whereClause = new String[]{String.valueOf(orderId)};
             cursor = sqLiteDatabase.rawQuery("select order_details.OrderId,orders.OrderId,order_details.MenuId,menu.MenuTitle,order_details.OrderQuantity,order_details.Note from orders inner join order_details on order_details.OrderId= orders.OrderId  inner join  menu on menu.MenuId = order_details.MenuId where order_details.OrderId =?", whereClause);
 
-         //   cursor = sqLiteDatabase.rawQuery("select order_details.OrderId,orders.OrderId,order_details.MenuId,menu.MenuTitle,order_details.OrderQuantity from orders inner join order_details on order_details.OrderId= orders.OrderId  inner join  menu on menu.MenuId = order_details.MenuId where order_details.OrderId =?", whereClause);
+            //   cursor = sqLiteDatabase.rawQuery("select order_details.OrderId,orders.OrderId,order_details.MenuId,menu.MenuTitle,order_details.OrderQuantity from orders inner join order_details on order_details.OrderId= orders.OrderId  inner join  menu on menu.MenuId = order_details.MenuId where order_details.OrderId =?", whereClause);
             //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
 
             if (cursor != null) {
@@ -1490,7 +1515,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         String mMenuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
                         // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
                         String mMenuNote = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.NOTE));
-                        ChefMenuDetailsDTO chefMenuDetailsDTO = new ChefMenuDetailsDTO(mMenuId, mMenuName, mMenuQty ,mMenuNote);
+                        ChefMenuDetailsDTO chefMenuDetailsDTO = new ChefMenuDetailsDTO(mMenuId, mMenuName, mMenuQty, mMenuNote);
                         menudetails.add(chefMenuDetailsDTO);
                     } while (cursor.moveToNext());
                 }
@@ -1522,6 +1547,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues = new ContentValues();
                 contentValues.put(SqlContract.SqlCustomer.CUST_ID, customerDbDTO.getCustId());
                 contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customerDbDTO.getCustName());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlCustomer.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "##Customer is added successfully" + customerDbDTO.getCustId());
@@ -1549,6 +1575,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues = new ContentValues();
                 if (customerDbDTO.getCustName() != null)
                     contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customerDbDTO.getCustName());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlCustomer.TABLE_NAME, contentValues,
                         SqlContract.SqlCustomer.CUST_ID + "=?", where);
                 contentValues.clear();
@@ -1580,6 +1607,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
                 contentValues.put(SqlContract.SqlTableTransaction.ARRIVAL_TIME, String.valueOf(tableTransaction.getArrivalTime()));
                 contentValues.put(SqlContract.SqlTableTransaction.OCCUPANCY, tableTransaction.getOccupancy());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlTableTransaction.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "##Table Transaction is added successfully" + tableTransaction.getCustId());
@@ -1612,6 +1640,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 if (tableTransaction.getUserId() != 0)
                     contentValues.put(SqlContract.SqlTableTransaction.USER_ID, tableTransaction.getUserId());
                 contentValues.put(SqlContract.SqlTableTransaction.IS_WAIT, tableTransaction.isWaiting());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlTableTransaction.TABLE_NAME, contentValues,
                         SqlContract.SqlTableTransaction.CUST_ID + "=?", whereClause);
                 contentValues.clear();
@@ -1682,7 +1711,6 @@ public class DbRepository extends SQLiteOpenHelper {
                         SqlContract.SqlTableTransaction.CUST_ID + "=? AND "
                                 + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
                 contentValues.clear();
-                sqLiteDatabase.close();
                 Log.d(TAG, "## Data deleted from transaction table");
             }
 
@@ -1691,6 +1719,7 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase.close();
             Log.d(TAG, "## Data not deleted from transaction table");
         } finally {
+            if (sqLiteDatabase!=null&&sqLiteDatabase.isOpen())
             sqLiteDatabase.close();
         }
         return count != -1;
@@ -1716,7 +1745,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 if (dbTable.getUpdatedDate() != null)
                     contentValues.put(SqlContract.SqlHotelTable.UPDATED_DATE, "" + dbTable.getUpdatedDate());
                 contentValues.put(SqlContract.SqlHotelTable.IS_OCCUPIED, dbTable.isOccupied());
-
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlHotelTable.TABLE_NAME, contentValues,
                         SqlContract.SqlHotelTable.TABLE_ID + "=?", whereClause);
                 contentValues.clear();
@@ -1749,7 +1778,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlTableCategory.CREATED_DATE, String.valueOf(tableCategory.getCreatedDate()));
                 if (tableCategory.getUpdatedDate() != null)
                     contentValues.put(SqlContract.SqlTableCategory.UPDATED_DATE, String.valueOf(tableCategory.getUpdatedDate()));
-
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlTableCategory.TABLE_NAME, contentValues
                         , SqlContract.SqlTableCategory.TABLE_CATEGORY_ID + "=?", whereClause);
                 contentValues.clear();

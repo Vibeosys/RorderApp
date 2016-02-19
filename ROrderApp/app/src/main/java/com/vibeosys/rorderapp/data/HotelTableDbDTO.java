@@ -16,9 +16,9 @@ public class HotelTableDbDTO {
     private int tableNo;
     private int tableCategoryId;
     private int capacity;
-    private Date createdDate;
-    private Date updatedDate;
-    private boolean isOccupied;
+    private String createdDate;
+    private String updatedDate;
+    private int isOccupied;
 
     public HotelTableDbDTO() {
     }
@@ -55,27 +55,27 @@ public class HotelTableDbDTO {
         this.capacity = capacity;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getUpdatedDate() {
+    public String getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
+    public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
     }
 
-    public boolean isOccupied() {
+    public int isOccupied() {
         return isOccupied;
     }
 
-    public void setIsOccupied(boolean isOccupied) {
+    public void setIsOccupied(int isOccupied) {
         this.isOccupied = isOccupied;
     }
 

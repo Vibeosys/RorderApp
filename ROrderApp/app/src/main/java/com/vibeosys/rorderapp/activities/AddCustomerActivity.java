@@ -116,13 +116,13 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
     private void uploadToServer(CustomerDbDTO customer, TableTransactionDbDTO tableTransaction) {
         Gson gson = new Gson();
+        TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
         String serializedJsonString = gson.toJson(customer);
-        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
-
+        //TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+        tableDataDTOs[0] = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
         String serializedTableTransaction = gson.toJson(tableTransaction);
-        tableDataDTO = new TableDataDTO(ConstantOperations.ADD_WAITING_CUSTOMER, serializedTableTransaction);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        tableDataDTOs[1] = new TableDataDTO(ConstantOperations.ADD_WAITING_CUSTOMER, serializedTableTransaction);
+        mServerSyncManager.uploadDataToServer(tableDataDTOs);
     }
 
     private void showMyDialog(final WaitingUserDTO waiting) {
@@ -155,14 +155,13 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                         mDbRepository.setOccupied(true, tableId);
 
                         UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 1);
+                        TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
                         Gson gson = new Gson();
                         String serializedJsonString = gson.toJson(occupiedDTO);
-                        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
-                        mServerSyncManager.uploadDataToServer(tableDataDTO);
-
+                        tableDataDTOs[0] = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
                         String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
-                        tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
-                        mServerSyncManager.uploadDataToServer(tableDataDTO);
+                        tableDataDTOs[1] = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
+                        mServerSyncManager.uploadDataToServer(tableDataDTOs);
 
                         dialog.dismiss();
                         mCustomerAdapter.refresh(mDbRepository.getWaitingList());

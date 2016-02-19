@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.util;
 
+import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
@@ -145,6 +146,16 @@ public class DbOperations {
         boolean isUpdated = dbRepository.updateTableTransactionList(tableTransactionUpdates);
         boolean isDeleted=dbRepository.deleteTableTransaction(tableTransactionDelete);
 
-        return isInserted & isUpdated;
+        MainActivity.runOnUI(new Runnable() {
+            public void run() {
+                try {
+                    MainActivity.adapter.refresh(dbRepository.getTableRecords(""));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return isInserted & isUpdated & isDeleted;
     }
 }

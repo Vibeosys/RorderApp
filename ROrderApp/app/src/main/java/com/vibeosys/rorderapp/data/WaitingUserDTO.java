@@ -8,7 +8,7 @@ import java.sql.Date;
 public class WaitingUserDTO {
     private String mCustomerId;
     private int mOccupancy;
-    private Date mArrivalTime;
+    private String mArrivalTime;
     private String mCustomerName;
 
     public WaitingUserDTO() {
@@ -20,7 +20,7 @@ public class WaitingUserDTO {
         this.mCustomerName = mCustomerName;
     }
 
-    public WaitingUserDTO(String mCustomerId, int mOccupancy, Date mArrivalTime, String mCustomerName) {
+    public WaitingUserDTO(String mCustomerId, int mOccupancy, String mArrivalTime, String mCustomerName) {
         this.mCustomerId = mCustomerId;
         this.mOccupancy = mOccupancy;
         this.mArrivalTime = mArrivalTime;
@@ -43,11 +43,11 @@ public class WaitingUserDTO {
         this.mOccupancy = mOccupancy;
     }
 
-    public Date getmArrivalTime() {
+    public String getmArrivalTime() {
         return mArrivalTime;
     }
 
-    public void setmArrivalTime(Date mArrivalTime) {
+    public void setmArrivalTime(String mArrivalTime) {
         this.mArrivalTime = mArrivalTime;
     }
 

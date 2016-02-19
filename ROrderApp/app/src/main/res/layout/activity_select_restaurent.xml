@@ -10,15 +10,15 @@
     android:weightSum="1">
 
 
-   <!-- <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:text="Select your restaurent"
-        android:textColor="@color/White"
-        android:textSize="25sp"
-        android:textStyle="bold" />-->
+    <!-- <TextView
+         android:id="@+id/textView2"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="25dp"
+         android:text="Select your restaurent"
+         android:textColor="@color/White"
+         android:textSize="25sp"
+         android:textStyle="bold" />-->
 
     <EditText
         android:id="@+id/txtRestaurantId"
@@ -28,7 +28,7 @@
         android:hint="@string/hint_restaurant_id"
         android:inputType="number"
         android:textColor="@color/White"
-        android:textColorHint="@color/White" />
+        android:textColorHint="@color/light_grey" />
 
     <!--<ListView
         android:layout_width="wrap_content"
@@ -45,12 +45,13 @@
         android:background="@drawable/button_custom"
         android:text="@string/btn_proceed"
         android:textColor="@color/White" />
+
     <TextView
         android:id="@+id/about_us"
+        style="@style/about_us_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/about_us"
-        style="@style/about_us_link"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="100dp"
+        android:text="@string/about_us" />
 
 </LinearLayout>

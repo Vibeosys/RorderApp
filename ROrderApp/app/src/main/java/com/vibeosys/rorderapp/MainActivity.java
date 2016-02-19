@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -59,10 +61,11 @@ import java.util.UUID;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
+    public static Handler UIHandler;
     TabLayout tab_layout;
     DrawerLayout drawer;
     GridView gridView;
-    TableGridAdapter adapter;
+    public static TableGridAdapter adapter;
     List<RestaurantTables> hotelTableDTOs;
     List<RestaurantTables> sortedTables;
     private Context mContext = this;
@@ -270,7 +273,7 @@ public class MainActivity extends BaseActivity
 
         HotelTableDTO hotelTableDTO = (HotelTableDTO) adapter.getItem(position);
         if (hotelTableDTO.ismIsOccupied()) {
-            String custId = mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId(), mSessionManager.getUserId());
+            String custId = mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId());
             Log.i(TAG, "## Customer Id " + custId);
             callToMenuIntent(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId(), custId);
         } else {
@@ -321,7 +324,7 @@ public class MainActivity extends BaseActivity
                 //getting current date here
                 String currentDate = new ROrderDateUtils().getGMTCurrentDate();
 
-                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId, mSessionManager.getUserId(), custid.toString(), 0, Date.valueOf(currentDate));
+                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId, mSessionManager.getUserId(), custid.toString(), 0, currentDate);
                 //here inserting records in table transaction
                 mDbRepository.insertTableTransaction(tableTransactionDbDTO);
 
@@ -413,5 +416,15 @@ public class MainActivity extends BaseActivity
         Intent iWaitingList = new Intent(getApplicationContext(), AddCustomerActivity.class);
         startActivity(iWaitingList);
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+    }
+
+    static {
+        UIHandler = new Handler(Looper.getMainLooper());
+
+    }
+
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
+
     }
 }

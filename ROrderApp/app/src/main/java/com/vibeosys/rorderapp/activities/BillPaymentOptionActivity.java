@@ -70,20 +70,19 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         mDbRepository.clearTableTransaction(mCustId, mTableId);
         UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(mTableId, 0);
         Gson gson = new Gson();
+
+        TableDataDTO[] tableDataDTOs = new TableDataDTO[3];
         String serializedJsonString = gson.toJson(occupiedDTO);
-        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        tableDataDTOs[0] = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
 
         TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(mTableId, mCustId);
         String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
-        tableDataDTO = new TableDataDTO(ConstantOperations.CLOSE_TABLE, serializedTableTransaction);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
-        // finish();
+        tableDataDTOs[1] = new TableDataDTO(ConstantOperations.CLOSE_TABLE, serializedTableTransaction);
 
         BillPaidUpload billPaidUpload = new BillPaidUpload(mBillNo, 1, mPaymentModeId);
         String serializedBillPaid = gson.toJson(billPaidUpload);
-        tableDataDTO = new TableDataDTO(ConstantOperations.PAID_BILL, serializedBillPaid);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        tableDataDTOs[2] = new TableDataDTO(ConstantOperations.PAID_BILL, serializedBillPaid);
+        mServerSyncManager.uploadDataToServer(tableDataDTOs);
 
         Intent i = new Intent(getApplicationContext(), FeedbackActivity.class);
         i.putExtra("tableCustInfo", tableCommonInfoDTO);
