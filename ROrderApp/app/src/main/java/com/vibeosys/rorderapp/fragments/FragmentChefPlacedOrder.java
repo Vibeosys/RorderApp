@@ -42,13 +42,14 @@ public class FragmentChefPlacedOrder extends BaseFragment
 
         return view;
     }
-//    static {
-//        UIHandler = new Handler(Looper.getMainLooper());
-//    }
+    static {
+        UIHandler = new Handler(Looper.getMainLooper());
+    }
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
         chefOrderAdapter.refresh(2);
+        chefOrderAdapter.notifyDataSetChanged();
     }
 
 

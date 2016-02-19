@@ -138,6 +138,7 @@ public class FragmentChefMyServing extends BaseFragment implements
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
         chefOrderAdapter.refresh(1);
+        chefOrderAdapter.notifyDataSetChanged();
     }
 
 

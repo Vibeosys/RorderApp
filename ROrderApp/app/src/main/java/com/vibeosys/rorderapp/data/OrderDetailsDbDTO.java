@@ -20,13 +20,14 @@ public class OrderDetailsDbDTO extends BaseDTO {
     private String orderId;
     private int menuId;
     private String menuTitle;
+    private String note;
 
     public OrderDetailsDbDTO() {
     }
 
     public OrderDetailsDbDTO(int orderDetailsId, double orderPrice, int orderQuantity,
                              Date createdDate, Date updatedDate, String orderId, int menuId,
-                             String menuTitle) {
+                             String menuTitle,String note) {
         this.orderDetailsId = orderDetailsId;
         this.orderPrice = orderPrice;
         this.orderQuantity = orderQuantity;
@@ -100,6 +101,15 @@ public class OrderDetailsDbDTO extends BaseDTO {
     public void setMenuTitle(String menuTitle) {
         this.menuTitle = menuTitle;
     }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
 
     public static List<OrderDetailsDbDTO> deserializeOrderDetail(List<String> serializedStringList) {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();

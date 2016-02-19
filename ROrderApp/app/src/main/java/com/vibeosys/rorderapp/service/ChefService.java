@@ -25,6 +25,7 @@ public class ChefService extends IntentService {
                         public void run() {
                             try {
                             } catch (Exception e) {
+                                notifyAll();
                                 Log.e("SyncService", "## Error in chef my serving  order runOnUi method " + e.toString());
                                 e.printStackTrace();
                             }
@@ -35,6 +36,7 @@ public class ChefService extends IntentService {
                         @Override
                         public void run() {
                             try {
+                                notifyAll();
                             } catch (Exception e) {
                                 Log.e("SyncService", "## Error in chef placed order runOnUi method " + e.toString());
                                 e.printStackTrace();

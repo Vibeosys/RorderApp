@@ -571,6 +571,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlOrderDetails.ORDER_ID, orderDetail.getOrderId());
                 contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
                 contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
+                contentValues.put(SqlContract.SqlOrderDetails.NOTE,orderDetail.getNote());
                 if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlOrderDetails.TABLE_NAME, null, contentValues);
                 contentValues.clear();

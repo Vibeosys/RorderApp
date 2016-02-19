@@ -192,8 +192,11 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
         childHolder.childTextView.setText(""+chefMenuDetailsDTO.getmChefMenuTitle());
         childHolder.childQty.setText(""+chefMenuDetailsDTO.getmChefQty());
-        childHolder.menuNo.setText(""+(childPosition+1));
-        childHolder.childMenuNote.setText("" + chefMenuDetailsDTO.getmMenuNote());
+        childHolder.menuNo.setText("" + (childPosition + 1));
+        if(chefMenuDetailsDTO.getmMenuNote()== null)
+        childHolder.childMenuNote.setText("");
+        else
+            childHolder.childMenuNote.setText(""+chefMenuDetailsDTO.getmMenuNote());
         Toast.makeText(context,""+chefMenuDetailsDTO.getmMenuNote(),Toast.LENGTH_SHORT);
 
         return convertView;
