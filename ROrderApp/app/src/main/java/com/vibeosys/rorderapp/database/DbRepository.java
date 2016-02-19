@@ -255,12 +255,12 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             //  cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + SqlContract.SqlHotelTable.TABLE_NAME + " ORDER BY " + SqlContract.SqlHotelTable.TABLE_NO, null);
-            cursor = sqLiteDatabase.rawQuery("select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
+            cursor = sqLiteDatabase.rawQuery("select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName,tt.UserId" +
                     " From r_tables as rs LEFT Join table_category as tc  On rs.TableCategoryId = tc.TableCategoryId" +
                     " Left Join table_transaction as tt on rs.tableId=tt.tableId" +
                     " left join users as us on tt.userId=us.userId " + where +
                     " ORder by rs.TableNo ", null);
-            Log.d(TAG, "## select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName" +
+            Log.d(TAG, "## select rs.TableId ,rs.TableNo,rs.TableCategoryId,CategoryTitle,Capacity,IsOccupied,us.UserName,tt.UserId" +
                     " From r_tables as rs LEFT Join table_category as tc  On rs.TableCategoryId = tc.TableCategoryId" +
                     " Left Join table_transaction as tt on rs.tableId=tt.tableId" +
                     " left join users as us on tt.userId=us.userId " + where +
@@ -278,10 +278,11 @@ public class DbRepository extends SQLiteOpenHelper {
                         String tableCtegoryName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTableCategory.CATEGORY_TITLE));
                         int capacity = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.CAPACITY));
                         int isOccupied = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.IS_OCCUPIED));
+                        int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTableTransaction.USER_ID));
                         boolean occupied = isOccupied == 1 ? true : false;
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         RestaurantTables table = new RestaurantTables(tableId, tableNo, tableCtegory,
-                                tableCtegoryName, capacity, occupied, userName);
+                                tableCtegoryName, capacity, occupied, userName, userId);
                         //table.setJsonSync();
                         hotelTables.add(table);
                     } while (cursor.moveToNext());
@@ -733,19 +734,15 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put(SqlContract.SqlTempOrder.ORDER_TIME, rOrderDateUtils.getGMTCurrentTime());
             contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
             contentValues.put(SqlContract.SqlTempOrder.NOTE, note);
-            if (rowCount == 0 && qty != 0)
-            {if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
-                count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);}
-
-            else if (qty == 0)
-            {
+            if (rowCount == 0 && qty != 0) {
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                count = sqLiteDatabase.insert(SqlContract.SqlTempOrder.TABLE_NAME, null, contentValues);
+            } else if (qty == 0) {
                 if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
                         SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
                                 + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
-            }
-            else
-            {
+            } else {
                 if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.update(SqlContract.SqlTempOrder.TABLE_NAME, contentValues,
                         SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
@@ -837,7 +834,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         //String orderDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_DATE));
                         //  String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
                         //String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.CREATED_DATE));
-                       // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.UPDATED_DATE));
+                        // String updatedDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.UPDATED_DATE));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TABLE_NO));
                         int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.USER_ID));
                         double orderAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_AMOUNT));
@@ -1719,8 +1716,8 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase.close();
             Log.d(TAG, "## Data not deleted from transaction table");
         } finally {
-            if (sqLiteDatabase!=null&&sqLiteDatabase.isOpen())
-            sqLiteDatabase.close();
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
         }
         return count != -1;
     }

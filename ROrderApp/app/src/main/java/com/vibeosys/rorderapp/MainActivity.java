@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity
             gridView = (GridView) findViewById(R.id.gridview);
             gridView.setOnItemClickListener(this);
             hotelTableDTOs = mDbRepository.getTableRecords("");
-            adapter = new TableGridAdapter(getApplicationContext(), hotelTableDTOs);
+            adapter = new TableGridAdapter(getApplicationContext(), hotelTableDTOs, mSessionManager.getUserId());
             gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity
             TextView txtUserName = (TextView) headerView.findViewById(R.id.txtHeaderWaiterName);
             txtUserName.setText(mSessionManager.getUserName());
             TextView txtRestaurantName = (TextView) headerView.findViewById(R.id.txtHeaderHotelName);
-       //     txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
+            //     txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
             txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + hotelTableDTOs.size() + " tables are occupied");
         }
 
@@ -248,8 +248,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_log_out) {
             UserAuth.CleanAuthenticationInfo();
             callLogin();
-        }else if(id ==R.id.about_us)
-        {
+        } else if (id == R.id.about_us) {
             Intent aboutUsIntent = new Intent(getApplicationContext(), AboutUsActivity.class);
             aboutUsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(aboutUsIntent);

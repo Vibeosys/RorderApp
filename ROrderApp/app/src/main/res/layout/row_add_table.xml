@@ -24,8 +24,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -33,30 +33,32 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="2dp"
                     android:background="@color/red"
-                    android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/txtTableName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="T"
-                    android:layout_gravity="fill"
-                    android:textColor="@color/White"
-                    android:textSize="15sp" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
 
-                <TextView
-                    android:id="@+id/txtTableNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/White"
-                    android:textSize="22sp" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/txtTableName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill"
+                        android:text="T"
+                        android:textColor="@color/White"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtTableNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/White"
+                        android:textSize="22sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
@@ -65,8 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:paddingLeft="5dp"
-                android:textColor="@color/login_background"
                 android:text="CATEGORY"
+                android:textColor="@color/login_background"
                 android:textSize="10sp" />
         </LinearLayout>
 
@@ -89,11 +91,13 @@
 
                 <ImageView
                     android:id="@+id/imgUserLogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_person"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="3dp"
+                    android:src="@drawable/waiter_filled"
 
                     />
+
                 <TextView
                     android:id="@+id/txtUserName"
                     android:layout_width="wrap_content"

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
+import com.vibeosys.rorderapp.util.SessionManager;
 
 import java.util.List;
 
@@ -26,13 +27,14 @@ public class TableGridAdapter extends BaseAdapter {
 
     private final String TAG = TableGridAdapter.class.getSimpleName();
     private Context mContext;
-
+    private int mSessionUserId;
     // table list
     private List<RestaurantTables> mHotelTables;
 
-    public TableGridAdapter(Context mContext, List<RestaurantTables> mHotelTables) {
+    public TableGridAdapter(Context mContext, List<RestaurantTables> mHotelTables, int sessionUserId) {
         this.mContext = mContext;
         this.mHotelTables = mHotelTables;
+        this.mSessionUserId = sessionUserId;
     }
 
     /**
@@ -134,12 +136,18 @@ public class TableGridAdapter extends BaseAdapter {
             viewHolder.layoutIsOccupied.setBackgroundColor(mContext.getResources().getColor(R.color.dark_green_color));
         }
         if (hotelTableDTO.getUserName() != null && !TextUtils.isEmpty(hotelTableDTO.getUserName())) {
-            viewHolder.txtUserName.setText(hotelTableDTO.getUserName());
+            if (hotelTableDTO.getUserId() == mSessionUserId) {
+                viewHolder.txtUserName.setText("Me");
+            } else {
+                viewHolder.txtUserName.setText(hotelTableDTO.getUserName());
+            }
+
             viewHolder.imgUserLogo.setVisibility(View.VISIBLE);
         } else {
             viewHolder.txtUserName.setText("");
             viewHolder.imgUserLogo.setVisibility(View.INVISIBLE);
         }
+
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }

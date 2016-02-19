@@ -18,9 +18,9 @@ import java.util.ArrayList;
 /**
  * Created by akshay on 21-01-2016.
  */
-public class GridBaseFragment extends BaseFragment implements AdapterView.OnItemClickListener{
+public class GridBaseFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
-    private final String TAG=GridBaseFragment.class.getSimpleName();
+    private final String TAG = GridBaseFragment.class.getSimpleName();
     GridView gridView;
     TableGridAdapter adapter;
 
@@ -30,21 +30,21 @@ public class GridBaseFragment extends BaseFragment implements AdapterView.OnItem
 
     }
 
-    protected void setGridAdapter(View v,ArrayList<RestaurantTables> hotels){
-        gridView=(GridView)v.findViewById(R.id.gridview);
+    protected void setGridAdapter(View v, ArrayList<RestaurantTables> hotels) {
+        gridView = (GridView) v.findViewById(R.id.gridview);
         gridView.setOnItemClickListener(this);
-        adapter=new TableGridAdapter(getContext(),hotels);
+        adapter = new TableGridAdapter(getContext(), hotels, mSessionManager.getUserId());
         gridView.setAdapter(adapter);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        RestaurantTables hotelTableDTO= (RestaurantTables) adapter.getItem(position);
+        RestaurantTables hotelTableDTO = (RestaurantTables) adapter.getItem(position);
 
-        Intent intentOpenTableMenu=new Intent(getActivity(), TableMenusActivity.class);
-        intentOpenTableMenu.putExtra("TableNo",hotelTableDTO.getmTableNo());
-        intentOpenTableMenu.putExtra("TableId",hotelTableDTO.getmTableId());
+        Intent intentOpenTableMenu = new Intent(getActivity(), TableMenusActivity.class);
+        intentOpenTableMenu.putExtra("TableNo", hotelTableDTO.getmTableNo());
+        intentOpenTableMenu.putExtra("TableId", hotelTableDTO.getmTableId());
         startActivity(intentOpenTableMenu);
-        Log.i(TAG,"##"+hotelTableDTO.getmTableNo()+"Is Clicked");
+        Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
     }
 }
