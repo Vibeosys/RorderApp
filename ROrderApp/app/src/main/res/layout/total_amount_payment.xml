@@ -308,16 +308,14 @@
             android:layout_margin="4dp"
             android:gravity="center"
             android:layout_weight="0.7"
-            android:textSize="18sp"
-            android:textColor="@color/White"
+            style="@style/button_custom_new"
             android:background="@drawable/button_custom"/>
         <TextView
 
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Bill Summary"
-            android:gravity="center|bottom"
-            android:layout_marginBottom="5dp"
+            android:text="@string/bill_summary"
+            android:gravity="center"
             android:layout_weight="1"
             style="@style/billing_summery_bold"/>
 

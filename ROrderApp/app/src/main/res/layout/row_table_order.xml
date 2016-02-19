@@ -61,9 +61,11 @@
         android:background="@drawable/button_custom"
         android:focusable="false"
         android:padding="5dp"
-        android:text="Place Order"
-        android:textColor="@color/White"
-        android:textSize="12sp" />
+        android:text="@string/place_orders"
+        style="@style/button_custom_new"/>
+       <!-- android:textColor="@color/White"
+        android:textSize="12sp"-->
+
 
 
 </LinearLayout>

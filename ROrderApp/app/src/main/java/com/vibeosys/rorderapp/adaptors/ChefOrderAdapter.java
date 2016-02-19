@@ -111,7 +111,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     }
 
     @Override
-    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, ViewGroup parent) {
         final ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
         if(convertView ==null)
         {
@@ -150,6 +150,18 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             public void onClick(View v) {
                 if (onDoneClickListener != null) {
                     onDoneClickListener.onDonClick(chefOrderDetailsDTO.getmNewOrderId());
+                    if(isExpanded)
+                    {
+                        onGroupCollapsed(groupPosition);
+                      //  notifyDataSetChanged();
+                        chefOrderDetailsDTOs.remove(groupPosition);
+                    }
+                    else
+                    {
+                      //  notifyDataSetChanged();
+                        chefOrderDetailsDTOs.remove(groupPosition);
+                    }
+
                 }
 
 
@@ -204,14 +216,15 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
 
         }
         else {
-            super.onGroupExpanded(groupPosition);
-            currentPosition = groupPosition;
+
+          //  currentPosition = groupPosition;
             ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
             String selectedOrderId = String.valueOf(chefOrderDetailsDTO.getmNewOrderId());
             child.clear();
             child = mDbRepository.getChefMenu(selectedOrderId);
             expHashMap.put(groupPosition, child);
             notifyDataSetChanged();
+            super.onGroupExpanded(groupPosition);
         }
 
     }
@@ -258,10 +271,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     {
 
         this.chefOrderDetailsDTOs.clear();
-        this.child.clear();
-        this.onGroupCollapsed(getGroupCount());
-
-        this.chefOrderDetailsDTOs = mDbRepository.getOrderHeadesInAsc(status);
+        this.chefOrderDetailsDTOs.addAll(mDbRepository.getOrderHeadesInAsc(status));
         notifyDataSetChanged();
 
     }

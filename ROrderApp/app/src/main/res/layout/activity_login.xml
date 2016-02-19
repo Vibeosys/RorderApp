@@ -104,14 +104,13 @@
 
                 <Button
                     android:id="@+id/email_sign_in_button"
-                    style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/button_custom"
+                    style="@style/button_custom_new"
                     android:text="@string/action_waiter_sign_in"
-                    android:textColor="@color/White"
-                    android:textStyle="bold" />
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -128,14 +127,12 @@
 
                 <Button
                     android:id="@+id/email_sign_in_chef"
-                    style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/button_custom"
                     android:text="@string/action_chef_sign_in"
-                    android:textColor="@color/White"
-                    android:textStyle="bold" />
+                    style="@style/button_custom_new" />
             </LinearLayout>
 
 

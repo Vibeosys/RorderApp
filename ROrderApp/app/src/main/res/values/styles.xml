@@ -116,9 +116,7 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="billing_summery_bold">
-        <item name="android:textAppearance">
-            @android:style/TextAppearance.DeviceDefault.Widget.TextView
-        </item>
+
         <item name="android:textColor">@color/blue</item>
         <item name="android:textSize">18sp</item>
         <item name="android:background">@color/White</item>
@@ -144,6 +142,17 @@
     <style name="about_us_link">
         <item name="android:textColor">@color/White</item>
         <item name="android:textStyle">italic</item>
+
+    </style>
+    <style name="button_custom_new">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="base_style">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12sp</item>
 
     </style>
 </resources>

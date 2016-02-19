@@ -92,6 +92,8 @@
         <service
             android:name=".service.SyncService"
             android:exported="false" />
+        <service android:name=".service.ChefService"
+            android:exported="false"/>
     </application>
 
 </manifest>

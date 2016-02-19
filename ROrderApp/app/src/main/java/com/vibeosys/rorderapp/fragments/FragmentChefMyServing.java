@@ -49,8 +49,11 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         View view = inflater.inflate(R.layout.chef_expandable_list,container,false);
 
-        Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),ChefService.class);
+        Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),SyncService.class);
         getContext().startService(i);
+
+        Intent chefServices = new Intent(this.getContext(),ChefService.class);
+        getContext().startService(chefServices);
 
         chefOrderList = (ExpandableListView) view.findViewById(R.id.expListViewForChef);
         list = mDbRepository.getOrderHeadesInAsc(1);
@@ -64,6 +67,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         return view;
     }
+
 
     @Override
     public void onDonClick(String ChefOrderId) {
@@ -128,11 +132,12 @@ public class FragmentChefMyServing extends BaseFragment implements
     static {
         UIHandler = new Handler(Looper.getMainLooper());
 
+
     }
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
-
+        chefOrderAdapter.refresh(1);
     }
 
 
@@ -140,9 +145,9 @@ public class FragmentChefMyServing extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        list.clear();
-        list.addAll(mDbRepository.getOrderHeadesInAsc(1));
-        chefOrderAdapter.notifyDataSetChanged();
+//        list.clear();
+//        list.addAll(mDbRepository.getOrderHeadesInAsc(1));
+//        chefOrderAdapter.notifyDataSetChanged();
 
 
 

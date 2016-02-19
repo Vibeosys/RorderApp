@@ -55,7 +55,7 @@ public class ChefOrdersDisplayActivity extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_SYNC,null,this,SyncService.class);
         startService(i);
 
-        chefOrderList = (ExpandableListView) findViewById(R.id.expListViewForChef);
+       // chefOrderList = (ExpandableListView) findViewById(R.id.expListViewForChef);
         getSupportActionBar();
 //        TextView textView = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_text_view,null);
 //        textView.setText("Current Orders");

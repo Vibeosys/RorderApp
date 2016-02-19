@@ -32,5 +32,5 @@
         android:background="@drawable/button_custom"
         android:gravity="center"
         android:text="@string/Payment_close"
-        android:textColor="@color/White" />
+        style="@style/button_custom_new"  />
 </LinearLayout>

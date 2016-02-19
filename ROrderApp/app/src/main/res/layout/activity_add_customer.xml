@@ -42,8 +42,8 @@
         android:background="@drawable/button_custom"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Add"
-        android:textColor="@color/White" />
+        android:text="@string/add_customer_wet"
+        style="@style/button_custom_new" />
 
     <ListView
         android:id="@+id/customerList"
