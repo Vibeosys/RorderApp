@@ -1,12 +1,13 @@
 package com.vibeosys.rorderapp.data;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by akshay on 23-01-2016.
@@ -18,9 +19,11 @@ public class OrdersDbDTO extends BaseDTO {
     private String custId;
     private int orderStatus;
     private Date orderDt;
+    private String orderDate;
     private Time orderTm;
-    private Date createdDate;
-    private Date updatedDate;
+    private String orderTime;
+    //private Date createdDate;
+    //private Date updatedDate;
     private int tableId;
     private int userId;
     private double orderAmt;
@@ -37,8 +40,8 @@ public class OrdersDbDTO extends BaseDTO {
         this.custId = custId;
         this.orderDt = orderDt;
         this.orderTm = orderTm;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
+        //this.createdDate = createdDate;
+        //this.updatedDate = updatedDate;
         this.tableId = tableId;
         this.userId = userId;
     }
@@ -51,8 +54,8 @@ public class OrdersDbDTO extends BaseDTO {
         this.orderStatus = orderStatus;
         this.orderDt = orderDt;
         this.orderTm = orderTm;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
+        //this.createdDate = createdDate;
+        //this.updatedDate = updatedDate;
         this.tableId = tableId;
         this.userId = userId;
         this.orderAmt = orderAmt;
@@ -99,23 +102,60 @@ public class OrdersDbDTO extends BaseDTO {
         this.orderStatus = orderStatus;
     }
 
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
     public Date getOrderDt() {
+        if(this.orderDate == null || this.orderDate.isEmpty())
+            return this.orderDt;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        java.util.Date value = null;
+        try {
+            value = formatter.parse(this.orderDate);
+            orderDt = new Date(value.getTime());
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
         return orderDt;
     }
 
-    public void setOrderDt(Date orderDt) {
+    /*public void setOrderDt(Date orderDt) {
         this.orderDt = orderDt;
-    }
+    }*/
+    public Time getOrderTm() {
+        if(this.orderTime == null || this.orderTime.isEmpty())
+            return this.orderTm;
 
-    public Time getOrderTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        java.util.Date value = null;
+        try {
+            value = formatter.parse(this.orderTime);
+            orderTm = new Time(value.getTime());
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
         return orderTm;
     }
 
-    public void setOrderTime(Time orderTime) {
-        this.orderTm = orderTime;
+    public String getOrderTime() {
+        return orderTime;
     }
 
-    public Date getCreatedDate() {
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    /*public Date getCreatedDate() {
         return createdDate;
     }
 
@@ -129,7 +169,7 @@ public class OrdersDbDTO extends BaseDTO {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
-    }
+    }*/
 
     public int getTableId() {
         return tableId;
@@ -164,7 +204,8 @@ public class OrdersDbDTO extends BaseDTO {
     }
 
     public static List<OrdersDbDTO> deserializeOrders(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+        Gson gson = new Gson();
+        //gson.fromJson(serializedStringList,)
         ArrayList<OrdersDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {
