@@ -17,7 +17,25 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:id="@+id/linearlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:drawableLeft="@drawable/abc_ic_search_api_mtrl_alpha"
+                    android:hint="@string/search_table"
+                    android:inputType="number" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
 
 
     </android.support.design.widget.AppBarLayout>
@@ -26,7 +44,8 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <include layout="@layout/content_main" />
 
     <ImageButton
@@ -34,14 +53,14 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_gravity="bottom|end"
-        android:clickable="true"
-        android:translationZ="5dp"
         android:layout_margin="@dimen/fab_margin"
-        android:padding="13dp"
-        app:layout_anchorGravity="bottom|right|end"
-        android:src="@drawable/ico_waiting_list_new"
         android:background="@drawable/floating_button"
-        android:scaleType="centerCrop" />
+        android:clickable="true"
+        android:padding="13dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ico_waiting_list_new"
+        android:translationZ="5dp"
+        app:layout_anchorGravity="bottom|right|end" />
 
 
 </android.support.design.widget.CoordinatorLayout>

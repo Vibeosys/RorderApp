@@ -8,14 +8,14 @@
     <color name="transperent">#80000000</color>
     <color name="light_grey">#d1cdcd</color>
     <color name="light_yello">#CD853F</color>
-
+    <color name="transparent_back">#66FFFFFF</color>
     <color name="colorPrimary">#9C27B0</color>
     <color name="colorPrimaryDark">#6A1B9A</color>
     <color name="colorPrimaryLight">#E1BEE7</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
-
+    <color name="dialog_fill_colour">#F9F9F9</color>
     <color name="red">#F74042</color>
     <color name="red_light">#80F74042</color>
     <color name="background">#EDEDED</color>
@@ -38,8 +38,6 @@
     <color name="listview_background">#404040</color>
     <color name="listview_item">#454545</color>
     <color name="dark_green_color">#229327</color>
-
-
 
 
     <color name="custom_header_text">#CD5C5C</color>

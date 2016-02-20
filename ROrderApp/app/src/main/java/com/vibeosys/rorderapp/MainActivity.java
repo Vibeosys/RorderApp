@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,14 +15,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +42,7 @@ import com.vibeosys.rorderapp.activities.NotificationActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.activities.TableFilterActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
+import com.vibeosys.rorderapp.adaptors.CustomerAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
@@ -44,6 +52,7 @@ import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
+import com.vibeosys.rorderapp.data.WaitingUserDTO;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
@@ -72,6 +81,7 @@ public class MainActivity extends BaseActivity
     TextView txtTotalCount;
     static int selectedCategory = 0;
     static boolean btnCancelFlag = false, chkMyservingFlag = false, chkUnoccupied = false;
+    EditText txtSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +112,10 @@ public class MainActivity extends BaseActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    callWaitingIntent();
+                    //callWaitingIntent();
+                    //Show waiting dialog
+
+                    showWaitingDialog();
                 }
             });
             Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
@@ -112,7 +125,7 @@ public class MainActivity extends BaseActivity
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-
+            txtSearch = (EditText) findViewById(R.id.search);
             drawer.setDrawerListener(toggle);
             toggle.syncState();
             txtTotalCount = (TextView) findViewById(R.id.txtCount);
@@ -129,6 +142,36 @@ public class MainActivity extends BaseActivity
             TextView txtRestaurantName = (TextView) headerView.findViewById(R.id.txtHeaderHotelName);
             //     txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
             txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + hotelTableDTOs.size() + " tables are occupied");
+
+            txtSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.length() == 0) {
+                        adapter.refresh(mDbRepository.getTableRecords(""));
+                    } else {
+                        try {
+                            sortedTables = sortAdapter(Integer.parseInt(s.toString()));
+                            adapter.refresh(sortedTables);
+                        } catch (Exception e) {
+                            Log.e(TAG, "##" + e.toString());
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "You should Enter number", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
         }
 
     }
@@ -160,8 +203,8 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        // SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -187,7 +230,7 @@ public class MainActivity extends BaseActivity
                 adapter.refresh(mDbRepository.getTableRecords(""));
                 return false;
             }
-        });
+        });*/
 
         return true;
     }
@@ -426,4 +469,146 @@ public class MainActivity extends BaseActivity
         UIHandler.post(runnable);
 
     }
+
+    private void showWaitingDialog() {
+        final Dialog dlg = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        View view = getLayoutInflater().inflate(R.layout.dialog_waiting_list, null);
+        dlg.setContentView(view);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        ArrayList<WaitingUserDTO> mWaitingList = mDbRepository.getWaitingList();
+        final EditText mTxtCount = (EditText) dlg.findViewById(R.id.txtCustCount);
+        final EditText mTxtName = (EditText) dlg.findViewById(R.id.txtCustomerName);
+        final ImageButton btnClose = (ImageButton) dlg.findViewById(R.id.fabClose);
+        TextView txtTitle = (TextView) dlg.findViewById(R.id.dlg_title);
+        txtTitle.setText("Waiting List");
+        Button mBtnAdd = (Button) dlg.findViewById(R.id.btnAdd);
+        ListView mListCustomer = (ListView) dlg.findViewById(R.id.customerList);
+        final CustomerAdapter mCustomerAdapter = new CustomerAdapter(getApplicationContext(), mWaitingList);
+        mListCustomer.setAdapter(mCustomerAdapter);
+        mCustomerAdapter.notifyDataSetChanged();
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
+        mBtnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean wrongCredential = false;
+                View focus = null;
+                mTxtName.setError(null);
+                mTxtCount.setError(null);
+
+                String customerName = mTxtName.getText().toString();
+                String strCount = mTxtCount.getText().toString();
+
+                if (TextUtils.isEmpty(customerName)) {
+                    mTxtName.setError("Customer Name is Required");
+                    focus = mTxtName;
+                    wrongCredential = true;
+                }
+                if (TextUtils.isEmpty(strCount)) {
+                    mTxtCount.setError("Customer Count is Required");
+                    focus = mTxtCount;
+                    wrongCredential = true;
+                }
+
+                if (wrongCredential) {
+                    focus.requestFocus();
+                } else {
+                    UUID custid = UUID.randomUUID();
+                    int customerCount = 0;
+                    try {
+                        customerCount = Integer.parseInt(strCount);
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "## Insert Count null pointer" + e.toString());
+                    }
+
+                    CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), customerName);
+                    mDbRepository.insertCustomerDetails(customer);
+                    String currentDate = new ROrderDateUtils().getGMTCurrentDate();
+                    Log.d(TAG, "##" + currentDate);
+                    TableTransactionDbDTO tableTransaction = new TableTransactionDbDTO(custid.toString(), 1, customerCount);
+                    mDbRepository.insertTableTransaction(tableTransaction);
+                    Toast.makeText(getApplicationContext(), "Customer is Added successfully", Toast.LENGTH_SHORT).show();
+                    mCustomerAdapter.refresh(mDbRepository.getWaitingList());
+                    mTxtCount.setText("");
+                    mTxtName.setText("");
+                    Gson gson = new Gson();
+                    TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
+                    String serializedJsonString = gson.toJson(customer);
+                    //TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+                    tableDataDTOs[0] = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+                    String serializedTableTransaction = gson.toJson(tableTransaction);
+                    tableDataDTOs[1] = new TableDataDTO(ConstantOperations.ADD_WAITING_CUSTOMER, serializedTableTransaction);
+                    mServerSyncManager.uploadDataToServer(tableDataDTOs);
+                }
+            }
+        });
+
+        mListCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final WaitingUserDTO waiting = (WaitingUserDTO) mCustomerAdapter.getItem(position);
+                final Dialog dialog = new Dialog(mContext);
+                dialog.setContentView(R.layout.dialog_table_alocate);
+                setTitle(getResources().getString(R.string.dialog_title_Allocate));
+                final EditText txtTableNo = (EditText) dialog.findViewById(R.id.txtTableNumber);
+                TextView txtReserve = (TextView) dialog.findViewById(R.id.txtReserve);
+                TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+
+                txtReserve.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String strTableNo = txtTableNo.getText().toString();
+                        if (TextUtils.isEmpty(strTableNo)) {
+                            txtTableNo.setError(getResources().getString(R.string.error_table_no));
+                            txtTableNo.requestFocus();
+                        } else {
+                            int tableId = mDbRepository.getTaleId(Integer.parseInt(strTableNo));
+                            if (tableId == -1) {
+                                Toast.makeText(getApplicationContext(), "Table is Already Occupied", Toast.LENGTH_SHORT).show();
+                            } else if (tableId == 0) {
+                                Toast.makeText(getApplicationContext(), "No Such Table found", Toast.LENGTH_SHORT).show();
+                            } else {
+                                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId,
+                                        mSessionManager.getUserId(), waiting.getmCustomerId(), 0,
+                                        waiting.getmArrivalTime(), waiting.getmOccupancy());
+                                mDbRepository.updateTableTransaction(tableTransactionDbDTO);
+                                mDbRepository.setOccupied(true, tableId);
+
+                                UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 1);
+                                TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
+                                Gson gson = new Gson();
+                                String serializedJsonString = gson.toJson(occupiedDTO);
+                                tableDataDTOs[0] = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
+                                String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
+                                tableDataDTOs[1] = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
+                                mServerSyncManager.uploadDataToServer(tableDataDTOs);
+
+                                dialog.dismiss();
+                                mCustomerAdapter.refresh(mDbRepository.getWaitingList());
+                                Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(iMain);
+                                finish();
+                            }
+
+                        }
+
+                    }
+                });
+
+                txtCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+        dlg.show();
+    }
+
 }

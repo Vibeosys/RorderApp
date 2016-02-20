@@ -1,25 +1,36 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.adaptors.FeedbackAdapter;
 import com.vibeosys.rorderapp.adaptors.PaymentModeAdapter;
 import com.vibeosys.rorderapp.data.BillPaidUpload;
+import com.vibeosys.rorderapp.data.FeedBackDTO;
 import com.vibeosys.rorderapp.data.PaymentModeDbDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.UploadCustomerFeedback;
+import com.vibeosys.rorderapp.data.UploadFeedback;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.NetworkUtils;
+
+import java.util.ArrayList;
 
 /**
  * Created by shrinivas on 08-02-2016.
@@ -84,10 +95,53 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         tableDataDTOs[2] = new TableDataDTO(ConstantOperations.PAID_BILL, serializedBillPaid);
         mServerSyncManager.uploadDataToServer(tableDataDTOs);
 
+        showFeedBackDialog();
         Intent i = new Intent(getApplicationContext(), FeedbackActivity.class);
         i.putExtra("tableCustInfo", tableCommonInfoDTO);
         startActivity(i);
         finish();
+    }
+
+    private void showFeedBackDialog() {
+        final Dialog dlg = new Dialog(BillPaymentOptionActivity.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        View view = getLayoutInflater().inflate(R.layout.activity_feedback, null);
+        dlg.setContentView(view);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dlg.setTitle(getResources().getString(R.string.feedback_activity_name));
+        ListView mFeedbackList = (ListView) dlg.findViewById(R.id.listFeedback);
+        TextView txtThank = (TextView) dlg.findViewById(R.id.txtThank);
+        final ArrayList<FeedBackDTO> mFeedbacks = mDbRepository.getFeedBackList();
+        FeedbackAdapter mFeedbackAdapter = new FeedbackAdapter(mFeedbacks, getApplicationContext());
+        mFeedbackList.setAdapter(mFeedbackAdapter);
+
+        txtThank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
+                    ArrayList<UploadFeedback> feedbackDbDTOs = new ArrayList<>();
+                    for (FeedBackDTO feedBackDTO : mFeedbacks) {
+                        feedbackDbDTOs.add(new UploadFeedback(feedBackDTO.getmFeedbackId(), feedBackDTO.getmRating()));
+                    }
+
+                    UploadCustomerFeedback customerFeedback = new UploadCustomerFeedback(mCustId, feedbackDbDTOs);
+
+                    Gson gson = new Gson();
+
+                    String serializedJsonString = gson.toJson(customerFeedback);
+                    Log.d(TAG, "##" + serializedJsonString);
+                    TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CUSTOMER_FEEDBACK, serializedJsonString);
+                    mServerSyncManager.uploadDataToServer(tableDataDTO);
+
+                    Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
+                    iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(iMain);
+                    finish();
+                } else {
+                    showMyDialog(mContext);
+                }
+            }
+        });
+        dlg.show();
     }
 
     @Override
