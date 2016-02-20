@@ -18,12 +18,13 @@ public class ChefService extends IntentService {
             synchronized (this) {
                 try {
                     //TODO: Hardcoded time for now, need to read from properties
-                    wait(20 * 1000);
+                    wait(10 * 1000);
 
 
                     FragmentChefMyServing.runOnUI(new Runnable() {
                         public void run() {
                             try {
+
                             } catch (Exception e) {
                                 notifyAll();
                                 Log.e("SyncService", "## Error in chef my serving  order runOnUi method " + e.toString());
@@ -36,7 +37,7 @@ public class ChefService extends IntentService {
                         @Override
                         public void run() {
                             try {
-                                notifyAll();
+
                             } catch (Exception e) {
                                 Log.e("SyncService", "## Error in chef placed order runOnUi method " + e.toString());
                                 e.printStackTrace();

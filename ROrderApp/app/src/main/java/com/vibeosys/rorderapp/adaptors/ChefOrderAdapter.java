@@ -21,14 +21,19 @@ import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by shrinivas on 12-02-2016.
  */
-public class ChefOrderAdapter extends BaseExpandableListAdapter  {
+public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
     private Context context;
     private ArrayList<ChefOrderDetailsDTO> chefOrderDetailsDTOs;
     private GroupHolder groupHolder;
@@ -123,6 +128,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             groupHolder.orderDoneBtn = (Button)convertView.findViewById(R.id.OrderDoneChef);
             groupHolder.getGroupOrderNo = (TextView)convertView.findViewById(R.id.cheforderNo);
             groupHolder.imgIndicator = (ImageView)convertView.findViewById(R.id.chefOrderDonIcon);
+            groupHolder.currentDate = (TextView)convertView.findViewById(R.id.orderTime);
 
             convertView.setTag(groupHolder);
         }
@@ -145,6 +151,8 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
         groupHolder.getGroupOrderNo.setText(""+chefOrderDetailsDTO.getmOrderNumner());
+
+
         groupHolder.orderDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,6 +191,8 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
             childHolder.childQty = (TextView)convertView.findViewById(R.id.chefQty);
             childHolder.menuNo = (TextView)convertView.findViewById(R.id.chefMenuNo);
             childHolder.childMenuNote = (TextView)convertView.findViewById(R.id.chefMenuComment);
+
+
             convertView.setTag(childHolder);
         }
         else
@@ -196,7 +206,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         if(chefMenuDetailsDTO.getmMenuNote()== null)
         childHolder.childMenuNote.setText("");
         else
-            childHolder.childMenuNote.setText(""+chefMenuDetailsDTO.getmMenuNote());
+            childHolder.childMenuNote.setText("" + chefMenuDetailsDTO.getmMenuNote());
         Toast.makeText(context,""+chefMenuDetailsDTO.getmMenuNote(),Toast.LENGTH_SHORT);
 
         return convertView;
@@ -251,6 +261,7 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
         Button orderDoneBtn;
         ImageView imgIndicator;
         TextView getGroupOrderNo;
+        TextView currentDate;
 
     }
     public final class ChildHolder
@@ -272,9 +283,13 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter  {
     }
     public void refresh(int status)
     {
+        if(this.chefOrderDetailsDTOs != null)
+        {
+            this.chefOrderDetailsDTOs.clear();
+        }
 
-        this.chefOrderDetailsDTOs.clear();
         this.chefOrderDetailsDTOs.addAll(mDbRepository.getOrderHeadesInAsc(status));
+
         notifyDataSetChanged();
 
     }

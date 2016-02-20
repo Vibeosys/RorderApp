@@ -82,6 +82,7 @@
             android:parentActivityName=".activities.FlashScreenActivity"></activity>
         <activity
             android:name=".activities.FeedbackActivity"
+            android:theme="@style/Base.Animation.AppCompat.Dialog"
             android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".activities.AboutUsActivity"

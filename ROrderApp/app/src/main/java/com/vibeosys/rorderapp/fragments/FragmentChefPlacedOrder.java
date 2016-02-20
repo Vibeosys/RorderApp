@@ -48,8 +48,8 @@ public class FragmentChefPlacedOrder extends BaseFragment
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
-        chefOrderAdapter.refresh(2);
-        chefOrderAdapter.notifyDataSetChanged();
+//        chefOrderAdapter.refresh(2);
+//        chefOrderAdapter.notifyDataSetChanged();
     }
 
 

@@ -138,6 +138,7 @@ public class TableGridAdapter extends BaseAdapter {
         if (hotelTableDTO.getUserName() != null && !TextUtils.isEmpty(hotelTableDTO.getUserName())) {
             if (hotelTableDTO.getUserId() == mSessionUserId) {
                 viewHolder.txtUserName.setText("Me");
+                viewHolder.txtUserName.setBackgroundResource(R.drawable.table_grid_adt_me_txt);
             } else {
                 viewHolder.txtUserName.setText(hotelTableDTO.getUserName());
             }

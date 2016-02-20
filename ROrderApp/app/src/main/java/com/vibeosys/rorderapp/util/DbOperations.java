@@ -1,5 +1,7 @@
 package com.vibeosys.rorderapp.util;
 
+import android.util.Log;
+
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
@@ -14,6 +16,8 @@ import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
+import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
+import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +90,7 @@ public class DbOperations {
         boolean isInserted = dbRepository.insertOrderDetails(orderDetailInserts);
 
         boolean isUpdated = dbRepository.updateOrderDetails(orderDetailUpdates);
+
         return isInserted & isUpdated;
     }
 
@@ -95,6 +100,41 @@ public class DbOperations {
 
         boolean isInserted = dbRepository.insertOrders(orderInserts);
         boolean isUpdated = dbRepository.updateOrders(orderUpdates);
+        FragmentChefMyServing.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    if(FragmentChefMyServing.chefOrderAdapter ==null)
+                    {
+                        Log.d("chef is null","##"+null);
+                    }
+                    else {
+                        FragmentChefMyServing.chefOrderAdapter.refresh(1);
+                    }
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.d("exception in my serving","##"+e.toString());
+                }
+            }
+        });
+        FragmentChefPlacedOrder.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (FragmentChefPlacedOrder.chefOrderAdapter == null) {
+                        Log.d("placed order adt", "##" + FragmentChefPlacedOrder.chefOrderAdapter.isEmpty());
+                    } else {
+                        FragmentChefPlacedOrder.chefOrderAdapter.refresh(2);
+                    }
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        });
         return isInserted & isUpdated;
     }
 

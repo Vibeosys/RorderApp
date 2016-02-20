@@ -103,6 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name"
+
                     android:textColor="@color/custom_text_inactive"
                     android:textSize="17sp" />
             </LinearLayout>

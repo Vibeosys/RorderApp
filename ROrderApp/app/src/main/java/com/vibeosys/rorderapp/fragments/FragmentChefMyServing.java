@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +53,8 @@ public class FragmentChefMyServing extends BaseFragment implements
         Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),SyncService.class);
         getContext().startService(i);
 
-        Intent chefServices = new Intent(this.getContext(),ChefService.class);
-        getContext().startService(chefServices);
+//        Intent chefServices = new Intent(this.getContext(),ChefService.class);
+//        getContext().startService(chefServices);
 
         chefOrderList = (ExpandableListView) view.findViewById(R.id.expListViewForChef);
         list = mDbRepository.getOrderHeadesInAsc(1);
@@ -63,7 +64,6 @@ public class FragmentChefMyServing extends BaseFragment implements
         chefOrderAdapter.setOnDoneClickListener(this);
         mServerSyncManager.setOnStringResultReceived(this);
         chefOrderAdapter.notifyDataSetChanged();
-
 
         return view;
     }
@@ -135,10 +135,15 @@ public class FragmentChefMyServing extends BaseFragment implements
 
     }
 
+
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
-        chefOrderAdapter.refresh(1);
-        chefOrderAdapter.notifyDataSetChanged();
+       // chefOrderAdapter.notifyDataSetChanged();
+//        chefOrderAdapter.refresh(1);
+//        chefOrderAdapter.notifyDataSetChanged();
+//
+//       // chefOrderAdapter.notifyDataSetInvalidated();
+
     }
 
 
