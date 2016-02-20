@@ -163,4 +163,10 @@ public class SqlContract {
         public final static String FEEDBACK_TITLE = "FeedbackTitle";
         public final static String ACTIVE = "Active";
     }
+    public abstract class SqlRestaurant{
+        public final static String TABLE_NAME ="restaurant";
+        public final static String RESTAURANT_ID="RestaurantId";
+        public final static String RESTAURANT_NAME="RestaurantTitle";
+        public final static String RESTAURANT_URL="LogoUrl";
+    }
 }

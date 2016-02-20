@@ -152,6 +152,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         if (strRestId != null && !strRestId.isEmpty()) {
             try {
                 mSelectedRestoId = Integer.parseInt(strRestId);
+                mSessionManager.setUserRestaurantId(mSelectedRestoId);
+
             } catch (NumberFormatException e) {
                 mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant));
                 Log.e(TAG, "Error at select Restaurant Id" + e.toString());
@@ -159,7 +161,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         } else {
             mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant_id));
         }
-        mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
+
+      //  mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
         if (NetworkUtils.isActiveNetworkAvailable(this)) {
             ContextWrapper ctw = new ContextWrapper(getApplicationContext());
             File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
@@ -170,6 +173,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                 downloadDatabase(dbFile);
             }
         }
+        mSelectedRestaurantName = mDbRepository.getRestaurantName(mSelectedRestoId);
+        mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
         Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
         intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intentLogin);

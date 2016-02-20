@@ -27,10 +27,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.util.UserAuth;
+import com.vibeosys.rorderapp.util.CustomVolleyRequestQueue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,9 @@ public class LoginActivity extends BaseActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private  String mImgUrl;
+    private ImageLoader mRestaurantImg;
+    NetworkImageView networkImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,7 @@ public class LoginActivity extends BaseActivity {
         // Set up the login form.
         mUserNameView = (EditText) findViewById(R.id.email);
         //populateAutoComplete();
-
+     //   mImgUrl = mDbRepository.getRestaurantUrl(mSessionManager.getUserRestaurantId());
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -84,7 +90,11 @@ public class LoginActivity extends BaseActivity {
                 return false;
             }
         });
-
+//        mRestaurantImg = CustomVolleyRequestQueue.getInstance(getApplicationContext())
+//                .getImageLoader();
+//        mRestaurantImg.get(mImgUrl, ImageLoader.getImageListener(networkImageView,
+//                R.drawable.menu_image_generic, R.drawable.menu_image_generic));
+//        networkImageView.setImageUrl(mImgUrl,mRestaurantImg);
         Button btnWaiterLogin = (Button) findViewById(R.id.email_sign_in_button);
         btnWaiterLogin.setOnClickListener(new OnClickListener() {
             @Override
@@ -101,6 +111,8 @@ public class LoginActivity extends BaseActivity {
         });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
     }
 
  /*   private void populateAutoComplete() {

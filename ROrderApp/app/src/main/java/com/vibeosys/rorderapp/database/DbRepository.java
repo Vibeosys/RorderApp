@@ -1274,6 +1274,61 @@ public class DbRepository extends SQLiteOpenHelper {
         return password;
     }
 
+    public String getRestaurantName(int restaurantId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        String restaurantName = "";
+        String whereClause[] = new String[]{String.valueOf(restaurantId)};
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("select restaurant.RestaurantTitle from restaurant where restaurant.RestaurantId =?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        restaurantName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_NAME));
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (cursor != null)
+                cursor.close();
+        }
+        return restaurantName;
+    }
+    public String getRestaurantUrl(int restaurantId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        String restaurantUrl = "";
+        String whereClause[] = new String[]{String.valueOf(restaurantId)};
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("select restaurant.LogoUrl from restaurant where restaurant.RestaurantId =?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        restaurantUrl = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_URL));
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (cursor != null)
+                cursor.close();
+        }
+        return restaurantUrl;
+    }
+
     public int checkTempOrderDetails(String custId, int tableId) {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;

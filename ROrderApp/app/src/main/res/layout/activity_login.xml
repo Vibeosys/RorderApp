@@ -32,14 +32,24 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:orientation="vertical">
 
-            <com.vibeosys.rorderapp.views.RoundedImageView
+           <!-- <com.vibeosys.rorderapp.views.RoundedImageView
                 android:id="@+id/companyLogo"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/hotel_logo" />
+                android:src="@drawable/hotel_logo" />-->
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/companyLogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerInside"
+                android:background="@drawable/menu_list_image_back"
+                android:src="@drawable/ic_menu_gallery" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
