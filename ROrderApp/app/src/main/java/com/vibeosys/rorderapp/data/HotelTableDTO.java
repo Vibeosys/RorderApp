@@ -10,8 +10,6 @@ public class HotelTableDTO {
     private int mTableCategoryId;
     private String mTableCategoryName;
     private int mCapacity;
-    private String mCreatedDate;
-    private String mUpdatedDate;
     private boolean mIsOccupied;
 
     public HotelTableDTO() {
@@ -61,21 +59,6 @@ public class HotelTableDTO {
         this.mCapacity = mCapacity;
     }
 
-    public String getmCreatedDate() {
-        return mCreatedDate;
-    }
-
-    public void setmCreatedDate(String mCreatedDate) {
-        this.mCreatedDate = mCreatedDate;
-    }
-
-    public String getmUpdatedDate() {
-        return mUpdatedDate;
-    }
-
-    public void setmUpdatedDate(String mUpdatedDate) {
-        this.mUpdatedDate = mUpdatedDate;
-    }
 
     public boolean ismIsOccupied() {
         return mIsOccupied;

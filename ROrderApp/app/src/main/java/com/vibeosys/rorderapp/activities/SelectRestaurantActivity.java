@@ -55,13 +55,13 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk = (Button) findViewById(R.id.btnOk);
         TextView aboutUs = (TextView) findViewById(R.id.about_us);
-
+        mSessionManager.setImei(getImei());
         //listResto=(ListView)findViewById(R.id.listView);
         getRestaurant(mSessionManager.getRestaurantUrl());
         aboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent i = new Intent(getApplicationContext(),AboutUsActivity.class);
+                Intent i = new Intent(getApplicationContext(), AboutUsActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(i);
 
@@ -81,7 +81,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         String buildInfo64Based = getBuild64BasedInfo();
         UUID uuid = UUID.randomUUID();
         mSessionManager.setDeviceId(uuid.toString());
-        String downloadDBURL = mSessionManager.getDownloadDbUrl(mSelectedRestoId);/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
+        String downloadDBURL = mSessionManager.getDownloadDbUrl(mSelectedRestoId) + "&info=" + buildInfo64Based + "&imei=" + mSessionManager.getImei();/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
         Log.i(TAG, "##" + downloadDBURL);
         try {
             URL url = new URL(downloadDBURL);
@@ -221,4 +221,6 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     public void onNothingSelected(AdapterView<?> parent) {
 
     }*/
+
+
 }

@@ -12,8 +12,6 @@ public class SqlContract {
         public final static String USER_NAME = "UserName";
         public final static String PASSWORD = "Password";
         public final static String ACTIVE = "Active";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATED_DATE = "UpadtedDate";
         public final static String ROLE_ID = "RoleId";
         public final static String RESTAURANTID = "RestaurantId";
     }
@@ -24,8 +22,6 @@ public class SqlContract {
         public final static String TABLE_NO = "TableNo";
         public final static String TABLE_CATEGORY = "TableCategoryId";
         public final static String CAPACITY = "Capacity";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATED_DATE = "UpdatedDate";
         public final static String IS_OCCUPIED = "IsOccupied";
     }
 
@@ -34,8 +30,6 @@ public class SqlContract {
         public final static String TABLE_CATEGORY_ID = "TableCategoryId";
         public final static String CATEGORY_TITLE = "CategoryTitle";
         public final static String IMAGE = "Image";
-        public final static String CREATED_DATE = "CrearedDate";
-        public final static String UPDATED_DATE = "UpdatedDate";
     }
 
     public abstract class SqlBill {
@@ -46,8 +40,6 @@ public class SqlContract {
         public final static String NET_AMOUNT = "NetAmount";
         public final static String TOATL_TAX_AMT = "TotalTaxAmount";
         public final static String TOTAL_PAY_AMT = "TotalPayAmount";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATED_DATE = "UpdatedDate";
         public final static String USER_ID = "userId";
         public final static String CUST_ID = "CustId";
         public final static String TABLE_ID = "TableId";
@@ -60,8 +52,6 @@ public class SqlContract {
         public final static String AUTO_ID = "AutoId";
         public final static String ORDER_ID = "OrderId";
         public final static String BILL_NO = "BillNo";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATED_DATE = "UpdatedDate";
     }
 
     public abstract class SqlMenu {
@@ -75,8 +65,6 @@ public class SqlContract {
         public final static String AVAIL_STATUS = "AvailabilityStatus";
         public final static String ACTIVE = "Active";
         public final static String FOOD_TYPE = "FoodType";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATED_DATE = "UpdatedDate";
         public final static String CATEGORY_ID = "CategoryId";
         public final static String IS_SPICY = "IsSpicy";
     }
@@ -89,8 +77,6 @@ public class SqlContract {
         public final static String ACTIVE = "Active";
         public final static String COLOUR = "Colour";
         public final static String IMG_URL = "ImgUrl";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATED_DATE = "UpdatedDate";
     }
 
     public abstract class SqlMenuTags {
@@ -105,8 +91,6 @@ public class SqlContract {
         public final static String ORDER_DETAILS_ID = "OrderDetailsId";
         public final static String ORDER_PRICE = "OrderPrice";
         public final static String ORDER_QUANTITY = "OrderQuantity";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATE_DATE = "UpdatedDate";
         public final static String ORDER_ID = "OrderId";
         public final static String MENU_ID = "MenuId";
         public final static String MENU_TITLE = "MenuTitle";
@@ -121,8 +105,6 @@ public class SqlContract {
         public final static String ORDER_STATUS = "OrderStatus";
         public final static String ORDER_DATE = "Orderdate";
         public final static String ORDER_TIME = "OrderTime";
-        public final static String CREATED_DATE = "CreatedDate";
-        public final static String UPDATED_DATE = "UpdatedDate";
         public final static String TABLE_NO = "TableNo";
         public final static String USER_ID = "UserId";
         public final static String ORDER_AMOUNT = "OrderAmount";

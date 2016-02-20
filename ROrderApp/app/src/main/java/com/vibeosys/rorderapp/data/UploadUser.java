@@ -9,6 +9,7 @@ public class UploadUser extends BaseDTO {
     protected String userName;
     protected String password;
     protected int restaurantId;
+    protected String imei;
 
     public UploadUser() {
 
@@ -19,10 +20,11 @@ public class UploadUser extends BaseDTO {
         this.restaurantId = restaurantId;
     }
 
-    public UploadUser(int userId, int restaurantId, String password) {
+    public UploadUser(int userId, int restaurantId, String password, String imei) {
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.password = password;
+        this.imei = imei;
     }
 
     public String getUserName() {

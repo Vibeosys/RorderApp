@@ -9,22 +9,17 @@ public class OrderDetailsDTO {
     private int mOrderDetailsId;
     private double mOrderPrice;
     private int mOrderQuantity;
-    private Date mCreatedDate;
-    private Date mUpdatedDate;
     private String mOrderId;
     private int mMenuId;
     private double mMenuUnitPrice;
     private String mMenuTitle;
     private String mNote;
 
-    public OrderDetailsDTO(int mOrderDetailsId, double mOrderPrice, int mOrderQuantity,
-                           Date mCreatedDate, Date mUpdatedDate, String mOrderId, int mMenuId,
+    public OrderDetailsDTO(int mOrderDetailsId, double mOrderPrice, int mOrderQuantity,String mOrderId, int mMenuId,
                            String mMenuTitle, double mMenuUnitPrice, String mNote) {
         this.mOrderDetailsId = mOrderDetailsId;
         this.mOrderPrice = mOrderPrice;
         this.mOrderQuantity = mOrderQuantity;
-        this.mCreatedDate = mCreatedDate;
-        this.mUpdatedDate = mUpdatedDate;
         this.mOrderId = mOrderId;
         this.mMenuId = mMenuId;
         this.mMenuTitle = mMenuTitle;
@@ -54,22 +49,6 @@ public class OrderDetailsDTO {
 
     public void setOrderQuantity(int mOrderQuantity) {
         this.mOrderQuantity = mOrderQuantity;
-    }
-
-    public Date getCreatedDate() {
-        return mCreatedDate;
-    }
-
-    public void setCreatedDate(Date mCreatedDate) {
-        this.mCreatedDate = mCreatedDate;
-    }
-
-    public Date getUpdatedDate() {
-        return mUpdatedDate;
-    }
-
-    public void setUpdatedDate(Date mUpdatedDate) {
-        this.mUpdatedDate = mUpdatedDate;
     }
 
     public String getOrderId() {

@@ -18,8 +18,6 @@ public class MenuCateoryDbDTO extends BaseDTO {
     private boolean active;
     private String colour;
     private String imgUrl;
-    private Date createdDate;
-    private Date updatedDate;
 
     public MenuCateoryDbDTO() {
     }
@@ -56,22 +54,6 @@ public class MenuCateoryDbDTO extends BaseDTO {
         this.active = active;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
 
     public String getColour() {
         return colour;
@@ -90,7 +72,7 @@ public class MenuCateoryDbDTO extends BaseDTO {
     }
 
     public static List<MenuCateoryDbDTO> deserializeMenuCateory(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+        Gson gson = new Gson();
         ArrayList<MenuCateoryDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

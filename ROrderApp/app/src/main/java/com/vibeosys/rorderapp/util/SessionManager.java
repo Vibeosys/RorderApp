@@ -100,7 +100,7 @@ public class SessionManager {
             Log.e("SessionManager", "User id in download DB URL is blank");
 
         String downloadDbUrl = mProjectSharedPref.getString(PropertyTypeConstants.API_DOWNLOAD_DB_URI, null);
-        return downloadDbUrl+restaurantId;
+        return downloadDbUrl + restaurantId;
     }
 
     public String getDownloadUrl(int userId, int restaurantId) {
@@ -218,6 +218,14 @@ public class SessionManager {
 
     public void setDeviceId(String deviceId) {
         setValuesInSharedPrefs(PropertyTypeConstants.USER_DEVICE_ID, deviceId);
+    }
+
+    public void setImei(String imei) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_IMEI_ID, imei);
+    }
+
+    public String getImei() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.USER_IMEI_ID, null);
     }
 
     private static void setValuesInSharedPrefs(String sharedPrefKey, String sharedPrefValue) {

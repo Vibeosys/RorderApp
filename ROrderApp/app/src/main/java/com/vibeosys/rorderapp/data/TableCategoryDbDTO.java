@@ -17,8 +17,6 @@ public class TableCategoryDbDTO {
     private int tableCategoryId;
     private String categoryTitle;
     private String image;
-    private Date createdDate;
-    private Date updatedDate;
 
     public TableCategoryDbDTO() {
     }
@@ -47,24 +45,9 @@ public class TableCategoryDbDTO {
         this.image = image;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 
     public static List<TableCategoryDbDTO> deserializeTableCateory(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+        Gson gson = new Gson();
         ArrayList<TableCategoryDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

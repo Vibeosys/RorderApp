@@ -22,8 +22,6 @@ public class MenuDbDTO extends BaseDTO {
     private boolean active;
     private boolean foodType;
     private boolean isSpicy;
-    private Date createdDate;
-    private Date updatedDate;
     private int categoryId;
 
     public MenuDbDTO() {
@@ -101,21 +99,6 @@ public class MenuDbDTO extends BaseDTO {
         this.foodType = foodType;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 
     public int getCategoryId() {
         return categoryId;
@@ -134,7 +117,7 @@ public class MenuDbDTO extends BaseDTO {
     }
 
     public static List<MenuDbDTO> deserializeMenu(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+        Gson gson = new Gson();
         ArrayList<MenuDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

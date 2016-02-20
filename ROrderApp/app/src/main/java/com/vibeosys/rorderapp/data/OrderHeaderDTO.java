@@ -13,8 +13,6 @@ public class OrderHeaderDTO {
     private boolean mOrderStatus;
     private Date mOrderDate;
     private Time mOrderTime;
-    private Date mCreatedDate;
-    private Date mUpdatedDate;
     private int mTableNo;
     private int mUserId;
     private double mOrderAmount;
@@ -85,21 +83,6 @@ public class OrderHeaderDTO {
         this.mOrderTime = mOrderTime;
     }
 
-    public Date getCreatedDate() {
-        return mCreatedDate;
-    }
-
-    public void setCreatedDate(Date mCreatedDate) {
-        this.mCreatedDate = mCreatedDate;
-    }
-
-    public Date getUpdatedDate() {
-        return mUpdatedDate;
-    }
-
-    public void setUpdatedDate(Date mUpdatedDate) {
-        this.mUpdatedDate = mUpdatedDate;
-    }
 
     public int getTableNo() {
         return mTableNo;

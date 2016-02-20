@@ -122,7 +122,8 @@ public class ServerSyncManager
         Upload uploadToServer = new Upload();
         uploadToServer.setUser(new UploadUser(
                 mSessionManager.getUserId(),
-                mSessionManager.getUserRestaurantId(), mDbRepository.getPassword(mSessionManager.getUserId())));
+                mSessionManager.getUserRestaurantId(),
+                mDbRepository.getPassword(mSessionManager.getUserId()), mSessionManager.getImei()));
         uploadToServer.setData(Arrays.asList(params));
         String uploadJson = uploadToServer.serializeString();
         return uploadJson;
@@ -164,7 +165,7 @@ public class ServerSyncManager
         Upload uploadToServer = new Upload();
         uploadToServer.setUser(new UploadUser(
                 SessionManager.Instance().getUserId(), SessionManager.Instance().getUserRestaurantId()
-                , mDbRepository.getPassword(mSessionManager.getUserId())));
+                , mDbRepository.getPassword(mSessionManager.getUserId()), mSessionManager.getImei()));
         List<Sync> syncRecordsInDb = mDbRepository.getPendingSyncRecords();
         ArrayList<TableDataDTO> tableDataList = new ArrayList<>();
 

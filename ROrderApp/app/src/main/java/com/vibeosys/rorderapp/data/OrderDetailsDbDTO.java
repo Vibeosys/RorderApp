@@ -15,8 +15,6 @@ public class OrderDetailsDbDTO extends BaseDTO {
     private int orderDetailsId;
     private double orderPrice;
     private int orderQuantity;
-    private Date createdDate;
-    private Date updatedDate;
     private String orderId;
     private int menuId;
     private String menuTitle;
@@ -26,13 +24,11 @@ public class OrderDetailsDbDTO extends BaseDTO {
     }
 
     public OrderDetailsDbDTO(int orderDetailsId, double orderPrice, int orderQuantity,
-                             Date createdDate, Date updatedDate, String orderId, int menuId,
-                             String menuTitle,String note) {
+                             String orderId, int menuId,
+                             String menuTitle, String note) {
         this.orderDetailsId = orderDetailsId;
         this.orderPrice = orderPrice;
         this.orderQuantity = orderQuantity;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
         this.orderId = orderId;
         this.menuId = menuId;
         this.menuTitle = menuTitle;
@@ -60,22 +56,6 @@ public class OrderDetailsDbDTO extends BaseDTO {
 
     public void setOrderQuantity(int orderQuantity) {
         this.orderQuantity = orderQuantity;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
     }
 
     public String getOrderId() {
@@ -112,7 +92,7 @@ public class OrderDetailsDbDTO extends BaseDTO {
 
 
     public static List<OrderDetailsDbDTO> deserializeOrderDetail(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+        Gson gson = new Gson();
         ArrayList<OrderDetailsDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

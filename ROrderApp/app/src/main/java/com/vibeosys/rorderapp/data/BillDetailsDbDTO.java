@@ -15,8 +15,6 @@ public class BillDetailsDbDTO extends BaseDTO {
     private int autoId;
     private String OrderId;
     private int billNo;
-    private Date CreateDate;
-    private Date UpdatedDate;
 
     public BillDetailsDbDTO() {
     }
@@ -45,21 +43,6 @@ public class BillDetailsDbDTO extends BaseDTO {
         this.billNo = billNo;
     }
 
-    public Date getCreateDate() {
-        return CreateDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        CreateDate = createDate;
-    }
-
-    public Date getUpdatedDate() {
-        return UpdatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        UpdatedDate = updatedDate;
-    }
 
     public static List<BillDetailsDbDTO> deserializeBillDetails(List<String> serializedStringList) {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();

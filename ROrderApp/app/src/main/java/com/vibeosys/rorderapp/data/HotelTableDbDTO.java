@@ -16,8 +16,6 @@ public class HotelTableDbDTO {
     private int tableNo;
     private int tableCategoryId;
     private int capacity;
-    private String createdDate;
-    private String updatedDate;
     private int isOccupied;
 
     public HotelTableDbDTO() {
@@ -55,21 +53,6 @@ public class HotelTableDbDTO {
         this.capacity = capacity;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 
     public int isOccupied() {
         return isOccupied;
@@ -80,7 +63,7 @@ public class HotelTableDbDTO {
     }
 
     public static List<HotelTableDbDTO> deserializeHotelTables(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+        Gson gson = new Gson();
         ArrayList<HotelTableDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

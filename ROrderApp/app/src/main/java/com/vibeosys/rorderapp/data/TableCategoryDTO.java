@@ -15,8 +15,6 @@ public class TableCategoryDTO {
     private String mTitle;
     private String mImage;
     private boolean mSelected;
-    private String mCreatedDate;
-    private String mUpdatedDate;
 
     public TableCategoryDTO() {
     }
@@ -43,22 +41,6 @@ public class TableCategoryDTO {
 
     public void setmImage(String mImage) {
         this.mImage = mImage;
-    }
-
-    public String getmCreatedDate() {
-        return mCreatedDate;
-    }
-
-    public void setmCreatedDate(String mCreatedDate) {
-        this.mCreatedDate = mCreatedDate;
-    }
-
-    public String getmUpdatedDate() {
-        return mUpdatedDate;
-    }
-
-    public void setmUpdatedDate(String mUpdatedDate) {
-        this.mUpdatedDate = mUpdatedDate;
     }
 
     public boolean isSelected() {

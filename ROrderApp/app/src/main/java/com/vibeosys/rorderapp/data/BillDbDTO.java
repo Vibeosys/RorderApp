@@ -20,27 +20,23 @@ public class BillDbDTO extends BaseDTO {
     private double netAmt;
     private double totalTaxAmt;
     private double totalPayAmt;
-    private String createdDate;
-    private String updatedDate;
     private int userId;
     private String custId;
     private int tableId;
-     private int isPayed;
+    private int isPayed;
     private int payedBy;
 
 
     public BillDbDTO() {
     }
 
-    public BillDbDTO(int billNo, String billDate, String billTime, double netAmt, double totalTaxAmt, double totalPayAmt, String createdDate, String updatedDate, int userId) {
+    public BillDbDTO(int billNo, String billDate, String billTime, double netAmt, double totalTaxAmt, double totalPayAmt, int userId) {
         this.billNo = billNo;
         this.billDate = billDate;
         this.billTime = billTime;
         this.netAmt = netAmt;
         this.totalTaxAmt = totalTaxAmt;
         this.totalPayAmt = totalPayAmt;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
         this.userId = userId;
     }
 
@@ -90,22 +86,6 @@ public class BillDbDTO extends BaseDTO {
 
     public void setTotalPayAmt(double totalPayAmt) {
         this.totalPayAmt = totalPayAmt;
-    }
-
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
     }
 
     public int getUserId() {

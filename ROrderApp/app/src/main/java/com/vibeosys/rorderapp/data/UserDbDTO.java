@@ -18,8 +18,6 @@ public class UserDbDTO extends BaseDTO {
     private boolean active;
     private int roleId;
     private int restaurantId;
-    private Date createdDate;
-    private Date updatedDate;
 
     public UserDbDTO() {
     }
@@ -81,24 +79,9 @@ public class UserDbDTO extends BaseDTO {
         this.roleId = roleId;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 
     public static List<UserDbDTO> deserializeUser(List<String> serializedStringList) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+        Gson gson = new Gson();
         ArrayList<UserDbDTO> objectList = new ArrayList<>();
 
         for (String serializedString : serializedStringList) {

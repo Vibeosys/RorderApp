@@ -15,8 +15,6 @@ public class MenuDTO {
     private boolean mAvailabilityStatus;
     private boolean mActive;
     private boolean mFoodType;
-    private Date mCreatedDate;
-    private Date mUpdatedDate;
     private int mCategoryId;
 
     public MenuDTO() {
@@ -24,7 +22,7 @@ public class MenuDTO {
 
     public MenuDTO(int mMenuId, String mMenuTitle, String mImage,
                    double mPrice, String mIngredients, String mTags, boolean mAvailabilityStatus,
-                   boolean mActive, boolean mFoodType, Date mCreatedDate, Date mUpdatedDate,
+                   boolean mActive, boolean mFoodType,
                    int mCategoryId) {
         this.mMenuId = mMenuId;
         this.mMenuTitle = mMenuTitle;
@@ -35,8 +33,6 @@ public class MenuDTO {
         this.mAvailabilityStatus = mAvailabilityStatus;
         this.mActive = mActive;
         this.mFoodType = mFoodType;
-        this.mCreatedDate = mCreatedDate;
-        this.mUpdatedDate = mUpdatedDate;
         this.mCategoryId = mCategoryId;
     }
 
@@ -112,21 +108,6 @@ public class MenuDTO {
         this.mFoodType = mFoodType;
     }
 
-    public Date getmCreatedDate() {
-        return mCreatedDate;
-    }
-
-    public void setmCreatedDate(Date mCreatedDate) {
-        this.mCreatedDate = mCreatedDate;
-    }
-
-    public Date getmUpdatedDate() {
-        return mUpdatedDate;
-    }
-
-    public void setmUpdatedDate(Date mUpdatedDate) {
-        this.mUpdatedDate = mUpdatedDate;
-    }
 
     public int getmCategoryId() {
         return mCategoryId;

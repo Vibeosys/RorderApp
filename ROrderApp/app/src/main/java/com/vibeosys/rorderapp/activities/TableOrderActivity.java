@@ -64,13 +64,12 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mOrdersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
         mList = mDbRepository.getOrdersOfTable(mTableId, mCustId);
-        if (mOrderFlag == 0) {
+        mDbRepository.getOrederDetailsGroupByID(mList);
+        if(mOrderFlag==0)
+        {
             mCurrentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
             mList.add(0, mCurrentOrder);
-        } else {
-
         }
-        mDbRepository.getOrederDetailsGroupByID(mList);
         mAdapter = new OrderSummaryAdapter(getApplicationContext(), mList);
         mOrdersList.setAdapter(mAdapter);
         mOrdersList.setDividerHeight(2);
