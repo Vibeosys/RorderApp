@@ -34,7 +34,7 @@ public class OrdersDbDTO extends BaseDTO {
 
 
     public OrdersDbDTO(String orderId, int orderNo, String custId, Date orderDt, Time orderTm,
-                       Date createdDate, Date updatedDate, int tableId, int userId) {
+                       int tableId, int userId) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.custId = custId;

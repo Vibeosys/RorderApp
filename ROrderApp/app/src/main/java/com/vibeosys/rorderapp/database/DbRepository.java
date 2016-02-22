@@ -2205,4 +2205,32 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return feebackList;
     }
+
+    public int getPendingOrdersOfTable(int tableId, String custId) {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        String[] whereClause = new String[]{String.valueOf(tableId), custId};
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("select orders.OrderId from orders where " +
+                        SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID +
+                        "=? AND " + SqlContract.SqlOrders.ORDER_STATUS + "=1", whereClause);
+                count = cursor.getCount();
+            }
+            //cursor.close();
+            //sqLiteDatabase.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error at getOrdersOf table " + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count;
+    }
 }

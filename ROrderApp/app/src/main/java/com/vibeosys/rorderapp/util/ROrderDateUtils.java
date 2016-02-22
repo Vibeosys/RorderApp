@@ -12,7 +12,8 @@ import java.util.TimeZone;
  */
 public class ROrderDateUtils {
 
-    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-dd");
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    final SimpleDateFormat dateReadFormat = new SimpleDateFormat("dd-MMM-yyyy");
     final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     public String getGMTCurrentDate() {
@@ -26,6 +27,9 @@ public class ROrderDateUtils {
 
     public String getLocalDateInFormat(java.util.Date date) {
         return dateFormat.format(date);
+    }
+    public String getLocalDateInReadableFormat(java.util.Date date) {
+        return dateReadFormat.format(date);
     }
 
     public String getGMTDateInFormat(Date date) {
@@ -61,4 +65,5 @@ public class ROrderDateUtils {
         }
         return date;
     }
+
 }

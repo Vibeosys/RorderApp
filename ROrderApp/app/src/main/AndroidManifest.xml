@@ -47,8 +47,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.BillSummeryActivity"
-            android:label="@string/title_activity_table_menus"
-            android:windowSoftInputMode="stateHidden">
+            android:label="@string/title_bill_summary">
 
         </activity>
         <activity
@@ -82,19 +81,21 @@
             android:parentActivityName=".activities.FlashScreenActivity"></activity>
         <activity
             android:name=".activities.FeedbackActivity"
-            android:theme="@style/Base.Animation.AppCompat.Dialog"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Base.Animation.AppCompat.Dialog"></activity>
         <activity
             android:name=".activities.AboutUsActivity"
             android:parentActivityName=".activities.FlashScreenActivity"></activity>
         <activity
             android:name=".activities.NotificationActivity"
             android:parentActivityName=".MainActivity"></activity>
+
         <service
             android:name=".service.SyncService"
             android:exported="false" />
-        <service android:name=".service.ChefService"
-            android:exported="false"/>
+        <service
+            android:name=".service.ChefService"
+            android:exported="false" />
     </application>
 
 </manifest>

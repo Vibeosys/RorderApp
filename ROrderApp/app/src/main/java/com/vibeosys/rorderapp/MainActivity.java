@@ -36,6 +36,7 @@ import com.google.gson.Gson;
 import com.vibeosys.rorderapp.activities.AboutUsActivity;
 import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
+import com.vibeosys.rorderapp.activities.BillDetailsActivity;
 import com.vibeosys.rorderapp.activities.ChefOrdersDisplayActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.NotificationActivity;
@@ -44,6 +45,7 @@ import com.vibeosys.rorderapp.activities.TableFilterActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
 import com.vibeosys.rorderapp.adaptors.CustomerAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
+import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
@@ -327,13 +329,23 @@ public class MainActivity extends BaseActivity
 
     private void callToMenuIntent(int tableNo, int tableId, String custId) {
 
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo);
 
-        Intent intentOpenTableMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-        intentOpenTableMenu.putExtra("tableCustInfo", tableCommonInfoDTO);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo);
+        BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
+        if (billDetailsDTO != null) {
+            Intent intentBillDetails = new Intent(getApplicationContext(), BillDetailsActivity.class);
+            intentBillDetails.putExtra("tableCustInfo", tableCommonInfoDTO);
 //        intentOpenTableMenu.putExtra("TableNo", tableNo);
 //        intentOpenTableMenu.putExtra("TableId", tableId);
-        startActivity(intentOpenTableMenu);
+            startActivity(intentBillDetails);
+        } else {
+            Intent intentOpenTableMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
+            intentOpenTableMenu.putExtra("tableCustInfo", tableCommonInfoDTO);
+//        intentOpenTableMenu.putExtra("TableNo", tableNo);
+//        intentOpenTableMenu.putExtra("TableId", tableId);
+            startActivity(intentOpenTableMenu);
+        }
+
     }
 
     private void showReserveDialog(final int tableNo, final int tableId) {

@@ -25,9 +25,10 @@
     <string name="title_activity_flash_screen">flashScreenActivity</string>
     <string name="dummy_button">Click to Continue</string>
     <string name="dummy_content">Restaurant\nOrdering\nSystem</string>
+    <string name="title_bill_summary">Bill Summary</string>
     <string name="title_activity_table_menus">Table Menus</string>
     <string name="order_summary">Order Summary</string>
-    <string name="bill_details">Order Summary</string>
+    <string name="bill_details">Bill Details</string>
     <string name="search_table">Search Table</string>
     <string name="filter_table">Filter Table</string>
     <string name="notification">Notifications</string>
@@ -101,4 +102,6 @@
     <string name="previous_orders">Previous Orders</string>
     <string name="add_note">Add Note</string>
     <string name="skip_btn">Skip</string>
+    <string name="empty_order_place">You Can not place an empty order.</string>
+    <string name="order_is_pending_to_serve">At least one order is not served</string>
 </resources>

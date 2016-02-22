@@ -84,6 +84,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textSize="13sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/txtPreviousOrders"
                 android:layout_width="wrap_content"
@@ -106,10 +107,12 @@
             style="@style/layout_generate_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/red"
             android:gravity="center"
             android:singleLine="false"
             android:text="Generate Bill"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/White"
             android:textSize="13sp"
             android:textStyle="bold" />
 

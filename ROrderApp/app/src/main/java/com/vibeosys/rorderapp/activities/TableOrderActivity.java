@@ -1,14 +1,17 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -65,8 +68,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
         mOrdersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
         mList = mDbRepository.getOrdersOfTable(mTableId, mCustId);
         mDbRepository.getOrederDetailsGroupByID(mList);
-        if(mOrderFlag==0)
-        {
+        if (mOrderFlag == 0) {
             mCurrentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
             mList.add(0, mCurrentOrder);
         }
@@ -159,20 +161,25 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
     private void placeOrder() {
         // OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId());
         if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
-            List<OrderDetailsDTO> orderDetailsDTOs = mCurrentOrder.getOrderDetailsDTOs();
-            ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
-            for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
-                UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
-                sendDetails.add(sendOrder);
-            }
-            mOrderId = UUID.randomUUID();
-            UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails);
-            Gson gson = new Gson();
+            OrderHeaderDTO sendOrderHeader = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
+            if (sendOrderHeader.getOrderDetailsDTOs().size() <= 0) {
+                showEmptyOrderDialog(mContext);
+            } else {
+                List<OrderDetailsDTO> orderDetailsDTOs = sendOrderHeader.getOrderDetailsDTOs();
+                ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+                for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
+                    UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
+                    sendDetails.add(sendOrder);
+                }
+                mOrderId = UUID.randomUUID();
+                UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails);
+                Gson gson = new Gson();
 
-            String serializedJsonString = gson.toJson(sendOrder);
-            Log.d(TAG, "##" + serializedJsonString);
-            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
-            mServerSyncManager.uploadDataToServer(tableDataDTO);
+                String serializedJsonString = gson.toJson(sendOrder);
+                Log.d(TAG, "##" + serializedJsonString);
+                TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
+                mServerSyncManager.uploadDataToServer(tableDataDTO);
+            }
         } else {
             showMyDialog(mContext);
         }
@@ -195,8 +202,7 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             String currentTime = new ROrderDateUtils().getGMTCurrentTime();
             ArrayList<OrdersDbDTO> orders = new ArrayList<>();
             orders.add(new OrdersDbDTO(mOrderId.toString(), Integer.parseInt(message), mCustId,
-                    Date.valueOf(currentDate), Time.valueOf(currentTime), Date.valueOf(currentDate),
-                    Date.valueOf(currentDate), mTableId, mSessionManager.getUserId()));
+                    Date.valueOf(currentDate), Time.valueOf(currentTime), mTableId, mSessionManager.getUserId()));
             mDbRepository.insertOrders(orders);
             mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
             mServerSyncManager.syncDataWithServer(true);
@@ -216,5 +222,20 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
         placeOrder();
     }
 
+    protected void showEmptyOrderDialog(Context context) {
 
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.show_network_alert);
+        dialog.setTitle(getResources().getString(R.string.alert_dialog));
+        TextView txtMessage = (TextView) dialog.findViewById(R.id.textView);
+        txtMessage.setText(getResources().getString(R.string.empty_order_place));
+        TextView txtOk = (TextView) dialog.findViewById(R.id.txtOk);
+        txtOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
 }

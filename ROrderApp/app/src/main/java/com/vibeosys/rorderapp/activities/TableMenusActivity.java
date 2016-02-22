@@ -24,6 +24,7 @@ import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.NoteAdapter;
 import com.vibeosys.rorderapp.adaptors.OrderListAdapter;
 import com.vibeosys.rorderapp.data.NoteDTO;
+import com.vibeosys.rorderapp.data.OrderHeaderDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.SelectedMenusDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
@@ -102,8 +103,7 @@ public class TableMenusActivity extends BaseActivity implements
         {
             txtBillGenerate.setVisibility(View.VISIBLE);
         }*/
-
-
+        generateBillColour();
     }
 
     public void sortList(String search) {
@@ -133,7 +133,7 @@ public class TableMenusActivity extends BaseActivity implements
         }
         mCount = mSelectedItems.size();
         SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(mSelectedItems);
-        txtTotalAmount.setText(String.format(String.format("%.2f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
+        txtTotalAmount.setText(String.format(String.format("%.0f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
         txtTotalItems.setText(selectedMenusDTO.getTotalItems() + " Items are selected");
     }
 
@@ -273,18 +273,42 @@ public class TableMenusActivity extends BaseActivity implements
     }
 
     public void genrateBill() {
-        UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
-        Gson gson = new Gson();
-        String serializedJsonString = gson.toJson(uploadBillGenerate);
-        Log.d(TAG, "##" + serializedJsonString);
-        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedJsonString);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
+        if (pendingOrder > 0) {
+            showAlertDiaog();
+        } else {
+            UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
+            Gson gson = new Gson();
+            String serializedJsonString = gson.toJson(uploadBillGenerate);
+            Log.d(TAG, "##" + serializedJsonString);
+            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedJsonString);
+            mServerSyncManager.uploadDataToServer(tableDataDTO);
+        }
 
+
+    }
+
+
+    private void showAlertDiaog() {
+        final Dialog dialog = new Dialog(TableMenusActivity.this);
+        dialog.setContentView(R.layout.show_network_alert);
+        dialog.setTitle(getResources().getString(R.string.alert_dialog));
+        TextView txtMessage = (TextView) dialog.findViewById(R.id.textView);
+        txtMessage.setText(getResources().getString(R.string.order_is_pending_to_serve));
+        TextView txtOk = (TextView) dialog.findViewById(R.id.txtOk);
+        txtOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        generateBillColour();
     }
 
     @Override
@@ -302,13 +326,13 @@ public class TableMenusActivity extends BaseActivity implements
         }
         if (errorCode == 0) {
             /*Successfully send data*/
-            Toast.makeText(getApplicationContext(), "Data is send to server", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Bill is Generated", Toast.LENGTH_LONG).show();
             Log.d(TAG, "##" + errorCode);
             mServerSyncManager.syncDataWithServer(true);
 
 
         } else {
-            Toast.makeText(getApplicationContext(), "response " + errorCode, Toast.LENGTH_LONG).show();
+            // Toast.makeText(getApplicationContext(), "response " + errorCode, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -360,5 +384,18 @@ public class TableMenusActivity extends BaseActivity implements
             }
         });
         dialog.show();
+    }
+
+    private void generateBillColour() {
+        //OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), custId);
+
+        int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
+        if (pendingOrder > 0) {
+            txtBillGenerate.setBackgroundColor(getResources().getColor(R.color.light_grey));
+            //txtBillGenerate.setTextColor(getResources().getColor(R.color.white_color));
+        } else {
+            txtBillGenerate.setBackgroundColor(getResources().getColor(R.color.red));
+            //txtBillGenerate.setTextColor(getResources().getColor(R.color.white_color));
+        }
     }
 }

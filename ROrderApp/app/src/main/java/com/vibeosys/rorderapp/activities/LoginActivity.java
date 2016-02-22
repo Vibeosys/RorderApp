@@ -67,7 +67,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private  String mImgUrl;
+    private String mImgUrl;
     private ImageLoader mRestaurantImg;
     NetworkImageView networkImageView;
 
@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity {
         // Set up the login form.
         mUserNameView = (EditText) findViewById(R.id.email);
         //populateAutoComplete();
-     //   mImgUrl = mDbRepository.getRestaurantUrl(mSessionManager.getUserRestaurantId());
+        mImgUrl = mDbRepository.getRestaurantUrl(mSessionManager.getUserRestaurantId());
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -90,12 +90,9 @@ public class LoginActivity extends BaseActivity {
                 return false;
             }
         });
-//        mRestaurantImg = CustomVolleyRequestQueue.getInstance(getApplicationContext())
-//                .getImageLoader();
-//        mRestaurantImg.get(mImgUrl, ImageLoader.getImageListener(networkImageView,
-//                R.drawable.menu_image_generic, R.drawable.menu_image_generic));
-//        networkImageView.setImageUrl(mImgUrl,mRestaurantImg);
+
         Button btnWaiterLogin = (Button) findViewById(R.id.email_sign_in_button);
+        networkImageView = (NetworkImageView) findViewById(R.id.companyLogo);
         btnWaiterLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +108,11 @@ public class LoginActivity extends BaseActivity {
         });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
+        mRestaurantImg = CustomVolleyRequestQueue.getInstance(getApplicationContext())
+                .getImageLoader();
+        mRestaurantImg.get(mImgUrl, ImageLoader.getImageListener(networkImageView,
+                R.drawable.menu_image_generic, R.drawable.menu_image_generic));
+        networkImageView.setImageUrl(mImgUrl, mRestaurantImg);
 
     }
 
@@ -339,7 +340,7 @@ public class LoginActivity extends BaseActivity {
             } catch (InterruptedException e) {
                 return false;
             }
-            user = mDbRepository.autheticateUser(mEmail, mPassword,mRoleId);
+            user = mDbRepository.autheticateUser(mEmail, mPassword, mRoleId);
 
             // TODO: register the new account here.
             if (user != null) {

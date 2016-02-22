@@ -117,7 +117,7 @@ public class OrderListAdapter extends BaseAdapter {
         viewHolder.networkImageView.setImageUrl(url, mImageLoader);
         viewHolder.txtMenuTags.setText(menu.getmTags());
         viewHolder.txtMenuCategory.setText(menu.getmCategory());
-        viewHolder.txtPrice.setText(String.format("%.2f", menu.getmPrice()));
+        viewHolder.txtPrice.setText(String.format("%.0f", menu.getmPrice()));
         viewHolder.txtQuantity.setText("" + menu.getmQuantity());
         viewHolder.imgMinus.setOnClickListener(new View.OnClickListener() {
             @Override
