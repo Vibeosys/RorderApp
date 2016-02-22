@@ -1555,7 +1555,7 @@ public class DbRepository extends SQLiteOpenHelper {
 //                    " where orders.OrderStatus=? order by  orders.OrderTime Asc     ", where);
 
                 cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus," +
-                        "orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName,r_tables.TableNo " +
+                        "orders.OrderNo,orders.TableNo,orders.OrderTime,orders.Orderdate,users.UserName,r_tables.TableNo " +
                         "from  orders left join users on orders.UserId =users.UserId left join r_tables " +
                         "on r_tables.TableId = orders.TableNo where orders.OrderStatus=? order by  " +
                         "orders.OrderTime Asc    ", where);

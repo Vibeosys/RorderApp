@@ -97,10 +97,9 @@ public class ChefOrdersDisplayActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
        // return super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main, menu);
-        menu.findItem(R.id.search).setVisible(false);
-        menu.findItem(R.id.filter).setVisible(false);
-        menu.findItem(R.id.notification).setVisible(false);
+        getMenuInflater().inflate(R.menu.chef_main, menu);
+     //   menu.findItem(R.id.search).setVisible(false);
+
         menu.findItem(R.id.signoutChef).setVisible(true);
         return true;
     }

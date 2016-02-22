@@ -37,6 +37,8 @@ public class ChefOrderDetailsDTO {
         this.mUserName = mUserName;
         this.mOrderNumner = mOrderNumner;
         this.mNewOrderStatus = mNewOrderStatus;
+        this.mOrderDate = orderDate;
+        this.mOrderTime =orderTime;
 
     }
 
@@ -150,7 +152,7 @@ public class ChefOrderDetailsDTO {
         if (this.mOrderTime == null || this.mOrderTime.isEmpty())
             return this.orderTm;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         java.util.Date value = null;

@@ -22,9 +22,6 @@
         android:icon="@drawable/ic_action_bell"
         android:title="@string/notification"
         app:showAsAction="collapseActionView" />
-    <item android:id="@+id/signoutChef"
-        android:icon="@drawable/ic_action_io"
-        android:title="Sign out"
-        app:showAsAction="never" />
+
 
 </menu>

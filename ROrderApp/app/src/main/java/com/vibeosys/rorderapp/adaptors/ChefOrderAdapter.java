@@ -128,7 +128,7 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
             groupHolder.orderDoneBtn = (Button)convertView.findViewById(R.id.OrderDoneChef);
             groupHolder.getGroupOrderNo = (TextView)convertView.findViewById(R.id.cheforderNo);
             groupHolder.imgIndicator = (ImageView)convertView.findViewById(R.id.chefOrderDonIcon);
-            groupHolder.currentDate = (TextView)convertView.findViewById(R.id.orderTime);
+            groupHolder.placedOrderTime = (TextView)convertView.findViewById(R.id.orderTime);
 
             convertView.setTag(groupHolder);
         }
@@ -148,9 +148,11 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
             groupHolder.imgIndicator.setVisibility(View.VISIBLE);
         }
 
+        groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.getOrderTm());
         groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
         groupHolder.getGroupOrderNo.setText(""+chefOrderDetailsDTO.getmOrderNumner());
+
 
 
         groupHolder.orderDoneBtn.setOnClickListener(new View.OnClickListener() {
@@ -261,7 +263,7 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
         Button orderDoneBtn;
         ImageView imgIndicator;
         TextView getGroupOrderNo;
-        TextView currentDate;
+        TextView placedOrderTime;
 
     }
     public final class ChildHolder
