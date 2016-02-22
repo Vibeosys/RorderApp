@@ -30,7 +30,10 @@ import com.vibeosys.rorderapp.util.ServerSyncManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by shrinivas on 15-02-2016.
@@ -50,14 +53,17 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         View view = inflater.inflate(R.layout.chef_expandable_list,container,false);
 
-        Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),SyncService.class);
-        getContext().startService(i);
+//        Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),SyncService.class);
+//        getContext().startService(i);
 
 //        Intent chefServices = new Intent(this.getContext(),ChefService.class);
 //        getContext().startService(chefServices);
 
         chefOrderList = (ExpandableListView) view.findViewById(R.id.expListViewForChef);
         list = mDbRepository.getOrderHeadesInAsc(1);
+        //ChefOrderDetailsDTO tiemDifference = list.get(0);
+
+
         chefOrderAdapter = new ChefOrderAdapter(getActivity().getApplicationContext(),list,mDbRepository);
         chefOrderList.setAdapter(chefOrderAdapter);
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:paddingTop="2dp"
+
     android:background="@drawable/custom_border"
     android:focusable="false"
     android:gravity="center_vertical"
@@ -94,10 +94,10 @@
             <TextView
                 android:id="@+id/orderFromTableNo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:paddingLeft="2dp"
                 android:text="DemoName"

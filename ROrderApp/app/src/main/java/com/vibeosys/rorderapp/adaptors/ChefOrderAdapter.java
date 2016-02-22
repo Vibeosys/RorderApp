@@ -148,7 +148,9 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
             groupHolder.imgIndicator.setVisibility(View.VISIBLE);
         }
 
-        groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.getOrderTm());
+        String str = chefOrderDetailsDTO.TimeDiff();
+         groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.TimeDiff()+" ago");
+       // groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.getOrderTm());
         groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
         groupHolder.getGroupOrderNo.setText(""+chefOrderDetailsDTO.getmOrderNumner());
@@ -206,7 +208,7 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
         childHolder.childQty.setText(""+chefMenuDetailsDTO.getmChefQty());
         childHolder.menuNo.setText("" + (childPosition + 1));
         if(chefMenuDetailsDTO.getmMenuNote()== null)
-        childHolder.childMenuNote.setText("");
+        childHolder.childMenuNote.setVisibility(View.GONE);
         else
             childHolder.childMenuNote.setText("" + chefMenuDetailsDTO.getmMenuNote());
         Toast.makeText(context,""+chefMenuDetailsDTO.getmMenuNote(),Toast.LENGTH_SHORT);

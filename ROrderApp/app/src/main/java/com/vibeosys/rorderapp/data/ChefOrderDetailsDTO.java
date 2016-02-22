@@ -1,7 +1,10 @@
 package com.vibeosys.rorderapp.data;
 
+import android.util.Log;
+
 import java.sql.Date;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TimeZone;
@@ -38,7 +41,7 @@ public class ChefOrderDetailsDTO {
         this.mOrderNumner = mOrderNumner;
         this.mNewOrderStatus = mNewOrderStatus;
         this.mOrderDate = orderDate;
-        this.mOrderTime =orderTime;
+        this.mOrderTime = orderTime;
 
     }
 
@@ -135,9 +138,9 @@ public class ChefOrderDetailsDTO {
         if (this.mOrderDate == null || this.mOrderDate.isEmpty())
             return this.orderDt;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        //formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         java.util.Date value = null;
         try {
             value = formatter.parse(this.mOrderDate);
@@ -154,7 +157,7 @@ public class ChefOrderDetailsDTO {
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        //formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         java.util.Date value = null;
         try {
             value = formatter.parse(this.mOrderTime);
@@ -163,5 +166,60 @@ public class ChefOrderDetailsDTO {
             e.printStackTrace();
         }
         return orderTm;
+    }
+
+    public String TimeDiff() {
+        String str = "";
+
+        SimpleDateFormat timeFormate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        timeFormate.setTimeZone(TimeZone.getTimeZone("UTC"));
+        java.util.Date date1 = null;
+        try {
+            String strDate = timeFormate.format(new java.util.Date());
+            date1 = timeFormate.parse(strDate);
+        } catch (ParseException e) {
+            Log.e("Chef Order Details", "Unable to parse current date");
+        }
+
+        try {
+            long currentTime = date1.getTime();
+            long orderTime = dateAndTimeToDateTime(this.getOrderDt(), this.getOrderTm());
+
+            long timeDiff = currentTime - orderTime;
+
+            //timeDiff = timeDiff/(60*1000)%60;
+            java.util.Date difference = new java.util.Date(timeDiff);
+
+            int hour = difference.getHours();
+            int mins = difference.getMinutes();
+            int sec = difference.getSeconds();
+            if (hour > 0)
+                str = str + " " + hour + " Hour";
+            if (mins > 0)
+                str = str + " " + mins + " Mins";
+            if (sec < 59)
+                str = str + " " + sec + " Sec";
+            //if()
+            //   str = String.valueOf(timeDiff);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return str;
+    }
+
+    public long dateAndTimeToDateTime(java.sql.Date date, java.sql.Time time) {
+        String myDate = date + " " + time;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        java.util.Date utilDate = new java.util.Date();
+        try {
+            utilDate = sdf.parse(myDate);
+        } catch (ParseException pe) {
+            pe.printStackTrace();
+        }
+        return utilDate.getTime();
     }
 }
