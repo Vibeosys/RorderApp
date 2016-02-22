@@ -1,15 +1,15 @@
 package com.vibeosys.rorderapp.data;
 
+import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by shrinivas on 11-02-2016.
  */
 public class ChefOrderDetailsDTO {
-
-
 
 
     private int mChefOrderId;
@@ -19,31 +19,27 @@ public class ChefOrderDetailsDTO {
     private int mTableNo;
     private int mNewOrderStatus;
     private int mOrderNumner;
-    private Date mplacedOrderDate;
-    private Time morderTime;
+    private String mOrderDate;
+    private String mOrderTime;
+    private Time orderTm;
+    private Date orderDt;
+    /* private Date mplacedOrderDate;
+     private Time morderTime;*/
     private ArrayList<ChefMenuDetailsDTO> mMenuChild;
-
 
 
     private boolean mOrderStatus;
 
-    public ChefOrderDetailsDTO(int mChefOrderId, int mUserId, String mUserName, int mTableNo, Date mplacedOrderDate,Time morderTime,boolean mOrderStatus) {
-        this.mChefOrderId = mChefOrderId;
-        this.mUserId = mUserId;
+    public ChefOrderDetailsDTO(String mNewOrderId, int mTableNo, String mUserName, int mOrderNumner,
+                               int mNewOrderStatus, String orderDate, String orderTime) {
+        this.mNewOrderId = mNewOrderId;
+        this.mTableNo = mTableNo;
         this.mUserName = mUserName;
-        this.mTableNo = mTableNo;
-        this.mplacedOrderDate = mplacedOrderDate;
-        this.morderTime = morderTime;
-        this.mOrderStatus =mOrderStatus;
-    }
-    public ChefOrderDetailsDTO(String mNewOrderId,  int mTableNo,String mUserName,int mOrderNumner,int mNewOrderStatus ) {
-        this.mNewOrderId =mNewOrderId;
-        this.mTableNo = mTableNo;
-        this.mUserName =mUserName;
         this.mOrderNumner = mOrderNumner;
-        this.mNewOrderStatus =mNewOrderStatus;
+        this.mNewOrderStatus = mNewOrderStatus;
 
     }
+
     public int getmChefOrderId() {
         return mChefOrderId;
     }
@@ -76,20 +72,7 @@ public class ChefOrderDetailsDTO {
         this.mTableNo = mTableNo;
     }
 
-    public Date getMplacedOrderDate() {
-        return mplacedOrderDate;
-    }
 
-    public void setMplacedOrderDate(Date mplacedOrderDate) {
-        this.mplacedOrderDate = mplacedOrderDate;
-    }
-    public Time getMorderTime() {
-        return morderTime;
-    }
-
-    public void setMorderTime(Time morderTime) {
-        this.morderTime = morderTime;
-    }
     public boolean ismOrderStatus() {
         return mOrderStatus;
     }
@@ -97,6 +80,7 @@ public class ChefOrderDetailsDTO {
     public void setmOrderStatus(boolean mOrderStatus) {
         this.mOrderStatus = mOrderStatus;
     }
+
     public String getmNewOrderId() {
         return mNewOrderId;
     }
@@ -120,6 +104,7 @@ public class ChefOrderDetailsDTO {
     public void setmOrderNumner(int mOrderNumner) {
         this.mOrderNumner = mOrderNumner;
     }
+
     public int getmNewOrderStatus() {
         return mNewOrderStatus;
     }
@@ -128,4 +113,53 @@ public class ChefOrderDetailsDTO {
         this.mNewOrderStatus = mNewOrderStatus;
     }
 
+    public String getOrderDate() {
+        return mOrderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.mOrderDate = orderDate;
+    }
+
+    public String getOrderTime() {
+        return mOrderTime;
+    }
+
+    public void setOrderTime(String orderTime) {
+        this.mOrderTime = orderTime;
+    }
+
+    public java.sql.Date getOrderDt() {
+        if (this.mOrderDate == null || this.mOrderDate.isEmpty())
+            return this.orderDt;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        java.util.Date value = null;
+        try {
+            value = formatter.parse(this.mOrderDate);
+            orderDt = new java.sql.Date(value.getTime());
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return orderDt;
+    }
+
+    public Time getOrderTm() {
+        if (this.mOrderTime == null || this.mOrderTime.isEmpty())
+            return this.orderTm;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        java.util.Date value = null;
+        try {
+            value = formatter.parse(this.mOrderTime);
+            orderTm = new Time(value.getTime());
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return orderTm;
+    }
 }

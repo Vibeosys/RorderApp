@@ -96,10 +96,10 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         mServerSyncManager.uploadDataToServer(tableDataDTOs);
 
         showFeedBackDialog();
-        Intent i = new Intent(getApplicationContext(), FeedbackActivity.class);
+       /* Intent i = new Intent(getApplicationContext(), FeedbackActivity.class);
         i.putExtra("tableCustInfo", tableCommonInfoDTO);
         startActivity(i);
-        finish();
+        finish();*/
     }
 
     private void showFeedBackDialog() {
@@ -107,9 +107,12 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         View view = getLayoutInflater().inflate(R.layout.activity_feedback, null);
         dlg.setContentView(view);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.setTitle(getResources().getString(R.string.feedback_activity_name));
+        //dlg.setTitle(getResources().getString(R.string.feedback_activity_name));
         ListView mFeedbackList = (ListView) dlg.findViewById(R.id.listFeedback);
         TextView txtThank = (TextView) dlg.findViewById(R.id.txtThank);
+        TextView txtSkip = (TextView) dlg.findViewById(R.id.dlg_skip);
+        TextView txtTitle = (TextView) dlg.findViewById(R.id.dlg_title);
+        txtTitle.setText(getResources().getString(R.string.feedback_activity_name));
         final ArrayList<FeedBackDTO> mFeedbacks = mDbRepository.getFeedBackList();
         FeedbackAdapter mFeedbackAdapter = new FeedbackAdapter(mFeedbacks, getApplicationContext());
         mFeedbackList.setAdapter(mFeedbackAdapter);
@@ -139,6 +142,16 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
                 } else {
                     showMyDialog(mContext);
                 }
+            }
+        });
+        txtSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
+                iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(iMain);
+                finish();
             }
         });
         dlg.show();

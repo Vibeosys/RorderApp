@@ -381,19 +381,20 @@ public class MainActivity extends BaseActivity
     }
 
     private void uploadToServer(CustomerDbDTO customer, TableTransactionDbDTO tableTransaction, int tableId) {
+        TableDataDTO[] tableDataDTOs = new TableDataDTO[3];
         Gson gson = new Gson();
         String serializedJsonString = gson.toJson(customer);
-        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        tableDataDTOs[0] = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+        // mServerSyncManager.uploadDataToServer(tableDataDTO);
 
         UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 1);
         String serializedTableString = gson.toJson(occupiedDTO);
-        tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedTableString);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        tableDataDTOs[1] = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedTableString);
+        // mServerSyncManager.uploadDataToServer(tableDataDTO);
 
         String serializedTableTransaction = gson.toJson(tableTransaction);
-        tableDataDTO = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
-        mServerSyncManager.uploadDataToServer(tableDataDTO);
+        tableDataDTOs[2] = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
+        mServerSyncManager.uploadDataToServer(tableDataDTOs);
     }
 
     @Override

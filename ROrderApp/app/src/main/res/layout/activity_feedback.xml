@@ -16,15 +16,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/dlg_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/White"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/dlg_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="@string/skip_btn"
+                android:textColor="@color/White"
+                android:textSize="12sp" />
+        </RelativeLayout>
 
         <ListView
             android:id="@+id/listFeedback"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_weight="1"
-            android:background="@color/blue_light" />
+            android:background="@color/feedback_blue" />
 
         <LinearLayout
             android:layout_width="match_parent"

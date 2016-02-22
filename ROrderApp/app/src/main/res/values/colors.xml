@@ -20,6 +20,7 @@
     <color name="red_light">#80F74042</color>
     <color name="background">#EDEDED</color>
     <color name="blue">#336799</color>
+    <color name="feedback_blue">#2196F3</color>
     <color name="blue_light">#80336799</color>
     <color name="red_dark">#CD2626</color>
     <color name="yellow">#fdb52d</color>

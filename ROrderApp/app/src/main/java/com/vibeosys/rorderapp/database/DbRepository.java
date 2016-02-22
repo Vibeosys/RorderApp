@@ -624,8 +624,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlOrders.ORDER_ID, order.getOrderId());
                     contentValues.put(SqlContract.SqlOrders.ORDER_NO, order.getOrderNo());
                     contentValues.put(SqlContract.SqlOrders.ORDER_STATUS, order.isOrderStatus());
-                    contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
-                    contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
+                    if (order.getOrderDt() != null)
+                        contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
+                    if (order.getOrderTm() != null)
+                        contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTm()));
                     //contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
                     // contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
                     contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
@@ -1301,6 +1303,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return restaurantName;
     }
+
     public String getRestaurantUrl(int restaurantId) {
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -1551,7 +1554,11 @@ public class DbRepository extends SQLiteOpenHelper {
 //                    " left join order_details on  orders.OrderId = order_details.OrderId\n" +
 //                    " where orders.OrderStatus=? order by  orders.OrderTime Asc     ", where);
 
-                cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName,r_tables.TableNo from  orders left join users on orders.UserId =users.UserId left join r_tables on r_tables.TableId = orders.TableNo where orders.OrderStatus=? order by  orders.OrderTime Asc    ", where);
+                cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus," +
+                        "orders.OrderNo,orders.TableNo,orders.OrderTime,users.UserName,r_tables.TableNo " +
+                        "from  orders left join users on orders.UserId =users.UserId left join r_tables " +
+                        "on r_tables.TableId = orders.TableNo where orders.OrderStatus=? order by  " +
+                        "orders.OrderTime Asc    ", where);
                 //cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus,orders.TableNo,orders.OrderTime from  orders where orders.OrderStatus=1 order by  orders.OrderTime Asc ", null);
 
                 if (cursor != null) {
@@ -1566,9 +1573,10 @@ public class DbRepository extends SQLiteOpenHelper {
                             String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                             int orderNumber = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_NO));
                             int orderStatus = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_STATUS));
-
+                            String orderDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_DATE));
+                            String orderTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME));
                             // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus);
+                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime);
                             AscindingOrdres.add(chefOrderDetailsDTO);
                         } while (cursor.moveToNext());
                     }

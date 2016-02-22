@@ -141,6 +141,7 @@ public class TableGridAdapter extends BaseAdapter {
                 viewHolder.txtUserName.setBackgroundResource(R.drawable.table_grid_adt_me_txt);
             } else {
                 viewHolder.txtUserName.setText(hotelTableDTO.getUserName());
+                viewHolder.txtUserName.setBackgroundColor(mContext.getResources().getColor(R.color.white_color));
             }
 
             viewHolder.imgUserLogo.setVisibility(View.VISIBLE);

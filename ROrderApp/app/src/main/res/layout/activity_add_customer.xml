@@ -33,8 +33,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/White"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp"/>
         </RelativeLayout>
 
         <LinearLayout
