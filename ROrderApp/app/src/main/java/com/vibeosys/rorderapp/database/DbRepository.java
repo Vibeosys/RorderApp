@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.vibeosys.rorderapp.data.BillDbDTO;
+import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
 import com.vibeosys.rorderapp.data.ChefMenuDetailsDTO;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
@@ -35,10 +35,7 @@ import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.SessionManager;
-import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1465,7 +1462,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     if (order.getOrderDt() != null)
                         contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
                     if (order.getOrderTime() != null)
-                        contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTime()));
+                        contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTm()));
                /* if (order.getCreatedDate() != null)
                     contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
                 if (order.getUpdatedDate() != null)

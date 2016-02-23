@@ -1,12 +1,12 @@
 package com.vibeosys.rorderapp.data;
 
-import android.util.Log;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -171,41 +171,22 @@ public class ChefOrderDetailsDTO {
     public String TimeDiff() {
         String str = "";
 
-        SimpleDateFormat timeFormate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        java.util.Date calendarDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.ROOT).getTime();
 
-        timeFormate.setTimeZone(TimeZone.getTimeZone("UTC"));
-        java.util.Date date1 = null;
-        try {
-            String strDate = timeFormate.format(new java.util.Date());
-            date1 = timeFormate.parse(strDate);
-        } catch (ParseException e) {
-            Log.e("Chef Order Details", "Unable to parse current date");
-        }
+        long currentTime = calendarDate.getTime() - getTimeOffsetForIndia(5, 30);
+        long orderTime = dateAndTimeToDateTime(this.getOrderDt(), this.getOrderTm());
 
-        try {
-            long currentTime = date1.getTime();
-            long orderTime = dateAndTimeToDateTime(this.getOrderDt(), this.getOrderTm());
+        long timeDiff = currentTime - orderTime;
 
-            long timeDiff = currentTime - orderTime;
+        long totalMilliSecondsForOneMin = 60 * 1000;
+        long totalMilliSecondsForOneHour = 60 * totalMilliSecondsForOneMin;
+        long timeDiffInHrs = timeDiff / totalMilliSecondsForOneHour;
+        long timeDiffInMins = (timeDiff / totalMilliSecondsForOneMin) % 60;
 
-            //timeDiff = timeDiff/(60*1000)%60;
-            java.util.Date difference = new java.util.Date(timeDiff);
-
-            int hour = difference.getHours();
-            int mins = difference.getMinutes();
-            int sec = difference.getSeconds();
-            if (hour > 0)
-                str = str + " " + hour + " Hour";
-            if (mins > 0)
-                str = str + " " + mins + " Mins";
-            if (sec < 59)
-                str = str + " " + sec + " Sec";
-            //if()
-            //   str = String.valueOf(timeDiff);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        if (timeDiffInHrs > 1)
+            str += timeDiffInHrs + " hrs ";
+        if (timeDiffInMins > 0)
+            str += timeDiffInMins + " mins";
 
         return str;
     }
@@ -215,11 +196,17 @@ public class ChefOrderDetailsDTO {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         java.util.Date utilDate = new java.util.Date();
+
         try {
             utilDate = sdf.parse(myDate);
         } catch (ParseException pe) {
             pe.printStackTrace();
         }
         return utilDate.getTime();
+    }
+
+    public long getTimeOffsetForIndia(int hours, int mins)
+    {
+        return ((hours * 60 * 60 * 1000) + (mins * 60 * 1000));
     }
 }

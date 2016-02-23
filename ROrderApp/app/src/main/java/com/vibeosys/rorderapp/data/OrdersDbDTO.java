@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -116,11 +117,13 @@ public class OrdersDbDTO extends BaseDTO {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        //formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         java.util.Date value = null;
         try {
             value = formatter.parse(this.orderDate);
             orderDt = new Date(value.getTime());
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTime(value);
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
@@ -134,13 +137,17 @@ public class OrdersDbDTO extends BaseDTO {
         if(this.orderTime == null || this.orderTime.isEmpty())
             return this.orderTm;
 
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        //formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         java.util.Date value = null;
         try {
             value = formatter.parse(this.orderTime);
             orderTm = new Time(value.getTime());
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTime(value);
+
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
