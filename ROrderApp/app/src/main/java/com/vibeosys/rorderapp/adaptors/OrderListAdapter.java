@@ -115,7 +115,11 @@ public class OrderListAdapter extends BaseAdapter {
         mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.networkImageView,
                 R.drawable.menu_image_generic, R.drawable.menu_image_generic));
         viewHolder.networkImageView.setImageUrl(url, mImageLoader);
-        viewHolder.txtMenuTags.setText(menu.getmTags());
+        if (menu.getmTags() != null && !menu.getmTags().isEmpty()) {
+            viewHolder.txtMenuTags.setText(menu.getmTags());
+        } else {
+            viewHolder.txtMenuTags.setText("");
+        }
         viewHolder.txtMenuCategory.setText(menu.getmCategory());
         viewHolder.txtPrice.setText(String.format("%.0f", menu.getmPrice()));
         viewHolder.txtQuantity.setText("" + menu.getmQuantity());
