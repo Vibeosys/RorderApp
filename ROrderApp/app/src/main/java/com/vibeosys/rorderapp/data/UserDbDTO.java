@@ -15,20 +15,20 @@ public class UserDbDTO extends BaseDTO {
     private int userId;
     private String userName;
     private String password;
-    private boolean active;
+    private int active;
     private int roleId;
     private int restaurantId;
 
     public UserDbDTO() {
     }
 
-    public UserDbDTO(int userId, String userName, boolean active, int roleId, int restaurantId,String password) {
+    public UserDbDTO(int userId, String userName, int active, int roleId, int restaurantId, String password) {
         this.userId = userId;
         this.userName = userName;
         this.active = active;
         this.roleId = roleId;
         this.restaurantId = restaurantId;
-        this.password=password;
+        this.password = password;
     }
 
     public int getRestaurantId() {
@@ -55,7 +55,7 @@ public class UserDbDTO extends BaseDTO {
         this.userName = userName;
     }
 
-    public boolean isActive() {
+    public int isActive() {
         return active;
     }
 
@@ -67,7 +67,7 @@ public class UserDbDTO extends BaseDTO {
         this.password = password;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(int active) {
         this.active = active;
     }
 

@@ -9,6 +9,7 @@
     <color name="light_grey">#d1cdcd</color>
     <color name="light_yello">#CD853F</color>
     <color name="transparent_back">#66FFFFFF</color>
+    <color name="transparent_black">#CC000000</color>
     <color name="colorPrimary">#9C27B0</color>
     <color name="colorPrimaryDark">#6A1B9A</color>
     <color name="colorPrimaryLight">#E1BEE7</color>

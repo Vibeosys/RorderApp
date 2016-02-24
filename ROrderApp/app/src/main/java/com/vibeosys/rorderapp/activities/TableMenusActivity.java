@@ -3,6 +3,8 @@ package com.vibeosys.rorderapp.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,6 +57,7 @@ public class TableMenusActivity extends BaseActivity implements
     private LinearLayout txtPreviousOrder;
     private int mTableId, mTableNo;
     private String custId;
+    private ImageButton imgFloat;
     private LinearLayout llCurrentOrder;
     //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
     private int mCount = 0;
@@ -80,6 +84,7 @@ public class TableMenusActivity extends BaseActivity implements
         txtBillGenerate = (TextView) findViewById(R.id.txtGenerateBill);
         txtPreviousOrder = (LinearLayout) findViewById(R.id.txtPreviousOrders);
         llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
+        imgFloat = (ImageButton) findViewById(R.id.fab);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
@@ -89,6 +94,7 @@ public class TableMenusActivity extends BaseActivity implements
         txtPreviousOrder.setOnClickListener(this);
         mServerSyncManager.setOnStringResultReceived(this);
         mServerSyncManager.setOnDownloadReceived(this);
+        imgFloat.setOnClickListener(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
         displayMenuPriceAndItems();
       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -291,6 +297,9 @@ public class TableMenusActivity extends BaseActivity implements
             startActivity(tableOrderIntent);
             finish();
         }
+        if (id == R.id.fab) {
+            showVegNonVeg();
+        }
 
     }
 
@@ -421,5 +430,52 @@ public class TableMenusActivity extends BaseActivity implements
             txtBillGenerate.setBackgroundColor(getResources().getColor(R.color.red));
             //txtBillGenerate.setTextColor(getResources().getColor(R.color.white_color));
         }
+    }
+
+    private void showVegNonVeg() {
+        final Dialog dlg = new Dialog(TableMenusActivity.this, android.R.style.Theme_Black_NoTitleBar);
+        View view = getLayoutInflater().inflate(R.layout.dilaog_floating_veg_nonveg, null);
+        dlg.setContentView(view);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        ImageButton btnVeg = (ImageButton) dlg.findViewById(R.id.btnVeg);
+        ImageButton btnNoveg = (ImageButton) dlg.findViewById(R.id.btnNonVeg);
+        ImageButton btnReset = (ImageButton) dlg.findViewById(R.id.btnReset);
+        btnVeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allMenus = sortVegNon(mDbRepository.getOrderMenu(custId), 1);
+                ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                dlg.dismiss();
+            }
+        });
+        btnNoveg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allMenus = sortVegNon(mDbRepository.getOrderMenu(custId), 0);
+                ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                dlg.dismiss();
+            }
+        });
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allMenus = mDbRepository.getOrderMenu(custId);
+                ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                dlg.dismiss();
+            }
+        });
+        dlg.show();
+    }
+
+    private List<OrderMenuDTO> sortVegNon(ArrayList<OrderMenuDTO> menus, int i) {
+        List<OrderMenuDTO> menuDTOs = new ArrayList<OrderMenuDTO>();
+        boolean flag = i == 0 ? false : true;
+        for (OrderMenuDTO menu : menus) {
+            if (menu.ismFoodType() == flag)
+                menuDTOs.add(menu);
+        }
+        Collections.sort(menuDTOs);
+        return menuDTOs;
+
     }
 }
