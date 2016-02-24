@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -148,7 +149,22 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
                 }).create().show();
     }
+    protected  void customAlterDialog(String title,String message)
+    {
+       AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(""+title);
+        builder.setIcon(R.drawable.ic_action_warning);
+        builder.setMessage(message);
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+        builder.show();
+
+
+    }
     protected String getImei() {
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();

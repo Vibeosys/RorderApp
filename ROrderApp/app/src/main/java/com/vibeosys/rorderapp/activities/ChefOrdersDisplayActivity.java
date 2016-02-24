@@ -35,7 +35,7 @@ import java.util.ArrayList;
 /**
  * Created by shrinivas on 12-02-2016.
  */
-public class ChefOrdersDisplayActivity extends AppCompatActivity {
+public class ChefOrdersDisplayActivity extends BaseActivity {
 
     private ExpandableListView chefOrderList;
     private ChefOrderAdapter chefOrderAdapter;
