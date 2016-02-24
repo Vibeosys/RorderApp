@@ -115,8 +115,10 @@ public class OrderListAdapter extends BaseAdapter {
         mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.networkImageView,
                 R.drawable.menu_image_generic, R.drawable.menu_image_generic));
         viewHolder.networkImageView.setImageUrl(url, mImageLoader);
-        if (menu.getmTags() != null && !menu.getmTags().isEmpty()) {
-            viewHolder.txtMenuTags.setText(menu.getmTags());
+
+        String menuTag = menu.getmTags();
+        if (menuTag != null && !menuTag.isEmpty() && !menuTag.equals("null")) {
+            viewHolder.txtMenuTags.setText(menuTag);
         } else {
             viewHolder.txtMenuTags.setText("");
         }

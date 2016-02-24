@@ -50,7 +50,8 @@ public class TableMenusActivity extends BaseActivity implements
     private OrderListAdapter orderListAdapter;
     private List<OrderMenuDTO> allMenus;
     private ListView listMenus;
-    private TextView txtTotalAmount, txtTotalItems, txtBillGenerate, txtPreviousOrder;
+    private TextView txtTotalAmount, txtTotalItems, txtBillGenerate;
+    private LinearLayout txtPreviousOrder;
     private int mTableId, mTableNo;
     private String custId;
     private LinearLayout llCurrentOrder;
@@ -62,7 +63,7 @@ public class TableMenusActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table_menus);
+        setContentView(R.layout.activity_table_menu_main);
         tableCommonInfoDTO = getIntent().getParcelableExtra("tableCustInfo");
         mTableId = tableCommonInfoDTO.getTableId();
         mTableNo = tableCommonInfoDTO.getTableNo();
@@ -77,7 +78,7 @@ public class TableMenusActivity extends BaseActivity implements
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
         txtBillGenerate = (TextView) findViewById(R.id.txtGenerateBill);
-        txtPreviousOrder = (TextView) findViewById(R.id.txtPreviousOrders);
+        txtPreviousOrder = (LinearLayout) findViewById(R.id.txtPreviousOrders);
         llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
@@ -106,9 +107,9 @@ public class TableMenusActivity extends BaseActivity implements
         generateBillColour();
     }
 
-    public void sortList(String search) {
+    private List<OrderMenuDTO> sortList(List<OrderMenuDTO> menus, String search) {
 
-        for (OrderMenuDTO menu : this.allMenus) {
+       /* for (OrderMenuDTO menu : this.allMenus) {
             if (menu.getmCategory().toLowerCase().contains(search.toLowerCase())) {
                 menu.setmShow(OrderMenuDTO.SHOW);
             } else if (menu.getmMenuTitle().toLowerCase().contains(search.toLowerCase())) {
@@ -118,8 +119,21 @@ public class TableMenusActivity extends BaseActivity implements
             } else {
                 menu.setmShow(OrderMenuDTO.HIDE);
             }
+        }*/
+        List<OrderMenuDTO> menuDTOs = new ArrayList<OrderMenuDTO>();
+
+        for (OrderMenuDTO menu : menus) {
+            if (menu.getmCategory().toLowerCase().contains(search.toLowerCase())) {
+                menuDTOs.add(menu);
+            } else if (menu.getmMenuTitle().toLowerCase().contains(search.toLowerCase())) {
+                menuDTOs.add(menu);
+            } else if (menu.getmTags().toLowerCase().contains(search.toLowerCase())) {
+                menuDTOs.add(menu);
+            }
         }
-        Collections.sort(allMenus);
+        Collections.sort(menuDTOs);
+        return menuDTOs;
+
     }
 
 
@@ -190,7 +204,7 @@ public class TableMenusActivity extends BaseActivity implements
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (s.length() == 0 || s.length() < 3) {
+                /*if (s.length() == 0 || s.length() < 3) {
                     // sortList
                     for (OrderMenuDTO menu : allMenus) {
                         menu.setmShow(OrderMenuDTO.SHOW);
@@ -204,7 +218,15 @@ public class TableMenusActivity extends BaseActivity implements
                     orderListAdapter.notifyDataSetChanged();
 
                 }
-                displayMenuPriceAndItems();
+                displayMenuPriceAndItems();*/
+                if (s.length() == 0 || s.length() < 3) {
+                    allMenus = mDbRepository.getOrderMenu(custId);
+                    ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                }
+                if (s.length() >= 3) {
+                    allMenus = sortList(mDbRepository.getOrderMenu(custId), s.toString());
+                    ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                }
                 return false;
             }
         });

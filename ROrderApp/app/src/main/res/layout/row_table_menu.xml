@@ -143,19 +143,18 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_weight="1"
-                    android:background="@drawable/menu_row_button_theme"
-                    android:src="@drawable/ic_action_minus" />
+                    android:src="@drawable/remove_menu" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="2"
-                    android:gravity="right"
-                    android:text="Qty "
-                    android:textColor="@color/listview_item"
-                    android:textSize="12sp" />
+                <!--  <TextView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_margin="3dp"
+                      android:layout_weight="2"
+                      android:gravity="right"
+                      android:text="Qty "
+                      android:textColor="@color/listview_item"
+                      android:textSize="12sp" />-->
 
                 <TextView
                     android:id="@+id/txtMenuQty"
@@ -176,8 +175,7 @@
                     android:layout_height="20dp"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:background="@drawable/menu_row_button_theme"
-                    android:src="@drawable/ic_action_add" />
+                    android:src="@drawable/add_menu" />
 
                 <ImageView
                     android:id="@+id/imgNote"

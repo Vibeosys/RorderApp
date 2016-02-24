@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.vibeosys.rorderapp.MainActivity">
+
+    <include layout="@layout/activity_table_menus"></include>
+
+    <ImageButton
+        android:id="@+id/fab"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:background="@drawable/menu_floating_button"
+        android:clickable="true"
+        android:padding="13dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_menu_filter"
+        android:translationZ="5dp"
+        app:layout_anchorGravity="bottom|right|end" />
+
+
+</android.support.design.widget.CoordinatorLayout>
