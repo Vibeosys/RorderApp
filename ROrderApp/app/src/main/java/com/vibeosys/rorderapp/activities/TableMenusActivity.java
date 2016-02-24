@@ -296,7 +296,8 @@ public class TableMenusActivity extends BaseActivity implements
 
     public void genrateBill() {
         int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
-        if (pendingOrder > 0) {
+        int tempOrder = mDbRepository.getOrderCountFromTemp(mTableId, custId);
+        if (pendingOrder > 0 || tempOrder == 0) {
             showAlertDiaog();
         } else {
             UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
@@ -330,7 +331,7 @@ public class TableMenusActivity extends BaseActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        generateBillColour();
+        //generateBillColour();
     }
 
     @Override
@@ -412,7 +413,8 @@ public class TableMenusActivity extends BaseActivity implements
         //OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), custId);
 
         int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
-        if (pendingOrder > 0) {
+        int tempOrder = mDbRepository.getOrderCountFromTemp(mTableId, custId);
+        if (pendingOrder > 0 || tempOrder == 0) {
             txtBillGenerate.setBackgroundColor(getResources().getColor(R.color.light_grey));
             //txtBillGenerate.setTextColor(getResources().getColor(R.color.white_color));
         } else {

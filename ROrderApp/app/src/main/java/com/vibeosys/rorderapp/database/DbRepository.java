@@ -2230,4 +2230,35 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count;
     }
+
+    public int getOrderCountFromTemp(int tableId, String custId) {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        OrderHeaderDTO orderHeaderDTO = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{String.valueOf(tableId), custId};
+                cursor = sqLiteDatabase.rawQuery("select count(orders.OrderId) as Count from orders where " +
+                        SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID +
+                        "=?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        count = cursor.getInt(cursor.getColumnIndex("Count"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count;
+    }
 }
