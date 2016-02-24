@@ -964,6 +964,28 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count;
     }
+    public int checkOrders()
+    {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrderDetails.TABLE_NAME , null);
+                count = cursor.getCount();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "## error at getOccupied table" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count;
+    }
 
     public OrderHeaderDTO getOrederDetailsFromTemp(int tableId, int userId, String custId) {
 

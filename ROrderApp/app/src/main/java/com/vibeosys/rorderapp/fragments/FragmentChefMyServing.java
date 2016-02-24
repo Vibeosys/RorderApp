@@ -50,14 +50,22 @@ public class FragmentChefMyServing extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        int count =0;
         View view = inflater.inflate(R.layout.chef_expandable_list,container,false);
-
+        count = mDbRepository.checkOrders();
 //        Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),SyncService.class);
 //        getContext().startService(i);
 
 //        Intent chefServices = new Intent(this.getContext(),ChefService.class);
 //        getContext().startService(chefServices);
+
+        if(count == 0)
+        {
+           // Toast.makeText(getContext(),"No records to display",Toast.LENGTH_LONG).show();
+            String stringTitle ="No Records";
+            String stringMessage ="No Records Available to display";
+            customAlterDialog(stringTitle,stringMessage);
+        }
 
         chefOrderList = (ExpandableListView) view.findViewById(R.id.expListViewForChef);
         list = mDbRepository.getOrderHeadesInAsc(1);
