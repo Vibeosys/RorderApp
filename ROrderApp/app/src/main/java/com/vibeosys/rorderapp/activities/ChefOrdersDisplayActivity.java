@@ -57,7 +57,14 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         Intent i = new Intent(Intent.ACTION_SYNC,null,this,SyncService.class);
         startService(i);
 
+        if(!NetworkUtils.isActiveNetworkAvailable(this))
+        {
+            String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage=getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle,stringMessage);
 
+
+        }
         getSupportActionBar();
 
 
@@ -125,19 +132,15 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         finish();
     }
 
-    @Override
-    protected void onStart() {
-        
-        super.onStart();
-    }
+
 
     @Override
     protected void onResume() {
 
         if(!NetworkUtils.isActiveNetworkAvailable(this))
         {
-            String stringTitle ="Network error";
-            String stringMessage="No Internet connection is available.Please check internet connection.";
+            String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage=getResources().getString(R.string.error_msg_for_select_restaurant);
             customAlterDialog(stringTitle,stringMessage);
 
 

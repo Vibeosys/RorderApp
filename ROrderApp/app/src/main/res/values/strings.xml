@@ -108,4 +108,7 @@
     <string name="generate_bill">Bill</string>
     <string name="error_dialog_title_registration">Registration Error</string>
     <string name="msg_dialog_title_registration">Your Device is not register with server. Contact Admin.</string>
+    <string name="error_msg_title_for_network">Network Error</string>
+    <string name="error_msg_for_select_restaurant">Internet connection is not available.Please
+        check internet connection</string>
 </resources>

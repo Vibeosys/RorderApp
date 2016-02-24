@@ -32,6 +32,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.UserDTO;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.UserAuth;
 import com.vibeosys.rorderapp.util.CustomVolleyRequestQueue;
 
@@ -77,6 +78,12 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mUserNameView = (EditText) findViewById(R.id.email);
+        if(!NetworkUtils.isActiveNetworkAvailable(this))
+        {
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle,stringMessage);
+        }
         //populateAutoComplete();
         mImgUrl = mDbRepository.getRestaurantUrl(mSessionManager.getUserRestaurantId());
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -372,6 +379,17 @@ public class LoginActivity extends BaseActivity {
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        if(!NetworkUtils.isActiveNetworkAvailable(this))
+        {
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle,stringMessage);
+        }
+        super.onResume();
     }
 }
 
