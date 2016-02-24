@@ -19,6 +19,7 @@ import com.vibeosys.rorderapp.data.ChefMenuDetailsDTO;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 
 import com.vibeosys.rorderapp.database.DbRepository;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 
 
 import java.text.DateFormat;
@@ -166,12 +167,16 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
                     {
                         onGroupCollapsed(groupPosition);
                       //  notifyDataSetChanged();
+                        if(NetworkUtils.isActiveNetworkAvailable(context))
                         chefOrderDetailsDTOs.remove(groupPosition);
                     }
                     else
                     {
                       //  notifyDataSetChanged();
+                        if(NetworkUtils.isActiveNetworkAvailable(context))
                         chefOrderDetailsDTOs.remove(groupPosition);
+
+
                     }
 
                 }

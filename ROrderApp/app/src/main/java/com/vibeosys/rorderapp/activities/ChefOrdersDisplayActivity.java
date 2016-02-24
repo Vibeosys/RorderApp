@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.activities;
 
 import android.app.ActionBar;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -24,6 +25,7 @@ import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.ServerSync;
 import com.vibeosys.rorderapp.service.ChefService;
 import com.vibeosys.rorderapp.service.SyncService;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.UserAuth;
 
 
@@ -55,10 +57,9 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         Intent i = new Intent(Intent.ACTION_SYNC,null,this,SyncService.class);
         startService(i);
 
-       // chefOrderList = (ExpandableListView) findViewById(R.id.expListViewForChef);
+
         getSupportActionBar();
-//        TextView textView = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_text_view,null);
-//        textView.setText("Current Orders");
+
 
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -96,9 +97,8 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       // return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.chef_main, menu);
-     //   menu.findItem(R.id.search).setVisible(false);
+
 
         menu.findItem(R.id.signoutChef).setVisible(true);
         return true;
@@ -111,6 +111,7 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
 
         if(id == R.id.signoutChef)
         {
+
             UserAuth.CleanAuthenticationInfo();
             chefCallLogin();
         }
@@ -122,5 +123,25 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+
+        if(!NetworkUtils.isActiveNetworkAvailable(this))
+        {
+            String stringTitle ="Network error";
+            String stringMessage="No Internet connection is available.Please check internet connection.";
+            customAlterDialog(stringTitle,stringMessage);
+
+
+        }
+        super.onResume();
     }
 }

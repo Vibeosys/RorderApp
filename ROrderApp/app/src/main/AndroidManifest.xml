@@ -78,7 +78,7 @@
             android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
         <activity
             android:name=".activities.ChefOrdersDisplayActivity"
-            android:parentActivityName=".activities.FlashScreenActivity"></activity>
+            ></activity>
         <activity
             android:name=".activities.FeedbackActivity"
             android:parentActivityName=".MainActivity"

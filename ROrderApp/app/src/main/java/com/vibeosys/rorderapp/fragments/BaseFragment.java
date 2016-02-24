@@ -1,7 +1,9 @@
 package com.vibeosys.rorderapp.fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -49,6 +51,23 @@ public class BaseFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+    protected  void customAlterDialog(String title,String message)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(""+title);
+        builder.setIcon(R.drawable.ic_action_warning_yellow);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+
+
     }
 }
 

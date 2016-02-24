@@ -13,6 +13,7 @@ import android.widget.ExpandableListView;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 
 
 import org.json.JSONObject;
@@ -37,7 +38,12 @@ public class FragmentChefPlacedOrder extends BaseFragment
         listHistory = mDbRepository.getOrderHeadesInAsc(2);
         chefOrderAdapter = new ChefOrderAdapter(getActivity().getApplicationContext(),listHistory,mDbRepository);
         chefOrderListHistory.setAdapter(chefOrderAdapter);
-
+        if(!NetworkUtils.isActiveNetworkAvailable(getContext()))
+        {
+            String stringTitle ="Network error";
+            String stringMessage="No Internet connection is available.Please check internet connection.";
+            customAlterDialog(stringTitle,stringMessage);
+        }
         chefOrderAdapter.notifyDataSetChanged();
 
         return view;
@@ -48,9 +54,18 @@ public class FragmentChefPlacedOrder extends BaseFragment
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
-//        chefOrderAdapter.refresh(2);
-//        chefOrderAdapter.notifyDataSetChanged();
+
     }
 
+    @Override
+    public void onStart() {
 
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+    }
 }

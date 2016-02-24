@@ -78,11 +78,21 @@ public class FragmentChefMyServing extends BaseFragment implements
     @Override
     public void onDonClick(String ChefOrderId) {
         //       Log.d(TAG,"## button click"+ChefOrderId);
-        sendToServer(ChefOrderId);
-        chefOrderList.invalidateViews();
+        if(!NetworkUtils.isActiveNetworkAvailable(getContext()))
+        {
+            String stringTitle ="Network error";
+            String stringMessage="No Internet connection is available.Please check internet connection.";
+            customAlterDialog(stringTitle,stringMessage);
 
-//        chefOrderAdapter.refresh(1);
-//        chefOrderAdapter.notifyDataSetChanged();
+        }
+        else
+        {
+            sendToServer(ChefOrderId);
+            chefOrderList.invalidateViews();
+        }
+
+
+
 
 
 
@@ -144,11 +154,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
-       // chefOrderAdapter.notifyDataSetChanged();
-//        chefOrderAdapter.refresh(1);
-//        chefOrderAdapter.notifyDataSetChanged();
-//
-//       // chefOrderAdapter.notifyDataSetInvalidated();
+
 
     }
 
@@ -156,13 +162,14 @@ public class FragmentChefMyServing extends BaseFragment implements
 
     @Override
     public void onResume() {
+
         super.onResume();
-//        list.clear();
-//        list.addAll(mDbRepository.getOrderHeadesInAsc(1));
-//        chefOrderAdapter.notifyDataSetChanged();
-
-
-
     }
 
+    @Override
+    public void onStart() {
+
+
+        super.onStart();
+    }
 }

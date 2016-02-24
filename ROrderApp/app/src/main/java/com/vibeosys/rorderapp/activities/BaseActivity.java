@@ -153,8 +153,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     {
        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(""+title);
-        builder.setIcon(R.drawable.ic_action_warning);
+        builder.setIcon(R.drawable.ic_action_warning_yellow);
         builder.setMessage(message);
+        builder.setCancelable(false);
         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
