@@ -1,5 +1,7 @@
 package com.vibeosys.rorderapp.data;
 
+import com.vibeosys.rorderapp.util.ChefDateUtil;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
@@ -138,16 +140,7 @@ public class ChefOrderDetailsDTO {
         if (this.mOrderDate == null || this.mOrderDate.isEmpty())
             return this.orderDt;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        //formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-        java.util.Date value = null;
-        try {
-            value = formatter.parse(this.mOrderDate);
-            orderDt = new java.sql.Date(value.getTime());
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
+        this.orderDt = new ChefDateUtil().getOrderDt(mOrderDate);
         return orderDt;
     }
 
@@ -155,16 +148,7 @@ public class ChefOrderDetailsDTO {
         if (this.mOrderTime == null || this.mOrderTime.isEmpty())
             return this.orderTm;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-
-        //formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-        java.util.Date value = null;
-        try {
-            value = formatter.parse(this.mOrderTime);
-            orderTm = new Time(value.getTime());
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
+        this.orderTm = new ChefDateUtil().getOrderTm(mOrderTime);
         return orderTm;
     }
 
@@ -172,9 +156,9 @@ public class ChefOrderDetailsDTO {
         String str = "";
 
         java.util.Date calendarDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.ROOT).getTime();
-
-        long currentTime = calendarDate.getTime() - getTimeOffsetForIndia(5, 30);
-        long orderTime = dateAndTimeToDateTime(this.getOrderDt(), this.getOrderTm());
+        ChefDateUtil dateUtil = new ChefDateUtil();
+        long currentTime = calendarDate.getTime() - dateUtil.getTimeOffsetAsPerLocal(5, 30);
+        long orderTime = dateUtil.dateAndTimeToDateTime(this.getOrderDt(), this.getOrderTm());
 
         long timeDiff = currentTime - orderTime;
 
@@ -191,22 +175,4 @@ public class ChefOrderDetailsDTO {
         return str;
     }
 
-    public long dateAndTimeToDateTime(java.sql.Date date, java.sql.Time time) {
-        String myDate = date + " " + time;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        java.util.Date utilDate = new java.util.Date();
-
-        try {
-            utilDate = sdf.parse(myDate);
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        }
-        return utilDate.getTime();
-    }
-
-    public long getTimeOffsetForIndia(int hours, int mins)
-    {
-        return ((hours * 60 * 60 * 1000) + (mins * 60 * 1000));
-    }
 }
