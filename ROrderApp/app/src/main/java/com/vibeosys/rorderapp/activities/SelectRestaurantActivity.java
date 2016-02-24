@@ -27,6 +27,9 @@ import com.vibeosys.rorderapp.data.RestaurantDbDTO;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
 import com.vibeosys.rorderapp.util.NetworkUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -72,7 +75,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         btnOk.setOnClickListener(this);
     }
 
-    private void downloadDatabase(File internalfile) {
+    private boolean downloadDatabase() {
+        boolean flag = false;
         HttpURLConnection urlConnection = null;
         OutputStream myOutput = null;
         byte[] buffer = null;
@@ -104,16 +108,37 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
             Log.d("ResponseMessage", res);
             Log.e("RESPONSE CODE", String.valueOf(Http_Result));
             if (Http_Result == HttpURLConnection.HTTP_OK) {
+                String contentType = urlConnection.getContentType();
                 inputStream = urlConnection.getInputStream();
-                buffer = new byte[1024];
-                myOutput = new FileOutputStream(internalfile);
-                int length;
-                while ((length = inputStream.read(buffer)) > 0) {
-                    myOutput.write(buffer, 0, length);
+                Log.i(TAG, "##" + contentType);
+                if (contentType.equals("application/octet-stream")) {
+                    ContextWrapper ctw = new ContextWrapper(getApplicationContext());
+                    File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
+                    File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
+                    buffer = new byte[1024];
+                    myOutput = new FileOutputStream(dbFile);
+                    int length;
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        myOutput.write(buffer, 0, length);
+                    }
+                    myOutput.flush();
+                    myOutput.close();
+                    inputStream.close();
+                    flag = true;
+                } else if (contentType.equals("application/json; charset=UTF-8")) {
+                    flag = false;
+                    String responce = convertStreamToString(inputStream);
+                    Log.i(TAG, "##" + responce);
+                    String message = "";
+                    try {
+                        JSONObject jsResponce = new JSONObject(responce);
+                        message = jsResponce.getString("message");
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    customAlterDialog(getResources().getString(R.string.error_dialog_title_registration)
+                            , message);
                 }
-                myOutput.flush();
-                myOutput.close();
-                inputStream.close();
             }
 
         } catch (Exception ex) {
@@ -123,6 +148,12 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
        /* boolean userCreated = mDbRepository.createUserId(mSessionManager.getUserId());
         if (!userCreated)
             Log.e("UserCreation", "##New user could not be created in DB");*/
+        return flag;
+    }
+
+    static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     private String getBuild64BasedInfo() {
@@ -149,36 +180,47 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         mTxtRestaurant.setError(null);
         String strRestId = mTxtRestaurant.getText().toString();
 
-        if (strRestId != null && !strRestId.isEmpty()) {
+        if (strRestId != null && !strRestId.isEmpty() && strRestId.length() == 6) {
             try {
                 mSelectedRestoId = Integer.parseInt(strRestId);
                 mSessionManager.setUserRestaurantId(mSelectedRestoId);
-
+                callDatabaseDownload();
             } catch (NumberFormatException e) {
                 mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant));
                 Log.e(TAG, "Error at select Restaurant Id" + e.toString());
             }
+        } else if (strRestId.length() < 6 || strRestId.length() > 6) {
+            mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant_id_length));
         } else {
             mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant_id));
         }
 
-      //  mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
+        //  mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
+
+    }
+
+    private void callDatabaseDownload() {
         if (NetworkUtils.isActiveNetworkAvailable(this)) {
-            ContextWrapper ctw = new ContextWrapper(getApplicationContext());
+        /*    ContextWrapper ctw = new ContextWrapper(getApplicationContext());
             File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
             File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
             if (!dbFile.exists()) {
                 downloadDatabase(dbFile);
             } else if (dbFile.exists() && (mSessionManager.getUserId() == 0)) {
                 downloadDatabase(dbFile);
+            }*/
+            boolean downFlag = downloadDatabase();
+            if (downFlag) {
+                mSelectedRestaurantName = mDbRepository.getRestaurantName(mSelectedRestoId);
+                mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
+                Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentLogin);
+                finish();
             }
+        } else {
+            showMyDialog(mContext);
         }
-        mSelectedRestaurantName = mDbRepository.getRestaurantName(mSelectedRestoId);
-        mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
-        Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
-        intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intentLogin);
-        finish();
     }
 
     private void getRestaurant(String Url) {

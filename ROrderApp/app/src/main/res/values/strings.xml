@@ -72,6 +72,7 @@
     <string name="hint_restaurant_id">Enter Restaurant Id</string>
     <string name="error_select_restaurant">Id Must be a Number</string>
     <string name="error_select_restaurant_id">Restaurant Id is needed</string>
+    <string name="error_select_restaurant_id_length">Restaurant Id Not Valid</string>
     <string name="network_error">Please Check Internet Connection</string>
     <string name="Ok">Ok</string>
     <string name="feed_back_btn">Thank You</string>
@@ -105,4 +106,6 @@
     <string name="empty_order_place">You Can not place an empty order.</string>
     <string name="order_is_pending_to_serve">At least one order is not served</string>
     <string name="generate_bill">Bill</string>
+    <string name="error_dialog_title_registration">Registration Error</string>
+    <string name="msg_dialog_title_registration">Your Device is not register with server. Contact Admin.</string>
 </resources>
