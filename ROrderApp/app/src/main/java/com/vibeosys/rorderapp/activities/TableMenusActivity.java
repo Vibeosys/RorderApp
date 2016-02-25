@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,6 +63,7 @@ public class TableMenusActivity extends BaseActivity implements
     private String custId;
     private ImageButton imgFloat;
     private LinearLayout llCurrentOrder;
+    private EditText txtSearch;
     //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
     private int mCount = 0;
     private final Context mContext = this;
@@ -73,13 +78,15 @@ public class TableMenusActivity extends BaseActivity implements
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
         setTitle(getResources().getString(R.string.title_search_cuisine));
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         listMenus = (ListView) findViewById(R.id.listMenus);
         allMenus = mDbRepository.getOrderMenu(custId);
 //        mTableId = getIntent().getIntExtra("TableId", 0);
 //        mTableNo = getIntent().getExtras().getInt("TableNo");
         //sortingMenu=mDbRepository.getOrderMenu();
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
+        txtSearch = (EditText) findViewById(R.id.search);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
         txtBillGenerate = (TextView) findViewById(R.id.txtGenerateBill);
         txtPreviousOrder = (LinearLayout) findViewById(R.id.txtPreviousOrders);
@@ -111,6 +118,29 @@ public class TableMenusActivity extends BaseActivity implements
             txtBillGenerate.setVisibility(View.VISIBLE);
         }*/
         generateBillColour();
+        txtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 || s.length() < 3) {
+                    allMenus = mDbRepository.getOrderMenu(custId);
+                    ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                }
+                if (s.length() >= 3) {
+                    allMenus = sortList(mDbRepository.getOrderMenu(custId), s.toString());
+                    ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private List<OrderMenuDTO> sortList(List<OrderMenuDTO> menus, String search) {
@@ -200,7 +230,7 @@ public class TableMenusActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.table_menus, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        /*SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -210,7 +240,7 @@ public class TableMenusActivity extends BaseActivity implements
 
             @Override
             public boolean onQueryTextChange(String s) {
-                /*if (s.length() == 0 || s.length() < 3) {
+                *//*if (s.length() == 0 || s.length() < 3) {
                     // sortList
                     for (OrderMenuDTO menu : allMenus) {
                         menu.setmShow(OrderMenuDTO.SHOW);
@@ -224,7 +254,7 @@ public class TableMenusActivity extends BaseActivity implements
                     orderListAdapter.notifyDataSetChanged();
 
                 }
-                displayMenuPriceAndItems();*/
+                displayMenuPriceAndItems();*//*
                 if (s.length() == 0 || s.length() < 3) {
                     allMenus = mDbRepository.getOrderMenu(custId);
                     ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
@@ -235,7 +265,7 @@ public class TableMenusActivity extends BaseActivity implements
                 }
                 return false;
             }
-        });
+        });*/
 
         return true;
     }
@@ -437,9 +467,12 @@ public class TableMenusActivity extends BaseActivity implements
         View view = getLayoutInflater().inflate(R.layout.dilaog_floating_veg_nonveg, null);
         dlg.setContentView(view);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dlg.setCancelable(true);
+        dlg.setCanceledOnTouchOutside(true);
         ImageButton btnVeg = (ImageButton) dlg.findViewById(R.id.btnVeg);
         ImageButton btnNoveg = (ImageButton) dlg.findViewById(R.id.btnNonVeg);
         ImageButton btnReset = (ImageButton) dlg.findViewById(R.id.btnReset);
+        ImageButton btnClose = (ImageButton) dlg.findViewById(R.id.btnClose);
         btnVeg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -461,6 +494,12 @@ public class TableMenusActivity extends BaseActivity implements
             public void onClick(View v) {
                 allMenus = mDbRepository.getOrderMenu(custId);
                 ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                dlg.dismiss();
+            }
+        });
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 dlg.dismiss();
             }
         });

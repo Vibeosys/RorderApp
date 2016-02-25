@@ -43,6 +43,7 @@
         <activity
             android:name=".activities.TableMenusActivity"
             android:label="@string/title_activity_table_menus"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity

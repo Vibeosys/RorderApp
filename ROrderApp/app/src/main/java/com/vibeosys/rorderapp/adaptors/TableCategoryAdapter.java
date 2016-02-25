@@ -23,10 +23,11 @@ import java.util.ArrayList;
  */
 public class TableCategoryAdapter extends BaseAdapter {
 
-    private final String TAG=TableCategoryAdapter.class.getSimpleName();
+    private final String TAG = TableCategoryAdapter.class.getSimpleName();
     private ArrayList<TableCategoryDTO> mTablecategories;
     private Context mContext;
     private ImageLoader mImageLoader;
+
     public TableCategoryAdapter(ArrayList<TableCategoryDTO> mTablecategories, Context context) {
         this.mTablecategories = mTablecategories;
         this.mContext = context;
@@ -59,48 +60,47 @@ public class TableCategoryAdapter extends BaseAdapter {
             row = theLayoutInflator.inflate(R.layout.row_table_category, null);
             viewHolder = new TableCategoryAdapter.ViewHolder();
             viewHolder.txtCategory = (TextView) row.findViewById(R.id.txtTableCategory);
-            viewHolder.icon=(NetworkImageView)row.findViewById(R.id.tableCategoryIcon);
-            viewHolder.checkMark=(ImageView)row.findViewById(R.id.imgCheck);
+            viewHolder.icon = (NetworkImageView) row.findViewById(R.id.tableCategoryIcon);
+            viewHolder.checkMark = (ImageView) row.findViewById(R.id.imgCheck);
             row.setTag(viewHolder);
 
         } else viewHolder = (TableCategoryAdapter.ViewHolder) row.getTag();
-        TableCategoryDTO categoryDTO=mTablecategories.get(position);
+        TableCategoryDTO categoryDTO = mTablecategories.get(position);
         Log.d(TAG, categoryDTO.toString());
         viewHolder.txtCategory.setText(categoryDTO.getmTitle());
         mImageLoader = CustomVolleyRequestQueue.getInstance(mContext)
                 .getImageLoader();
         //Image URL - This can point to any image file supported by Android
         final String url = categoryDTO.getmImage();
-        mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.icon,
-                R.mipmap.ic_launcher, android.R.drawable.stat_notify_error));
-        viewHolder.icon.setImageUrl(url, mImageLoader);
-        if(categoryDTO.isSelected())
-        {
-            viewHolder.checkMark.setVisibility(View.VISIBLE);
+        try {
+            mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.icon,
+                    R.drawable.table_default, R.drawable.table_default));
+            viewHolder.icon.setImageUrl(url, mImageLoader);
+        } catch (Exception e) {
+            viewHolder.icon.setImageResource(R.drawable.table_default);
         }
-        else {
+
+        if (categoryDTO.isSelected()) {
+            viewHolder.checkMark.setVisibility(View.VISIBLE);
+        } else {
             viewHolder.checkMark.setVisibility(View.INVISIBLE);
         }
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView txtCategory;
         NetworkImageView icon;
         ImageView checkMark;
     }
 
-    public void setItemChecked(int categoryId)
-    {
-        for(int i=0;i<mTablecategories.size();i++)
-        {
-            TableCategoryDTO tableCategory=mTablecategories.get(i);
-            if(tableCategory.getmCategoryId()==categoryId)
-            {
+    public void setItemChecked(int categoryId) {
+        for (int i = 0; i < mTablecategories.size(); i++) {
+            TableCategoryDTO tableCategory = mTablecategories.get(i);
+            if (tableCategory.getmCategoryId() == categoryId) {
                 tableCategory.setSelected(!tableCategory.isSelected());
-            }
-            else {
+            } else {
                 tableCategory.setSelected(false);
             }
 

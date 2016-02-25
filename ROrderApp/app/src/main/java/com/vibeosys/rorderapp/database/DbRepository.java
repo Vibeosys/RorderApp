@@ -166,6 +166,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 for (UserDbDTO dbUser : usersList) {
                     contentValues.put(SqlContract.SqlUser.USER_ID, dbUser.getUserId());
                     contentValues.put(SqlContract.SqlUser.USER_NAME, dbUser.getUserName());
+                    contentValues.put(SqlContract.SqlUser.PASSWORD, dbUser.getPassword());
                     contentValues.put(SqlContract.SqlUser.ACTIVE, dbUser.isActive());
                     contentValues.put(SqlContract.SqlUser.ROLE_ID, dbUser.getRoleId());
                     contentValues.put(SqlContract.SqlUser.RESTAURANTID, dbUser.getRestaurantId());
@@ -964,15 +965,15 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count;
     }
-    public int checkOrders()
-    {
+
+    public int checkOrders() {
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrderDetails.TABLE_NAME , null);
+                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrderDetails.TABLE_NAME, null);
                 count = cursor.getCount();
             }
         } catch (Exception e) {

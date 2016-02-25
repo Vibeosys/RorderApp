@@ -112,9 +112,14 @@ public class OrderListAdapter extends BaseAdapter {
                 .getImageLoader();
         //Image URL - This can point to any image file supported by Android
         final String url = menu.getmImage();
-        mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.networkImageView,
-                R.drawable.menu_image_generic, R.drawable.menu_image_generic));
-        viewHolder.networkImageView.setImageUrl(url, mImageLoader);
+        try {
+            mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.networkImageView,
+                    R.drawable.menu_image_generic, R.drawable.menu_image_generic));
+            viewHolder.networkImageView.setImageUrl(url, mImageLoader);
+        } catch (Exception e) {
+            viewHolder.networkImageView.setImageResource(R.drawable.menu_image_generic);
+        }
+
 
         String menuTag = menu.getmTags();
         if (menuTag != null && !menuTag.isEmpty() && !menuTag.equals("null")) {

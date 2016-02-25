@@ -19,7 +19,34 @@
             android:background="@color/White"
             android:gravity="center"
             android:padding="2dp"
-            android:text="Non Veg"
+            android:text="@string/str_reset"
+            android:textColor="@color/black_color"
+            android:textSize="13sp" />
+
+
+        <ImageButton
+            android:id="@+id/btnReset"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_margin="14dp"
+            android:background="@drawable/dialog_floating_button"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_reset_float" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/White"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="@string/str_non_veg"
             android:textColor="@color/black_color"
             android:textSize="13sp" />
 
@@ -29,7 +56,7 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_margin="14dp"
-            android:background="@drawable/menu_floating_button"
+            android:background="@drawable/dialog_floating_button"
             android:scaleType="centerCrop"
             android:src="@drawable/non_veg_icon" />
     </LinearLayout>
@@ -46,7 +73,7 @@
             android:background="@color/White"
             android:gravity="center"
             android:padding="2dp"
-            android:text="Veg"
+            android:text="@string/veg"
             android:textColor="@color/black_color"
             android:textSize="13sp" />
 
@@ -55,7 +82,7 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_margin="14dp"
-            android:background="@drawable/menu_floating_button"
+            android:background="@drawable/dialog_floating_button"
             android:scaleType="centerCrop"
             android:src="@drawable/veg_icon" />
     </LinearLayout>
@@ -74,18 +101,18 @@
             android:background="@color/White"
             android:gravity="center"
             android:padding="2dp"
-            android:text="Reset"
+            android:text="@string/Payment_close"
             android:textColor="@color/black_color"
             android:textSize="13sp" />
 
         <ImageButton
-            android:id="@+id/btnReset"
+            android:id="@+id/btnClose"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_margin="14dp"
-            android:background="@drawable/menu_floating_button"
+            android:background="@drawable/dialog_floating_button"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_action_cancel" />
+            android:src="@drawable/ic_close" />
     </LinearLayout>
 
 </LinearLayout>
