@@ -148,7 +148,17 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             if (mOrderFlag == 1) {
                 Toast.makeText(getApplicationContext(), "You Can not place an empty order", Toast.LENGTH_SHORT).show();
             } else {
-                placeOrder();
+                if(!NetworkUtils.isActiveNetworkAvailable(this))
+                {
+                    String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
+                    String StringMessage =getResources().getString(R.string.error_msg_for_select_restaurant) ;
+                    customAlterDialog(stringTitle,StringMessage);
+                }
+                else
+                {
+                    placeOrder();
+                }
+
             }
 
 
