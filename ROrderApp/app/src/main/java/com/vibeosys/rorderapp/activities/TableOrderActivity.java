@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.OrderSummaryAdapter;
@@ -41,7 +42,9 @@ import java.util.UUID;
 /**
  * Created by akshay on 04-02-2016.
  */
-public class TableOrderActivity extends BaseActivity implements OrderSummaryAdapter.ButtonListener, ServerSyncManager.OnStringResultReceived, OrderSummaryAdapter.PlaceOrderListener {
+public class TableOrderActivity extends BaseActivity implements
+        OrderSummaryAdapter.ButtonListener, ServerSyncManager.OnStringResultReceived,
+        OrderSummaryAdapter.PlaceOrderListener, ServerSyncManager.OnStringErrorReceived {
 
     private ExpandableListView mOrdersList;
     private OrderSummaryAdapter mAdapter;
@@ -148,14 +151,11 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             if (mOrderFlag == 1) {
                 Toast.makeText(getApplicationContext(), "You Can not place an empty order", Toast.LENGTH_SHORT).show();
             } else {
-                if(!NetworkUtils.isActiveNetworkAvailable(this))
-                {
-                    String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
-                    String StringMessage =getResources().getString(R.string.error_msg_for_select_restaurant) ;
-                    customAlterDialog(stringTitle,StringMessage);
-                }
-                else
-                {
+                if (!NetworkUtils.isActiveNetworkAvailable(this)) {
+                    String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+                    String StringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+                    customAlterDialog(stringTitle, StringMessage);
+                } else {
                     placeOrder();
                 }
 
@@ -223,12 +223,10 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             Toast.makeText(getApplicationContext(), getResources().getString
                     (R.string.order_place_success), Toast.LENGTH_SHORT).show();
         }
-        else if(errorCode == 104)
+       /* else if(errorCode == 104)
         {
-            String stringTitle= getResources().getString(R.string.error_msg_title_for_server);
-            String stringMessage =getResources().getString(R.string.error_msg_for_server_details);
-            customAlterDialog(stringTitle ,stringMessage);
-        }
+
+        }*/
 
 
     }
@@ -253,5 +251,12 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public void onStingErrorReceived(@NonNull VolleyError error) {
+        String stringTitle = getResources().getString(R.string.error_msg_title_for_server);
+        String stringMessage = getResources().getString(R.string.error_msg_for_server_details);
+        customAlterDialog(stringTitle, stringMessage);
     }
 }

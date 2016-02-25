@@ -52,6 +52,7 @@ public class ServerSyncManager
     private boolean mIsWorkInProgress;
     private OnDownloadReceived mOnDownloadReceived;
     private OnStringResultReceived mOnStringResultReceived;
+    private OnStringErrorReceived mErrorReceived;
     private String TAG = ServerSyncManager.class.getSimpleName();
     private OnNotifyUser mNotifyUser;
 
@@ -117,6 +118,10 @@ public class ServerSyncManager
         mOnStringResultReceived = stringResultReceived;
     }
 
+    public void setOnStringErrorReceived(OnStringErrorReceived stringErrorReceived) {
+        mErrorReceived = stringErrorReceived;
+    }
+
     private String prepareUploadJsonFromData(TableDataDTO... params) {
 
         Upload uploadToServer = new Upload();
@@ -151,6 +156,8 @@ public class ServerSyncManager
             public void onErrorResponse(VolleyError error) {
                 if (progress != null)
                     progress.dismiss();
+                if (mErrorReceived != null)
+                    mErrorReceived.onStingErrorReceived(error);
                 Log.i(TAG, "##" + error.toString());
             }
         });
@@ -411,6 +418,10 @@ public class ServerSyncManager
 
     public interface OnStringResultReceived {
         void onStingResultReceived(@NonNull JSONObject data);
+    }
+
+    public interface OnStringErrorReceived {
+        void onStingErrorReceived(@NonNull VolleyError error);
     }
 
     public interface OnNotifyUser {
