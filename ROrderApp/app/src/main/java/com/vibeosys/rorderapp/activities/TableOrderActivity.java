@@ -223,6 +223,12 @@ public class TableOrderActivity extends BaseActivity implements OrderSummaryAdap
             Toast.makeText(getApplicationContext(), getResources().getString
                     (R.string.order_place_success), Toast.LENGTH_SHORT).show();
         }
+        else if(errorCode == 104)
+        {
+            String stringTitle= getResources().getString(R.string.error_msg_title_for_server);
+            String stringMessage =getResources().getString(R.string.error_msg_for_server_details);
+            customAlterDialog(stringTitle ,stringMessage);
+        }
 
 
     }

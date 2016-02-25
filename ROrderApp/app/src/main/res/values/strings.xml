@@ -112,4 +112,6 @@
     <string name="error_msg_title_for_network">Network Error</string>
     <string name="error_msg_for_select_restaurant">Internet connection is not available.Please
         check internet connection</string>
+    <string name="error_msg_title_for_server">Server Error</string>
+    <string name="error_msg_for_server_details">your order is not placed </string>
 </resources>
