@@ -16,6 +16,7 @@ import com.vibeosys.rorderapp.data.NotificationOrderDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
 import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
+import com.vibeosys.rorderapp.util.AppConstants;
 import com.vibeosys.rorderapp.util.DbTableNameConstants;
 import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -48,7 +49,7 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
             synchronized (this) {
                 try {
                     //TODO: Hardcoded time for now, need to read from properties
-                    wait(10 * 1000);
+                    wait(AppConstants.SERVICE_TIME_OUT * 1000);
                     if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
                         mServerSyncManager.syncDataWithServer(false);
 
