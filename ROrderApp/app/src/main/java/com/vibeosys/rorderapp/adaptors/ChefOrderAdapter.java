@@ -200,7 +200,7 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
             childHolder.childQty = (TextView)convertView.findViewById(R.id.chefQty);
             childHolder.menuNo = (TextView)convertView.findViewById(R.id.chefMenuNo);
             childHolder.childMenuNote = (TextView)convertView.findViewById(R.id.chefMenuComment);
-
+            childHolder.childQtText = (TextView)convertView.findViewById(R.id.cQty);
 
             convertView.setTag(childHolder);
         }
@@ -279,6 +279,7 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
         TextView childQty;
         TextView menuNo;
         TextView childMenuNote;
+        TextView childQtText;
     }
 
 

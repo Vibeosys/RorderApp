@@ -33,7 +33,7 @@
             android:text="veg Manchurain"
             android:textColor="@color/listview_item"
             android:singleLine="false"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_weight="1"/>
         <TextView
             android:id="@+id/commentForChef"
@@ -43,14 +43,22 @@
             android:textColor="@color/listview_item"
             />
         <TextView
-            android:id="@+id/chefQty"
+        android:id="@+id/chefQty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 "
+        android:textSize="16sp"
+            android:paddingRight="2dp"
+            android:gravity="right"
+        android:textColor="@color/listview_item" />
+        <TextView
+            android:id="@+id/cQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1 "
-            android:textSize="16sp"
+            android:text="Qty"
+            android:textSize="12sp"
             android:gravity="center"
-            android:layout_weight="1"
-            android:textColor="@color/listview_item" />
+            android:textColor="@color/light_grey" />
 
     </LinearLayout>
     <LinearLayout
@@ -66,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Testing text "
+            android:textSize="12sp"
             android:paddingStart="22dp"
             android:paddingEnd="5dp"
             android:textColor="@color/red"
