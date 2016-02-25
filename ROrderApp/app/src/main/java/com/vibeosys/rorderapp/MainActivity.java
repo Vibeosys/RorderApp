@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -290,7 +291,9 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_my_profile) {
             // Handle the camera action
         } else if (id == R.id.nav_waiting_list) {
-            callWaitingIntent();
+
+            showWaitingDialog();
+            //callWaitingIntent();
         } else if (id == R.id.nav_log_out) {
             UserAuth.CleanAuthenticationInfo();
             callLogin();
@@ -489,6 +492,7 @@ public class MainActivity extends BaseActivity
         View view = getLayoutInflater().inflate(R.layout.dialog_waiting_list, null);
         dlg.setContentView(view);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ArrayList<WaitingUserDTO> mWaitingList = mDbRepository.getWaitingList();
         final EditText mTxtCount = (EditText) dlg.findViewById(R.id.txtCustCount);
         final EditText mTxtName = (EditText) dlg.findViewById(R.id.txtCustomerName);
