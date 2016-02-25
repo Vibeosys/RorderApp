@@ -604,12 +604,8 @@ public class MainActivity extends BaseActivity
                                 String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
                                 tableDataDTOs[1] = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
                                 mServerSyncManager.uploadDataToServer(tableDataDTOs);
-
                                 dialog.dismiss();
-                                mCustomerAdapter.refresh(mDbRepository.getWaitingList());
-                                Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(iMain);
-                                finish();
+                                dlg.dismiss();
                             }
 
                         }

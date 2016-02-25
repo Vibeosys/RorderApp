@@ -72,13 +72,18 @@ public class TableCategoryAdapter extends BaseAdapter {
                 .getImageLoader();
         //Image URL - This can point to any image file supported by Android
         final String url = categoryDTO.getmImage();
-        try {
-            mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.icon,
-                    R.drawable.table_default, R.drawable.table_default));
-            viewHolder.icon.setImageUrl(url, mImageLoader);
-        } catch (Exception e) {
+        if (url != null && !url.isEmpty()) {
+            try {
+                mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.icon,
+                        R.drawable.table_default, R.drawable.table_default));
+                viewHolder.icon.setImageUrl(url, mImageLoader);
+            } catch (Exception e) {
+                viewHolder.icon.setImageResource(R.drawable.table_default);
+            }
+        } else {
             viewHolder.icon.setImageResource(R.drawable.table_default);
         }
+
 
         if (categoryDTO.isSelected()) {
             viewHolder.checkMark.setVisibility(View.VISIBLE);
