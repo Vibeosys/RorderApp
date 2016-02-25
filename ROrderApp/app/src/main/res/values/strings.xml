@@ -84,20 +84,21 @@
     <string name="bill_summary"><u>Bill Summary</u></string>
     <string name="add_customer_wet">Add</string>
     <string name="about_us_content">
-        <![CDATA[ <p>QuickServe offers a User-friendly, Reliable and Agile restaurant ordering
+        <![CDATA[ <p><b>QuickServe&trade;</b> offers a User-friendly, Reliable and Agile restaurant ordering
          system especially designed for the Dine-in restaurants. This App is multi-faceted,
          effective ordering for Waiter and efficient order fulfilment for Chef.
          App comes with variety of features like Table occupancy chart, Menu filtering,
-         Suggestive favourite menu,Bill generation, Updates for waiter and chef,
+         Suggestive favourite menu, Bill generation, Updates for waiter and chef,
          Waiting list preparation,Instant updates for all. </p>
-         <p> QuickServe is all-in-one app for all types of restaurants with easy-to-use functions
+         <p><b>QuickServe&trade;</b> is all-in-one app for all types of restaurants with easy-to-use functions
          which needs lesser training for the staff. Admin panel accompanying the App, provides vital
          strategic functions like Sales forecasting, Graphs and Charts for Billing, Food item
          ranking based on past orders. </p>
          <p>For more information or tie-ups, please visit our website
-          <a href ="http://www.vibeosys.com">www.vibeosys.com</a> or send an inquiry to
-          <a href ="http://info@vibeosys.com">info@vibeosys.com</a></p>
-
+          <a href ="http://www.vibeosys.com">www.vibeosys.com</a> </p>
+         <p>For business inquiry please contact
+          <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a></p>
+          <p><b>QuickServe&trade;</b> is a registered trademark of Vibeosys Software Pvt Ltd. </p>
         ]]>
         </string>
     <string name="previous_orders">Previous Orders</string>
