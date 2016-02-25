@@ -167,14 +167,14 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
                     {
                         onGroupCollapsed(groupPosition);
                       //  notifyDataSetChanged();
-                        if(NetworkUtils.isActiveNetworkAvailable(context))
-                        chefOrderDetailsDTOs.remove(groupPosition);
+
+                       // chefOrderDetailsDTOs.remove(groupPosition);
                     }
                     else
                     {
                       //  notifyDataSetChanged();
-                        if(NetworkUtils.isActiveNetworkAvailable(context))
-                        chefOrderDetailsDTOs.remove(groupPosition);
+//                        if(NetworkUtils.isActiveNetworkAvailable(context))
+                      //  chefOrderDetailsDTOs.remove(groupPosition);
 
 
                     }

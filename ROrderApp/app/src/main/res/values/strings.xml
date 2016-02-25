@@ -115,6 +115,6 @@
     <string name="error_msg_title_for_server">Server Error</string>
     <string name="error_msg_for_server_details">your order is not placed </string>
     <string name="str_reset">Reset</string>
-    <string name="str_non_veg">Non Veg</string>
-    <string name="veg">Veg</string>
+    <string name="str_non_veg">Non Veg Only</string>
+    <string name="veg">Veg Only</string>
 </resources>
