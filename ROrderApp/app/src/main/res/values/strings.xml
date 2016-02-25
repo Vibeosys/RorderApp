@@ -76,7 +76,7 @@
     <string name="network_error">Please Check Internet Connection</string>
     <string name="Ok">Ok</string>
     <string name="feed_back_btn">Thank You</string>
-    <string name="alert_dialog">warning</string>
+    <string name="alert_dialog">Warning</string>
     <string name="feedback_activity_name">Give Feedback</string>
     <string name="btn_proceed">Proceed</string>
     <string name="about_us"><u>About us</u></string>
@@ -117,4 +117,5 @@
     <string name="str_reset">Reset</string>
     <string name="str_non_veg">Non Veg Only</string>
     <string name="veg">Veg Only</string>
+
 </resources>

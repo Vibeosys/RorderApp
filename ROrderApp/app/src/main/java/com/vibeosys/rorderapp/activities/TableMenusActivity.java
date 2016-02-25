@@ -337,7 +337,10 @@ public class TableMenusActivity extends BaseActivity implements
         int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
         int tempOrder = mDbRepository.getOrderCountFromTemp(mTableId, custId);
         if (pendingOrder > 0 || tempOrder == 0) {
-            showAlertDiaog();
+            //showAlertDiaog();
+            String stringTitle = getResources().getString(R.string.alert_dialog);
+            String strMessage =getResources().getString(R.string.alert_dialog);
+            customAlterDialog(stringTitle ,strMessage);
         } else {
             UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
             Gson gson = new Gson();
