@@ -370,7 +370,7 @@ public class MainActivity extends BaseActivity
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Customer Entered in db", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Customer Entered in db", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
 
                 UUID custid = UUID.randomUUID();

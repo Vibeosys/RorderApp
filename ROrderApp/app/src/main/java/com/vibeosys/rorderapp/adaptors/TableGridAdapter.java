@@ -138,11 +138,12 @@ public class TableGridAdapter extends BaseAdapter {
         if (hotelTableDTO.getUserName() != null && !TextUtils.isEmpty(hotelTableDTO.getUserName())) {
             if (hotelTableDTO.getUserId() == mSessionUserId) {
                 viewHolder.txtUserName.setText("Me");
-                viewHolder.txtUserName.setBackgroundResource(R.drawable.table_grid_adt_me_txt);
+                viewHolder.txtUserName.setBackgroundColor(mContext.getResources().getColor(R.color.red));
                 viewHolder.txtUserName.setTextColor(mContext.getResources().getColor(R.color.white_color));
             } else {
                 viewHolder.txtUserName.setText(hotelTableDTO.getUserName());
                 viewHolder.txtUserName.setBackgroundColor(mContext.getResources().getColor(R.color.white_color));
+                viewHolder.txtUserName.setTextColor(mContext.getResources().getColor(R.color.custom_text_inactive));
             }
 
             viewHolder.imgUserLogo.setVisibility(View.VISIBLE);
