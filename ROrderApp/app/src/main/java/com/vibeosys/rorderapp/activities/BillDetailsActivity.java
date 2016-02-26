@@ -63,7 +63,7 @@ public class BillDetailsActivity extends BaseActivity {
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
         mBillDetailsDTOs = mDbRepository.getBillDetailsRecords(custId);
-        tableNo.setText("" + mBillDetailsDTOs.getTableNo());
+        tableNo.setText(" # " + mBillDetailsDTOs.getTableNo());
         //orderNo.setText("");
         servedBy.setText(mBillDetailsDTOs.getServedByName());
         Log.d("##", "##" + mBillDetailsDTOs.getBillDate());
