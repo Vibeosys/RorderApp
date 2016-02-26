@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Created by shrinivas on 12-02-2016.
  */
-public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
+public class ChefOrderAdapter extends BaseExpandableListAdapter {
     private Context context;
     private ArrayList<ChefOrderDetailsDTO> chefOrderDetailsDTOs;
     private GroupHolder groupHolder;
@@ -43,53 +43,50 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
     private OnDoneClickListener onDoneClickListener;
     ArrayList<ChefMenuDetailsDTO> child;
     ArrayList<ChefMenuDetailsDTO> child1;
-    HashMap<Integer ,ArrayList<ChefMenuDetailsDTO>> expHashMap ;
+    HashMap<Integer, ArrayList<ChefMenuDetailsDTO>> expHashMap;
 
 
-   public ChefOrderAdapter(Context context,ArrayList<ChefOrderDetailsDTO>chefOrderDetailsDTOs,
-                           DbRepository dbRepository)
-    {
+    public ChefOrderAdapter(Context context, ArrayList<ChefOrderDetailsDTO> chefOrderDetailsDTOs,
+                            DbRepository dbRepository) {
         this.context = context;
-        this.chefOrderDetailsDTOs =chefOrderDetailsDTOs;
+        this.chefOrderDetailsDTOs = chefOrderDetailsDTOs;
         child = new ArrayList<>();
-        this.mDbRepository =dbRepository;
+        this.mDbRepository = dbRepository;
         expHashMap = new HashMap<>();
 
     }
 
     @Override
     public int getGroupCount() {
-       // return 0;
+        // return 0;
         return chefOrderDetailsDTOs.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
 
-        if(expHashMap.size()>0) {
-            if (expHashMap.containsKey(groupPosition))
-            {
+        if (expHashMap.size() > 0) {
+            if (expHashMap.containsKey(groupPosition)) {
                 child1 = expHashMap.get(groupPosition);
                 {
                     return child1.size();
                 }
 
-            }
-            else {
+            } else {
                 return 0;
             }
 
         }
 
 
-       return 0;
+        return 0;
 
     }
 
     @Override
     public Object getGroup(int groupPosition) {
 
-        return  this.chefOrderDetailsDTOs.get(groupPosition);
+        return this.chefOrderDetailsDTOs.get(groupPosition);
 
     }
 
@@ -119,43 +116,36 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
     @Override
     public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, ViewGroup parent) {
         final ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
-        if(convertView ==null)
-        {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.chef_main_table_order,null);
+            convertView = inflater.inflate(R.layout.chef_main_table_order, null);
             groupHolder = new GroupHolder();
-            groupHolder.groupTextView = (TextView)convertView.findViewById(R.id.orderFromTableNo);
-            groupHolder.getGroupTableNo = (TextView)convertView.findViewById(R.id.orderTakenBy);
-            groupHolder.orderDoneBtn = (Button)convertView.findViewById(R.id.OrderDoneChef);
-            groupHolder.getGroupOrderNo = (TextView)convertView.findViewById(R.id.cheforderNo);
-            groupHolder.imgIndicator = (ImageView)convertView.findViewById(R.id.chefOrderDonIcon);
-            groupHolder.placedOrderTime = (TextView)convertView.findViewById(R.id.orderTime);
+            groupHolder.groupTextView = (TextView) convertView.findViewById(R.id.orderFromTableNo);
+            groupHolder.getGroupTableNo = (TextView) convertView.findViewById(R.id.orderTakenBy);
+            groupHolder.orderDoneBtn = (Button) convertView.findViewById(R.id.OrderDoneChef);
+            groupHolder.getGroupOrderNo = (TextView) convertView.findViewById(R.id.cheforderNo);
+            groupHolder.imgIndicator = (ImageView) convertView.findViewById(R.id.chefOrderDonIcon);
+            groupHolder.placedOrderTime = (TextView) convertView.findViewById(R.id.orderTime);
 
             convertView.setTag(groupHolder);
-        }
-        else
-        {
+        } else {
 
-            groupHolder = (GroupHolder)convertView.getTag();
+            groupHolder = (GroupHolder) convertView.getTag();
         }
-        if(chefOrderDetailsDTO.getmNewOrderStatus() == 1)
-        {
+        if (chefOrderDetailsDTO.getmNewOrderStatus() == 1) {
             groupHolder.orderDoneBtn.setVisibility(View.VISIBLE);
             groupHolder.imgIndicator.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             groupHolder.orderDoneBtn.setVisibility(View.GONE);
             groupHolder.imgIndicator.setVisibility(View.VISIBLE);
         }
 
         String str = chefOrderDetailsDTO.TimeDiff();
-         groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.TimeDiff()+" ago");
-       // groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.getOrderTm());
-        groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
+        groupHolder.placedOrderTime.setText("" + chefOrderDetailsDTO.TimeDiff() + " ago");
+        // groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.getOrderTm());
+        groupHolder.getGroupTableNo.setText("" + chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
-        groupHolder.getGroupOrderNo.setText(""+chefOrderDetailsDTO.getmOrderNumner());
-
+        groupHolder.getGroupOrderNo.setText("" + chefOrderDetailsDTO.getmOrderNumner());
 
 
         groupHolder.orderDoneBtn.setOnClickListener(new View.OnClickListener() {
@@ -163,18 +153,15 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
             public void onClick(View v) {
                 if (onDoneClickListener != null) {
                     onDoneClickListener.onDonClick(chefOrderDetailsDTO.getmNewOrderId());
-                    if(isExpanded)
-                    {
+                    if (isExpanded) {
                         onGroupCollapsed(groupPosition);
-                      //  notifyDataSetChanged();
+                        //  notifyDataSetChanged();
 
-                       // chefOrderDetailsDTOs.remove(groupPosition);
-                    }
-                    else
-                    {
-                      //  notifyDataSetChanged();
+                        // chefOrderDetailsDTOs.remove(groupPosition);
+                    } else {
+                        //  notifyDataSetChanged();
 //                        if(NetworkUtils.isActiveNetworkAvailable(context))
-                      //  chefOrderDetailsDTOs.remove(groupPosition);
+                        //  chefOrderDetailsDTOs.remove(groupPosition);
 
 
                     }
@@ -191,32 +178,29 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChefMenuDetailsDTO chefMenuDetailsDTO = child.get(childPosition);
-        if(convertView == null)
-        {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.chef_main_row_order,null);
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.chef_main_row_order, null);
             childHolder = new ChildHolder();
-            childHolder.childTextView = (TextView)convertView.findViewById(R.id.chefMenuName);
-            childHolder.childQty = (TextView)convertView.findViewById(R.id.chefQty);
-            childHolder.menuNo = (TextView)convertView.findViewById(R.id.chefMenuNo);
-            childHolder.childMenuNote = (TextView)convertView.findViewById(R.id.chefMenuComment);
-            childHolder.childQtText = (TextView)convertView.findViewById(R.id.cQty);
+            childHolder.childTextView = (TextView) convertView.findViewById(R.id.chefMenuName);
+            childHolder.childQty = (TextView) convertView.findViewById(R.id.chefQty);
+            childHolder.menuNo = (TextView) convertView.findViewById(R.id.chefMenuNo);
+            childHolder.childMenuNote = (TextView) convertView.findViewById(R.id.chefMenuComment);
+            childHolder.childQtText = (TextView) convertView.findViewById(R.id.cQty);
 
             convertView.setTag(childHolder);
-        }
-        else
-        {
-            childHolder = (ChildHolder)convertView.getTag();
+        } else {
+            childHolder = (ChildHolder) convertView.getTag();
         }
 
-        childHolder.childTextView.setText(""+chefMenuDetailsDTO.getmChefMenuTitle());
-        childHolder.childQty.setText(""+chefMenuDetailsDTO.getmChefQty());
+        childHolder.childTextView.setText("" + chefMenuDetailsDTO.getmChefMenuTitle());
+        childHolder.childQty.setText("" + chefMenuDetailsDTO.getmChefQty());
         childHolder.menuNo.setText("" + (childPosition + 1));
-        if(chefMenuDetailsDTO.getmMenuNote()== null)
+        /*if(chefMenuDetailsDTO.getmMenuNote()== null)
         childHolder.childMenuNote.setVisibility(View.GONE);
-        else
-            childHolder.childMenuNote.setText("" + chefMenuDetailsDTO.getmMenuNote());
-        Toast.makeText(context,""+chefMenuDetailsDTO.getmMenuNote(),Toast.LENGTH_SHORT);
+        else*/
+        childHolder.childMenuNote.setText(chefMenuDetailsDTO.getmMenuNote());
+        Toast.makeText(context, "" + chefMenuDetailsDTO.getmMenuNote(), Toast.LENGTH_SHORT);
 
         return convertView;
     }
@@ -229,19 +213,17 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
     @Override
     public void onGroupExpanded(int groupPosition) {
 
-        int currentPosition  =-1;
-        if(currentPosition !=-1 &&currentPosition != groupPosition )
-        {
+        int currentPosition = -1;
+        if (currentPosition != -1 && currentPosition != groupPosition) {
 
             onGroupCollapsed(groupPosition);
             notifyDataSetChanged();
 
-        }
-        else {
+        } else {
 
-          //  currentPosition = groupPosition;
+            //  currentPosition = groupPosition;
             ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(groupPosition);
-            String selectedOrderId = String.valueOf(chefOrderDetailsDTO.getmNewOrderId());
+            String selectedOrderId = chefOrderDetailsDTO.getmNewOrderId();
             child.clear();
             child = mDbRepository.getChefMenu(selectedOrderId);
             expHashMap.put(groupPosition, child);
@@ -262,9 +244,7 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
     }
 
 
-
-    public final class GroupHolder
-    {
+    public final class GroupHolder {
         TextView groupTextView;
         TextView getGroupTableNo;
         Button orderDoneBtn;
@@ -273,8 +253,8 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
         TextView placedOrderTime;
 
     }
-    public final class ChildHolder
-    {
+
+    public final class ChildHolder {
         TextView childTextView;
         TextView childQty;
         TextView menuNo;
@@ -283,18 +263,16 @@ public  class  ChefOrderAdapter extends BaseExpandableListAdapter  {
     }
 
 
-    public interface OnDoneClickListener
-    {
+    public interface OnDoneClickListener {
         public void onDonClick(String ChefOrderId);
     }
-    public void setOnDoneClickListener(OnDoneClickListener listener)
-    {
-       this.onDoneClickListener=listener;
+
+    public void setOnDoneClickListener(OnDoneClickListener listener) {
+        this.onDoneClickListener = listener;
     }
-    public void refresh(int status)
-    {
-        if(this.chefOrderDetailsDTOs != null)
-        {
+
+    public void refresh(int status) {
+        if (this.chefOrderDetailsDTOs != null) {
             this.chefOrderDetailsDTOs.clear();
         }
 

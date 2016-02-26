@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context=".activities.LoginActivity">
 
     <!-- Login progress -->
@@ -143,7 +143,25 @@
                     android:text="@string/action_chef_sign_in" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:background="@color/black_overlay">
 
+                <TextView
+                    android:id="@+id/loginversionId"
+                    android:text="@string/version_no"
+                    android:textColor="@color/White"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingRight="2dp"
+                    android:layout_marginBottom="4dp" />
+
+                </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

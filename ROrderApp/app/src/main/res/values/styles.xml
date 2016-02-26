@@ -156,4 +156,10 @@
     <style name="table_me_text">
         <item name="android:textColor">@color/red</item>
     </style>
+    <style name="about_us_info">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:textStyle">normal</item>
+
+
+    </style>
 </resources>

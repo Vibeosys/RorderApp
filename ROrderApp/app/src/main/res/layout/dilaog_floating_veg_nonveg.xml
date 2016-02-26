@@ -16,12 +16,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/White"
             android:gravity="center"
             android:padding="2dp"
             android:text="@string/str_reset"
-            android:textColor="@color/black_color"
-            android:textSize="13sp" />
+            android:textColor="@color/White"
+            android:textSize="18sp" />
 
 
         <ImageButton
@@ -43,12 +42,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/White"
+
             android:gravity="center"
             android:padding="2dp"
             android:text="@string/str_non_veg"
-            android:textColor="@color/black_color"
-            android:textSize="13sp" />
+            android:textColor="@color/White"
+            android:textSize="18sp" />
 
 
         <ImageButton
@@ -70,12 +69,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/White"
             android:gravity="center"
             android:padding="2dp"
             android:text="@string/veg"
-            android:textColor="@color/black_color"
-            android:textSize="13sp" />
+            android:textColor="@color/White"
+            android:textSize="18sp" />
 
         <ImageButton
             android:id="@+id/btnVeg"
@@ -98,12 +96,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/White"
             android:gravity="center"
             android:padding="2dp"
             android:text="@string/Payment_close"
-            android:textColor="@color/black_color"
-            android:textSize="13sp" />
+            android:textColor="@color/White"
+            android:textSize="18sp" />
 
         <ImageButton
             android:id="@+id/btnClose"

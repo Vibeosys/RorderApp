@@ -33,6 +33,7 @@ import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.util.NetworkUtils;
+import com.vibeosys.rorderapp.util.PropertyFileReader;
 import com.vibeosys.rorderapp.util.UserAuth;
 import com.vibeosys.rorderapp.util.CustomVolleyRequestQueue;
 
@@ -71,6 +72,8 @@ public class LoginActivity extends BaseActivity {
     private String mImgUrl;
     private ImageLoader mRestaurantImg;
     NetworkImageView networkImageView;
+    private TextView mversionNo;
+    private PropertyFileReader mpropertyFileReader;
 
     @Override
     protected String getScreenName() {
@@ -83,6 +86,10 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mUserNameView = (EditText) findViewById(R.id.email);
+        mversionNo = (TextView)findViewById(R.id.loginversionId);
+        mpropertyFileReader = new PropertyFileReader();
+        float demo = mpropertyFileReader.getVersion();
+        mversionNo.append(""+demo);
         if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);

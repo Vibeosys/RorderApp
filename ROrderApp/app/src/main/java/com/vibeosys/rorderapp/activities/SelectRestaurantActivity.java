@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.vibeosys.rorderapp.adaptors.RestaurantListAdapter;
 import com.vibeosys.rorderapp.data.RestaurantDbDTO;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
 import com.vibeosys.rorderapp.util.NetworkUtils;
+import com.vibeosys.rorderapp.util.PropertyFileReader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +53,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     private TextView mTxtRestaurant;
     private int mSelectedRestoId;
     private String mSelectedRestaurantName;
+    private PropertyFileReader mpropertyFileReader;
 
     @Override
     protected String getScreenName() {
@@ -63,6 +66,12 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk = (Button) findViewById(R.id.btnOk);
         TextView aboutUs = (TextView) findViewById(R.id.about_us);
+        TextView companyInfo = (TextView)findViewById(R.id.abt_Us_info);
+        companyInfo.setText(Html.fromHtml(getResources().getString(R.string.company_info)));
+        TextView versionNo = (TextView)findViewById(R.id.versionId);
+        mpropertyFileReader = new PropertyFileReader();
+        float demo = mpropertyFileReader.getVersion();
+        versionNo.append(""+demo);
         if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
