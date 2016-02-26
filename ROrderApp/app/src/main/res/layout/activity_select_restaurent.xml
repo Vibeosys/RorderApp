@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/restaurent1"
     android:gravity="top|center"
     android:orientation="vertical"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
     android:weightSum="1">
 
 
@@ -26,6 +23,8 @@
         android:id="@+id/txtRestaurantId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="80dp"
         android:hint="@string/hint_restaurant_id"
         android:inputType="number"
@@ -44,59 +43,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRestaurantId"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/button_custom"
         android:text="@string/btn_proceed"
         android:textColor="@color/White" />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentBottom="true"
-    android:gravity="bottom|center"
-    android:orientation="vertical">
-
-
-
-
-    <TextView
-        android:id="@+id/abt_Us_info"
-        style="@style/about_us_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/versionId"
-        android:layout_marginTop="4dp"
-        android:text="" />
-
-
-    <TextView
-        android:id="@+id/about_us"
-        android:layout_centerHorizontal="true"
-        style="@style/about_us_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:layout_above="@+id/versionId"
-        android:text="@string/about_us" />
-    <TextView
-        android:id="@+id/versionId"
-        android:text="@string/version_no"
-        style="?metaButtonBarButtonStyle"
-        android:textColor="@color/White"
-        android:background="@color/black_overlay"
-        android:layout_centerHorizontal="true"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:gravity="center"
-        android:layout_marginBottom="4dp"
-        android:layout_alignParentBottom="true" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom|center"
+        android:orientation="vertical">
 
 
+        <TextView
+            android:id="@+id/abt_Us_info"
+            style="@style/about_us_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/versionId"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="4dp"
+            android:text="abcd" />
 
 
+        <TextView
+            android:id="@+id/about_us"
+            style="@style/about_us_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/versionId"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:padding="6dp"
+            android:text="@string/about_us" />
 
-
+        <TextView
+            android:id="@+id/versionId"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/black_overlay"
+            android:gravity="center|center_vertical"
+            android:text="@string/version_no"
+            android:textColor="@color/White" />
+    </LinearLayout>
 
 
 </LinearLayout>

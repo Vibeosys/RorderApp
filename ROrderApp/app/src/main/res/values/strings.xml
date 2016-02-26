@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ROrderApp</string>
+    <string name="app_name">QuickServe</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -118,8 +118,8 @@
     <string name="str_non_veg">Non Veg Only</string>
     <string name="veg">Veg Only</string>
     <string name="company_info">
-       <![CDATA[ <p> <b>QuickServe&trade;</b>is product of Vibeosys Software Pvt.Ltd.For business inquiry
-        please contact  <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a></p> ]]>
+       <![CDATA[  <b>QuickServe&trade;</b>is product of Vibeosys Software Pvt.Ltd.For business inquiry
+        please contact  <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a> ]]>
         </string>
     <string name="version_no">QuickServe V.</string>>
 </resources>
