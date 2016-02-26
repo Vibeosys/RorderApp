@@ -62,11 +62,12 @@ public class TableCategoryDTO {
         }
         return sortedTable;
     }
-    public ArrayList<RestaurantTables> filterTable(ArrayList<RestaurantTables> hotelTables, int categoryId,boolean unOccupied) {
+
+    public ArrayList<RestaurantTables> filterTable(ArrayList<RestaurantTables> hotelTables, int categoryId, boolean unOccupied) {
         ArrayList<RestaurantTables> sortedTable = new ArrayList<>();
         for (RestaurantTables table : hotelTables) {
 
-            if(table.ismIsOccupied()!=unOccupied){
+            if (table.ismIsOccupied() != unOccupied) {
                 if (table.getmTableCategoryId() == categoryId) {
                     sortedTable.add(table);
                     Log.i(TAG, "" + table.toString());
@@ -76,16 +77,28 @@ public class TableCategoryDTO {
         }
         return sortedTable;
     }
-    public ArrayList<RestaurantTables> filterTable(ArrayList<RestaurantTables> hotelTables,boolean unOccupied) {
+
+    public ArrayList<RestaurantTables> filterTable(ArrayList<RestaurantTables> hotelTables, boolean unOccupied) {
         ArrayList<RestaurantTables> sortedTable = new ArrayList<>();
         for (RestaurantTables table : hotelTables) {
 
-            if(table.ismIsOccupied()!=unOccupied) {
+            if (table.ismIsOccupied() != unOccupied) {
                 sortedTable.add(table);
                 Log.i(TAG, "" + table.toString());
             }
 
         }
         return sortedTable;
+    }
+
+    @Override
+    public String toString() {
+        return "TableCategoryDTO{" +
+                "TAG='" + TAG + '\'' +
+                ", mCategoryId=" + mCategoryId +
+                ", mTitle='" + mTitle + '\'' +
+                ", mImage='" + mImage + '\'' +
+                ", mSelected=" + mSelected +
+                '}';
     }
 }

@@ -35,6 +35,7 @@ public class TableCategoryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        Log.d(TAG, "" + mTablecategories.size());
         if (mTablecategories != null) return mTablecategories.size();
         else return 0;
     }
@@ -75,13 +76,13 @@ public class TableCategoryAdapter extends BaseAdapter {
         if (url != null && !url.isEmpty()) {
             try {
                 mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.icon,
-                        R.drawable.table_default, R.drawable.table_default));
+                        R.drawable.default_table, R.drawable.default_table));
                 viewHolder.icon.setImageUrl(url, mImageLoader);
             } catch (Exception e) {
-                viewHolder.icon.setImageResource(R.drawable.table_default);
+                viewHolder.icon.setImageResource(R.drawable.default_table);
             }
         } else {
-            viewHolder.icon.setImageResource(R.drawable.table_default);
+            viewHolder.icon.setImageResource(R.drawable.default_table);
         }
 
 

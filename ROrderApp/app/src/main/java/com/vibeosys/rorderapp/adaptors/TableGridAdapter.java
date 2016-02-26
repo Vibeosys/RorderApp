@@ -149,6 +149,8 @@ public class TableGridAdapter extends BaseAdapter {
             viewHolder.imgUserLogo.setVisibility(View.VISIBLE);
         } else {
             viewHolder.txtUserName.setText("");
+            viewHolder.txtUserName.setBackgroundColor(mContext.getResources().getColor(R.color.white_color));
+            viewHolder.txtUserName.setTextColor(mContext.getResources().getColor(R.color.custom_text_inactive));
             viewHolder.imgUserLogo.setVisibility(View.INVISIBLE);
         }
 

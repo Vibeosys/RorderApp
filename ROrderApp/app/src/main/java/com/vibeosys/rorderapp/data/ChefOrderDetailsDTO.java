@@ -171,7 +171,8 @@ public class ChefOrderDetailsDTO {
             str += timeDiffInHrs + " hrs ";
         if (timeDiffInMins > 0)
             str += timeDiffInMins + " mins";
-
+        else
+            str = "1 minute";
         return str;
     }
 

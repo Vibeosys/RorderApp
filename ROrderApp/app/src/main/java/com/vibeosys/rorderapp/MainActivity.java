@@ -624,6 +624,7 @@ public class MainActivity extends BaseActivity
                                 mServerSyncManager.uploadDataToServer(tableDataDTOs);
                                 dialog.dismiss();
                                 dlg.dismiss();
+                                adapter.refresh(mDbRepository.getTableRecords(""));
                             }
 
                         }

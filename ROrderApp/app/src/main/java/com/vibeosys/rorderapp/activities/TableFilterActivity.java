@@ -173,7 +173,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
         super.onBackPressed();
     }
 
-    public int getPosition() {
+   /* public int getPosition() {
         int position = 0;
         for (int i = 0; i < mAllTableCategory.size(); i++) {
             TableCategoryDTO table = mAllTableCategory.get(i);
@@ -182,5 +182,5 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
             break;
         }
         return position;
-    }
+    }*/
 }

@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:padding="6dp"
                 android:text="@string/skip_btn"
                 android:textColor="@color/White"
                 android:textSize="12sp" />
@@ -48,7 +49,7 @@
         <ListView
             android:id="@+id/listFeedback"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="320dp"
             android:layout_weight="1"
             android:background="@color/feedback_blue" />
 
@@ -56,7 +57,6 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <TextView

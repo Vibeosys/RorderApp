@@ -77,7 +77,7 @@
     <string name="Ok">Ok</string>
     <string name="feed_back_btn">Thank You</string>
     <string name="alert_dialog">Warning</string>
-    <string name="feedback_activity_name">Give Feedback</string>
+    <string name="feedback_activity_name">Help us with your Feedback</string>
     <string name="btn_proceed">Proceed</string>
     <string name="about_us"><u>About us</u></string>
     <string name="place_orders">Place Order</string>
@@ -121,5 +121,5 @@
        <![CDATA[ <p> <b>QuickServe&trade;</b>is product of Vibeosys Software Pvt.Ltd.For business inquiry
         please contact  <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a></p> ]]>
         </string>
-    <string name="version_no">QickServe V.</string>>
+    <string name="version_no">QuickServe V.</string>>
 </resources>
