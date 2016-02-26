@@ -31,6 +31,11 @@ public class BillDetailsActivity extends BaseActivity {
     private String custId;
 
     @Override
+    protected String getScreenName() {
+        return "Bill Details";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.total_amount_payment);
@@ -96,4 +101,5 @@ public class BillDetailsActivity extends BaseActivity {
 
 
     }
+
 }

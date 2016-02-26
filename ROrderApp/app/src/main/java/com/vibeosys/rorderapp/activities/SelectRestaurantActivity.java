@@ -53,16 +53,20 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     private String mSelectedRestaurantName;
 
     @Override
+    protected String getScreenName() {
+        return "Restaurant registration";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk = (Button) findViewById(R.id.btnOk);
         TextView aboutUs = (TextView) findViewById(R.id.about_us);
-        if(!NetworkUtils.isActiveNetworkAvailable(this))
-        {
-            String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
-            String stringMessage =getResources().getString(R.string.error_msg_for_select_restaurant);
-            customAlterDialog(stringTitle,stringMessage);
+        if (!NetworkUtils.isActiveNetworkAvailable(this)) {
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle, stringMessage);
         }
         mSessionManager.setImei(getImei());
         //listResto=(ListView)findViewById(R.id.listView);
@@ -277,11 +281,10 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
 
     @Override
     protected void onResume() {
-        if(!NetworkUtils.isActiveNetworkAvailable(this))
-        {
-            String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
-            String stringMessage =getResources().getString(R.string.error_msg_for_select_restaurant);
-            customAlterDialog(stringTitle,stringMessage);
+        if (!NetworkUtils.isActiveNetworkAvailable(this)) {
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle, stringMessage);
         }
         super.onResume();
 

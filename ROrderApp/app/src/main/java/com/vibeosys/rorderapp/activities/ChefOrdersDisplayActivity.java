@@ -48,20 +48,24 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
     TabLayout tab_layout;
 
     @Override
+    protected String getScreenName() {
+        return "Chef Dashboard";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chef_main_screen);
         getSupportActionBar();
         setTitle("Chef dashboard");
 
-        Intent i = new Intent(Intent.ACTION_SYNC,null,this,SyncService.class);
+        Intent i = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
         startService(i);
 
-        if(!NetworkUtils.isActiveNetworkAvailable(this))
-        {
-            String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
-            String stringMessage=getResources().getString(R.string.error_msg_for_select_restaurant);
-            customAlterDialog(stringTitle,stringMessage);
+        if (!NetworkUtils.isActiveNetworkAvailable(this)) {
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle, stringMessage);
 
 
         }
@@ -116,8 +120,7 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
 
         int id = item.getItemId();
 
-        if(id == R.id.signoutChef)
-        {
+        if (id == R.id.signoutChef) {
 
             UserAuth.CleanAuthenticationInfo();
             chefCallLogin();
@@ -125,6 +128,7 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void chefCallLogin() {
         Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -133,18 +137,15 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void onResume() {
-
-        if(!NetworkUtils.isActiveNetworkAvailable(this))
-        {
-            String stringTitle =getResources().getString(R.string.error_msg_title_for_network);
-            String stringMessage=getResources().getString(R.string.error_msg_for_select_restaurant);
-            customAlterDialog(stringTitle,stringMessage);
+        super.onResume();
+        if (!NetworkUtils.isActiveNetworkAvailable(this)) {
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle, stringMessage);
 
 
         }
-        super.onResume();
     }
 }

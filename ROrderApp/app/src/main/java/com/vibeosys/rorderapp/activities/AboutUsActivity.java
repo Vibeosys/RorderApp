@@ -11,6 +11,7 @@ import com.vibeosys.rorderapp.R;
  */
 public class AboutUsActivity extends BaseActivity {
     TextView abtTxt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,5 +20,10 @@ public class AboutUsActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.about_us));
         abtTxt.setText(Html.fromHtml(getResources().getString(R.string.about_us_content)));
 
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "About Us";
     }
 }

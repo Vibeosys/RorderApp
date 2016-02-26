@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_id": "quickserveapp",
+    "project_number": "387147069386",
+    "name": "QuickServeApp"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387147069386:android:0f13ae98b854a82c",
+        "client_id": "android:com.vibeosys.rorderapp",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.vibeosys.rorderapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-71829158-2"
+          }
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

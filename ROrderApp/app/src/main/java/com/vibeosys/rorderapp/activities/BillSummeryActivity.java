@@ -26,6 +26,11 @@ public class BillSummeryActivity extends BaseActivity {
     private String mCustId;
 
     @Override
+    protected String getScreenName() {
+        return "Bill Summary";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_summary);

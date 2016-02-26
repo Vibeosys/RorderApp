@@ -68,6 +68,11 @@ public class TableMenusActivity extends BaseActivity implements
     private int mCount = 0;
     private final Context mContext = this;
 
+    @Override
+    protected String getScreenName() {
+        return "Tables";
+    }
+
     //List<OrderMenuDTO> sortingMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -339,8 +344,8 @@ public class TableMenusActivity extends BaseActivity implements
         if (pendingOrder > 0 || tempOrder == 0) {
             //showAlertDiaog();
             String stringTitle = getResources().getString(R.string.alert_dialog);
-            String strMessage =getResources().getString(R.string.order_is_pending_to_serve);
-            customAlterDialog(stringTitle ,strMessage);
+            String strMessage = getResources().getString(R.string.order_is_pending_to_serve);
+            customAlterDialog(stringTitle, strMessage);
         } else {
             UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
             Gson gson = new Gson();

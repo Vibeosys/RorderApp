@@ -22,12 +22,17 @@ import java.util.ArrayList;
 /**
  * Created by shrinivas on 03-02-2016.
  */
-public class TableFilterActivity  extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener{
+public class TableFilterActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private TableCategoryAdapter mTableCategoryAdapter;
     private ArrayList<TableCategoryDTO> mAllTableCategory;
     private int mSelectedCategory;
-    private boolean mBtnFlag =false , chkMyservingFlag =false ,chkUnoccupied =false ;
+    private boolean mBtnFlag = false, chkMyservingFlag = false, chkUnoccupied = false;
+
+    @Override
+    protected String getScreenName() {
+        return "Filter Tables";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +47,23 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
         Log.d(TAG, "##" + jsonString);
         setTitle("Filter Tables");
 
-        TextView txtCancel=(TextView)findViewById(R.id.txtCancel);
-        TextView txtApply=(TextView)findViewById(R.id.txtApply);
+        TextView txtCancel = (TextView) findViewById(R.id.txtCancel);
+        TextView txtApply = (TextView) findViewById(R.id.txtApply);
 
         mAllTableCategory = mDbRepository.getTableCategories();
-       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mTableCategoryAdapter = new TableCategoryAdapter(mAllTableCategory,getApplicationContext());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mTableCategoryAdapter = new TableCategoryAdapter(mAllTableCategory, getApplicationContext());
         filterTableList.setAdapter(mTableCategoryAdapter);
-        if(jsonString=="null"||jsonString.isEmpty())
-        {
+        if (jsonString == "null" || jsonString.isEmpty()) {
 
-        }
-        else {
+        } else {
             JSONObject json;
             try {
-                json =new JSONObject(jsonString);
-                mBtnFlag=json.getBoolean("btnFlag");
-                chkMyservingFlag=json.getBoolean("chkMyservingFlag");
-                chkUnoccupied=json.getBoolean("chkUnoccupied");
-                mSelectedCategory =json.getInt("Category");
+                json = new JSONObject(jsonString);
+                mBtnFlag = json.getBoolean("btnFlag");
+                chkMyservingFlag = json.getBoolean("chkMyservingFlag");
+                chkUnoccupied = json.getBoolean("chkUnoccupied");
+                mSelectedCategory = json.getInt("Category");
                 changeUi();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -70,7 +73,6 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
         mTableCategoryAdapter.notifyDataSetChanged();
         myServingChk.setChecked(chkMyservingFlag);
         unOccupyChk.setChecked(chkUnoccupied);
-
 
 
         txtApply.setOnClickListener(this);
@@ -115,33 +117,31 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        int id=v.getId();
+        int id = v.getId();
 
-        if(id==R.id.txtApply)
-        {
-             JSONObject jsonObject = new JSONObject();
+        if (id == R.id.txtApply) {
+            JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("Category", mSelectedCategory);
                 jsonObject.put("chkMyservingFlag", chkMyservingFlag);
-                jsonObject.put("chkUnoccupied",chkUnoccupied);
-                jsonObject.put("btnFlag",true);
+                jsonObject.put("chkUnoccupied", chkUnoccupied);
+                jsonObject.put("btnFlag", true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Intent intent=new Intent();
-            intent.putExtra("json",jsonObject.toString());//json data added here
-            setResult(2,intent);
+            Intent intent = new Intent();
+            intent.putExtra("json", jsonObject.toString());//json data added here
+            setResult(2, intent);
             finish();
         }
-        if(id == R.id.txtCancel)
-        {
+        if (id == R.id.txtCancel) {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("Category", -1);
                 jsonObject.put("chkMyservingFlag", false);
-                jsonObject.put("chkUnoccupied",false);
-                jsonObject.put("btnFlag",false);
-                Intent intent=new Intent();
+                jsonObject.put("chkUnoccupied", false);
+                jsonObject.put("btnFlag", false);
+                Intent intent = new Intent();
                 intent.putExtra("json", jsonObject.toString());//json data added here
                 setResult(2, intent);
                 finish();
@@ -152,21 +152,17 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
     }
 
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TableCategoryDTO categoryDTO= (TableCategoryDTO) mTableCategoryAdapter.getItem(position);
+        TableCategoryDTO categoryDTO = (TableCategoryDTO) mTableCategoryAdapter.getItem(position);
         //categoryDTO.setSelected(!categoryDTO.isSelected());
-        if(!categoryDTO.isSelected())
-        {
-            mSelectedCategory =categoryDTO.getmCategoryId();
+        if (!categoryDTO.isSelected()) {
+            mSelectedCategory = categoryDTO.getmCategoryId();
             mTableCategoryAdapter.setItemChecked(mSelectedCategory);
             mTableCategoryAdapter.notifyDataSetChanged();
-        }
-        else
-        {
+        } else {
             mTableCategoryAdapter.setItemChecked(mSelectedCategory);
-            mSelectedCategory =0;
+            mSelectedCategory = 0;
             mTableCategoryAdapter.notifyDataSetChanged();
         }
         Log.d(TAG, "## " + mSelectedCategory);
@@ -177,14 +173,12 @@ public class TableFilterActivity  extends BaseActivity implements View.OnClickLi
         super.onBackPressed();
     }
 
-    public int getPosition()
-    {
-        int position=0;
-        for (int i=0;i< mAllTableCategory.size();i++)
-        {
-            TableCategoryDTO table= mAllTableCategory.get(i);
-            if(mSelectedCategory ==table.getmCategoryId())
-                position= i;
+    public int getPosition() {
+        int position = 0;
+        for (int i = 0; i < mAllTableCategory.size(); i++) {
+            TableCategoryDTO table = mAllTableCategory.get(i);
+            if (mSelectedCategory == table.getmCategoryId())
+                position = i;
             break;
         }
         return position;

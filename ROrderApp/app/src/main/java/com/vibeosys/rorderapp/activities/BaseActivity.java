@@ -2,6 +2,7 @@ package com.vibeosys.rorderapp.activities;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,8 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.database.DbRepository;
+import com.vibeosys.rorderapp.util.AnalyticsApplication;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 import com.vibeosys.rorderapp.util.SessionManager;
@@ -42,6 +46,11 @@ import java.net.URL;
 import java.util.Map;
 import java.util.UUID;
 
+import android.app.Application;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 /**
  * Base Activity will give the basic implementation with async task support and other things
  */
@@ -53,6 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected DbRepository mDbRepository = null;
     protected static SessionManager mSessionManager = null;
     protected final static String TAG = "com.vibeosys.rorderapp";
+    protected Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +71,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         mSessionManager = SessionManager.getInstance(getApplicationContext());
         mServerSyncManager = new ServerSyncManager(getApplicationContext(), mSessionManager);
         mDbRepository = new DbRepository(getApplicationContext(), mSessionManager);
+
+        // Google analytics tracker
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
 
@@ -116,6 +130,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         task.execute();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hitActivity();
+    }
 
     //@Override
     public void onUploadComplete(String uploadJsonResponse, Map<String, String> inputParameters) {
@@ -149,10 +168,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
                 }).create().show();
     }
-    protected  void customAlterDialog(String title,String message)
-    {
-       AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(""+title);
+
+    protected void customAlterDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("" + title);
         builder.setIcon(R.drawable.ic_action_warning_yellow);
         builder.setMessage(message);
         builder.setCancelable(false);
@@ -166,6 +185,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     }
+
     protected String getImei() {
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();
@@ -196,4 +216,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
+    protected void hitActivity() {
+        String screenName = getScreenName();
+        Log.i(TAG, "Setting screen name: " + screenName);
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    protected abstract String getScreenName();
+
 }

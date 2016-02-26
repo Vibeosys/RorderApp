@@ -59,6 +59,11 @@ public class TableOrderActivity extends BaseActivity implements
     private int mOrderFlag;
 
     @Override
+    protected String getScreenName() {
+        return "Order ";
+    }
+    
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tableCommonInfo = getIntent().getParcelableExtra("tableCustInfo");

@@ -9,7 +9,12 @@ import com.vibeosys.rorderapp.R;
 /**
  * Created by shrinivas on 09-02-2016.
  */
-public class CustomerFeedBackActivity extends BaseActivity{
+public class CustomerFeedBackActivity extends BaseActivity {
+
+    @Override
+    protected String getScreenName() {
+        return "Customer Feedback";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,4 +22,5 @@ public class CustomerFeedBackActivity extends BaseActivity{
         setContentView(R.layout.select_customer_feedback);
 
     }
+
 }

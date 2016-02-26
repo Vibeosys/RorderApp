@@ -43,6 +43,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private Context mContext = this;
 
     @Override
+    protected String getScreenName() {
+        return "New Customer";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer);
@@ -67,6 +72,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             addUser();
         }
     }
+
 
     private void addUser() {
         boolean wrongCredential = false;

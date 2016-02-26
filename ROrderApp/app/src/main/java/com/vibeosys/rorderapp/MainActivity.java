@@ -33,6 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.activities.AboutUsActivity;
 import com.vibeosys.rorderapp.activities.AddCustomerActivity;
@@ -57,6 +59,7 @@ import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
 import com.vibeosys.rorderapp.service.SyncService;
+import com.vibeosys.rorderapp.util.AnalyticsApplication;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.UserAuth;
@@ -85,6 +88,7 @@ public class MainActivity extends BaseActivity
     static int selectedCategory = 0;
     static boolean btnCancelFlag = false, chkMyservingFlag = false, chkUnoccupied = false;
     EditText txtSearch;
+    // private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,9 @@ public class MainActivity extends BaseActivity
         ContextWrapper ctw = new ContextWrapper(getApplicationContext());
         File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
         File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
+
+      /*  AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();*/
 
         if (!dbFile.exists()) {
             Intent selectRestoIntent = new Intent(getApplicationContext(), SelectRestaurantActivity.class);
@@ -187,9 +194,16 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    protected String getScreenName() {
+        return "Tables";
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //adapter.refresh(mDbRepository.getTableRecords(""));
+
+        hitActivity();
     }
 
     @Override
@@ -262,6 +276,10 @@ public class MainActivity extends BaseActivity
             return true;
         }*/
         if (id == R.id.filter) {
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Action")
+                    .setAction("Filter").setValue(1)
+                    .build());
             Intent iFilter = new Intent(this, TableFilterActivity.class);
             JSONObject jsonObject = new JSONObject();
             try {

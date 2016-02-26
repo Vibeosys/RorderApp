@@ -73,16 +73,20 @@ public class LoginActivity extends BaseActivity {
     NetworkImageView networkImageView;
 
     @Override
+    protected String getScreenName() {
+        return "Login User";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mUserNameView = (EditText) findViewById(R.id.email);
-        if(!NetworkUtils.isActiveNetworkAvailable(this))
-        {
+        if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
-            customAlterDialog(stringTitle,stringMessage);
+            customAlterDialog(stringTitle, stringMessage);
         }
         //populateAutoComplete();
         mImgUrl = mDbRepository.getRestaurantUrl(mSessionManager.getUserRestaurantId());
@@ -383,11 +387,10 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        if(!NetworkUtils.isActiveNetworkAvailable(this))
-        {
+        if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
-            customAlterDialog(stringTitle,stringMessage);
+            customAlterDialog(stringTitle, stringMessage);
         }
         super.onResume();
     }

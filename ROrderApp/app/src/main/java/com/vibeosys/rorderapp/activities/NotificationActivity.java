@@ -19,6 +19,11 @@ public class NotificationActivity extends BaseActivity {
     public static ArrayList<NotificationOrderDTO> notifications = new ArrayList<>();
 
     @Override
+    protected String getScreenName() {
+        return "Waiter Notification";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstatnceState) {
         super.onCreate(savedInstatnceState);
         setContentView(R.layout.activity_notification);

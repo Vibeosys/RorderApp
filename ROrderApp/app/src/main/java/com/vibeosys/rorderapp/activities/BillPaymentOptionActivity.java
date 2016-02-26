@@ -46,6 +46,11 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
     private Context mContext = this;
 
     @Override
+    protected String getScreenName() {
+        return "Payment Modes";
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bill_details_payment_screen);
