@@ -62,7 +62,7 @@ public class TableOrderActivity extends BaseActivity implements
     protected String getScreenName() {
         return "Order ";
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,8 +148,8 @@ public class TableOrderActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-
-        if (item.getItemId() == R.id.placeOrder) {
+        int id = item.getItemId();
+        if (id == R.id.placeOrder) {
             //Toast.makeText(getApplicationContext(),"Button is clicke",Toast.LENGTH_LONG).show();
             /*Intent i = new Intent(this, BillDetailsActivity.class);
             startActivity(i);*/
@@ -168,7 +168,9 @@ public class TableOrderActivity extends BaseActivity implements
 
 
         }
-
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -234,6 +236,15 @@ public class TableOrderActivity extends BaseActivity implements
         }*/
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
+        iMenu.putExtra("tableCustInfo", tableCommonInfo);
+        startActivity(iMenu);
+        finish();
     }
 
     @Override

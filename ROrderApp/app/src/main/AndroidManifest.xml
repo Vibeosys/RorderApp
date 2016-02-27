@@ -12,12 +12,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".util.AnalyticsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".util.AnalyticsApplication">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -44,8 +44,8 @@
         <activity
             android:name=".activities.TableMenusActivity"
             android:label="@string/title_activity_table_menus"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.BillSummeryActivity"
@@ -60,8 +60,7 @@
         </activity>
         <activity
             android:name=".activities.TableOrderActivity"
-            android:label="@string/order_summary"
-            android:parentActivityName=".MainActivity"></activity>
+            android:label="@string/order_summary"></activity>
         <activity
             android:name=".activities.BillDetailsActivity"
             android:label="@string/bill_details"
@@ -78,9 +77,7 @@
             android:name=".activities.CustomerFeedBackActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
-        <activity
-            android:name=".activities.ChefOrdersDisplayActivity"
-            ></activity>
+        <activity android:name=".activities.ChefOrdersDisplayActivity"></activity>
         <activity
             android:name=".activities.FeedbackActivity"
             android:parentActivityName=".MainActivity"
