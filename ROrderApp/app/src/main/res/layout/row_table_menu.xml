@@ -110,7 +110,6 @@
                     android:id="@+id/imgFoodType"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:layout_margin="3dp"
                     android:layout_weight="1"
                     android:src="@drawable/veg_icon" />
 
@@ -118,14 +117,12 @@
                     android:id="@+id/imgSpicy"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_margin="3dp"
                     android:layout_weight="1"
                     android:src="@drawable/spicy_food" />
 
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginTop="3dp"
                     android:layout_weight="1"
                     android:src="@drawable/rupee_icon" />
 
@@ -133,7 +130,6 @@
                     android:id="@+id/txtMenuPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
                     android:layout_weight="2"
                     android:text="90"
                     android:textColor="@color/listview_item"
@@ -161,7 +157,6 @@
                     android:id="@+id/txtMenuQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
