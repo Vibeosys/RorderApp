@@ -8,12 +8,12 @@
             android:title="@string/nav_waiting_list" />
         <item
             android:id="@+id/nav_my_profile"
-            android:icon="@drawable/ic_action_mist"
+            android:icon="@drawable/ic_person"
             android:title="@string/nav_my_profile" />
 
         <item
             android:id="@+id/about_us"
-            android:icon="@drawable/ic_person"
+            android:icon="@drawable/ic_action_info"
             android:title="@string/nav_about_us" />
 
     </group>
@@ -22,7 +22,7 @@
         <menu>
             <item
                 android:id="@+id/nav_log_out"
-                android:icon="@drawable/ic_action_cancel"
+                android:icon="@drawable/ic_action_io"
                 android:title="@string/nav_log_out" />
         </menu>
     </item>
