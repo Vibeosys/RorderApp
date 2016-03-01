@@ -93,7 +93,7 @@ public class ServerSyncManager
         }
         String uploadJson = prepareUploadJsonFromData(params);
         String uploadURL = mSessionManager.getUploadUrl();
-        Log.i(TAG, "##" + uploadJson);
+       // Log.i(TAG, "##" + uploadJson);
         uploadJsonToServer(uploadJson, uploadURL, progress);
     }
 
@@ -158,7 +158,7 @@ public class ServerSyncManager
                     progress.dismiss();
                 if (mErrorReceived != null)
                     mErrorReceived.onStingErrorReceived(error);
-                Log.i(TAG, "##" + error.toString());
+               // Log.i(TAG, "##" + error.toString());
             }
         });
         uploadRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
@@ -293,7 +293,7 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.R_TABLES, jsonInsertList.size());
             dbOperations.addOrUpdateRTable(jsonInsertList, tableValue.getUpdateJsonList());
-            Log.d("TableDataDTO", "##" + DbTableNameConstants.R_TABLES);
+           // Log.d("TableDataDTO", "##" + DbTableNameConstants.R_TABLES);
         }
         if (theTableData.containsKey(DbTableNameConstants.TABLE_CATEGORY)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TABLE_CATEGORY);
@@ -306,7 +306,7 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.TABLE_TRANSACTION, jsonInsertList.size());
             dbOperations.addOrUpdateTableTransaction(jsonInsertList, tableValue.getUpdateJsonList(), tableValue.getDeleteJsonList());
-            Log.d("TableDataDTO", "##" + DbTableNameConstants.TABLE_TRANSACTION);
+           // Log.d("TableDataDTO", "##" + DbTableNameConstants.TABLE_TRANSACTION);
         }
         if (theTableData.containsKey(DbTableNameConstants.USER)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.USER);
