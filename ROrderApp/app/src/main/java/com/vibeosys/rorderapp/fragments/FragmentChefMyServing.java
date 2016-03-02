@@ -2,6 +2,7 @@ package com.vibeosys.rorderapp.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.DataSetObservable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,15 +10,22 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
+import com.vibeosys.rorderapp.adaptors.ChefRecyclerViewAdapter;
+import com.vibeosys.rorderapp.adaptors.ChefTabListAdapter;
 import com.vibeosys.rorderapp.data.ChefOrderCompleted;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
@@ -34,37 +42,88 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by shrinivas on 15-02-2016.
  */
 public class FragmentChefMyServing extends BaseFragment implements
-        ChefOrderAdapter.OnDoneClickListener,ServerSyncManager.OnStringResultReceived{
+        ChefOrderAdapter.OnDoneClickListener, ServerSyncManager.OnStringResultReceived {
 
     private ExpandableListView chefOrderList;
+    private ListView listView;
+    private ChefTabListAdapter chefTabListAdapter;
     public static ChefOrderAdapter chefOrderAdapter;
     public static Handler UIHandler;
-    private Context mContext =this.getContext();
-    private ArrayList<ChefOrderDetailsDTO> list  =new ArrayList<>();
+    private Context mContext = this.getContext();
+    private ArrayList<ChefOrderDetailsDTO> list = new ArrayList<>();
+
+    //private Context context=this;
     @Nullable
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int count =0;
-        View view = inflater.inflate(R.layout.chef_expandable_list,container,false);
+        int count = 0;
+
+        View view = inflater.inflate(R.layout.chef_expandable_list, container, false);
         count = mDbRepository.checkOrders();
+        list = mDbRepository.getOrderHeadesInAsc(1);
 //        Intent i = new Intent(Intent.ACTION_SYNC,null,this.getContext(),SyncService.class);
 //        getContext().startService(i);
 
 //        Intent chefServices = new Intent(this.getContext(),ChefService.class);
 //        getContext().startService(chefServices);
 
-        if(count == 0)
-        {
-           // Toast.makeText(getContext(),"No records to display",Toast.LENGTH_LONG).show();
-            String stringTitle ="No Records";
-            String stringMessage ="No Records Available to display";
-            customAlterDialog(stringTitle,stringMessage);
+
+        DisplayMetrics matrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(matrics);
+        int widthPixel = matrics.widthPixels;
+        int heightPixel = matrics.heightPixels;
+
+        float scaleFactor = matrics.density;
+
+
+        float widthDp = widthPixel / scaleFactor;
+        float heigthDp = heightPixel / scaleFactor;
+
+        float smallWidth = Math.min(widthDp, heigthDp);
+
+        if (widthDp >= 590 && heigthDp >= 400) {
+            Toast.makeText(getContext(), "finally you are at 6 inches", Toast.LENGTH_LONG).show();
+            View view1 = inflater.inflate(R.layout.chef_tab_layout, container, false);
+           /* listView = (ListView)view1.findViewById(R.id.listChef);
+            chefTabListAdapter = new ChefTabListAdapter(getActivity().getApplicationContext(),list);
+            listView.setAdapter(chefTabListAdapter);*/
+            ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
+            mDbRepository.addMenuList(orders);
+            RecyclerView chefRecycle = (RecyclerView) view1.findViewById(R.id.ChefRecycler);
+            ChefRecyclerViewAdapter adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext());
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL);
+            chefRecycle.setLayoutManager(layoutManager);
+            chefRecycle.setAdapter(adapterRecycle);
+
+            return view1;
+
+        }
+        if (widthDp <= 450 && widthDp < 590) {
+            Toast.makeText(getContext(), "finally you are at normall screen", Toast.LENGTH_LONG).show();
+        }
+
+        float widthDpi = matrics.xdpi;
+        float heightDpi = matrics.ydpi;
+        float widthInches = widthPixel / widthDpi;
+        float heightInches = heightPixel / heightDpi;
+
+        double diagonalInches = Math.sqrt(
+                (widthInches * widthInches)
+                        + (heightInches * heightInches));
+
+
+        if (count == 0) {
+            // Toast.makeText(getContext(),"No records to display",Toast.LENGTH_LONG).show();
+            String stringTitle = "No Records";
+            String stringMessage = "No Records Available to display";
+            customAlterDialog(stringTitle, stringMessage);
         }
 
         chefOrderList = (ExpandableListView) view.findViewById(R.id.expListViewForChef);
@@ -72,7 +131,7 @@ public class FragmentChefMyServing extends BaseFragment implements
         //ChefOrderDetailsDTO tiemDifference = list.get(0);
 
 
-        chefOrderAdapter = new ChefOrderAdapter(getActivity().getApplicationContext(),list,mDbRepository);
+        chefOrderAdapter = new ChefOrderAdapter(getActivity().getApplicationContext(), list, mDbRepository);
         chefOrderList.setAdapter(chefOrderAdapter);
 
         chefOrderAdapter.setOnDoneClickListener(this);
@@ -86,44 +145,35 @@ public class FragmentChefMyServing extends BaseFragment implements
     @Override
     public void onDonClick(String ChefOrderId) {
         //       Log.d(TAG,"## button click"+ChefOrderId);
-        if(!NetworkUtils.isActiveNetworkAvailable(getContext()))
-        {
-            String stringTitle ="Network error";
-            String stringMessage="No Internet connection is available.Please check internet connection.";
-            customAlterDialog(stringTitle,stringMessage);
+        if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
+            String stringTitle = "Network error";
+            String stringMessage = "No Internet connection is available.Please check internet connection.";
+            customAlterDialog(stringTitle, stringMessage);
 
-        }
-        else
-        {
+        } else {
             sendToServer(ChefOrderId);
             chefOrderList.invalidateViews();
         }
 
 
-
-
-
-
     }
-    public void sendToServer(String OrderId)
-    {
-        if(NetworkUtils.isActiveNetworkAvailable(getContext()))
-        {
+
+    public void sendToServer(String OrderId) {
+        if (NetworkUtils.isActiveNetworkAvailable(getContext())) {
             ChefOrderCompleted chefOrderCompleted = new ChefOrderCompleted(OrderId);
             Gson gson = new Gson();
             String serializedJsonString = gson.toJson(chefOrderCompleted);
-            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE,serializedJsonString);
+            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
             mServerSyncManager.syncDataWithServer(true);
             //  finish();
-        }else
-        {
+        } else {
             showMyDialog(mContext);
         }
 
 
-
     }
+
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
 
@@ -152,7 +202,6 @@ public class FragmentChefMyServing extends BaseFragment implements
     }
 
 
-
     static {
         UIHandler = new Handler(Looper.getMainLooper());
 
@@ -165,7 +214,6 @@ public class FragmentChefMyServing extends BaseFragment implements
 
 
     }
-
 
 
     @Override

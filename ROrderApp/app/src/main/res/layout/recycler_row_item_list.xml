@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:background="@color/White"
+    android:focusable="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginEnd="25dp"
+
+        android:layout_marginStart="25dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/chefMenuNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="5dp"
+            android:text=" "
+            android:textColor="@color/listview_item"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/recyclerChefMenuName"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:singleLine="false"
+            android:text="veg Manchurain"
+            android:textColor="@color/listview_item"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/commentForChef"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "
+            android:textColor="@color/listview_item" />
+
+        <TextView
+            android:id="@+id/recyclerChefQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingRight="2dp"
+            android:text="1 "
+            android:textColor="@color/listview_item"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/recyclerQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Qty"
+            android:textColor="@color/light_grey"
+            android:textSize="9sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp">
+
+       <!-- <TextView
+            android:id="@+id/recyclerChefMenuComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="5dp"
+            android:paddingStart="22dp"
+            android:text=""
+            android:textColor="@color/red"
+            android:textSize="5sp" />-->
+    </LinearLayout>
+</LinearLayout>
