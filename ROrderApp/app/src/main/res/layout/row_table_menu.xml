@@ -26,13 +26,12 @@
                 android:src="@drawable/veg" >
 
             </com.vibeosys.rorderapp.views.RoundedImageView>-->
-            <com.android.volley.toolbox.NetworkImageView
+            <com.vibeosys.rorderapp.views.NetworkRoundImageView
                 android:id="@+id/menuImageLoader"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/menu_list_image_back"
-                android:padding="8dp"
+                android:padding="3dp"
                 android:src="@drawable/menu_image_generic" />
 
             <LinearLayout

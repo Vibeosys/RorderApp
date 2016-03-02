@@ -36,6 +36,7 @@ import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.PropertyFileReader;
 import com.vibeosys.rorderapp.util.UserAuth;
 import com.vibeosys.rorderapp.util.CustomVolleyRequestQueue;
+import com.vibeosys.rorderapp.views.NetworkRoundImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class LoginActivity extends BaseActivity {
     private View mLoginFormView;
     private String mImgUrl;
     private ImageLoader mRestaurantImg;
-    NetworkImageView networkImageView;
+    private NetworkRoundImageView networkImageView;
     private TextView mversionNo;
     private PropertyFileReader mpropertyFileReader;
 
@@ -86,10 +87,10 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mUserNameView = (EditText) findViewById(R.id.email);
-        mversionNo = (TextView)findViewById(R.id.loginversionId);
+        mversionNo = (TextView) findViewById(R.id.loginversionId);
         mpropertyFileReader = new PropertyFileReader();
         float demo = mpropertyFileReader.getVersion();
-        mversionNo.append(""+demo);
+        mversionNo.append("" + demo);
         if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
@@ -110,7 +111,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         Button btnWaiterLogin = (Button) findViewById(R.id.email_sign_in_button);
-        networkImageView = (NetworkImageView) findViewById(R.id.companyLogo);
+        networkImageView = (NetworkRoundImageView) findViewById(R.id.companyLogo);
         btnWaiterLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

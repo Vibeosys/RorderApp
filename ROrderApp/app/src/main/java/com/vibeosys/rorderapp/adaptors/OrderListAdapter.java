@@ -15,6 +15,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.util.CustomVolleyRequestQueue;
+import com.vibeosys.rorderapp.views.NetworkRoundImageView;
 
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class OrderListAdapter extends BaseAdapter {
             viewHolder.imgPlus = (ImageView) row.findViewById(R.id.imgPlus);
             viewHolder.imgMinus = (ImageView) row.findViewById(R.id.imgMinus);
             viewHolder.txtQuantity = (TextView) row.findViewById(R.id.txtMenuQty);
-            viewHolder.networkImageView = (NetworkImageView) row.findViewById(R.id.menuImageLoader);
+            viewHolder.networkImageView = (NetworkRoundImageView) row.findViewById(R.id.menuImageLoader);
             viewHolder.imgNote = (ImageView) row.findViewById(R.id.imgNote);
             row.setTag(viewHolder);
 
@@ -174,7 +175,7 @@ public class OrderListAdapter extends BaseAdapter {
         ImageView imgPlus;
         ImageView imgMinus;
         TextView txtQuantity;
-        NetworkImageView networkImageView;
+        NetworkRoundImageView networkImageView;
         ImageView imgNote;
     }
 

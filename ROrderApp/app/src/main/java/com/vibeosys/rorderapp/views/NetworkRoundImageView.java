@@ -45,6 +45,10 @@ public class NetworkRoundImageView extends NetworkImageView {
             return;
         }
         Bitmap originalImage = ((BitmapDrawable) drawable).getBitmap();
+
+        if (originalImage == null) {
+            return;
+        }
         Bitmap bitmap = originalImage.copy(Bitmap.Config.ARGB_8888, true);
 
         int w = getWidth(), h = getHeight();
