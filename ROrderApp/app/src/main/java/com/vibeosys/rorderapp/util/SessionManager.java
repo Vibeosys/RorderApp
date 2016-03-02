@@ -87,6 +87,7 @@ public class SessionManager {
         editor.putString(PropertyTypeConstants.API_RESTAURANT_URI, mPropertyFileReader.getRestaurantUrl());
         //editor.putString(PropertyTypeConstants.API_SEND_OTP_URL, mPropertyFileReader.getSendOtpUrl());
         editor.putString(PropertyTypeConstants.VERSION_NUMBER, String.valueOf(mPropertyFileReader.getVersion()));
+        editor.putString(PropertyTypeConstants.GOOGLE_PLAY_SERVICE_SET, mPropertyFileReader.getPlayServiceSetting());
         editor.apply();
         return true;
     }
@@ -226,6 +227,10 @@ public class SessionManager {
 
     public String getImei() {
         return mProjectSharedPref.getString(PropertyTypeConstants.USER_IMEI_ID, null);
+    }
+
+    public String getAnalyticsSet() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.GOOGLE_PLAY_SERVICE_SET, "off");
     }
 
     private static void setValuesInSharedPrefs(String sharedPrefKey, String sharedPrefValue) {

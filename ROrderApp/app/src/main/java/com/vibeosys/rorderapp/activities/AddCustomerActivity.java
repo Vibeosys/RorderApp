@@ -70,6 +70,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         int id = v.getId();
         if (id == R.id.btnAdd) {
             addUser();
+            sendEventToGoogle("Action", "Add Customer");
         }
     }
 

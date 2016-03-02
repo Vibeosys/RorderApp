@@ -115,6 +115,7 @@ public class LoginActivity extends BaseActivity {
         btnWaiterLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                sendEventToGoogle("Action", "Login Waiter");
                 attemptLogin(1);
             }
         });
@@ -122,6 +123,7 @@ public class LoginActivity extends BaseActivity {
         btnChefLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendEventToGoogle("Action", "Login Chef");
                 attemptLogin(2);
             }
         });

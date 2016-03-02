@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity
                 public void onClick(View view) {
                     //callWaitingIntent();
                     //Show waiting dialog
-
+                    sendEventToGoogle("Action", "Float Waiting list");
                     showWaitingDialog();
                 }
             });
@@ -180,7 +180,7 @@ public class MainActivity extends BaseActivity
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
+                    sendEventToGoogle("Action", "Table Filter");
                 }
             });
         }
@@ -202,8 +202,7 @@ public class MainActivity extends BaseActivity
     protected void onResume() {
         super.onResume();
         //adapter.refresh(mDbRepository.getTableRecords(""));
-
-        hitActivity();
+        //hitActivity();
     }
 
     @Override
@@ -276,10 +275,7 @@ public class MainActivity extends BaseActivity
             return true;
         }*/
         if (id == R.id.filter) {
-            mTracker.send(new HitBuilders.EventBuilder()
-                    .setCategory("Action")
-                    .setAction("Filter").setValue(1)
-                    .build());
+            sendEventToGoogle("Action", "Filter Table");
             Intent iFilter = new Intent(this, TableFilterActivity.class);
             JSONObject jsonObject = new JSONObject();
             try {
@@ -294,6 +290,7 @@ public class MainActivity extends BaseActivity
             startActivityForResult(iFilter, 2);
         }
         if (id == R.id.notification) {
+            sendEventToGoogle("Action", "Notification");
             Intent iWaitingList = new Intent(getApplicationContext(), NotificationActivity.class);
             startActivity(iWaitingList);
         }
@@ -307,15 +304,17 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_profile) {
+            sendEventToGoogle("Action", "My Profile");
             // Handle the camera action
         } else if (id == R.id.nav_waiting_list) {
-
+            sendEventToGoogle("Action", "NavBar Waiting list");
             showWaitingDialog();
             //callWaitingIntent();
         } else if (id == R.id.nav_log_out) {
             UserAuth.CleanAuthenticationInfo();
             callLogin();
         } else if (id == R.id.about_us) {
+            sendEventToGoogle("Action", "NavBar About us");
             Intent aboutUsIntent = new Intent(getApplicationContext(), AboutUsActivity.class);
             aboutUsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(aboutUsIntent);
@@ -553,6 +552,7 @@ public class MainActivity extends BaseActivity
                 if (wrongCredential) {
                     focus.requestFocus();
                 } else {
+                    sendEventToGoogle("Action", " Add Customer");
                     UUID custid = UUID.randomUUID();
                     int customerCount = 0;
                     try {
@@ -597,6 +597,7 @@ public class MainActivity extends BaseActivity
                 txtReserve.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        sendEventToGoogle("Action", "Table Reservation");
                         String strTableNo = txtTableNo.getText().toString();
                         if (TextUtils.isEmpty(strTableNo)) {
                             txtTableNo.setError(getResources().getString(R.string.error_table_no));

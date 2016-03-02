@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.util.AnalyticsApplication;
@@ -72,9 +74,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         mServerSyncManager = new ServerSyncManager(getApplicationContext(), mSessionManager);
         mDbRepository = new DbRepository(getApplicationContext(), mSessionManager);
 
-        // Google analytics tracker
-        AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+        if (mSessionManager.getAnalyticsSet().equals("on")) {
+            // Google analytics tracker
+            if (isGooglePlayServicesAvailable(getApplicationContext())) {
+                AnalyticsApplication application = (AnalyticsApplication) getApplication();
+                mTracker = application.getDefaultTracker();
+            } else {
+                Log.i(TAG, "Google play service is not available on device");
+                mTracker = null;
+            }
+
+        } else {
+            mTracker = null;
+            Log.d(TAG, "Analytics is off");
+        }
+
     }
 
 
@@ -133,7 +147,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        hitActivity();
+        if (mTracker != null) {
+            hitActivity();
+        } else {
+            Log.d(TAG, "Analytics is not stated");
+        }
     }
 
     //@Override
@@ -222,8 +240,30 @@ public abstract class BaseActivity extends AppCompatActivity {
         Log.i(TAG, "Setting screen name: " + screenName);
         mTracker.setScreenName(screenName);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+
     }
 
     protected abstract String getScreenName();
 
+    private boolean isGooglePlayServicesAvailable(Context context) {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+
+        // Showing status
+        if (status == ConnectionResult.SUCCESS)
+            return true;
+        else {
+            return false;
+        }
+    }
+
+    protected void sendEventToGoogle(String category, String action) {
+        if (mTracker != null)
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .build());
+        else
+            Log.d(TAG, "Analytics is not stated");
+    }
 }

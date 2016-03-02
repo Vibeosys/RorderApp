@@ -14,6 +14,7 @@ public final class PropertyTypeConstants {
     public static final String DATABASE_DEVICE_FULLPATH = "database.device.fullpath";
     public static final String DATABASE_DIR_PATH = "db.dir.path";
     public static final String DATABASE_FILE_NAME = "db.file.name";
+    public static final String GOOGLE_PLAY_SERVICE_SET = "virsion.playservice";
     public static final String VERSION_NUMBER = "version.number";
 
     //Specific to Shared Pref for Session Manager to consume

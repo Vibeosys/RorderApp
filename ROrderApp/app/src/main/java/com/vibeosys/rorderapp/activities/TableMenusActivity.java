@@ -70,7 +70,7 @@ public class TableMenusActivity extends BaseActivity implements
 
     @Override
     protected String getScreenName() {
-        return "Tables";
+        return "Menu List";
     }
 
     //List<OrderMenuDTO> sortingMenu;
@@ -138,6 +138,7 @@ public class TableMenusActivity extends BaseActivity implements
                 if (s.length() >= 3) {
                     allMenus = sortList(mDbRepository.getOrderMenu(custId), s.toString());
                     ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                    sendEventToGoogle("Action", "Search Menu");
                 }
             }
 
@@ -223,7 +224,7 @@ public class TableMenusActivity extends BaseActivity implements
             showMyDialog(orderMenu);
             Log.d(TAG, "##" + orderMenu.getNote());
             displayMenuPriceAndItems();
-
+            sendEventToGoogle("Action", "Add Note");
             orderListAdapter.notifyDataSetChanged();
         }
         //Collections.sort(allMenus);
@@ -326,6 +327,7 @@ public class TableMenusActivity extends BaseActivity implements
             }
         }
         if (id == R.id.txtPreviousOrders) {
+            sendEventToGoogle("Action", "View Prev Order");
             Intent tableOrderIntent = new Intent(getApplicationContext(), TableOrderActivity.class);
             tableOrderIntent.putExtra("tableCustInfo", tableCommonInfoDTO);
             tableOrderIntent.putExtra("orderTypeFlag", 1);
@@ -333,6 +335,7 @@ public class TableMenusActivity extends BaseActivity implements
             finish();
         }
         if (id == R.id.fab) {
+            sendEventToGoogle("Action", "Veg-Non veg Filter");
             showVegNonVeg();
         }
 

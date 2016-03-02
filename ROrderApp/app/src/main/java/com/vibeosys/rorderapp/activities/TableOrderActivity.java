@@ -150,6 +150,7 @@ public class TableOrderActivity extends BaseActivity implements
 
         int id = item.getItemId();
         if (id == R.id.placeOrder) {
+            sendEventToGoogle("Action", "ActionBar Place Order");
             //Toast.makeText(getApplicationContext(),"Button is clicke",Toast.LENGTH_LONG).show();
             /*Intent i = new Intent(this, BillDetailsActivity.class);
             startActivity(i);*/
@@ -249,6 +250,7 @@ public class TableOrderActivity extends BaseActivity implements
 
     @Override
     public void onPlaceOrderClick() {
+        sendEventToGoogle("Action", "Place Order in list");
         placeOrder();
     }
 
@@ -263,6 +265,7 @@ public class TableOrderActivity extends BaseActivity implements
         txtOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendEventToGoogle("Action", "Empty Order prevent");
                 dialog.dismiss();
             }
         });

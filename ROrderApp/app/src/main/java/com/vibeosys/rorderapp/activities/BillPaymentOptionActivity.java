@@ -144,6 +144,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
                     iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(iMain);
                     finish();
+                    sendEventToGoogle("Action", "Give Feedback");
                 } else {
                     showMyDialog(mContext);
                 }
@@ -157,6 +158,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
                 iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(iMain);
                 finish();
+                sendEventToGoogle("Action", "Skip Feedback");
             }
         });
         dlg.show();

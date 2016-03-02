@@ -80,7 +80,7 @@ public class BillDetailsActivity extends BaseActivity {
         payment_bill_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                sendEventToGoogle("Action", "Payment Option selection");
                 Intent i = new Intent(getApplicationContext(), BillPaymentOptionActivity.class);
                 i.putExtra("tableCustInfo", tableCommonInfoDTO);
                 i.putExtra("BillNo", mBillDetailsDTOs.getBillNo());
@@ -93,6 +93,7 @@ public class BillDetailsActivity extends BaseActivity {
         btnBillSummary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendEventToGoogle("Action", "View Bill Summary");
                 Intent i = new Intent(getApplicationContext(), BillSummeryActivity.class);
                 i.putExtra("tableCustInfo", tableCommonInfoDTO);
                 startActivityForResult(i, 1);
