@@ -125,7 +125,7 @@ public class TableMenusActivity extends BaseActivity implements
         {
             txtBillGenerate.setVisibility(View.VISIBLE);
         }*/
-        generateBillColour();
+        //generateBillColour();
         txtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -373,7 +373,7 @@ public class TableMenusActivity extends BaseActivity implements
     }
 
     public void genrateBill() {
-        int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
+        long pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
         int tempOrder = mDbRepository.getOrderCountFromTemp(mTableId, custId);
         if (pendingOrder > 0 || tempOrder == 0) {
             //showAlertDiaog();
@@ -407,7 +407,7 @@ public class TableMenusActivity extends BaseActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        //generateBillColour();
+        generateBillColour();
     }
 
     @Override
@@ -488,7 +488,7 @@ public class TableMenusActivity extends BaseActivity implements
     private void generateBillColour() {
         //OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), custId);
 
-        int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
+        long pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
         int tempOrder = mDbRepository.getOrderCountFromTemp(mTableId, custId);
         if (pendingOrder > 0 || tempOrder == 0) {
             txtBillGenerate.setBackgroundColor(getResources().getColor(R.color.light_grey));

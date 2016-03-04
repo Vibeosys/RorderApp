@@ -35,7 +35,7 @@ public class OrdersDbDTO extends BaseDTO {
 
 
     public OrdersDbDTO(String orderId, int orderNo, String custId, Date orderDt, Time orderTm,
-                       int tableId, int userId) {
+                       int tableId, int userId, int orderStatus) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.custId = custId;
@@ -45,21 +45,7 @@ public class OrdersDbDTO extends BaseDTO {
         //this.updatedDate = updatedDate;
         this.tableId = tableId;
         this.userId = userId;
-    }
-
-    public OrdersDbDTO(String orderId, int orderNo, int orderStatus, Date orderDt,
-                       Time orderTm, Date createdDate, Date updatedDate, int tableId,
-                       int userId, double orderAmt) {
-        this.orderId = orderId;
-        this.orderNo = orderNo;
         this.orderStatus = orderStatus;
-        this.orderDt = orderDt;
-        this.orderTm = orderTm;
-        //this.createdDate = createdDate;
-        //this.updatedDate = updatedDate;
-        this.tableId = tableId;
-        this.userId = userId;
-        this.orderAmt = orderAmt;
     }
 
     public OrdersDbDTO(String orderId, int orderNo, String custId, int orderStatus, int tableId, int userId) {
@@ -112,7 +98,7 @@ public class OrdersDbDTO extends BaseDTO {
     }
 
     public Date getOrderDt() {
-        if(this.orderDate == null || this.orderDate.isEmpty())
+        if (this.orderDate == null || this.orderDate.isEmpty())
             return this.orderDt;
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -134,7 +120,7 @@ public class OrdersDbDTO extends BaseDTO {
         this.orderDt = orderDt;
     }*/
     public Time getOrderTm() {
-        if(this.orderTime == null || this.orderTime.isEmpty())
+        if (this.orderTime == null || this.orderTime.isEmpty())
             return this.orderTm;
 
 

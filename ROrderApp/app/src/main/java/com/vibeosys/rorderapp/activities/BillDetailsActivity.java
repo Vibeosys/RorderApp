@@ -127,12 +127,17 @@ public class BillDetailsActivity extends BaseActivity {
         txtDiscount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
                 double percentage = 0;
                 String strPercentage = txtPer.getText().toString();
                 try {
                     percentage = Double.parseDouble(strPercentage);
-                    displayData(percentage);
+                    if (percentage > 99) {
+                        txtPer.setError("Enter correct percentage");
+                    } else {
+                        dialog.dismiss();
+                        displayData(percentage);
+                    }
+
                 } catch (NumberFormatException e) {
                     Log.d(TAG, "## error in enter discount percentage");
                 }

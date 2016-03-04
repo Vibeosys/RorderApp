@@ -220,21 +220,19 @@ public class TableOrderActivity extends BaseActivity implements
             String currentTime = new ROrderDateUtils().getGMTCurrentTime();
             ArrayList<OrdersDbDTO> orders = new ArrayList<>();
             orders.add(new OrdersDbDTO(mOrderId.toString(), Integer.parseInt(message), mCustId,
-                    Date.valueOf(currentDate), Time.valueOf(currentTime), mTableId, mSessionManager.getUserId()));
+                    Date.valueOf(currentDate), Time.valueOf(currentTime), mTableId, mSessionManager.getUserId(), 1));
             mDbRepository.insertOrders(orders);
             mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
             mServerSyncManager.syncDataWithServer(true);
+            Toast.makeText(getApplicationContext(), getResources().getString
+                    (R.string.order_place_success), Toast.LENGTH_SHORT).show();
             Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
             iMenu.putExtra("tableCustInfo", tableCommonInfo);
             startActivity(iMenu);
             finish();
-            Toast.makeText(getApplicationContext(), getResources().getString
-                    (R.string.order_place_success), Toast.LENGTH_SHORT).show();
-        }
-       /* else if(errorCode == 104)
-        {
+        } else if (errorCode == 104) {
 
-        }*/
+        }
 
 
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.vibeosys.rorderapp.data.BillDbDTO;
@@ -2239,18 +2240,25 @@ public class DbRepository extends SQLiteOpenHelper {
         return feebackList;
     }
 
-    public int getPendingOrdersOfTable(int tableId, String custId) {
-        int count = 0;
+    public long getPendingOrdersOfTable(int tableId, String custId) {
+        long count = 0;
         SQLiteDatabase sqLiteDatabase = null;
-        String[] whereClause = new String[]{String.valueOf(tableId), custId};
-        Cursor cursor = null;
+        /*String[] whereClause = new String[]{String.valueOf(tableId), custId};
+        Cursor cursor = null;*/
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                cursor = sqLiteDatabase.rawQuery("select orders.OrderId from orders where " +
+
+                String sql = "select count(orders.OrderId)from orders where " + SqlContract.
+                        SqlOrders.TABLE_NO + "=" + tableId + " AND " + SqlContract.SqlOrders.CUST_ID + "='" + custId
+                        + "' And " + SqlContract.SqlOrders.ORDER_STATUS + "=1";
+               /* cursor = sqLiteDatabase.rawQuery("select orders.OrderId from orders where " +
                         SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID +
                         "=? AND " + SqlContract.SqlOrders.ORDER_STATUS + "=1", whereClause);
-                count = cursor.getCount();
+                count = cursor.getCount();*/
+                SQLiteStatement sqLiteStatement = sqLiteDatabase.compileStatement(sql);
+                count = sqLiteStatement.simpleQueryForLong();
+
             }
             //cursor.close();
             //sqLiteDatabase.close();
@@ -2258,9 +2266,9 @@ public class DbRepository extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.e(TAG, "Error at getOrdersOf table " + e.toString());
         } finally {
-            if (cursor != null) {
+           /* if (cursor != null) {
                 cursor.close();
-            }
+            }*/
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
         }
