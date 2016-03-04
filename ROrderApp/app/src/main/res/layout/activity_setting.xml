@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <Switch
+        android:id="@+id/printKOT"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="6dp"
+        android:text="@string/print_kot_title"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/txtIpKOT"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="6dp"
+        android:hint="@string/print_kot_edit_hint"
+        android:visibility="invisible" />
+
+    <Switch
+        android:id="@+id/printBill"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="6dp"
+        android:text="@string/print_bill_title"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/txtIpBill"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="6dp"
+        android:hint="@string/print_bill_edit_hint"
+        android:visibility="invisible" />
+
+</LinearLayout>

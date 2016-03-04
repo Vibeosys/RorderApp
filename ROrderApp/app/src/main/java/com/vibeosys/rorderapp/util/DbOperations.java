@@ -105,17 +105,14 @@ public class DbOperations {
             public void run() {
 
                 try {
-                    if(FragmentChefMyServing.chefOrderAdapter ==null)
-                    {
-                        Log.d("chef is null","##"+null);
-                    }
-                    else {
+                    if (FragmentChefMyServing.chefOrderAdapter == null) {
+                        Log.d("chef is null", "##" + null);
+                    } else {
                         FragmentChefMyServing.chefOrderAdapter.refresh(1);
                     }
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.d("exception in my serving","##"+e.toString());
+                    Log.d("exception in my serving", "##" + e.toString());
                 }
             }
         });
@@ -124,12 +121,11 @@ public class DbOperations {
             public void run() {
                 try {
                     if (FragmentChefPlacedOrder.chefOrderAdapter == null) {
-                        Log.d("placed order adt", "##" + FragmentChefPlacedOrder.chefOrderAdapter.isEmpty());
+                        Log.d("placed order adt", "##" + null);
                     } else {
                         FragmentChefPlacedOrder.chefOrderAdapter.refresh(2);
                     }
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -178,13 +174,13 @@ public class DbOperations {
         return isInserted & isUpdated;
     }
 
-    public boolean addOrUpdateTableTransaction(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList,ArrayList<String> delete) {
+    public boolean addOrUpdateTableTransaction(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList, ArrayList<String> delete) {
         List<TableTransactionDbDTO> tableTransactionInserts = TableTransactionDbDTO.deserializeTableTransaction(jsonInsertList);
         List<TableTransactionDbDTO> tableTransactionUpdates = TableTransactionDbDTO.deserializeTableTransaction(updateJsonList);
-        List<TableTransactionDbDTO> tableTransactionDelete=TableTransactionDbDTO.deserializeTableTransaction(delete);
+        List<TableTransactionDbDTO> tableTransactionDelete = TableTransactionDbDTO.deserializeTableTransaction(delete);
         boolean isInserted = dbRepository.insertTableTransactionList(tableTransactionInserts);
         boolean isUpdated = dbRepository.updateTableTransactionList(tableTransactionUpdates);
-        boolean isDeleted=dbRepository.deleteTableTransaction(tableTransactionDelete);
+        boolean isDeleted = dbRepository.deleteTableTransaction(tableTransactionDelete);
 
         MainActivity.runOnUI(new Runnable() {
             public void run() {

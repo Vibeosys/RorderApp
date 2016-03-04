@@ -1,9 +1,14 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -13,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -54,6 +61,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     private int mSelectedRestoId;
     private String mSelectedRestaurantName;
     private PropertyFileReader mpropertyFileReader;
+    private LinearLayout mSelectRestoView;
+    private ProgressBar mProgressBar;
 
     @Override
     protected String getScreenName() {
@@ -66,12 +75,12 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_select_restaurent);
         Button btnOk = (Button) findViewById(R.id.btnOk);
         TextView aboutUs = (TextView) findViewById(R.id.about_us);
-        TextView companyInfo = (TextView)findViewById(R.id.abt_Us_info);
+        TextView companyInfo = (TextView) findViewById(R.id.abt_Us_info);
         companyInfo.setText(Html.fromHtml(getResources().getString(R.string.company_info)));
-        TextView versionNo = (TextView)findViewById(R.id.versionId);
+        TextView versionNo = (TextView) findViewById(R.id.versionId);
         mpropertyFileReader = new PropertyFileReader();
         float demo = mpropertyFileReader.getVersion();
-        versionNo.append(""+demo);
+        versionNo.append("" + demo);
         if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
@@ -89,7 +98,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
 
             }
         });
-
+        mProgressBar = (ProgressBar) findViewById(R.id.select_reto_progress);
+        mSelectRestoView = (LinearLayout) findViewById(R.id.select_rest_view);
         mTxtRestaurant = (TextView) findViewById(R.id.txtRestaurantId);
         btnOk.setOnClickListener(this);
     }
@@ -175,6 +185,39 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         return s.hasNext() ? s.next() : "";
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mSelectRestoView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mSelectRestoView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mSelectRestoView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mSelectRestoView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
     private String getBuild64BasedInfo() {
         String buildInfo64Based;
         DeviceBuildInfo buildInfo = DeviceBuildInfo.GetDeviceInfo();
@@ -228,15 +271,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
             } else if (dbFile.exists() && (mSessionManager.getUserId() == 0)) {
                 downloadDatabase(dbFile);
             }*/
-            boolean downFlag = downloadDatabase();
-            if (downFlag) {
-                mSelectedRestaurantName = mDbRepository.getRestaurantName(mSelectedRestoId);
-                mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
-                Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
-                intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentLogin);
-                finish();
-            }
+            DownloadAndProceed down = new DownloadAndProceed();
+            down.execute();
         } else {
             showMyDialog(mContext);
         }
@@ -297,5 +333,35 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         }
         super.onResume();
 
+    }
+
+    private class DownloadAndProceed extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            boolean downFlag = downloadDatabase();
+
+            return downFlag;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            showProgress(false);
+            if (aBoolean) {
+                mSelectedRestaurantName = mDbRepository.getRestaurantName(mSelectedRestoId);
+                mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
+                Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentLogin);
+                finish();
+            }
+        }
     }
 }

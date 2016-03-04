@@ -88,6 +88,12 @@ public class SessionManager {
         //editor.putString(PropertyTypeConstants.API_SEND_OTP_URL, mPropertyFileReader.getSendOtpUrl());
         editor.putString(PropertyTypeConstants.VERSION_NUMBER, String.valueOf(mPropertyFileReader.getVersion()));
         editor.putString(PropertyTypeConstants.GOOGLE_PLAY_SERVICE_SET, mPropertyFileReader.getPlayServiceSetting());
+
+        editor.putString(PropertyTypeConstants.KOT_PRINTER_STATUS, mPropertyFileReader.getKotPrinterStatus());
+        editor.putString(PropertyTypeConstants.BILL_PRINTER_STATUS, mPropertyFileReader.getBillPrinterStatus());
+        editor.putString(PropertyTypeConstants.KOT_PRINTER_IP, mPropertyFileReader.getKotPrinterIp());
+        editor.putString(PropertyTypeConstants.BILL_PRINTER_IP, mPropertyFileReader.getBillPrinterIp());
+
         editor.apply();
         return true;
     }
@@ -231,6 +237,39 @@ public class SessionManager {
 
     public String getAnalyticsSet() {
         return mProjectSharedPref.getString(PropertyTypeConstants.GOOGLE_PLAY_SERVICE_SET, "off");
+    }
+
+    public String getKotPrinterStatus() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.KOT_PRINTER_STATUS, null);
+    }
+
+    public String getBillPrinterStatus() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.BILL_PRINTER_STATUS, null);
+    }
+
+    public String getKotPrinterIp() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.KOT_PRINTER_IP, null);
+    }
+
+    public String getBillPrinterIp() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.BILL_PRINTER_IP, null);
+    }
+
+
+    public void setKotPrinterStatus(String status) {
+        setValuesInSharedPrefs(PropertyTypeConstants.KOT_PRINTER_STATUS, status);
+    }
+
+    public void setBillPrinterStatus(String status) {
+        setValuesInSharedPrefs(PropertyTypeConstants.BILL_PRINTER_STATUS, status);
+    }
+
+    public void setKotPrinterIp(String ip) {
+        setValuesInSharedPrefs(PropertyTypeConstants.KOT_PRINTER_IP, ip);
+    }
+
+    public void setBillPrinterIp(String ip) {
+        setValuesInSharedPrefs(PropertyTypeConstants.BILL_PRINTER_IP, ip);
     }
 
     private static void setValuesInSharedPrefs(String sharedPrefKey, String sharedPrefValue) {

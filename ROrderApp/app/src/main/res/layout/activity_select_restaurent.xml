@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/restaurent1"
@@ -8,7 +9,13 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-
+    <ProgressBar
+        android:id="@+id/select_reto_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
     <!-- <TextView
          android:id="@+id/textView2"
          android:layout_width="wrap_content"
@@ -18,37 +25,44 @@
          android:textColor="@color/White"
          android:textSize="25sp"
          android:textStyle="bold" />-->
-
-    <EditText
-        android:id="@+id/txtRestaurantId"
+    <LinearLayout
+        android:id="@+id/select_rest_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="80dp"
-        android:hint="@string/hint_restaurant_id"
-        android:inputType="number"
-        android:textColor="@color/White"
-        android:textColorHint="@color/light_grey" />
+        android:orientation="vertical">
 
-    <!--<ListView
-        android:layout_width="wrap_content"
-        android:layout_height="149dp"
-        android:id="@+id/listView"
-        android:background="@color/White"
-        android:layout_weight="0.57" />-->
+        <EditText
+            android:id="@+id/txtRestaurantId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="80dp"
+            android:hint="@string/hint_restaurant_id"
+            android:inputType="number"
+            android:textColor="@color/White"
+            android:textColorHint="@color/light_grey" />
 
-    <Button
-        android:id="@+id/btnOk"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtRestaurantId"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/button_custom"
-        android:text="@string/btn_proceed"
-        android:textColor="@color/White" />
+        <!--<ListView
+            android:layout_width="wrap_content"
+            android:layout_height="149dp"
+            android:id="@+id/listView"
+            android:background="@color/White"
+            android:layout_weight="0.57" />-->
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtRestaurantId"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_custom"
+            android:text="@string/btn_proceed"
+            android:textColor="@color/White" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

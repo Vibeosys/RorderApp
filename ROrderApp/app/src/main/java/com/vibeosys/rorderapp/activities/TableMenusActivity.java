@@ -1,11 +1,14 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
@@ -320,8 +323,8 @@ public class TableMenusActivity extends BaseActivity implements
         if (id == R.id.txtGenerateBill) {
             //  Toast.makeText(getApplicationContext(),"bill genrate is cliked",Toast.LENGTH_LONG).show();
             if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
-
                 genrateBill();
+
             } else {
                 startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
             }
@@ -341,6 +344,34 @@ public class TableMenusActivity extends BaseActivity implements
 
     }
 
+    private void showConfirmDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Bill Generate");
+        // builder.setIcon(R.drawable.ic_action_warning_yellow);
+        builder.setMessage("Are you confirm to generate bill?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
+                Gson gson = new Gson();
+                String serializedJsonString = gson.toJson(uploadBillGenerate);
+                Log.d(TAG, "##" + serializedJsonString);
+                TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedJsonString);
+                mServerSyncManager.uploadDataToServer(tableDataDTO);
+
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+    }
+
     public void genrateBill() {
         int pendingOrder = mDbRepository.getPendingOrdersOfTable(mTableId, custId);
         int tempOrder = mDbRepository.getOrderCountFromTemp(mTableId, custId);
@@ -350,12 +381,7 @@ public class TableMenusActivity extends BaseActivity implements
             String strMessage = getResources().getString(R.string.order_is_pending_to_serve);
             customAlterDialog(stringTitle, strMessage);
         } else {
-            UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
-            Gson gson = new Gson();
-            String serializedJsonString = gson.toJson(uploadBillGenerate);
-            Log.d(TAG, "##" + serializedJsonString);
-            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.GENRATE_BILL, serializedJsonString);
-            mServerSyncManager.uploadDataToServer(tableDataDTO);
+            showConfirmDialog();
         }
 
 
@@ -402,9 +428,9 @@ public class TableMenusActivity extends BaseActivity implements
             Toast.makeText(getApplicationContext(), "Bill is Generated", Toast.LENGTH_LONG).show();
             Log.d(TAG, "##" + errorCode);
             mServerSyncManager.syncDataWithServer(true);
-
-
-        } else {
+        } else if (errorCode != 104) {
+            String stringTitle = getResources().getString(R.string.alert_dialog);
+            customAlterDialog(stringTitle, message);
             // Toast.makeText(getApplicationContext(), "response " + errorCode, Toast.LENGTH_LONG).show();
         }
     }

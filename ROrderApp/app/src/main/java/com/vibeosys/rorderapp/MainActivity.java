@@ -44,6 +44,7 @@ import com.vibeosys.rorderapp.activities.ChefOrdersDisplayActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.NotificationActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
+import com.vibeosys.rorderapp.activities.SettingPrinterActivity;
 import com.vibeosys.rorderapp.activities.TableFilterActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
 import com.vibeosys.rorderapp.adaptors.CustomerAdapter;
@@ -294,6 +295,10 @@ public class MainActivity extends BaseActivity
             Intent iWaitingList = new Intent(getApplicationContext(), NotificationActivity.class);
             startActivity(iWaitingList);
         }
+        if (id == R.id.settings) {
+            Intent iSetting = new Intent(getApplicationContext(), SettingPrinterActivity.class);
+            startActivity(iSetting);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -318,6 +323,9 @@ public class MainActivity extends BaseActivity
             Intent aboutUsIntent = new Intent(getApplicationContext(), AboutUsActivity.class);
             aboutUsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(aboutUsIntent);
+        } else if (id == R.id.settings) {
+            Intent iSetting = new Intent(getApplicationContext(), SettingPrinterActivity.class);
+            startActivity(iSetting);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

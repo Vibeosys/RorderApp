@@ -22,6 +22,11 @@
         android:icon="@drawable/ic_action_bell"
         android:title="@string/notification"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_setting_dark"
+        android:title="@string/action_settings"
+        app:showAsAction="collapseActionView" />
 
 
 </menu>

@@ -79,4 +79,20 @@ public class PropertyFileReader {
     public String getPlayServiceSetting() {
         return mProperties.getProperty(PropertyTypeConstants.GOOGLE_PLAY_SERVICE_SET);
     }
+
+    public String getKotPrinterStatus() {
+        return mProperties.getProperty(PropertyTypeConstants.KOT_PRINTER_STATUS);
+    }
+
+    public String getBillPrinterStatus() {
+        return mProperties.getProperty(PropertyTypeConstants.BILL_PRINTER_STATUS);
+    }
+
+    public String getKotPrinterIp() {
+        return mProperties.getProperty(PropertyTypeConstants.KOT_PRINTER_IP);
+    }
+
+    public String getBillPrinterIp() {
+        return mProperties.getProperty(PropertyTypeConstants.BILL_PRINTER_IP);
+    }
 }

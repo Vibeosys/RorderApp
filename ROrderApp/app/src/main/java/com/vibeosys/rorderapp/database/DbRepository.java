@@ -330,8 +330,9 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 if (cursor != null) {
                     if (cursor.getCount() > 0)
-                        cursor.moveToFirst();
+
                     {
+                        cursor.moveToFirst();
                         int billNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlBill.BILL_NO));
                         String billDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlBill.BILL_DATE));
                         double netAmount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.NET_AMOUNT));
@@ -1206,7 +1207,7 @@ public class DbRepository extends SQLiteOpenHelper {
     * */
     public boolean clearTableTransaction(String custId, int tableId) {
         SQLiteDatabase sqLiteDatabase = null;
-        ContentValues contentValues = null;
+        //ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
         try {
@@ -1216,7 +1217,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
                         SqlContract.SqlTableTransaction.CUST_ID + "=? AND "
                                 + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
-                contentValues.clear();
+//                contentValues.clear();
                 // sqLiteDatabase.close();
                 Log.d(TAG, "## Data deledted from transcation table");
             }
@@ -1424,15 +1425,23 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlBill.TOTAL_PAY_AMT, bill.getTotalPayAmt());
                     if (bill.getUserId() != 0)
                         contentValues.put(SqlContract.SqlBill.USER_ID, bill.getUserId());
+                    if (bill.isPayed() != 0)
+                        contentValues.put(SqlContract.SqlBill.IS_PAYED, bill.isPayed());
+                    if (bill.getPayedBy() != 0)
+                        contentValues.put(SqlContract.SqlBill.PAID_BY, bill.getPayedBy());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
-                    count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues, SqlContract.SqlBill.BILL_NO + "=?", whereClause);
-                    contentValues.clear();
+                    if (contentValues.size() != 0)
+                        count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues, SqlContract.SqlBill.BILL_NO + "=?", whereClause);
+
                     Log.d(TAG, "## Bill is Updated Successfully" + bill.getBillNo());
                 }
             }
         } catch (Exception e) {
             Log.e(TAG, "Error while updating Bills " + e.toString());
         } finally {
+            if (contentValues != null) {
+                contentValues.clear();
+            }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
         }
@@ -1849,7 +1858,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     count = sqLiteDatabase.delete(SqlContract.SqlTableTransaction.TABLE_NAME,
                             SqlContract.SqlTableTransaction.CUST_ID + "=? AND "
                                     + SqlContract.SqlTableTransaction.TABLE_ID + "=?", whereClasuse);
-                    contentValues.clear();
+                    //contentValues.clear();
                     Log.d(TAG, "## Data deleted from transaction table");
                 }
             }

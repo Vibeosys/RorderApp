@@ -121,5 +121,15 @@
        <![CDATA[  <b>QuickServe&trade;</b>is product of Vibeosys Software Pvt.Ltd.For business inquiry
         please contact  <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a> ]]>
         </string>
-    <string name="version_no">QuickServe V.</string>>
+    <string name="version_no">QuickServe V.</string>
+
+    <string name="printer_option">Print Option</string>
+    <string name="printer_selection">Select Printer</string>
+    <string name="print_kot_title">Print KOT</string>
+    <string name="print_kot_summary">Set the KOT printer setting to print the KOT</string>
+    <string name="print_kot_edit_hint">KOT Printer Ip e.g. 192.168.1.1</string>
+
+    <string name="print_bill_title">Print Bill</string>
+    <string name="print_bill_summary">Set the Bill printer setting to \n print the Bill</string>
+    <string name="print_bill_edit_hint">Bill Printer Ip e.g. 192.168.1.2</string>
 </resources>
