@@ -323,7 +323,7 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
                 String[] whereclause = new String[]{custId};
-                cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount," +
+                cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount,bill.BillTime," +
                         "bill.TotalTaxAmount,bill.TotalPayAmount,users.UserName,r_tables.TableNo" +
                         " from bill left Join users On users.UserId = bill.UserId" +
                         " Left join r_tables on bill.TableId=r_tables.TableId where bill.CustId=?", whereclause);
@@ -340,8 +340,9 @@ public class DbRepository extends SQLiteOpenHelper {
                         double totalPayAbleTax = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlBill.TOTAL_PAY_AMT));
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
+                        String billTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlBill.BILL_TIME));
                         billDetailsRecords = new BillDetailsDTO(billNo, billDate, netAmount,
-                                totalTaxAmount, totalPayAbleTax, userName, tableNo);
+                                totalTaxAmount, totalPayAbleTax, userName, tableNo, billTime);
                     }
 
                 }
@@ -437,6 +438,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlBill.TABLE_ID, bill.getTableId());
                     contentValues.put(SqlContract.SqlBill.IS_PAYED, bill.isPayed());
                     contentValues.put(SqlContract.SqlBill.PAID_BY, bill.getPayedBy());
+                    contentValues.put(SqlContract.SqlBill.DISCOUNT, bill.getDiscount());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlBill.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -1429,6 +1431,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlBill.IS_PAYED, bill.isPayed());
                     if (bill.getPayedBy() != 0)
                         contentValues.put(SqlContract.SqlBill.PAID_BY, bill.getPayedBy());
+                    if (bill.getDiscount() != 0)
+                        contentValues.put(SqlContract.SqlBill.DISCOUNT, bill.getDiscount());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     if (contentValues.size() != 0)
                         count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues, SqlContract.SqlBill.BILL_NO + "=?", whereClause);

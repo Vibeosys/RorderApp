@@ -44,6 +44,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
     private int mTableNo;
     private String mCustId;
     private Context mContext = this;
+    private double mDiscount;
 
     @Override
     protected String getScreenName() {
@@ -58,6 +59,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         Button closeBtn = (Button) findViewById(R.id.closeTableBtn);
         tableCommonInfoDTO = getIntent().getParcelableExtra("tableCustInfo");
         mBillNo = getIntent().getIntExtra("BillNo", 0);
+        mDiscount = getIntent().getDoubleExtra("DiscountAmt", 0);
         mTableId = tableCommonInfoDTO.getTableId();
         mTableNo = tableCommonInfoDTO.getTableNo();
         mCustId = tableCommonInfoDTO.getCustId();
@@ -95,7 +97,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
         tableDataDTOs[1] = new TableDataDTO(ConstantOperations.CLOSE_TABLE, serializedTableTransaction);
 
-        BillPaidUpload billPaidUpload = new BillPaidUpload(mBillNo, 1, mPaymentModeId);
+        BillPaidUpload billPaidUpload = new BillPaidUpload(mBillNo, 1, mPaymentModeId, mDiscount);
         String serializedBillPaid = gson.toJson(billPaidUpload);
         tableDataDTOs[2] = new TableDataDTO(ConstantOperations.PAID_BILL, serializedBillPaid);
         mServerSyncManager.uploadDataToServer(tableDataDTOs);
@@ -121,7 +123,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         final ArrayList<FeedBackDTO> mFeedbacks = mDbRepository.getFeedBackList();
         FeedbackAdapter mFeedbackAdapter = new FeedbackAdapter(mFeedbacks, getApplicationContext());
         mFeedbackList.setAdapter(mFeedbackAdapter);
-
+        dlg.show();
         txtThank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +145,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
                     Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
                     iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(iMain);
+                    dlg.dismiss();
                     finish();
                     sendEventToGoogle("Action", "Give Feedback");
                 } else {
@@ -161,7 +164,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
                 sendEventToGoogle("Action", "Skip Feedback");
             }
         });
-        dlg.show();
+
     }
 
     @Override

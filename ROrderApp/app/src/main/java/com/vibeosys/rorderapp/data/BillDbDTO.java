@@ -25,7 +25,7 @@ public class BillDbDTO extends BaseDTO {
     private int tableId;
     private int isPayed;
     private int payedBy;
-
+    private double discount;
 
     public BillDbDTO() {
     }
@@ -126,6 +126,18 @@ public class BillDbDTO extends BaseDTO {
 
     public void setPayedBy(int payedBy) {
         this.payedBy = payedBy;
+    }
+
+    public int getIsPayed() {
+        return isPayed;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
     public static List<BillDbDTO> deserializeBill(List<String> serializedStringList) {

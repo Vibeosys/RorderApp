@@ -1,8 +1,5 @@
 package com.vibeosys.rorderapp.data;
 
-import com.vibeosys.rorderapp.util.ROrderDateUtils;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -15,22 +12,25 @@ public class BillDetailsDTO {
     private String billDate;
     private double netAmount;
     private double totalTax;
-    private double totalPayableTaxAmt;
+    private double totalPayableAmt;
     private String servedByName;
     private int tableNo;
     private Date billInDate;
+    private String billTime;
+
     public BillDetailsDTO() {
     }
 
     public BillDetailsDTO(int billNo, String billDate, double netAmount, double totalTax,
-                          double totalPayableTaxAmt, String servedByName, int tableNo) {
+                          double totalPayableTaxAmt, String servedByName, int tableNo, String billTime) {
         this.billNo = billNo;
         this.billDate = billDate;
         this.netAmount = netAmount;
         this.totalTax = totalTax;
-        this.totalPayableTaxAmt = totalPayableTaxAmt;
+        this.totalPayableAmt = totalPayableTaxAmt;
         this.servedByName = servedByName;
         this.tableNo = tableNo;
+        this.billTime = billTime;
     }
 
     public int getBillNo() {
@@ -65,12 +65,12 @@ public class BillDetailsDTO {
         this.totalTax = totalTax;
     }
 
-    public double getTotalPayableTaxAmt() {
-        return totalPayableTaxAmt;
+    public double getTotalPayableAmt() {
+        return totalPayableAmt;
     }
 
-    public void setTotalPayableTaxAmt(double totalPayableTaxAmt) {
-        this.totalPayableTaxAmt = totalPayableTaxAmt;
+    public void setTotalPayableAmt(double totalPayableAmt) {
+        this.totalPayableAmt = totalPayableAmt;
     }
 
     public String getServedByName() {
@@ -92,5 +92,13 @@ public class BillDetailsDTO {
 
     public void setBillInDate(Date billInDate) {
         this.billInDate = billInDate;
+    }
+
+    public String getBillTime() {
+        return billTime;
+    }
+
+    public void setBillTime(String billTime) {
+        this.billTime = billTime;
     }
 }

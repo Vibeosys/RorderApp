@@ -1,24 +1,23 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
-import java.sql.Date;
 import java.sql.Time;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by shrinivas on 08-02-2016.
@@ -29,6 +28,15 @@ public class BillDetailsActivity extends BaseActivity {
     private TableCommonInfoDTO tableCommonInfoDTO;
     private int mTableId, mTableNo;
     private String custId;
+    private TextView mTxtTableNo;
+    private TextView mTxtServedBy;
+    private TextView mTxtBillDate;
+    private TextView mTxtNetAmount;
+    private TextView mTxtTotalTaxes;
+    //private TextView mTxtServicesCharges;
+    private TextView mTxtDiscountAmount;
+    private TextView mTxtTotalPayableAmnount;
+    private double mDiscount = 0.00;
 
     @Override
     protected String getScreenName() {
@@ -51,31 +59,24 @@ public class BillDetailsActivity extends BaseActivity {
         mTableId = tableCommonInfoDTO.getTableId();
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
-        TextView tableNo = (TextView) findViewById(R.id.TableNumber);
+
+
+        mTxtTableNo = (TextView) findViewById(R.id.TableNumber);
         //TextView orderNo = (TextView) findViewById(R.id.OrderNumber);
-        TextView servedBy = (TextView) findViewById(R.id.ServedByName);
-        TextView billDate = (TextView) findViewById(R.id.DateDisplay);
-        TextView netAmount = (TextView) findViewById(R.id.PaymentAmt);
-        TextView totalTaxes = (TextView) findViewById(R.id.TaxAmt);
-        TextView servicesCharges = (TextView) findViewById(R.id.ServicesChrgAmt);
-        TextView discountAmount = (TextView) findViewById(R.id.DiscountAmt);
-        TextView totalPayableAmnount = (TextView) findViewById(R.id.TotalAmt);
+        mTxtServedBy = (TextView) findViewById(R.id.ServedByName);
+        mTxtBillDate = (TextView) findViewById(R.id.DateDisplay);
+        mTxtNetAmount = (TextView) findViewById(R.id.PaymentAmt);
+        mTxtTotalTaxes = (TextView) findViewById(R.id.TaxAmt);
+        //mTxtServicesCharges = (TextView) findViewById(R.id.ServicesChrgAmt);
+        mTxtDiscountAmount = (TextView) findViewById(R.id.DiscountAmt);
+        mTxtTotalPayableAmnount = (TextView) findViewById(R.id.TotalAmt);
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
+        LinearLayout mLayoutAddDiscount = (LinearLayout) findViewById(R.id.layout_discount_per);
+
         mBillDetailsDTOs = mDbRepository.getBillDetailsRecords(custId);
-        tableNo.setText(" # " + mBillDetailsDTOs.getTableNo());
-        //orderNo.setText("");
-        servedBy.setText(mBillDetailsDTOs.getServedByName());
-        Log.d("##", "##" + mBillDetailsDTOs.getBillDate());
-        java.util.Date date = new ROrderDateUtils().getFormattedDate(mBillDetailsDTOs.getBillDate());
-        billDate.setText(new ROrderDateUtils().getLocalDateInReadableFormat(date));
-        netAmount.setText(String.format("%.2f", mBillDetailsDTOs.getNetAmount()));
-        totalTaxes.setText(String.format("%.2f", mBillDetailsDTOs.getTotalTax()));
 
-        servicesCharges.setText("");
-        discountAmount.setText("");
-        totalPayableAmnount.setText(String.format("%.2f", mBillDetailsDTOs.getTotalPayableTaxAmt()));
-
+        displayData(0);
 
         payment_bill_details.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +85,7 @@ public class BillDetailsActivity extends BaseActivity {
                 Intent i = new Intent(getApplicationContext(), BillPaymentOptionActivity.class);
                 i.putExtra("tableCustInfo", tableCommonInfoDTO);
                 i.putExtra("BillNo", mBillDetailsDTOs.getBillNo());
+                i.putExtra("DiscountAmt", mDiscount);
                 startActivity(i);
                 finish();
 
@@ -99,8 +101,73 @@ public class BillDetailsActivity extends BaseActivity {
                 startActivityForResult(i, 1);
             }
         });
+        mLayoutAddDiscount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDiscountDialog();
+            }
+        });
 
+    }
 
+    private void showDiscountDialog() {
+        final Dialog dialog = new Dialog(BillDetailsActivity.this);
+        //double percentage = 0;
+        dialog.setContentView(R.layout.dialog_add_discount);
+        final EditText txtPer = (EditText) dialog.findViewById(R.id.txtDiscountPer);
+        TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        TextView txtDiscount = (TextView) dialog.findViewById(R.id.txtDiscount);
+
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        txtDiscount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                double percentage = 0;
+                String strPercentage = txtPer.getText().toString();
+                try {
+                    percentage = Double.parseDouble(strPercentage);
+                    displayData(percentage);
+                } catch (NumberFormatException e) {
+                    Log.d(TAG, "## error in enter discount percentage");
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    private void displayData(double percenatge) {
+
+        double netAmount = mBillDetailsDTOs.getNetAmount();
+        double totalPaybleAmount = mBillDetailsDTOs.getTotalPayableAmt();
+
+        ROrderDateUtils dateUtils = new ROrderDateUtils();
+        if (percenatge != 0) {
+            mDiscount = Math.round((netAmount * percenatge) / 100);
+            totalPaybleAmount = Math.round(totalPaybleAmount - mDiscount);
+        }
+        mTxtTableNo.setText(" # " + mBillDetailsDTOs.getTableNo());
+        //orderNo.setText("");
+        mTxtServedBy.setText(mBillDetailsDTOs.getServedByName());
+        Log.d("##", "##" + mBillDetailsDTOs.getBillDate());
+        java.util.Date date = new ROrderDateUtils().getFormattedDate(mBillDetailsDTOs.getBillDate());
+        java.util.Date time = new ROrderDateUtils().getFormattedDate(mBillDetailsDTOs.getBillTime());
+        long lngTime = time.getTime();
+
+        long billTime = lngTime + dateUtils.getTimeOffsetAsPerLocal(5, 30);
+        mTxtBillDate.setText(dateUtils.getLocalDateInReadableFormat(date) + " at " +
+                dateUtils.getLocalTimeInReadableFormat(new Date(billTime)));
+
+        mTxtNetAmount.setText(String.format("%.2f", netAmount));
+        mTxtTotalTaxes.setText(String.format("%.2f", mBillDetailsDTOs.getTotalTax()));
+        //mTxtServicesCharges.setText(String.format("%.2f", mDiscount));
+        mTxtDiscountAmount.setText(String.format("%.2f", mDiscount));
+        mTxtTotalPayableAmnount.setText(String.format("%.2f", totalPaybleAmount));
     }
 
 }

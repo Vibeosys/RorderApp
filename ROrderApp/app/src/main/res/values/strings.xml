@@ -132,4 +132,7 @@
     <string name="print_bill_title">Print Bill</string>
     <string name="print_bill_summary">Set the Bill printer setting to \n print the Bill</string>
     <string name="print_bill_edit_hint">Bill Printer Ip e.g. 192.168.1.2</string>
+
+    <string name="discount_per_hint">Discount in percentage</string>
+    <string name="discount_btn">Discount</string>
 </resources>

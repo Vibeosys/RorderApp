@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.util;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,8 +14,9 @@ import java.util.TimeZone;
 public class ROrderDateUtils {
 
     final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    final SimpleDateFormat dateReadFormat = new SimpleDateFormat("dd-MMM-yyyy");
+    final SimpleDateFormat dateReadFormat = new SimpleDateFormat("dd MMM yyyy");
     final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+    final SimpleDateFormat timeReadFormat = new SimpleDateFormat("hh:mm aa");
 
     public String getGMTCurrentDate() {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -28,8 +30,13 @@ public class ROrderDateUtils {
     public String getLocalDateInFormat(java.util.Date date) {
         return dateFormat.format(date);
     }
+
     public String getLocalDateInReadableFormat(java.util.Date date) {
         return dateReadFormat.format(date);
+    }
+
+    public String getLocalTimeInReadableFormat(java.util.Date date) {
+        return timeReadFormat.format(date);
     }
 
     public String getGMTDateInFormat(Date date) {
@@ -66,4 +73,7 @@ public class ROrderDateUtils {
         return date;
     }
 
+    public long getTimeOffsetAsPerLocal(int hours, int mins) {
+        return ((hours * 60 * 60 * 1000) + (mins * 60 * 1000));
+    }
 }

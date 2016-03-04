@@ -7,11 +7,13 @@ public class BillPaidUpload {
     private int billNo;
     private int isPayed;
     private int payedBy;
+    private double discount;
 
-    public BillPaidUpload(int billNo, int isPayed, int payedBy) {
+    public BillPaidUpload(int billNo, int isPayed, int payedBy, double discount) {
         this.billNo = billNo;
         this.isPayed = isPayed;
         this.payedBy = payedBy;
+        this.discount = discount;
     }
 
     public int getBillNo() {
@@ -36,5 +38,13 @@ public class BillPaidUpload {
 
     public void setPayedBy(int payedBy) {
         this.payedBy = payedBy;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }
