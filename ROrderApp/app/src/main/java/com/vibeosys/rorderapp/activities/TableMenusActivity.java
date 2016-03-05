@@ -67,6 +67,7 @@ public class TableMenusActivity extends BaseActivity implements
     private ImageButton imgFloat;
     private LinearLayout llCurrentOrder;
     private EditText txtSearch;
+    private TextView txtTableNo;
     //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
     private int mCount = 0;
     private final Context mContext = this;
@@ -100,6 +101,8 @@ public class TableMenusActivity extends BaseActivity implements
         txtPreviousOrder = (LinearLayout) findViewById(R.id.txtPreviousOrders);
         llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
         imgFloat = (ImageButton) findViewById(R.id.fab);
+        txtTableNo = (TextView) findViewById(R.id.txtTableNo);
+        txtTableNo.setText("T-" + mTableNo);
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);

@@ -34,6 +34,16 @@
                     android:layout_weight="5"
                     android:drawableLeft="@drawable/abc_ic_search_api_mtrl_alpha"
                     android:hint="@string/title_search_cuisine" />
+
+                <TextView
+                    android:id="@+id/txtTableNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:padding="3dp"
+                    android:text="T999"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
