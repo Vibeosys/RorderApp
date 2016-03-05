@@ -2461,4 +2461,29 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count != -1;
     }
+
+    public boolean deleteBill(String custId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+
+        try {
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{custId};
+                count = sqLiteDatabase.delete(SqlContract.SqlBill.TABLE_NAME,
+                        SqlContract.SqlBill.CUST_ID + "=?",
+                        whereClause);
+
+                Log.d(TAG, " ## delete Bill sucessfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "## delete bill is not sucessfully" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
 }
