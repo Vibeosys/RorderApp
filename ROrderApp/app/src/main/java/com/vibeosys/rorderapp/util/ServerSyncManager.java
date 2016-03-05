@@ -473,9 +473,9 @@ public class ServerSyncManager
             if (mNotifyUser != null) {
                 if (count == 1) {
                     if (tableNo == 0) {
-                        message = count + " new order has arrived";
+                        message = count + " new order has received";
                     } else
-                        message = count + " new order for T" + tableNo + " has arrived";
+                        message = count + " new order for T" + tableNo + " has been received";
                 } else {
                     message = count + " new orders are waiting";
                 }
