@@ -29,7 +29,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txtTableName"
+                    android:id="@+id/chefTxtTableNameTab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -39,8 +39,7 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/chefTableNumber"
-
+                    android:id="@+id/chefTableNumberTab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -49,7 +48,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/txtHash"
+                    android:id="@+id/cheftxtHashTab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -59,7 +58,7 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/orderNumber"
+                    android:id="@+id/cheforderNumberTab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -69,31 +68,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/hrsGlassIcon"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:src="@drawable/icon_hours_glass" />
-
-                <TextView
-                    android:id="@+id/orderTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="2"
-                    android:focusable="false"
-                    android:text="29 mins ago"
-                    android:textColor="@color/listview_item"
-                    android:textSize="12sp" />
-            </LinearLayout>
 
         </LinearLayout>
 
@@ -116,23 +91,14 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/servedByIcon"
+                android:id="@+id/servedByIconTab"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_weight="1"
                 android:padding="4dp"
                 android:src="@drawable/ico_served_by_black" />
 
-            <TextView
-                android:id="@+id/txtExpLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:gravity="bottom"
-                android:text="Click To Expand"
-                android:textColor="@color/blue"
-                android:textSize="12sp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -142,7 +108,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/orderServedBy"
+                android:id="@+id/chefOrderServedByTab"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -159,22 +125,14 @@
                 android:gravity="bottom"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/OrderDoneChef"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:background="@drawable/button_custom"
-                    android:focusable="false"
-                    android:text="Complete"
-                    android:textColor="@color/White"
-                    android:textSize="13sp" />
 
-                <ImageView
-                    android:id="@+id/chefOrderDonIcon"
+
+                <!--<ImageView
+                    android:id="@+id/chefOrderDonIconTab"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_action_tick_chef" />
+                    android:src="@drawable/ic_action_tick_chef" />-->
             </LinearLayout>
         </LinearLayout>
 

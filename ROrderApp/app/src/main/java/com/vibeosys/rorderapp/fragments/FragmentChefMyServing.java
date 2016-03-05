@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -55,6 +56,7 @@ public class FragmentChefMyServing extends BaseFragment implements
     private ChefTabListAdapter chefTabListAdapter;
     public static ChefOrderAdapter chefOrderAdapter;
     public static Handler UIHandler;
+    ProgressDialog dialog;
     private Context mContext = this.getContext();
     private ArrayList<ChefOrderDetailsDTO> list = new ArrayList<>();
 
@@ -88,12 +90,12 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         float smallWidth = Math.min(widthDp, heigthDp);
 
-        if (widthDp >= 590 && heigthDp >= 400) {
-            Toast.makeText(getContext(), "finally you are at 6 inches", Toast.LENGTH_LONG).show();
+        /*if (widthDp >= 590 && heigthDp >= 400) {
+         //   Toast.makeText(getContext(), "finally you are at 6 inches", Toast.LENGTH_LONG).show();
             View view1 = inflater.inflate(R.layout.chef_tab_layout, container, false);
-           /* listView = (ListView)view1.findViewById(R.id.listChef);
+            listView = (ListView)view1.findViewById(R.id.listChef);
             chefTabListAdapter = new ChefTabListAdapter(getActivity().getApplicationContext(),list);
-            listView.setAdapter(chefTabListAdapter);*/
+            listView.setAdapter(chefTabListAdapter);
             ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
             mDbRepository.addMenuList(orders);
             RecyclerView chefRecycle = (RecyclerView) view1.findViewById(R.id.ChefRecycler);
@@ -104,7 +106,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
             return view1;
 
-        }
+        }*/
         if (widthDp <= 450 && widthDp < 590) {
             Toast.makeText(getContext(), "finally you are at normall screen", Toast.LENGTH_LONG).show();
         }
@@ -151,7 +153,10 @@ public class FragmentChefMyServing extends BaseFragment implements
             customAlterDialog(stringTitle, stringMessage);
 
         } else {
+            dialog = ProgressDialog.show(getContext(),"","Please wait ...",true);
+            dialog.show();
             sendToServer(ChefOrderId);
+            mServerSyncManager.syncDataWithServer(true);
             chefOrderList.invalidateViews();
         }
 
@@ -179,6 +184,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         int errorCode = -1;
         String message = null;
+        dialog.dismiss();
         /*try
         {
 

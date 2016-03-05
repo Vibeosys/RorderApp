@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by akshay on 01-03-2016.
  */
-public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerViewAdapter.OrderViewHolder> {
+public class ChefRecyclerViewAdapter extends  RecyclerView.Adapter<ChefRecyclerViewAdapter.OrderViewHolder> {
     private List<ChefOrderDetailsDTO> mOrderHeaderDTOs;
     private Context mContext;
 
@@ -68,13 +68,13 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
 
         public OrderViewHolder(View itemView) {
             super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.RecyclerCard);
-            txtTableNo = (TextView) itemView.findViewById(R.id.recyclerTxtTableNo);
+            /*cardView = (CardView) itemView.findViewById(R.id.RecyclerCard);
+            txtTableNo = (TextView) itemView.findViewById(R.id.recyclerTableNo);
             txtOrderNo = (TextView) itemView.findViewById(R.id.recyclerOrderNo);
             txtWaiterName = (TextView) itemView.findViewById(R.id.recyclerServedByName);
             txtOrderTime = (TextView) itemView.findViewById(R.id.recyclerOrderTime);
             btnComplete = (Button) itemView.findViewById(R.id.recyclerOrderDoneBtn);
-            menuList = (ListView) itemView.findViewById(R.id.recyclerMenuList);
+            menuList = (ListView) itemView.findViewById(R.id.recyclerMenuList);*/
         }
     }
 }

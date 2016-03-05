@@ -10,10 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_marginEnd="25dp"
-
-        android:layout_marginStart="25dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
         android:orientation="horizontal">
 
         <TextView
@@ -21,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="5dp"
-            android:text=" "
+            android:text="1 "
             android:textColor="@color/listview_item"
             android:textSize="9sp" />
 
@@ -32,16 +30,11 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:singleLine="false"
-            android:text="veg Manchurain"
+            android:text="veg Manchurainc  "
             android:textColor="@color/listview_item"
             android:textSize="9sp" />
 
-        <TextView
-            android:id="@+id/commentForChef"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" "
-            android:textColor="@color/listview_item" />
+
 
         <TextView
             android:id="@+id/recyclerChefQty"
@@ -49,6 +42,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="2dp"
+            android:paddingLeft="2dp"
             android:text="1 "
             android:textColor="@color/listview_item"
             android:textSize="9sp" />
@@ -70,14 +64,14 @@
         android:layout_marginEnd="25dp"
         android:layout_marginStart="25dp">
 
-       <!-- <TextView
+        <TextView
             android:id="@+id/recyclerChefMenuComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="5dp"
-            android:paddingStart="22dp"
-            android:text=""
+            android:paddingStart="12dp"
+            android:text="testin Note"
             android:textColor="@color/red"
-            android:textSize="5sp" />-->
+            android:textSize="6sp" />
     </LinearLayout>
 </LinearLayout>

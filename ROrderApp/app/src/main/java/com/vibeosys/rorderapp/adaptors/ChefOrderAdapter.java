@@ -120,10 +120,10 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.chef_main_table_order, null);
             groupHolder = new GroupHolder();
-            groupHolder.groupTextView = (TextView) convertView.findViewById(R.id.orderFromTableNo);
-            groupHolder.getGroupTableNo = (TextView) convertView.findViewById(R.id.orderTakenBy);
+            groupHolder.groupTextView = (TextView) convertView.findViewById(R.id.orderServedBy);
+            groupHolder.getGroupOrderNo = (TextView) convertView.findViewById(R.id.orderNumber);
             groupHolder.orderDoneBtn = (Button) convertView.findViewById(R.id.OrderDoneChef);
-            groupHolder.getGroupOrderNo = (TextView) convertView.findViewById(R.id.cheforderNo);
+            groupHolder.getGroupTableNo = (TextView) convertView.findViewById(R.id.chefTableNumber);
             groupHolder.imgIndicator = (ImageView) convertView.findViewById(R.id.chefOrderDonIcon);
             groupHolder.placedOrderTime = (TextView) convertView.findViewById(R.id.orderTime);
 

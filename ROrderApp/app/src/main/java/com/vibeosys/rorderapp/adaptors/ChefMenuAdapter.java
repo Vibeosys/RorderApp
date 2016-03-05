@@ -55,7 +55,7 @@ public class ChefMenuAdapter extends BaseAdapter {
             viewHolder.txtSrNo = (TextView) row.findViewById(R.id.chefMenuNo);
             viewHolder.txtmenuName = (TextView) row.findViewById(R.id.recyclerChefMenuName);
             viewHolder.txtQty = (TextView) row.findViewById(R.id.recyclerChefQty);
-            //viewHolder.txtComment = (TextView) row.findViewById(R.id.commentForChef);
+            viewHolder.txtComment = (TextView) row.findViewById(R.id.recyclerChefMenuComment);
             row.setTag(viewHolder);
 
         } else viewHolder = (ViewHolder) row.getTag();
@@ -64,6 +64,7 @@ public class ChefMenuAdapter extends BaseAdapter {
         viewHolder.txtSrNo.setText("" + (position + 1));
         viewHolder.txtmenuName.setText(menu.getmChefMenuTitle());
         viewHolder.txtQty.setText("" + menu.getmChefQty());
+        viewHolder.txtComment.setText(menu.getmMenuNote());
         //String note = menu.getmMenuNote();
        /* if (menu.getmMenuNote().isEmpty() && menu.getmMenuNote() == null) {
             viewHolder.txtComment.setText("");

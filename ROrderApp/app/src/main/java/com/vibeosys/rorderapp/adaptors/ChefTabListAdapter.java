@@ -21,6 +21,7 @@ public class ChefTabListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<ChefOrderDetailsDTO> chefOrderDetailsDTOs;
     private  GroupHolder groupHolder;
+    private OnRowItemClickListner onRowItemClickListner ;
  public  ChefTabListAdapter(Context context,ArrayList<ChefOrderDetailsDTO> chefOrderDetailsDTOs)
     {
         this.context = context;
@@ -44,33 +45,40 @@ public class ChefTabListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ChefOrderDetailsDTO chefOrderDetailsDTO = chefOrderDetailsDTOs.get(position);
         if(convertView ==null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.chef_main_table_order, null);
+            convertView = inflater.inflate(R.layout.chef_main_tab, null);
             groupHolder = new GroupHolder();
-            groupHolder.groupTextView = (TextView) convertView.findViewById(R.id.orderFromTableNo);
-            groupHolder.getGroupTableNo = (TextView) convertView.findViewById(R.id.orderTakenBy);
-            groupHolder.orderDoneBtn = (Button) convertView.findViewById(R.id.OrderDoneChef);
-            groupHolder.getGroupOrderNo = (TextView) convertView.findViewById(R.id.cheforderNo);
-            groupHolder.imgIndicator = (ImageView) convertView.findViewById(R.id.chefOrderDonIcon);
-            groupHolder.placedOrderTime = (TextView) convertView.findViewById(R.id.orderTime);
-
+            groupHolder.groupOrderServedBy = (TextView) convertView.findViewById(R.id.chefOrderServedByTab);
+            groupHolder.getGroupOrderNo = (TextView) convertView.findViewById(R.id.cheforderNumberTab);
+            groupHolder.getGroupTableNo = (TextView) convertView.findViewById(R.id.chefTableNumberTab);
             convertView.setTag(groupHolder);
         }
         else
         {
             groupHolder = (GroupHolder) convertView.getTag();
         }
+        groupHolder.groupOrderServedBy.setText(chefOrderDetailsDTO.getmUserName());
+        groupHolder.getGroupOrderNo.setText("" + chefOrderDetailsDTO.getmOrderNumner());
+        groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTableNo());
+
         return convertView;
     }
     public final class GroupHolder {
-        TextView groupTextView;
+        TextView groupOrderServedBy;
         TextView getGroupTableNo;
-        Button orderDoneBtn;
-        ImageView imgIndicator;
         TextView getGroupOrderNo;
-        TextView placedOrderTime;
 
+
+    }
+   public interface OnRowItemClickListner
+    {
+        public void rowItemClicked(String ChefOrderId);
+    }
+    public void setRowItemClicked(OnRowItemClickListner listern)
+    {
+        this.onRowItemClickListner = listern;
     }
 }

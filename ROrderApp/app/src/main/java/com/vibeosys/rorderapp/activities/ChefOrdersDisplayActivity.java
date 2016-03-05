@@ -1,28 +1,38 @@
 package com.vibeosys.rorderapp.activities;
 
 import android.app.ActionBar;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefPagerAdapter;
 
+import com.vibeosys.rorderapp.adaptors.ChefRecyclerViewAdapter;
+import com.vibeosys.rorderapp.adaptors.ChefTabListAdapter;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.ServerSync;
+import com.vibeosys.rorderapp.fragments.FragmentChefTabMyServing;
 import com.vibeosys.rorderapp.service.ChefService;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.NetworkUtils;
@@ -59,9 +69,6 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         getSupportActionBar();
         setTitle("Chef dashboard");
 
-        Intent i = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-        startService(i);
-
         if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
@@ -71,8 +78,39 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         }
         getSupportActionBar();
 
+        Intent i = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+        startService(i);
 
-        tab_layout = (TabLayout) findViewById(R.id.tab_layout);
+        DisplayMetrics matrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(matrics);
+        int widthPixel = matrics.widthPixels;
+        int heightPixel = matrics.heightPixels;
+
+        float scaleFactor = matrics.density;
+
+
+        float widthDp = widthPixel / scaleFactor;
+        float heigthDp = heightPixel / scaleFactor;
+
+        float smallWidth = Math.min(widthDp, heigthDp);
+
+        if (widthDp >= 590 && heigthDp >= 400) {
+            Toast.makeText(this, "finally you are at 6 inches from activity", Toast.LENGTH_LONG).show();
+
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            FragmentChefTabMyServing fragmentChefTabMyServing= new FragmentChefTabMyServing();
+            fragmentTransaction.add(R.id.parent_test, fragmentChefTabMyServing);
+            fragmentTransaction.commit();
+
+
+
+
+
+        }
+        else
+        {
+
+            tab_layout = (TabLayout) findViewById(R.id.tab_layout);
 
         tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
 
@@ -103,6 +141,43 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
 
             }
         });
+        }
+
+
+
+
+
+      /*  tab_layout = (TabLayout) findViewById(R.id.tab_layout);
+
+        tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
+
+        tab_layout.addTab(tab_layout.newTab().setText("ORDER HISTORY"));
+
+
+        tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tab_layout.setSelectedTabIndicatorHeight(4);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final ChefPagerAdapter adapter = new ChefPagerAdapter
+                (getSupportFragmentManager(), tab_layout.getTabCount());
+        viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
+        tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });*/
 
     }
 
