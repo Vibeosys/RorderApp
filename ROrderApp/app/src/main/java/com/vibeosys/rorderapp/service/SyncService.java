@@ -101,8 +101,8 @@ public class SyncService extends IntentService implements ServerSyncManager.OnDo
     private void showNotification(String showMessage) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.hotel_logo)
-                        .setContentTitle("R Order Updates")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(getResources().getString(R.string.app_name))
                         .setContentText(showMessage);
 
         // Creates an explicit intent for an Activity in your app
