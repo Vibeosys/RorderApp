@@ -63,6 +63,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     private PropertyFileReader mpropertyFileReader;
     private LinearLayout mSelectRestoView;
     private ProgressBar mProgressBar;
+    private String message = "";
 
     @Override
     protected String getScreenName() {
@@ -158,15 +159,13 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                     flag = false;
                     String responce = convertStreamToString(inputStream);
                     Log.i(TAG, "##" + responce);
-                    String message = "";
+
                     try {
                         JSONObject jsResponce = new JSONObject(responce);
                         message = jsResponce.getString("message");
                     } catch (JSONException e) {
                         Log.e(TAG, e.toString());
                     }
-                    customAlterDialog(getResources().getString(R.string.error_dialog_title_registration)
-                            , message);
                 }
             }
 
@@ -361,6 +360,9 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                 intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentLogin);
                 finish();
+            } else if (!aBoolean) {
+                customAlterDialog(getResources().getString(R.string.error_dialog_title_registration)
+                        , message);
             }
         }
     }
