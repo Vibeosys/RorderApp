@@ -95,7 +95,7 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         float smallWidth = Math.min(widthDp, heigthDp);
 
         if (widthDp >= 590 && heigthDp >= 400) {
-            Toast.makeText(this, "finally you are at 6 inches from activity", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(this, "finally you are at 6 inches from activity", Toast.LENGTH_LONG).show();
 
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             FragmentChefTabMyServing fragmentChefTabMyServing= new FragmentChefTabMyServing();

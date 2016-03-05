@@ -145,7 +145,7 @@
                 android:id="@+id/orderServedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="end"
                 android:layout_weight="1"
                 android:text="DemoName"
                 android:textColor="@color/listview_item"
@@ -156,7 +156,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="1.5dp"
                 android:layout_weight="1"
-                android:gravity="bottom"
+                android:gravity="bottom|end"
                 android:orientation="horizontal">
 
                 <Button
@@ -165,6 +165,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/button_custom"
                     android:focusable="false"
+                    android:layout_gravity="center"
                     android:text="Complete"
                     android:textColor="@color/White"
                     android:textSize="13sp" />

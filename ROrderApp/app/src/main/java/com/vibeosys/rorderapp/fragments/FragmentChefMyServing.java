@@ -108,7 +108,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         }*/
         if (widthDp <= 450 && widthDp < 590) {
-            Toast.makeText(getContext(), "finally you are at normall screen", Toast.LENGTH_LONG).show();
+           // Toast.makeText(getContext(), "finally you are at normall screen", Toast.LENGTH_LONG).show();
         }
 
         float widthDpi = matrics.xdpi;
