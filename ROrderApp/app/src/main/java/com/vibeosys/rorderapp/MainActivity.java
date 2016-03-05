@@ -1,8 +1,10 @@
 package com.vibeosys.rorderapp;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -518,7 +520,7 @@ public class MainActivity extends BaseActivity
         dlg.setContentView(view);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        ArrayList<WaitingUserDTO> mWaitingList = mDbRepository.getWaitingList();
+        final ArrayList<WaitingUserDTO> mWaitingList = mDbRepository.getWaitingList();
         final EditText mTxtCount = (EditText) dlg.findViewById(R.id.txtCustCount);
         final EditText mTxtName = (EditText) dlg.findViewById(R.id.txtCustomerName);
         final ImageButton btnClose = (ImageButton) dlg.findViewById(R.id.fabClose);
@@ -634,6 +636,7 @@ public class MainActivity extends BaseActivity
                                 dialog.dismiss();
                                 dlg.dismiss();
                                 adapter.refresh(mDbRepository.getTableRecords(""));
+                                callToMenuIntent(Integer.parseInt(strTableNo), tableId, waiting.getmCustomerId());
                             }
 
                         }
@@ -648,6 +651,43 @@ public class MainActivity extends BaseActivity
                     }
                 });
                 dialog.show();
+            }
+        });
+        mListCustomer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final WaitingUserDTO customer = (WaitingUserDTO) mCustomerAdapter.getItem(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Delete Customer");
+                //builder.setIcon(R.drawable.ic_action_warning_yellow);
+                builder.setMessage("Are you sure to delete " + customer.getmCustomerName());
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean flagDeleteCust = mDbRepository.deleteCustomerTableTrans(customer.getmCustomerId())
+                                && mDbRepository.deleteCustomer(customer.getmCustomerId());
+                        if (flagDeleteCust) {
+                            mCustomerAdapter.refresh(mDbRepository.getWaitingList());
+                            Gson gson = new Gson();
+                            TableDataDTO[] tableDataDTOs = new TableDataDTO[1];
+                            CustomerDbDTO deleteCustomer = new CustomerDbDTO(customer.getmCustomerId(), customer.getmCustomerName());
+                            String serializedJsonString = gson.toJson(deleteCustomer);
+                            //TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+                            tableDataDTOs[0] = new TableDataDTO(ConstantOperations.DELETE_CUSTOMER, serializedJsonString);
+                            mServerSyncManager.uploadDataToServer(tableDataDTOs);
+                            Toast.makeText(getApplicationContext(), "Customer Deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
         dlg.show();

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
@@ -23,6 +24,7 @@ public class CustomerAdapter extends BaseAdapter {
     private static final String TAG = CustomerAdapter.class.getSimpleName();
     private Context mContext;
     private ArrayList<WaitingUserDTO> waitingList;
+    private OnDeleteClickListener onDeleteClickListener;
 
     public CustomerAdapter(Context mContext, ArrayList<WaitingUserDTO> waitingList) {
         this.mContext = mContext;
@@ -64,6 +66,8 @@ public class CustomerAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.txtCustName = (TextView) row.findViewById(R.id.txtCustomerName);
             viewHolder.txtCount = (TextView) row.findViewById(R.id.txtCount);
+            viewHolder.txtSrNo = (TextView) row.findViewById(R.id.txtSrNo);
+            //viewHolder.imgClose = (ImageView) row.findViewById(R.id.imgDeleteCustomer);
             //viewHolder.txtArrivalTime  = (TextView) row.findViewById(R.id.txtArrivalTime);
             // viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
             row.setTag(viewHolder);
@@ -73,9 +77,11 @@ public class CustomerAdapter extends BaseAdapter {
         WaitingUserDTO waitingUserDTO = waitingList.get(position);
         Log.d(TAG, waitingUserDTO.toString());
         viewHolder.txtCustName.setText(waitingUserDTO.getmCustomerName());
-        viewHolder.txtCount.setText(String.valueOf(waitingUserDTO.getmOccupancy()));
+        if (waitingUserDTO.getmOccupancy() != 0)
+            viewHolder.txtCount.setText(String.valueOf(waitingUserDTO.getmOccupancy()));
+        else viewHolder.txtCount.setText("");
         //viewHolder.txtArrivalTime.setText(waitingUserDTO.getmArrivalTime().toString());
-
+        viewHolder.txtSrNo.setText("" + (position + 1));
         //viewHolder.imgTablePhoto.loadImageFromFile("file:" + myImageDBs.get(position).getmImagePath());
         return row;
     }
@@ -84,5 +90,15 @@ public class CustomerAdapter extends BaseAdapter {
         TextView txtCustName;
         TextView txtCount;
         TextView txtArrivalTime;
+        TextView txtSrNo;
+        ImageView imgClose;
+    }
+
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
+        this.onDeleteClickListener = listener;
+    }
+
+    public interface OnDeleteClickListener {
+        void onDeleteCustomer(WaitingUserDTO customer, int position);
     }
 }

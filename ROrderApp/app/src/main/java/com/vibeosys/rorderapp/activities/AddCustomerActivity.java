@@ -1,7 +1,9 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,7 +35,7 @@ import java.util.UUID;
 /**
  * Created by akshay on 08-02-2016.
  */
-public class AddCustomerActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class AddCustomerActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private EditText mTxtName, mTxtCount;
     private Button mBtnAdd;
@@ -62,7 +64,10 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mCustomerAdapter = new CustomerAdapter(getApplicationContext(), mWaitingList);
         mListCustomer.setAdapter(mCustomerAdapter);
         mCustomerAdapter.notifyDataSetChanged();
+        mListCustomer.setLongClickable(true);
         mListCustomer.setOnItemClickListener(this);
+        mListCustomer.setOnItemLongClickListener(this);
+
     }
 
     @Override
@@ -195,5 +200,45 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         WaitingUserDTO waiting = (WaitingUserDTO) mCustomerAdapter.getItem(position);
         showMyDialog(waiting);
+    }
+
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        WaitingUserDTO customer = (WaitingUserDTO) mCustomerAdapter.getItem(position);
+        confrmDeleteCustomer(customer);
+        Log.d(TAG, "## Long Click on customer List");
+        return true;
+    }
+
+    private void confrmDeleteCustomer(final WaitingUserDTO customer) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Customer");
+        //builder.setIcon(R.drawable.ic_action_warning_yellow);
+        builder.setMessage("Are you sure to delete " + customer.getmCustomerName());
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean flagDeleteCust = mDbRepository.deleteCustomer(customer.getmCustomerId());
+                if (flagDeleteCust) {
+                    Gson gson = new Gson();
+                    TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
+                    CustomerDbDTO deleteCustomer = new CustomerDbDTO(customer.getmCustomerId(), customer.getmCustomerName());
+                    String serializedJsonString = gson.toJson(deleteCustomer);
+                    //TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+                    tableDataDTOs[0] = new TableDataDTO(ConstantOperations.DELETE_CUSTOMER, serializedJsonString);
+                    mServerSyncManager.uploadDataToServer(tableDataDTOs);
+                    Toast.makeText(getApplicationContext(), "Customer Deleted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
     }
 }

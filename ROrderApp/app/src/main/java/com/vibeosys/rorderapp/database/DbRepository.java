@@ -2405,4 +2405,60 @@ public class DbRepository extends SQLiteOpenHelper {
 
         }
     }
+
+    public boolean deleteCustomer(String custId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        // ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+
+        try {
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{custId};
+                count = sqLiteDatabase.delete(SqlContract.SqlCustomer.TABLE_NAME,
+                        SqlContract.SqlCustomer.CUST_ID + "=?",
+                        whereClause);
+                // contentValues.clear();
+                //sqLiteDatabase.close();
+                Log.d(TAG, " ## delete customer sucessfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "## delete customer is not sucessfully" + e.toString());
+            //sqLiteDatabase.close();
+
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean deleteCustomerTableTrans(String custId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        // ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+
+        try {
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{custId};
+                count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
+                        SqlContract.SqlTempOrder.CUST_ID + "=?",
+                        whereClause);
+                // contentValues.clear();
+                //sqLiteDatabase.close();
+                Log.d(TAG, " ## delete customer sucessfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "## delete customer is not sucessfully" + e.toString());
+            //sqLiteDatabase.close();
+
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
 }
