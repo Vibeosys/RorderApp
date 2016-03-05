@@ -36,6 +36,7 @@ public class BillDetailsActivity extends BaseActivity {
     //private TextView mTxtServicesCharges;
     private TextView mTxtDiscountAmount;
     private TextView mTxtTotalPayableAmnount;
+    TextView txtDiscountTitle;
     private double mDiscount = 0.00;
 
     @Override
@@ -70,6 +71,7 @@ public class BillDetailsActivity extends BaseActivity {
         //mTxtServicesCharges = (TextView) findViewById(R.id.ServicesChrgAmt);
         mTxtDiscountAmount = (TextView) findViewById(R.id.DiscountAmt);
         mTxtTotalPayableAmnount = (TextView) findViewById(R.id.TotalAmt);
+        txtDiscountTitle = (TextView) findViewById(R.id.DiscountTitle);
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
         LinearLayout mLayoutAddDiscount = (LinearLayout) findViewById(R.id.layout_discount_per);
@@ -167,7 +169,7 @@ public class BillDetailsActivity extends BaseActivity {
         long billTime = lngTime + dateUtils.getTimeOffsetAsPerLocal(5, 30);
         mTxtBillDate.setText(dateUtils.getLocalDateInReadableFormat(date) + " at " +
                 dateUtils.getLocalTimeInReadableFormat(new Date(billTime)));
-
+        txtDiscountTitle.setText("Discount (" + percenatge + "%)");
         mTxtNetAmount.setText(String.format("%.2f", netAmount));
         mTxtTotalTaxes.setText(String.format("%.2f", mBillDetailsDTOs.getTotalTax()));
         //mTxtServicesCharges.setText(String.format("%.2f", mDiscount));
