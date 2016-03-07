@@ -41,9 +41,12 @@ public class FragmentChefTabDetail extends BaseFragment{
         TextView orderTimeTv = (TextView)view.findViewById(R.id.recyclerOrderTime);
         ListView orderMenuItem = (ListView)view.findViewById(R.id.recyclerMenuList);
 
+
         menuDetailsDTO = mDbRepository.getChefMenu(orderId);
         ChefTabDetailAdapter chefTabDetailAdapter = new ChefTabDetailAdapter(getContext(),menuDetailsDTO);
         orderMenuItem.setAdapter(chefTabDetailAdapter);
+
+
         waiterNameTv.setText(""+waiterName);
         orderNumberTv.setText(""+orderNumber);
         tableNumberTv.setText(""+tableNumber);

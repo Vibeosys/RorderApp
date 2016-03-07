@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -47,8 +48,8 @@ public class FragmentChefTabMyServing extends BaseFragment {
 
         View view = inflater.inflate(R.layout.chef_tab_layout,container,false);
 
-        listView = (ListView)view.findViewById(R.id.listChef);
-        list = mDbRepository.getOrderHeadesInAsc(1);
+        //listView = (ListView)view.findViewById(R.id.listChef);
+        /*list = mDbRepository.getOrderHeadesInAsc(1);
         chefTabListAdapter = new ChefTabListAdapter(getActivity().getApplicationContext(),list);
         listView.setAdapter(chefTabListAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,16 +75,35 @@ public class FragmentChefTabMyServing extends BaseFragment {
                 fragmentTransaction.commit();
 
             }
-        });
-       /* ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
+        });*/
+        ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
         mDbRepository.addMenuList(orders);
         RecyclerView chefRecycle = (RecyclerView) view.findViewById(R.id.ChefRecycler);
         ChefRecyclerViewAdapter adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext());
-      //  StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),2,1,true);
-        chefRecycle.setLayoutManager(gridLayoutManager);
-        //chefRecycle.setLayoutManager(layoutManager);
-        chefRecycle.setAdapter(adapterRecycle);*/
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),2,1,true);
+//        chefRecycle.setLayoutManager(gridLayoutManager);
+        chefRecycle.setLayoutManager(layoutManager);
+        chefRecycle.setAdapter(adapterRecycle);
+
+
+        /*chefRecycle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                v.onTouchEvent(event);
+
+                return true;
+            }
+        });*/
         return view;
     }
 

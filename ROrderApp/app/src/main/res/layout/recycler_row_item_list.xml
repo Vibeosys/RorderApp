@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recycler_row_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
+    android:layout_margin="4dp"
     android:background="@color/White"
     android:focusable="false"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +23,7 @@
             android:paddingEnd="5dp"
             android:text="1 "
             android:textColor="@color/listview_item"
-            android:textSize="9sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/recyclerChefMenuName"
@@ -32,8 +34,7 @@
             android:singleLine="false"
             android:text="veg Manchurainc  "
             android:textColor="@color/listview_item"
-            android:textSize="9sp" />
-
+            android:textSize="14sp" />
 
 
         <TextView
@@ -41,11 +42,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:paddingRight="2dp"
             android:paddingLeft="2dp"
+            android:paddingRight="2dp"
             android:text="1 "
             android:textColor="@color/listview_item"
-            android:textSize="9sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/recyclerQty"
@@ -54,7 +55,7 @@
             android:gravity="center"
             android:text="Qty"
             android:textColor="@color/light_grey"
-            android:textSize="9sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -69,9 +70,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="5dp"
-            android:paddingStart="12dp"
-            android:text="testin Note"
+            android:paddingStart="17dp"
+            android:text="testing Note"
             android:textColor="@color/red"
-            android:textSize="6sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

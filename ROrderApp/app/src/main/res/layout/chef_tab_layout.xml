@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
 
-    <ListView
+    <!--<ListView
         android:id="@+id/listChef"
         android:layout_width="300dp"
         android:layout_height="wrap_content">
 
-    </ListView>
-  <!--<LinearLayout
+    </ListView>-->
+  <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="horizontal">
@@ -21,12 +21,12 @@
           android:layout_height="match_parent"
           android:id="@+id/ChefRecycler"
           />
-  </LinearLayout>-->
+  </LinearLayout>
 
-    <FrameLayout
+   <!-- <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/parent_detaisl" >
-        </FrameLayout>
+        </FrameLayout>-->
 </LinearLayout>

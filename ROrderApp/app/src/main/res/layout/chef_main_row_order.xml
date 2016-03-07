@@ -3,15 +3,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="2dp"
-    android:background="@color/White"
-    android:focusable="false">
+    android:layout_gravity="center"
+    android:layout_marginTop="8dp"
+    android:background="@color/White">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_gravity="center"
         android:orientation="horizontal"
-
+        android:layout_marginTop="4dp"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         >
@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_gravity="center"
         android:paddingBottom="2dp"
         android:background="@drawable/custom_border">
 
