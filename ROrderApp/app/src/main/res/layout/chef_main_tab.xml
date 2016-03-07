@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="@drawable/custom_border"
+     android:orientation="vertical">
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:background="@drawable/custom_border"
+
     android:focusable="false"
-    android:gravity="center_vertical"
+    android:gravity="center"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -36,7 +43,7 @@
                     android:gravity="center"
                     android:text="No."
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/chefTableNumberTab"
@@ -45,7 +52,7 @@
                     android:layout_weight="2"
                     android:text="1"
                     android:textColor="@color/black_color"
-                    android:textSize="18sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/cheftxtHashTab"
@@ -55,7 +62,7 @@
                     android:gravity="center"
                     android:text="#"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/cheforderNumberTab"
@@ -64,7 +71,7 @@
                     android:layout_weight="2"
                     android:text="112"
                     android:textColor="@color/black_color"
-                    android:textSize="18sp" />
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -73,7 +80,7 @@
         </LinearLayout>
 
 
-        <!--   <TextView
+           <!--<TextView
                android:id="@+id/txtServedName"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
@@ -93,7 +100,7 @@
             <ImageView
                 android:id="@+id/servedByIconTab"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:padding="4dp"
                 android:src="@drawable/ico_served_by_black" />
@@ -115,7 +122,7 @@
                 android:layout_weight="1"
                 android:text="DemoName"
                 android:textColor="@color/listview_item"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,3 +147,29 @@
     </LinearLayout>
 
 </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="4dp">
+
+        <ImageView
+            android:id="@+id/hrsGlassIcon"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_gravity="bottom"
+            android:src="@drawable/icon_hours_glass" />
+
+        <TextView
+            android:id="@+id/orderTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="4dp"
+            android:focusable="false"
+            android:text="29 mins ago"
+            android:textColor="@color/listview_item"
+            android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>

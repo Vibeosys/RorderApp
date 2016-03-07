@@ -170,7 +170,7 @@ public class ChefOrderDetailsDTO {
         if (timeDiffInHrs > 1)
             str += timeDiffInHrs + " hrs ";
         if (timeDiffInMins > 0)
-            str += timeDiffInMins + " mins";
+            str += String.format("%2d",timeDiffInMins) + " mins";
         else
             str = "1 min";
         return str;
