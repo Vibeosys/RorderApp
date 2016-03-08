@@ -1,14 +1,20 @@
 package com.vibeosys.rorderapp.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,12 +26,22 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefRecyclerViewAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefTabListAdapter;
+import com.vibeosys.rorderapp.data.ChefOrderCompleted;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
+import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
+import com.vibeosys.rorderapp.service.SyncService;
+import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.NetworkUtils;
+import com.vibeosys.rorderapp.util.ServerSyncManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -33,14 +49,17 @@ import java.util.ArrayList;
 /**
  * Created by shrinivas on 02-03-2016.
  */
-public class FragmentChefTabMyServing extends BaseFragment {
+public class FragmentChefTabMyServing extends BaseFragment
+        implements ChefRecyclerViewAdapter.tabCompleteButton ,ServerSyncManager.OnStringResultReceived {
 
 
     private ChefTabListAdapter chefTabListAdapter;
-    public static ChefOrderAdapter chefOrderAdapter;
     public static Handler UIHandler;
     private ListView listView;
     private ArrayList<ChefOrderDetailsDTO> list = new ArrayList<>();
+    private RecyclerView chefRecycle;
+    public static ChefRecyclerViewAdapter adapterRecycle;
+    ProgressDialog dialog;
 
     @Nullable
     @Override
@@ -48,64 +67,100 @@ public class FragmentChefTabMyServing extends BaseFragment {
 
         View view = inflater.inflate(R.layout.chef_tab_layout,container,false);
 
-        //listView = (ListView)view.findViewById(R.id.listChef);
-        /*list = mDbRepository.getOrderHeadesInAsc(1);
-        chefTabListAdapter = new ChefTabListAdapter(getActivity().getApplicationContext(),list);
-        listView.setAdapter(chefTabListAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ChefOrderDetailsDTO chefOrderDetailsDTO = (ChefOrderDetailsDTO)chefTabListAdapter.getItem(position);
-                String orderId = chefOrderDetailsDTO.getmNewOrderId();
-                String waiterName = chefOrderDetailsDTO.getmUserName();
-                int tableNumber = chefOrderDetailsDTO.getmTableNo();
-                int orderNumber = chefOrderDetailsDTO.getmOrderNumner();
-                String orderTime = (chefOrderDetailsDTO.TimeDiff());
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                FragmentChefTabDetail fragmentChefTabDetail = new FragmentChefTabDetail();
-                Bundle args = new Bundle();
-                args.putString("orderId" ,orderId);
-                args.putString("waiterName" ,waiterName);
-                args.putInt("tableNumber", tableNumber);
-                args.putInt("orderNumber", orderNumber);
-                args.putString("orderTimeString",orderTime);
-                fragmentChefTabDetail.setArguments(args);
-                fragmentTransaction.add(R.id.parent_detaisl, fragmentChefTabDetail);
-                fragmentTransaction.commit();
 
-            }
-        });*/
         ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
         mDbRepository.addMenuList(orders);
-        RecyclerView chefRecycle = (RecyclerView) view.findViewById(R.id.ChefRecycler);
-        ChefRecyclerViewAdapter adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext());
+        chefRecycle = (RecyclerView) view.findViewById(R.id.ChefRecycler);
+        adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext(),mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),2,1,true);
-//        chefRecycle.setLayoutManager(gridLayoutManager);
         chefRecycle.setLayoutManager(layoutManager);
+
         chefRecycle.setAdapter(adapterRecycle);
+        adapterRecycle.tabSetCompleteBtn(this);
+        mServerSyncManager.setOnStringResultReceived(this);
 
 
-        /*chefRecycle.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
 
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                }
-                v.onTouchEvent(event);
-
-                return true;
-            }
-        });*/
         return view;
     }
 
 
+    @Override
+    public void tabComplete(String chefTabOrderId) {
+        if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
+            String stringTitle = "Network error";
+            String stringMessage = "No Internet connection is available.Please check internet connection.";
+            customAlterDialog(stringTitle, stringMessage);
+
+        } else {
+
+            sendTabDataToServer( chefTabOrderId );
+
+        }
+    }
+    public void sendTabDataToServer(String chefTabOrderId)
+    {
+        if (NetworkUtils.isActiveNetworkAvailable(getContext())) {
+            dialog = ProgressDialog.show(getContext(), "", "Please wait ...", true);
+            dialog.show();
+            ChefOrderCompleted chefOrderCompleted = new ChefOrderCompleted(chefTabOrderId);
+            Gson gson = new Gson();
+            String serializedJsonString = gson.toJson(chefOrderCompleted);
+            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
+            mServerSyncManager.uploadDataToServer(tableDataDTO);
+            mServerSyncManager.syncDataWithServer(true);
+
+
+        } else {
+            showMyDialog(getActivity());
+        }
+    }
+
+    @Override
+    public void onStingResultReceived(@NonNull JSONObject data) {
+        int errorCode = -1;
+        String errorString="";
+        String message = null;
+
+
+        adapterRecycle.notifyDataSetChanged();
+        dialog.dismiss();
+
+        try
+        {
+           /* errorCode = data.getInt(String.valueOf(errorCode));
+            errorString = data.getString("errorCode");
+            message = data.getString("message");
+            if(errorCode == 0)
+            {
+                Toast.makeText(getActivity(),"Data send to server",Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Toast.makeText(getActivity(),"Data  not send",Toast.LENGTH_LONG).show();
+            }*/
+
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    static {
+        UIHandler = new Handler(Looper.getMainLooper());
+
+
+    }
+public static void runOnUI(Runnable runnable)
+{
+    UIHandler.post(runnable);
+    adapterRecycle.notifyDataSetChanged();
+}
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 }

@@ -4,5 +4,5 @@
     <item android:id="@+id/signoutChef"
         android:icon="@drawable/ic_action_io"
         android:title="Sign out"
-        app:showAsAction="always" />
+        app:showAsAction="always|withText" />
 </menu>

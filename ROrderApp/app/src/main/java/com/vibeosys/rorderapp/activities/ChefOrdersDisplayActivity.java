@@ -42,6 +42,7 @@ import com.vibeosys.rorderapp.util.UserAuth;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.IDN;
 import java.util.ArrayList;
 
 /**
@@ -67,7 +68,8 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chef_main_screen);
         getSupportActionBar();
-        setTitle("Chef dashboard");
+
+        setTitle("Chef's Kitchen");
 
         if (!NetworkUtils.isActiveNetworkAvailable(this)) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
@@ -183,10 +185,14 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+
         getMenuInflater().inflate(R.menu.chef_main, menu);
 
 
         menu.findItem(R.id.signoutChef).setVisible(true);
+
+
         return true;
     }
 

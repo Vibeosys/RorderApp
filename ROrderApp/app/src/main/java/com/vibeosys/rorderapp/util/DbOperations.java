@@ -18,6 +18,7 @@ import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
 import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
+import com.vibeosys.rorderapp.fragments.FragmentChefTabMyServing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +130,24 @@ public class DbOperations {
                     e.printStackTrace();
                 }
 
+            }
+        });
+        FragmentChefTabMyServing.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(FragmentChefTabMyServing.adapterRecycle == null)
+                    {
+                        Log.d("Place order Tab", "##" + null);
+                    }
+                    else{
+                        FragmentChefTabMyServing.adapterRecycle.refresh(2);
+                    }
+
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
         return isInserted & isUpdated;
