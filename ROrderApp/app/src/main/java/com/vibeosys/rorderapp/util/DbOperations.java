@@ -19,6 +19,7 @@ import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
 import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
 import com.vibeosys.rorderapp.fragments.FragmentChefTabMyServing;
+import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,16 +137,13 @@ public class DbOperations {
             @Override
             public void run() {
                 try {
-                    if(FragmentChefTabMyServing.adapterRecycle == null)
-                    {
+                    if (FragmentChefTabMyServing.adapterRecycle == null) {
                         Log.d("Place order Tab", "##" + null);
-                    }
-                    else{
+                    } else {
                         FragmentChefTabMyServing.adapterRecycle.refresh(2);
                     }
 
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -204,7 +202,7 @@ public class DbOperations {
         MainActivity.runOnUI(new Runnable() {
             public void run() {
                 try {
-                    MainActivity.adapter.refresh(dbRepository.getTableRecords(""));
+                    FragmentWaiterTable.adapter.refresh(dbRepository.getTableRecords(""));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -50,7 +50,7 @@ import java.util.ArrayList;
  * Created by shrinivas on 02-03-2016.
  */
 public class FragmentChefTabMyServing extends BaseFragment
-        implements ChefRecyclerViewAdapter.tabCompleteButton ,ServerSyncManager.OnStringResultReceived {
+        implements ChefRecyclerViewAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived {
 
 
     private ChefTabListAdapter chefTabListAdapter;
@@ -63,23 +63,21 @@ public class FragmentChefTabMyServing extends BaseFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.chef_tab_layout,container,false);
-
+        View view = inflater.inflate(R.layout.chef_tab_layout, container, false);
 
 
         ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
         mDbRepository.addMenuList(orders);
         chefRecycle = (RecyclerView) view.findViewById(R.id.ChefRecycler);
-        adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext(),mDbRepository);
+        adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         chefRecycle.setLayoutManager(layoutManager);
 
         chefRecycle.setAdapter(adapterRecycle);
         adapterRecycle.tabSetCompleteBtn(this);
         mServerSyncManager.setOnStringResultReceived(this);
-
 
 
         return view;
@@ -95,12 +93,12 @@ public class FragmentChefTabMyServing extends BaseFragment
 
         } else {
 
-            sendTabDataToServer( chefTabOrderId );
+            sendTabDataToServer(chefTabOrderId);
 
         }
     }
-    public void sendTabDataToServer(String chefTabOrderId)
-    {
+
+    public void sendTabDataToServer(String chefTabOrderId) {
         if (NetworkUtils.isActiveNetworkAvailable(getContext())) {
             dialog = ProgressDialog.show(getContext(), "", "Please wait ...", true);
             dialog.show();
@@ -120,15 +118,14 @@ public class FragmentChefTabMyServing extends BaseFragment
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
         int errorCode = -1;
-        String errorString="";
+        String errorString = "";
         String message = null;
 
 
         adapterRecycle.notifyDataSetChanged();
         dialog.dismiss();
 
-        try
-        {
+        try {
            /* errorCode = data.getInt(String.valueOf(errorCode));
             errorString = data.getString("errorCode");
             message = data.getString("message");
@@ -142,8 +139,7 @@ public class FragmentChefTabMyServing extends BaseFragment
             }*/
 
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -153,11 +149,12 @@ public class FragmentChefTabMyServing extends BaseFragment
 
 
     }
-public static void runOnUI(Runnable runnable)
-{
-    UIHandler.post(runnable);
-    adapterRecycle.notifyDataSetChanged();
-}
+
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
+        //adapterRecycle.notifyDataSetChanged();
+    }
+
     @Override
     public void onResume() {
         super.onResume();

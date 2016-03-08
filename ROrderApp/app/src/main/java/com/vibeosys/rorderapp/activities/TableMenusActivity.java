@@ -1,5 +1,8 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -7,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.provider.Settings;
@@ -26,9 +30,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.NoteAdapter;
@@ -54,7 +60,8 @@ import java.util.List;
 import java.util.Map;
 
 public class TableMenusActivity extends BaseActivity implements
-        OrderListAdapter.CustomButtonListener, View.OnClickListener, ServerSyncManager.OnStringResultReceived, ServerSyncManager.OnDownloadReceived {
+        OrderListAdapter.CustomButtonListener, View.OnClickListener, ServerSyncManager.OnStringResultReceived,
+        ServerSyncManager.OnDownloadReceived, ServerSyncManager.OnStringErrorReceived {
 
     private TableCommonInfoDTO tableCommonInfoDTO;
     private OrderListAdapter orderListAdapter;
@@ -68,9 +75,11 @@ public class TableMenusActivity extends BaseActivity implements
     private LinearLayout llCurrentOrder;
     private EditText txtSearch;
     private TextView txtTableNo;
+    private ProgressBar mProgressBar;
     //  private ArrayList<OrderMenuDTO> mSelectedItems= new ArrayList<>();
     private int mCount = 0;
     private final Context mContext = this;
+    private LinearLayout mMainLayout;
 
     @Override
     protected String getScreenName() {
@@ -94,6 +103,10 @@ public class TableMenusActivity extends BaseActivity implements
 //        mTableId = getIntent().getIntExtra("TableId", 0);
 //        mTableNo = getIntent().getExtras().getInt("TableNo");
         //sortingMenu=mDbRepository.getOrderMenu();
+
+        mProgressBar = (ProgressBar) findViewById(R.id.select_reto_progress);
+        mMainLayout = (LinearLayout) findViewById(R.id.layout_main);
+
         txtTotalItems = (TextView) findViewById(R.id.txtTotalItems);
         txtSearch = (EditText) findViewById(R.id.search);
         txtTotalAmount = (TextView) findViewById(R.id.txtTotalRs);
@@ -111,6 +124,7 @@ public class TableMenusActivity extends BaseActivity implements
         txtBillGenerate.setOnClickListener(this);
         txtPreviousOrder.setOnClickListener(this);
         mServerSyncManager.setOnStringResultReceived(this);
+        mServerSyncManager.setOnStringErrorReceived(this);
         mServerSyncManager.setOnDownloadReceived(this);
         imgFloat.setOnClickListener(this);
         /// changes for Tool bar  01/02/2016 by Shrinivas
@@ -184,6 +198,38 @@ public class TableMenusActivity extends BaseActivity implements
 
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mMainLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mMainLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mMainLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mMainLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
 
     private void displayMenuPriceAndItems() {
         mCount = 0;
@@ -357,6 +403,7 @@ public class TableMenusActivity extends BaseActivity implements
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showProgress(true);
                 UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
                 Gson gson = new Gson();
                 String serializedJsonString = gson.toJson(uploadBillGenerate);
@@ -415,6 +462,7 @@ public class TableMenusActivity extends BaseActivity implements
 
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
+        showProgress(false);
         int errorCode = -1;
         String message = null;
 
@@ -430,7 +478,7 @@ public class TableMenusActivity extends BaseActivity implements
             /*Successfully send data*/
             Toast.makeText(getApplicationContext(), "Bill is Generated", Toast.LENGTH_LONG).show();
             Log.d(TAG, "##" + errorCode);
-            mServerSyncManager.syncDataWithServer(true);
+            mServerSyncManager.syncDataWithServer(false);
         } else if (errorCode != 104) {
             String stringTitle = getResources().getString(R.string.alert_dialog);
             customAlterDialog(stringTitle, message);
@@ -556,5 +604,13 @@ public class TableMenusActivity extends BaseActivity implements
         Collections.sort(menuDTOs);
         return menuDTOs;
 
+    }
+
+    @Override
+    public void onStingErrorReceived(@NonNull VolleyError error) {
+        showProgress(false);
+        String stringTitle = getResources().getString(R.string.error_msg_title_for_server);
+        String stringMessage = getResources().getString(R.string.error_msg_for_server_details_bill);
+        customAlterDialog(stringTitle, stringMessage);
     }
 }

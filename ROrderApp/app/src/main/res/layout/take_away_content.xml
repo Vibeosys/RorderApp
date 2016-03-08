@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:background="@color/White"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.vibeosys.rorderapp.MainActivity">
 
     <ProgressBar
@@ -12,34 +13,51 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="top|center"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="50dp"
         android:visibility="gone" />
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/activity_table_menus"></include>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/txtCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Total Orders"
+            android:textColor="@color/black_color" />
 
+        <GridView
+            android:id="@+id/gridview"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/White"
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"></GridView>
+
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/fab"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="56dp"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:background="@drawable/menu_floating_button"
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@drawable/floating_button"
         android:clickable="true"
         android:padding="13dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_menu_filter"
+        android:src="@drawable/ic_action_add_white"
         android:translationZ="5dp"
         app:layout_anchorGravity="bottom|right|end" />
-
-
 </android.support.design.widget.CoordinatorLayout>

@@ -1,8 +1,12 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -11,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +62,7 @@ public class TableOrderActivity extends BaseActivity implements
     private UUID mOrderId;
     private Context mContext = this;
     private int mOrderFlag;
+    private ProgressBar mProgressBar;
 
     @Override
     protected String getScreenName() {
@@ -74,12 +80,14 @@ public class TableOrderActivity extends BaseActivity implements
         setContentView(R.layout.activity_table_order);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mOrdersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
+        mProgressBar = (ProgressBar) findViewById(R.id.select_reto_progress);
         mList = mDbRepository.getOrdersOfTable(mTableId, mCustId);
         mDbRepository.getOrederDetailsGroupByID(mList);
         if (mOrderFlag == 0) {
             mCurrentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
             mList.add(0, mCurrentOrder);
         }
+
         mAdapter = new OrderSummaryAdapter(getApplicationContext(), mList);
         mOrdersList.setAdapter(mAdapter);
         mOrdersList.setDividerHeight(2);
@@ -176,6 +184,39 @@ public class TableOrderActivity extends BaseActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mOrdersList.setVisibility(show ? View.GONE : View.VISIBLE);
+            mOrdersList.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mOrdersList.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mOrdersList.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
     private void placeOrder() {
         // OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId());
         if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
@@ -183,6 +224,7 @@ public class TableOrderActivity extends BaseActivity implements
             if (sendOrderHeader.getOrderDetailsDTOs().size() <= 0) {
                 showEmptyOrderDialog(mContext);
             } else {
+                showProgress(true);
                 List<OrderDetailsDTO> orderDetailsDTOs = sendOrderHeader.getOrderDetailsDTOs();
                 ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
                 for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
@@ -206,6 +248,7 @@ public class TableOrderActivity extends BaseActivity implements
 
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
+        showProgress(false);
         int errorCode = -1;
         String message = null;
         try {
@@ -230,8 +273,9 @@ public class TableOrderActivity extends BaseActivity implements
             iMenu.putExtra("tableCustInfo", tableCommonInfo);
             startActivity(iMenu);
             finish();
-        } else if (errorCode == 104) {
-
+        } else if (errorCode != 104) {
+            String stringTitle = getResources().getString(R.string.alert_dialog);
+            customAlterDialog(stringTitle, message);
         }
 
 
@@ -272,6 +316,7 @@ public class TableOrderActivity extends BaseActivity implements
 
     @Override
     public void onStingErrorReceived(@NonNull VolleyError error) {
+        showProgress(false);
         String stringTitle = getResources().getString(R.string.error_msg_title_for_server);
         String stringMessage = getResources().getString(R.string.error_msg_for_server_details);
         customAlterDialog(stringTitle, stringMessage);

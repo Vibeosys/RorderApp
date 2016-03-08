@@ -1,71 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/White"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.vibeosys.rorderapp.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context="com.vibeosys.rorderapp.MainActivity">
+
+    <ProgressBar
+        android:id="@+id/select_reto_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="50dp"
+        android:visibility="gone" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+        android:id="@+id/layout_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-<TextView
-    android:id="@+id/txtCount"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Total Tables"
-    android:gravity="center"
-    android:padding="8dp"
-    android:textColor="@color/black_color"
-    android:background="@color/colorPrimaryLight"    />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Total Tables"
+            android:textColor="@color/black_color" />
+
         <GridView
             android:id="@+id/gridview"
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:columnWidth="90dp"
-            android:numColumns="2"
             android:background="@color/White"
-            android:stretchMode="columnWidth"
-            android:gravity="center">
-        </GridView>
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"></GridView>
 
     </LinearLayout>
-<!--
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_scrollFlags="scroll|enterAlways"
-        android:background="#ffffff"
-        app:tabTextColor="#000000"
-        android:touchscreenBlocksFocus="true"
-        app:tabSelectedTextColor= "@color/colorAccent"
-        app:tabGravity="center"
-        android:elevation="2dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>-->
-<!--
-        <EditText
-            android:id="@+id/etSearch"
-            android:layout_below="@+id/tab_layout"
+    <!--
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:drawableStart="@drawable/ic_action_search"
-            android:layout_gravity="center"
-            android:textSize="15sp"
-            android:textColor="@android:color/secondary_text_light"
-            android:textColorHint="#B6B6B6"
-            android:drawableEnd="@drawable/delete_logo"
-            android:background="@drawable/search_design"
-            android:layout_margin="8dp"
-            android:singleLine="true"
-            android:padding="4dp"
-            android:hint="Type table or number"/>-->
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:background="#ffffff"
+            app:tabTextColor="#000000"
+            android:touchscreenBlocksFocus="true"
+            app:tabSelectedTextColor= "@color/colorAccent"
+            app:tabGravity="center"
+            android:elevation="2dp"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>-->
+    <!--
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_below="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:drawableStart="@drawable/ic_action_search"
+                android:layout_gravity="center"
+                android:textSize="15sp"
+                android:textColor="@android:color/secondary_text_light"
+                android:textColorHint="#B6B6B6"
+                android:drawableEnd="@drawable/delete_logo"
+                android:background="@drawable/search_design"
+                android:layout_margin="8dp"
+                android:singleLine="true"
+                android:padding="4dp"
+                android:hint="Type table or number"/>-->
 
     <!--<android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -73,5 +84,17 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         />-->
-
-</RelativeLayout>
+    <ImageButton
+        android:id="@+id/fab"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@drawable/floating_button"
+        android:clickable="true"
+        android:padding="13dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ico_waiting_list_new"
+        android:translationZ="5dp"
+        app:layout_anchorGravity="bottom|right|end" />
+</android.support.design.widget.CoordinatorLayout>

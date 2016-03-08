@@ -113,7 +113,8 @@
     <string name="error_msg_for_select_restaurant">Internet connection is not available.Please
         check internet connection</string>
     <string name="error_msg_title_for_server">Server Error</string>
-    <string name="error_msg_for_server_details">your order is not placed </string>
+    <string name="error_msg_for_server_details">Your order is not placed </string>
+    <string name="error_msg_for_server_details_bill">Your bill is not generated </string>
     <string name="str_reset">All Menu Items</string>
     <string name="str_non_veg">Non Veg Only</string>
     <string name="veg">Veg Only</string>
@@ -135,4 +136,9 @@
 
     <string name="discount_per_hint">Discount in percentage</string>
     <string name="discount_btn">Discount</string>
+    <string name="customer_name">Name</string>
+    <string name="customer_hint_address">Customer Address</string>
+    <string name="address">Address</string>
+    <string name="source">Source</string>
+    <string name="delivery_charges">Delivery Charges</string>
 </resources>

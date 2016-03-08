@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
@@ -49,7 +50,9 @@ import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
 import com.vibeosys.rorderapp.activities.SettingPrinterActivity;
 import com.vibeosys.rorderapp.activities.TableFilterActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
+import com.vibeosys.rorderapp.adaptors.ChefPagerAdapter;
 import com.vibeosys.rorderapp.adaptors.CustomerAdapter;
+import com.vibeosys.rorderapp.adaptors.MainActivityAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
@@ -61,6 +64,7 @@ import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
+import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.AnalyticsApplication;
 import com.vibeosys.rorderapp.util.ConstantOperations;
@@ -77,21 +81,20 @@ import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     public static Handler UIHandler;
     TabLayout tab_layout;
     DrawerLayout drawer;
-    GridView gridView;
-    public static TableGridAdapter adapter;
-    List<RestaurantTables> hotelTableDTOs;
-    List<RestaurantTables> sortedTables;
+
     private Context mContext = this;
-    TextView txtTotalCount;
+
     static int selectedCategory = 0;
     static boolean btnCancelFlag = false, chkMyservingFlag = false, chkUnoccupied = false;
-    EditText txtSearch;
+    private EditText txtSearch;
     // private Tracker mTracker;
+    private int selectedTab;
+    List<RestaurantTables> sortedTables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,16 +124,7 @@ public class MainActivity extends BaseActivity
         } else {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            ImageButton fab = (ImageButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //callWaitingIntent();
-                    //Show waiting dialog
-                    sendEventToGoogle("Action", "Float Waiting list");
-                    showWaitingDialog();
-                }
-            });
+
             Intent syncServiceIntent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
             startService(syncServiceIntent);
 
@@ -138,15 +132,9 @@ public class MainActivity extends BaseActivity
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-            txtSearch = (EditText) findViewById(R.id.search);
+
             drawer.setDrawerListener(toggle);
             toggle.syncState();
-            txtTotalCount = (TextView) findViewById(R.id.txtCount);
-            gridView = (GridView) findViewById(R.id.gridview);
-            gridView.setOnItemClickListener(this);
-            hotelTableDTOs = mDbRepository.getTableRecords("");
-            adapter = new TableGridAdapter(getApplicationContext(), hotelTableDTOs, mSessionManager.getUserId());
-            gridView.setAdapter(adapter);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
             View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -155,7 +143,40 @@ public class MainActivity extends BaseActivity
             TextView txtRestaurantName = (TextView) headerView.findViewById(R.id.txtHeaderHotelName);
             txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
             //     txtRestaurantName.setText(mSessionManager.getUserRestaurantName());
-            txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + hotelTableDTOs.size() + " tables are occupied");
+            txtSearch = (EditText) findViewById(R.id.search);
+
+            tab_layout = (TabLayout) findViewById(R.id.tab_layout);
+
+            tab_layout.addTab(tab_layout.newTab().setText("DINE IN"));
+
+            tab_layout.addTab(tab_layout.newTab().setText("TAKE AWAY"));
+
+
+            tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tab_layout.setSelectedTabIndicatorHeight(4);
+            final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+            final MainActivityAdapter mainActivityAdapteradapter = new MainActivityAdapter
+                    (getSupportFragmentManager(), tab_layout.getTabCount());
+            viewPager.setAdapter(mainActivityAdapteradapter);
+
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
+            tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    selectedTab = tab.getPosition();
+                    viewPager.setCurrentItem(selectedTab);
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
 
             txtSearch.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -165,20 +186,27 @@ public class MainActivity extends BaseActivity
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (s.length() == 0) {
-                        adapter.refresh(mDbRepository.getTableRecords(""));
-                    } else {
-                        try {
-                            sortedTables = sortAdapter(Integer.parseInt(s.toString()));
-                            adapter.refresh(sortedTables);
-                        } catch (Exception e) {
-                            Log.e(TAG, "##" + e.toString());
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "You should Enter number", Toast.LENGTH_SHORT).show();
-                        }
+                    if (selectedTab == 0) {
+                        if (s.length() == 0) {
+                            if (selectedTab == 0) {
+                                txtSearch.setHint(R.string.search_table);
+                                FragmentWaiterTable.adapter.refresh(mDbRepository.getTableRecords(""));
+                            }
 
+                        } else {
+                            try {
+                                sortedTables = sortAdapter(Integer.parseInt(s.toString()));
+                                FragmentWaiterTable.adapter.refresh(sortedTables);
+                            } catch (Exception e) {
+                                Log.e(TAG, "##" + e.toString());
+                                e.printStackTrace();
+                                //Toast.makeText(getActivity().getApplicationContext(), "You should Enter number", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                        FragmentWaiterTable.adapter.notifyDataSetChanged();
                     }
-                    adapter.notifyDataSetChanged();
+
                 }
 
                 @Override
@@ -186,10 +214,21 @@ public class MainActivity extends BaseActivity
                     sendEventToGoogle("Action", "Table Filter");
                 }
             });
+
         }
 
     }
 
+    public List<RestaurantTables> sortAdapter(int tableNo) {
+        List<RestaurantTables> mHotelTables = new ArrayList<>();
+
+        for (RestaurantTables table : mDbRepository.getTableRecords("")) {
+            if (table.getmTableNo() == tableNo) {
+                mHotelTables.add(table);
+            }
+        }
+        return mHotelTables;
+    }
 
     @Override
     protected void onPostResume() {
@@ -255,16 +294,6 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    public List<RestaurantTables> sortAdapter(int tableNo) {
-        List<RestaurantTables> mHotelTables = new ArrayList<>();
-
-        for (RestaurantTables table : mDbRepository.getTableRecords("")) {
-            if (table.getmTableNo() == tableNo) {
-                mHotelTables.add(table);
-            }
-        }
-        return mHotelTables;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -315,7 +344,7 @@ public class MainActivity extends BaseActivity
             // Handle the camera action
         } else if (id == R.id.nav_waiting_list) {
             sendEventToGoogle("Action", "NavBar Waiting list");
-            showWaitingDialog();
+            //showWaitingDialog();
             //callWaitingIntent();
         } else if (id == R.id.nav_log_out) {
             UserAuth.CleanAuthenticationInfo();
@@ -335,108 +364,11 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-
     public void callLogin() {
         Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
         finish();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        HotelTableDTO hotelTableDTO = (HotelTableDTO) adapter.getItem(position);
-        if (hotelTableDTO.ismIsOccupied()) {
-            String custId = mDbRepository.getCustmerIdFromTransaction(hotelTableDTO.getmTableId());
-            Log.i(TAG, "## Customer Id " + custId);
-            callToMenuIntent(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId(), custId);
-        } else {
-            showReserveDialog(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId());
-        }
-        Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
-    }
-
-    private void callToMenuIntent(int tableNo, int tableId, String custId) {
-
-
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo);
-        BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
-        if (billDetailsDTO != null) {
-            Intent intentBillDetails = new Intent(getApplicationContext(), BillDetailsActivity.class);
-            intentBillDetails.putExtra("tableCustInfo", tableCommonInfoDTO);
-//        intentOpenTableMenu.putExtra("TableNo", tableNo);
-//        intentOpenTableMenu.putExtra("TableId", tableId);
-            startActivity(intentBillDetails);
-        } else {
-            Intent intentOpenTableMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-            intentOpenTableMenu.putExtra("tableCustInfo", tableCommonInfoDTO);
-//        intentOpenTableMenu.putExtra("TableNo", tableNo);
-//        intentOpenTableMenu.putExtra("TableId", tableId);
-            startActivity(intentOpenTableMenu);
-        }
-
-    }
-
-    private void showReserveDialog(final int tableNo, final int tableId) {
-
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.dialog_table_reserve);
-        dialog.setTitle("Reserve Table");
-        final EditText txtCustomerName = (EditText) dialog.findViewById(R.id.txtCustomerName);
-        TextView cancel = (TextView) dialog.findViewById(R.id.txtCancel);
-        TextView reserve = (TextView) dialog.findViewById(R.id.txtReserve);
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-
-        });
-        reserve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "Customer Entered in db", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-
-                UUID custid = UUID.randomUUID();
-
-                String customerName = txtCustomerName.getText().toString();
-                CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), customerName);
-                //here inserting custmer to custmer table
-                mDbRepository.insertCustomerDetails(customer);
-                //getting current date here
-                String currentDate = new ROrderDateUtils().getGMTCurrentDate();
-
-                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId, mSessionManager.getUserId(), custid.toString(), 0, currentDate);
-                //here inserting records in table transaction
-                mDbRepository.insertTableTransaction(tableTransactionDbDTO);
-
-                mDbRepository.setOccupied(true, tableId);
-                uploadToServer(customer, tableTransactionDbDTO, tableId);
-                adapter.refresh(mDbRepository.getTableRecords(""));
-                callToMenuIntent(tableNo, tableId, custid.toString());
-            }
-        });
-        dialog.show();
-    }
-
-    private void uploadToServer(CustomerDbDTO customer, TableTransactionDbDTO tableTransaction, int tableId) {
-        TableDataDTO[] tableDataDTOs = new TableDataDTO[3];
-        Gson gson = new Gson();
-        String serializedJsonString = gson.toJson(customer);
-        tableDataDTOs[0] = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
-        // mServerSyncManager.uploadDataToServer(tableDataDTO);
-
-        UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 1);
-        String serializedTableString = gson.toJson(occupiedDTO);
-        tableDataDTOs[1] = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedTableString);
-        // mServerSyncManager.uploadDataToServer(tableDataDTO);
-
-        String serializedTableTransaction = gson.toJson(tableTransaction);
-        tableDataDTOs[2] = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
-        mServerSyncManager.uploadDataToServer(tableDataDTOs);
     }
 
     @Override
@@ -485,13 +417,15 @@ public class MainActivity extends BaseActivity
 
                 }
                 if (!chkMyservingFlag && !chkUnoccupied && selectedCategory == 0 || selectedCategory == -1) {
-                    adapter.refresh(mDbRepository.getTableRecords(""));
+                    FragmentWaiterTable.adapter.refresh(mDbRepository.getTableRecords(""));
                 }
-                adapter.refresh(mDbRepository.getTableRecords(where));
-
+                if (where != null)
+                    FragmentWaiterTable.adapter.refresh(mDbRepository.getTableRecords(where));
+                else
+                    FragmentWaiterTable.adapter.refresh(mDbRepository.getTableRecords(""));
             } else {
                 Toast.makeText(getApplicationContext(), "All Filters are removed", Toast.LENGTH_SHORT).show();
-                adapter.refresh(mDbRepository.getTableRecords(""));
+                FragmentWaiterTable.adapter.refresh(mDbRepository.getTableRecords(""));
             }
         } else {
 
@@ -513,184 +447,4 @@ public class MainActivity extends BaseActivity
         UIHandler.post(runnable);
 
     }
-
-    private void showWaitingDialog() {
-        final Dialog dlg = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-        View view = getLayoutInflater().inflate(R.layout.dialog_waiting_list, null);
-        dlg.setContentView(view);
-        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        final ArrayList<WaitingUserDTO> mWaitingList = mDbRepository.getWaitingList();
-        final EditText mTxtCount = (EditText) dlg.findViewById(R.id.txtCustCount);
-        final EditText mTxtName = (EditText) dlg.findViewById(R.id.txtCustomerName);
-        final ImageButton btnClose = (ImageButton) dlg.findViewById(R.id.fabClose);
-        TextView txtTitle = (TextView) dlg.findViewById(R.id.dlg_title);
-        txtTitle.setText("Waiting List");
-        Button mBtnAdd = (Button) dlg.findViewById(R.id.btnAdd);
-        ListView mListCustomer = (ListView) dlg.findViewById(R.id.customerList);
-        final CustomerAdapter mCustomerAdapter = new CustomerAdapter(getApplicationContext(), mWaitingList);
-        mListCustomer.setAdapter(mCustomerAdapter);
-        mCustomerAdapter.notifyDataSetChanged();
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-            }
-        });
-        mBtnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean wrongCredential = false;
-                View focus = null;
-                mTxtName.setError(null);
-                mTxtCount.setError(null);
-
-                String customerName = mTxtName.getText().toString();
-                String strCount = mTxtCount.getText().toString();
-
-                if (TextUtils.isEmpty(customerName)) {
-                    mTxtName.setError("Customer Name is Required");
-                    focus = mTxtName;
-                    wrongCredential = true;
-                }
-                if (TextUtils.isEmpty(strCount)) {
-                    mTxtCount.setError("Customer Count is Required");
-                    focus = mTxtCount;
-                    wrongCredential = true;
-                }
-
-                if (wrongCredential) {
-                    focus.requestFocus();
-                } else {
-                    sendEventToGoogle("Action", " Add Customer");
-                    UUID custid = UUID.randomUUID();
-                    int customerCount = 0;
-                    try {
-                        customerCount = Integer.parseInt(strCount);
-                    } catch (NumberFormatException e) {
-                        Log.e(TAG, "## Insert Count null pointer" + e.toString());
-                    }
-
-                    CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), customerName);
-                    mDbRepository.insertCustomerDetails(customer);
-                    String currentDate = new ROrderDateUtils().getGMTCurrentDate();
-                    Log.d(TAG, "##" + currentDate);
-                    TableTransactionDbDTO tableTransaction = new TableTransactionDbDTO(custid.toString(), 1, customerCount);
-                    mDbRepository.insertTableTransaction(tableTransaction);
-                    Toast.makeText(getApplicationContext(), "Customer is Added successfully", Toast.LENGTH_SHORT).show();
-                    mCustomerAdapter.refresh(mDbRepository.getWaitingList());
-                    mTxtCount.setText("");
-                    mTxtName.setText("");
-                    Gson gson = new Gson();
-                    TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
-                    String serializedJsonString = gson.toJson(customer);
-                    //TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
-                    tableDataDTOs[0] = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
-                    String serializedTableTransaction = gson.toJson(tableTransaction);
-                    tableDataDTOs[1] = new TableDataDTO(ConstantOperations.ADD_WAITING_CUSTOMER, serializedTableTransaction);
-                    mServerSyncManager.uploadDataToServer(tableDataDTOs);
-                }
-            }
-        });
-
-        mListCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final WaitingUserDTO waiting = (WaitingUserDTO) mCustomerAdapter.getItem(position);
-                final Dialog dialog = new Dialog(mContext);
-                dialog.setContentView(R.layout.dialog_table_alocate);
-                setTitle(getResources().getString(R.string.dialog_title_Allocate));
-                final EditText txtTableNo = (EditText) dialog.findViewById(R.id.txtTableNumber);
-                TextView txtReserve = (TextView) dialog.findViewById(R.id.txtReserve);
-                TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
-
-                txtReserve.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sendEventToGoogle("Action", "Table Reservation");
-                        String strTableNo = txtTableNo.getText().toString();
-                        if (TextUtils.isEmpty(strTableNo)) {
-                            txtTableNo.setError(getResources().getString(R.string.error_table_no));
-                            txtTableNo.requestFocus();
-                        } else {
-                            int tableId = mDbRepository.getTaleId(Integer.parseInt(strTableNo));
-                            if (tableId == -1) {
-                                Toast.makeText(getApplicationContext(), "Table is Already Occupied", Toast.LENGTH_SHORT).show();
-                            } else if (tableId == 0) {
-                                Toast.makeText(getApplicationContext(), "No Such Table found", Toast.LENGTH_SHORT).show();
-                            } else {
-                                TableTransactionDbDTO tableTransactionDbDTO = new TableTransactionDbDTO(tableId,
-                                        mSessionManager.getUserId(), waiting.getmCustomerId(), 0,
-                                        waiting.getmArrivalTime(), waiting.getmOccupancy());
-                                mDbRepository.updateTableTransaction(tableTransactionDbDTO);
-                                mDbRepository.setOccupied(true, tableId);
-
-                                UploadOccupiedDTO occupiedDTO = new UploadOccupiedDTO(tableId, 1);
-                                TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
-                                Gson gson = new Gson();
-                                String serializedJsonString = gson.toJson(occupiedDTO);
-                                tableDataDTOs[0] = new TableDataDTO(ConstantOperations.TABLE_OCCUPIED, serializedJsonString);
-                                String serializedTableTransaction = gson.toJson(tableTransactionDbDTO);
-                                tableDataDTOs[1] = new TableDataDTO(ConstantOperations.TABLE_TRANSACTION, serializedTableTransaction);
-                                mServerSyncManager.uploadDataToServer(tableDataDTOs);
-                                dialog.dismiss();
-                                dlg.dismiss();
-                                adapter.refresh(mDbRepository.getTableRecords(""));
-                                callToMenuIntent(Integer.parseInt(strTableNo), tableId, waiting.getmCustomerId());
-                            }
-
-                        }
-
-                    }
-                });
-
-                txtCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
-        mListCustomer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final WaitingUserDTO customer = (WaitingUserDTO) mCustomerAdapter.getItem(position);
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("Delete Customer");
-                //builder.setIcon(R.drawable.ic_action_warning_yellow);
-                builder.setMessage("Are you sure to delete " + customer.getmCustomerName());
-                builder.setCancelable(false);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        boolean flagDeleteCust = mDbRepository.deleteCustomerTableTrans(customer.getmCustomerId())
-                                && mDbRepository.deleteCustomer(customer.getmCustomerId());
-                        if (flagDeleteCust) {
-                            mCustomerAdapter.refresh(mDbRepository.getWaitingList());
-                            Gson gson = new Gson();
-                            TableDataDTO[] tableDataDTOs = new TableDataDTO[1];
-                            CustomerDbDTO deleteCustomer = new CustomerDbDTO(customer.getmCustomerId(), customer.getmCustomerName());
-                            String serializedJsonString = gson.toJson(deleteCustomer);
-                            //TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
-                            tableDataDTOs[0] = new TableDataDTO(ConstantOperations.DELETE_CUSTOMER, serializedJsonString);
-                            mServerSyncManager.uploadDataToServer(tableDataDTOs);
-                            Toast.makeText(getApplicationContext(), "Customer Deleted", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.show();
-                return true;
-            }
-        });
-        dlg.show();
-    }
-
 }

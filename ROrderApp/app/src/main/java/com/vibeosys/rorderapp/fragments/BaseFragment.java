@@ -8,11 +8,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.database.DbRepository;
+import com.vibeosys.rorderapp.util.AnalyticsApplication;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 import com.vibeosys.rorderapp.util.SessionManager;
 
@@ -28,6 +34,8 @@ public class BaseFragment extends Fragment {
     protected ServerSyncManager mServerSyncManager;
     protected static SessionManager mSessionManager;
     protected DbRepository mDbRepository;
+    protected Tracker mTracker;
+    protected final static String TAG = BaseFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +44,24 @@ public class BaseFragment extends Fragment {
         mSessionManager = SessionManager.getInstance(getContext());
         mServerSyncManager = new ServerSyncManager(getContext(), mSessionManager);
         mDbRepository = new DbRepository(getContext(), mSessionManager);
+
+        if (mSessionManager.getAnalyticsSet().equals("on")) {
+            // Google analytics tracker
+            if (isGooglePlayServicesAvailable(getActivity().getApplicationContext())) {
+                AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
+                mTracker = application.getDefaultTracker();
+            } else {
+                Log.i(TAG, "Google play service is not available on device");
+                mTracker = null;
+            }
+
+        } else {
+            mTracker = null;
+            Log.d(TAG, "Analytics is off");
+        }
+
     }
+
     protected void showMyDialog(Context context) {
 
         final Dialog dialog = new Dialog(context);
@@ -52,10 +77,10 @@ public class BaseFragment extends Fragment {
         });
         dialog.show();
     }
-    protected  void customAlterDialog(String title,String message)
-    {
+
+    protected void customAlterDialog(String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(""+title);
+        builder.setTitle("" + title);
         builder.setIcon(R.drawable.ic_action_warning_yellow);
         builder.setMessage(message);
         builder.setCancelable(false);
@@ -68,6 +93,27 @@ public class BaseFragment extends Fragment {
         builder.show();
 
 
+    }
+
+    protected void sendEventToGoogle(String category, String action) {
+        if (mTracker != null)
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .build());
+        else
+            Log.d(TAG, "Analytics is not stated");
+    }
+
+    private boolean isGooglePlayServicesAvailable(Context context) {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity().getApplicationContext());
+
+        // Showing status
+        if (status == ConnectionResult.SUCCESS)
+            return true;
+        else {
+            return false;
+        }
     }
 }
 
