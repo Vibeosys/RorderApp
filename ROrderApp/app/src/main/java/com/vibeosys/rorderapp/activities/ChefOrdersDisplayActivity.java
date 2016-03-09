@@ -99,10 +99,14 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         if (widthDp >= 590 && heigthDp >= 400) {
           //  Toast.makeText(this, "finally you are at 6 inches from activity", Toast.LENGTH_LONG).show();
 
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            /*android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             FragmentChefTabMyServing fragmentChefTabMyServing= new FragmentChefTabMyServing();
             fragmentTransaction.add(R.id.parent_test, fragmentChefTabMyServing);
-            fragmentTransaction.commit();
+            fragmentTransaction.commit();*/
+
+            Intent tabLayoutActivity = new Intent(this,ChefOrdersDisplayTabActivity.class);
+            startActivity(tabLayoutActivity);
+            finish();
 
 
 

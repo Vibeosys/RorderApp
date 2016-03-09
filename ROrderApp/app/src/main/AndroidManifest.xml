@@ -93,7 +93,9 @@
             android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".activities.SettingPrinterActivity"></activity>
+        <activity android:name=".activities.ChefOrdersDisplayTabActivity">
 
+        </activity>
         <service
             android:name=".service.SyncService"
             android:exported="false" />

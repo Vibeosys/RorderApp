@@ -27,6 +27,7 @@ public class ChefPagerAdapter extends FragmentPagerAdapter{
             case 1:
                 FragmentChefPlacedOrder fragmentChefPlacedOrder = new FragmentChefPlacedOrder();
                 return fragmentChefPlacedOrder;
+
             default:
                 return null;
         }

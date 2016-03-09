@@ -92,16 +92,19 @@ public class FragmentChefTabMyServing extends BaseFragment
             customAlterDialog(stringTitle, stringMessage);
 
         } else {
-
+            dialog = ProgressDialog.show(getActivity(), "", "Please wait ...", true);
+            dialog.show();
             sendTabDataToServer(chefTabOrderId);
+            mServerSyncManager.syncDataWithServer(true);
+            chefRecycle.invalidate();
+
 
         }
     }
 
     public void sendTabDataToServer(String chefTabOrderId) {
         if (NetworkUtils.isActiveNetworkAvailable(getContext())) {
-            dialog = ProgressDialog.show(getContext(), "", "Please wait ...", true);
-            dialog.show();
+
             ChefOrderCompleted chefOrderCompleted = new ChefOrderCompleted(chefTabOrderId);
             Gson gson = new Gson();
             String serializedJsonString = gson.toJson(chefOrderCompleted);
@@ -121,8 +124,6 @@ public class FragmentChefTabMyServing extends BaseFragment
         String errorString = "";
         String message = null;
 
-
-        adapterRecycle.notifyDataSetChanged();
         dialog.dismiss();
 
         try {

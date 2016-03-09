@@ -1,5 +1,6 @@
 package com.vibeosys.rorderapp.adaptors;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
     private tabCompleteButton mTabCompleteButton;
     DbRepository dbRepository;
     Utility utility = new Utility();
+    ProgressDialog dialog;
 
     public ChefRecyclerViewAdapter(ArrayList<ChefOrderDetailsDTO> orderHeaderDTOs, Context context, DbRepository dbRepository) {
         this.mOrderHeaderDTOs = orderHeaderDTOs;
@@ -60,14 +63,17 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
         holder.txtWaiterName.setText(mOrderHeaderDTOs.get(position).getmUserName());
         ChefMenuAdapter adapter = new ChefMenuAdapter(mOrderHeaderDTOs.get(position).getmMenuChild(), mContext);
         holder.menuList.setAdapter(adapter);
+
         utility.setListViewHeightBasedOnChildren(holder.menuList);
         holder.btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mTabCompleteButton != null) {
                     mTabCompleteButton.tabComplete(mOrderHeaderDTOs.get(position).getmNewOrderId());
-                    mOrderHeaderDTOs.remove(position);
-                    notifyDataSetChanged();
+
+//                    mOrderHeaderDTOs.remove(position);
+//                    notifyDataSetChanged();
+
                 } else {
 
                 }
@@ -111,6 +117,7 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
         TextView txtOrderTime;
         Button btnComplete;
         ListView menuList;
+        ImageView btnDone;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
@@ -167,10 +174,12 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
     public void refresh(int status) {
         if (this.mOrderHeaderDTOs != null) {
             this.mOrderHeaderDTOs.clear();
+            this.mOrderHeaderDTOs = dbRepository.getRecChefOrder();
+            dbRepository.addMenuList(mOrderHeaderDTOs);
+            notifyDataSetChanged();
+
         }
-        this.mOrderHeaderDTOs = dbRepository.getRecChefOrder();
-        dbRepository.addMenuList(mOrderHeaderDTOs);
-        notifyDataSetChanged();
+
 
     }
 }
