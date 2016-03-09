@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
@@ -102,7 +104,8 @@ public class FlashScreenActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_flash_screen);
-
+        TextView txtAppName = (TextView) findViewById(R.id.fullscreen_content);
+        txtAppName.setText(Html.fromHtml(getResources().getString(R.string.quick_serve_tm)));
         mVisible = true;
 
         mContentView = getWindow().getDecorView();

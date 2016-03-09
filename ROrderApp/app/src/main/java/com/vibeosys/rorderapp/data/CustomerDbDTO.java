@@ -14,13 +14,20 @@ public class CustomerDbDTO extends BaseDTO {
 
     private String custId;
     private String custName;
+    private String custAddress;
 
-    public CustomerDbDTO() {
-    }
+   /* public CustomerDbDTO() {
+    }*/
 
     public CustomerDbDTO(String custId, String custName) {
         this.custId = custId;
         this.custName = custName;
+    }
+
+    public CustomerDbDTO(String custId, String custName, String custAddress) {
+        this.custId = custId;
+        this.custName = custName;
+        this.custAddress = custAddress;
     }
 
     public String getCustId() {

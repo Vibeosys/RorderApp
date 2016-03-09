@@ -180,7 +180,7 @@
                         android:text="@string/cancel_string" />
 
                     <TextView
-                        android:id="@+id/txtApply"
+                        android:id="@+id/txtPlaceOrder"
                         style="@style/layout_ok_button_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

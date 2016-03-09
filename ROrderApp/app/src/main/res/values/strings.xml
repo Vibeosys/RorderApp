@@ -84,7 +84,7 @@
     <string name="bill_summary"><u>Bill Summary</u></string>
     <string name="add_customer_wet">Add</string>
     <string name="about_us_content">
-        <![CDATA[ <p><b>QuickServe&trade;</b> offers a User-friendly, Reliable and Agile restaurant ordering
+        <![CDATA[ <p style="text-align:center;"><b>QuickServe&trade;</b> offers a User-friendly, Reliable and Agile restaurant ordering
          system especially designed for the Dine-in restaurants. This App is multi-faceted,
          effective ordering for Waiter and efficient order fulfilment for Chef.
          App comes with variety of features like Table occupancy chart, Menu filtering,
@@ -141,4 +141,7 @@
     <string name="address">Address</string>
     <string name="source">Source</string>
     <string name="delivery_charges">Delivery Charges</string>
+    <string name="quick_serve_tm">
+        <![CDATA[ <strong>Quick</strong><small>Serve</small>&trade;]]>
+        </string>
 </resources>
