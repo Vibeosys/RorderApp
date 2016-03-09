@@ -2420,11 +2420,11 @@ public class DbRepository extends SQLiteOpenHelper {
                         whereClause);
                 // contentValues.clear();
                 //sqLiteDatabase.close();
-                Log.d(TAG, " ## delete customer sucessfully");
+                Log.d(TAG, " ## delete customer successfully");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "## delete customer is not sucessfully" + e.toString());
+            Log.d(TAG, "## delete customer is not successfully" + e.toString());
             //sqLiteDatabase.close();
 
         } finally {
@@ -2448,11 +2448,11 @@ public class DbRepository extends SQLiteOpenHelper {
                         whereClause);
                 // contentValues.clear();
                 //sqLiteDatabase.close();
-                Log.d(TAG, " ## delete customer sucessfully");
+                Log.d(TAG, " ## delete customer successfully");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "## delete customer is not sucessfully" + e.toString());
+            Log.d(TAG, "## delete customer is not successfully" + e.toString());
             //sqLiteDatabase.close();
 
         } finally {
@@ -2474,11 +2474,11 @@ public class DbRepository extends SQLiteOpenHelper {
                         SqlContract.SqlBill.CUST_ID + "=?",
                         whereClause);
 
-                Log.d(TAG, " ## delete Bill sucessfully");
+                Log.d(TAG, " ## delete Bill successfully");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "## delete bill is not sucessfully" + e.toString());
+            Log.d(TAG, "## delete bill is not successfully" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
@@ -2486,4 +2486,87 @@ public class DbRepository extends SQLiteOpenHelper {
         return count != -1;
     }
 
+    public boolean deleteBillDetails(String custId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+
+        try {
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{custId};
+                count = sqLiteDatabase.delete(SqlContract.SqlBillDetails.TABLE_NAME,
+                        SqlContract.SqlBillDetails.BILL_NO + " IN (Select BillNo from bill where " +
+                                "CustId='" + custId + "')",
+                        null);
+
+                Log.d(TAG, " ## delete BillDetails successfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "## delete BillDetails is not successfully" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean deleteOrderDetails(String custId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+
+        try {
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{custId};
+                count = sqLiteDatabase.delete(SqlContract.SqlOrderDetails.TABLE_NAME,
+                        SqlContract.SqlOrderDetails.ORDER_ID + " IN(select OrderId from orders " +
+                                "Where CustId ='" + custId + "')",
+                        null);
+
+                Log.d(TAG, " ## delete order details successfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "## delete order details is not successfully" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean deleteOrder(String custId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+
+        try {
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{custId};
+                count = sqLiteDatabase.delete(SqlContract.SqlOrders.TABLE_NAME,
+                        SqlContract.SqlOrders.CUST_ID + "=?",
+                        whereClause);
+
+                Log.d(TAG, " ## delete Order successfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "## delete Order is not successfully" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public void cleanData(String custId, int userId, int myUserId) {
+        if (userId == myUserId) {
+            deleteBillDetails(custId);
+            deleteBill(custId);
+        }
+        deleteOrderDetails(custId);
+        deleteOrder(custId);
+        deleteCustomer(custId);
+    }
 }

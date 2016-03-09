@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
@@ -46,7 +47,15 @@ public class FragmentTakeAway extends BaseFragment {
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         TextView txtTitle = (TextView) dlg.findViewById(R.id.dlg_title);
+        ImageView imgCancel = (ImageView) dlg.findViewById(R.id.imgClose);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
         txtTitle.setText("Add take away");
+
         dlg.show();
     }
 }

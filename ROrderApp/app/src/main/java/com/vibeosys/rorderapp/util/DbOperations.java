@@ -191,7 +191,9 @@ public class DbOperations {
         return isInserted & isUpdated;
     }
 
-    public boolean addOrUpdateTableTransaction(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList, ArrayList<String> delete) {
+    public boolean addOrUpdateTableTransaction(ArrayList<String> jsonInsertList,
+                                               ArrayList<String> updateJsonList,
+                                               ArrayList<String> delete, int myUserId) {
         List<TableTransactionDbDTO> tableTransactionInserts = TableTransactionDbDTO.deserializeTableTransaction(jsonInsertList);
         List<TableTransactionDbDTO> tableTransactionUpdates = TableTransactionDbDTO.deserializeTableTransaction(updateJsonList);
         List<TableTransactionDbDTO> tableTransactionDelete = TableTransactionDbDTO.deserializeTableTransaction(delete);
@@ -199,6 +201,9 @@ public class DbOperations {
         boolean isUpdated = dbRepository.updateTableTransactionList(tableTransactionUpdates);
         boolean isDeleted = dbRepository.deleteTableTransaction(tableTransactionDelete);
 
+        for (TableTransactionDbDTO deleteDto : tableTransactionDelete) {
+            dbRepository.cleanData(deleteDto.getCustId(), deleteDto.getUserId(), myUserId);
+        }
         MainActivity.runOnUI(new Runnable() {
             public void run() {
                 try {

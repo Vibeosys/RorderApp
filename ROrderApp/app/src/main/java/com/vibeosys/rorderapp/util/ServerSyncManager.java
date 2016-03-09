@@ -305,7 +305,8 @@ public class ServerSyncManager
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TABLE_TRANSACTION);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.TABLE_TRANSACTION, jsonInsertList.size());
-            dbOperations.addOrUpdateTableTransaction(jsonInsertList, tableValue.getUpdateJsonList(), tableValue.getDeleteJsonList());
+            dbOperations.addOrUpdateTableTransaction(jsonInsertList, tableValue.getUpdateJsonList(),
+                    tableValue.getDeleteJsonList(), mSessionManager.getUserId());
             // Log.d("TableDataDTO", "##" + DbTableNameConstants.TABLE_TRANSACTION);
         }
         if (theTableData.containsKey(DbTableNameConstants.USER)) {
@@ -436,10 +437,17 @@ public class ServerSyncManager
         if (updateJsonList.size() != 0) {
             List<OrdersDbDTO> orderUpdates = OrdersDbDTO.deserializeOrders(updateJsonList);
             String message = "";
+
             for (OrdersDbDTO order : orderUpdates) {
+                int userId = 0;
                 if (order.isOrderStatus() == 2) {
                     OrdersDbDTO myOrder = mDbRepository.getOrderDetails(order.getOrderId());
-                    if (myOrder.getUserId() == mSessionManager.getUserId()) {
+                    try {
+                        userId = myOrder.getUserId();
+                    } catch (Exception e) {
+                        Log.d(TAG, "## userId is not given");
+                    }
+                    if (userId == mSessionManager.getUserId()) {
                         int tableNo = mDbRepository.getTaleNo(myOrder.getTableId());
                         message = "Table # " + tableNo + " order ready to pickup";
                         NotificationOrderDTO notificationOrderDTO = new NotificationOrderDTO(
@@ -451,6 +459,7 @@ public class ServerSyncManager
                             mNotifyUser.onNotificationReceived(message);
                         }
                     }
+
                 }
             }
         }

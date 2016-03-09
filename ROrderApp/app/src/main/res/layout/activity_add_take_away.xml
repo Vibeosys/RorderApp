@@ -42,10 +42,11 @@
                     android:textSize="18sp" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/imgClose"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_toEndOf="@+id/dlg_title"
-                    android:src="@drawable/ic_action_cancel" />
+                    android:src="@drawable/ic_action_cancel_white" />
             </LinearLayout>
 
             <LinearLayout
