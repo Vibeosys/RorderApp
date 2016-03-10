@@ -321,7 +321,18 @@ public class ServerSyncManager
             downloadResults.put(DbTableNameConstants.TAKE_AWAY_SOURCE, jsonInsertList.size());
             dbOperations.addOrUpdateTakeAwaySource(jsonInsertList, tableValue.getUpdateJsonList());
         }
-
+        if (theTableData.contains(DbTableNameConstants.TAKE_AWAY)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TAKE_AWAY);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.TAKE_AWAY, jsonInsertList.size());
+            dbOperations.addOrUpdateTakeAway(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if (theTableData.contains(DbTableNameConstants.ORDER_TYPE)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.ORDER_TYPE);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.ORDER_TYPE, jsonInsertList.size());
+            dbOperations.addOrUpdateOrderType(jsonInsertList, tableValue.getUpdateJsonList());
+        }
 
         if (mOnDownloadReceived != null)
             mOnDownloadReceived.onDownloadResultReceived(downloadResults);

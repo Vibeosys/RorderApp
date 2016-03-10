@@ -11,9 +11,11 @@ import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
 import com.vibeosys.rorderapp.data.MenuDbDTO;
 import com.vibeosys.rorderapp.data.MenuTagsDbDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
+import com.vibeosys.rorderapp.data.OrderTypeDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwayDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDbDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
@@ -190,6 +192,26 @@ public class DbOperations {
 
         boolean isInserted = dbRepository.insertTakeAwaySource(inserts);
         boolean isUpdated = dbRepository.updateTakeAwaySource(updates);
+        return isInserted & isUpdated;
+    }
+
+    public boolean addOrUpdateTakeAway(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
+
+        List<TakeAwayDbDTO> inserts = TakeAwayDbDTO.deserializeTakeAway(jsonInsertList);
+        List<TakeAwayDbDTO> updates = TakeAwayDbDTO.deserializeTakeAway(updateJsonList);
+
+        boolean isInserted = dbRepository.insertTakeAway(inserts);
+        boolean isUpdated = dbRepository.updateTakeAway(updates);
+        return isInserted & isUpdated;
+    }
+
+    public boolean addOrUpdateOrderType(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
+
+        List<OrderTypeDbDTO> inserts = OrderTypeDbDTO.deserializeOrderType(jsonInsertList);
+        List<OrderTypeDbDTO> updates = OrderTypeDbDTO.deserializeOrderType(updateJsonList);
+
+        boolean isInserted = dbRepository.insertOrderType(inserts);
+        boolean isUpdated = dbRepository.updateOrderType(updates);
         return isInserted & isUpdated;
     }
 

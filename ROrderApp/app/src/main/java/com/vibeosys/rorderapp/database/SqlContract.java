@@ -182,10 +182,22 @@ public class SqlContract {
     }
 
     public abstract class SqlTakeAway {
-        public final static String TABLE_NAME = "restaurant";
-        public final static String TAKE_AWAY_SOURCE_ID = "RestaurantId";
-        public final static String SOURCE_NAME = "RestaurantTitle";
-        public final static String SOURCE_URL = "LogoUrl";
-        public final static String DISCOUNT = "LogoUrl";
+        public final static String TABLE_NAME = "takeaway";
+        public final static String TAKE_AWAY_ID = "TakeawayId";
+        public final static String TAKE_AWAY_NO = "TakeawayNo";
+        public final static String DISCOUNT = "Discount";
+        public final static String DELIVERY_CHG = "DeliveryCharges";
+        public final static String CUST_ID = "CustId";
+        public final static String RESTAURANT_ID = "RestaurantId";
+        public final static String USER_ID = "UserId";
+        public final static String SOURCE_ID = "SourceId";
+    }
+
+    public abstract class SqlOrderType {
+        public final static String TABLE_NAME = "order_type";
+        public final static String ORDER_TYPE_ID = "OrderTypeId";
+        public final static String ORDER_TYPE_TITLE = "OrderTypeTitle";
+        public final static String ACTIVE = "Active";
+
     }
 }

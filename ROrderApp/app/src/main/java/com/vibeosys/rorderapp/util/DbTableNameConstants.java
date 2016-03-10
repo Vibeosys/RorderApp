@@ -20,4 +20,6 @@ public class DbTableNameConstants {
     public static final String TABLE_TRANSACTION = SqlContract.SqlTableTransaction.TABLE_NAME;
     public static final String USER = SqlContract.SqlUser.TABLE_NAME;
     public static final String TAKE_AWAY_SOURCE = SqlContract.SqlTakeAwaySource.TABLE_NAME;
+    public static final String TAKE_AWAY = SqlContract.SqlTakeAway.TABLE_NAME;
+    public static final String ORDER_TYPE = SqlContract.SqlOrderType.TABLE_NAME;
 }
