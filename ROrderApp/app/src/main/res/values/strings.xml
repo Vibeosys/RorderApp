@@ -84,7 +84,7 @@
     <string name="bill_summary"><u>Bill Summary</u></string>
     <string name="add_customer_wet">Add</string>
     <string name="about_us_content">
-        <![CDATA[ <p style="text-align:center;"><b>QuickServe&trade;</b> offers a User-friendly, Reliable and Agile restaurant ordering
+        <![CDATA[ <p><b>QuickServe&trade;</b> offers a User-friendly, Reliable and Agile restaurant ordering
          system especially designed for the Dine-in restaurants. This App is multi-faceted,
          effective ordering for Waiter and efficient order fulfilment for Chef.
          App comes with variety of features like Table occupancy chart, Menu filtering,
@@ -119,8 +119,8 @@
     <string name="str_non_veg">Non Veg Only</string>
     <string name="veg">Veg Only</string>
     <string name="company_info">
-       <![CDATA[  <b>QuickServe&trade;</b>is product of Vibeosys Software Pvt.Ltd.For business inquiry
-        please contact  <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a> ]]>
+       <![CDATA[  <p style="text-align:center"><b>QuickServe&trade;</b>is product of Vibeosys Software Pvt.Ltd.For business inquiry
+        please contact  <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a></p> ]]>
         </string>
     <string name="version_no">QuickServe V.</string>
 

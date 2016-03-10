@@ -75,12 +75,11 @@
         <TextView
             android:id="@+id/abt_Us_info"
             style="@style/about_us_info"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/versionId"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="4dp"
             android:text="abcd" />
 
 
