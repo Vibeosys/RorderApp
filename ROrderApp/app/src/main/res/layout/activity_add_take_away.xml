@@ -107,8 +107,10 @@
                     android:textSize="15sp" />
 
                 <Spinner
+                    android:id="@+id/spnSource"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></Spinner>
+                    android:layout_height="wrap_content"
+                    android:drawSelectorOnTop="true"></Spinner>
             </LinearLayout>
 
             <LinearLayout

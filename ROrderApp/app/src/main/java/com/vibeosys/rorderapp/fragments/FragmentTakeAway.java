@@ -10,17 +10,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.adaptors.TakeAwaySourceAdapter;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
+import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -28,6 +33,7 @@ import com.vibeosys.rorderapp.util.ServerSyncManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -62,12 +68,38 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         dlg.setContentView(view);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         TextView txtTitle = (TextView) dlg.findViewById(R.id.dlg_title);
         ImageView imgCancel = (ImageView) dlg.findViewById(R.id.imgClose);
+
         final EditText txtCustomerName = (EditText) dlg.findViewById(R.id.txtCustomerName);
         final EditText txtCustomerAddress = (EditText) dlg.findViewById(R.id.txtCustomerAddress);
-        TextView txtPlaceOrder = (TextView) dlg.findViewById(R.id.txtPlaceOrder);
+        final EditText txtDiscountPer = (EditText) dlg.findViewById(R.id.txtDiscountPer);
 
+        TextView txtPlaceOrder = (TextView) dlg.findViewById(R.id.txtPlaceOrder);
+        TextView txtCancel = (TextView) dlg.findViewById(R.id.txtCancel);
+        Spinner spnSource = (Spinner) dlg.findViewById(R.id.spnSource);
+
+        txtTitle.setText("Add take away");
+        txtDiscountPer.setEnabled(false);
+
+        ArrayList<TakeAwaySourceDTO> tableTransactionDbDTOs = mDbRepository.getTakeAwaySource();
+        final TakeAwaySourceAdapter adapter = new TakeAwaySourceAdapter(getActivity().getApplicationContext(),
+                tableTransactionDbDTOs);
+        spnSource.setAdapter(adapter);
+
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
         txtPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,14 +138,18 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
                 }
             }
         });
-        imgCancel.setOnClickListener(new View.OnClickListener() {
+        spnSource.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                dlg.dismiss();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                TakeAwaySourceDTO takeAwaySourceDTo = (TakeAwaySourceDTO) adapter.getItem(position);
+                txtDiscountPer.setText(String.format("%.2f", takeAwaySourceDTo.getDiscount()));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        txtTitle.setText("Add take away");
-
         dlg.show();
     }
 
@@ -133,6 +169,6 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        
+
     }
 }

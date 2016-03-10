@@ -14,6 +14,7 @@ import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwaySourceDbDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
@@ -179,6 +180,16 @@ public class DbOperations {
 
         boolean isInserted = dbRepository.insertUsers(userInserts);
         boolean isUpdated = dbRepository.updateUsers(userUpdates);
+        return isInserted & isUpdated;
+    }
+
+    public boolean addOrUpdateTakeAwaySource(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList) {
+
+        List<TakeAwaySourceDbDTO> inserts = TakeAwaySourceDbDTO.deserializeTakeSource(jsonInsertList);
+        List<TakeAwaySourceDbDTO> updates = TakeAwaySourceDbDTO.deserializeTakeSource(updateJsonList);
+
+        boolean isInserted = dbRepository.insertTakeAwaySource(inserts);
+        boolean isUpdated = dbRepository.updateTakeAwaySource(updates);
         return isInserted & isUpdated;
     }
 

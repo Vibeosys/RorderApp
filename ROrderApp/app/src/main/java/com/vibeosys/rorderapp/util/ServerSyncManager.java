@@ -315,6 +315,12 @@ public class ServerSyncManager
             downloadResults.put(DbTableNameConstants.USER, jsonInsertList.size());
             dbOperations.addOrUpdateUser(jsonInsertList, tableValue.getUpdateJsonList());
         }
+        if (theTableData.contains(DbTableNameConstants.TAKE_AWAY_SOURCE)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.TAKE_AWAY_SOURCE);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.TAKE_AWAY_SOURCE, jsonInsertList.size());
+            dbOperations.addOrUpdateTakeAwaySource(jsonInsertList, tableValue.getUpdateJsonList());
+        }
 
 
         if (mOnDownloadReceived != null)

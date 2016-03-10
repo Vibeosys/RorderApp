@@ -171,4 +171,21 @@ public class SqlContract {
         public final static String RESTAURANT_NAME = "RestaurantTitle";
         public final static String RESTAURANT_URL = "LogoUrl";
     }
+
+    public abstract class SqlTakeAwaySource {
+        public final static String TABLE_NAME = "takeaway_source";
+        public final static String TAKE_AWAY_SOURCE_ID = "SourceId";
+        public final static String SOURCE_NAME = "SourceName";
+        public final static String SOURCE_URL = "SourceImg";
+        public final static String DISCOUNT = "Discount";
+        public final static String ACTIVE = "Active";
+    }
+
+    public abstract class SqlTakeAway {
+        public final static String TABLE_NAME = "restaurant";
+        public final static String TAKE_AWAY_SOURCE_ID = "RestaurantId";
+        public final static String SOURCE_NAME = "RestaurantTitle";
+        public final static String SOURCE_URL = "LogoUrl";
+        public final static String DISCOUNT = "LogoUrl";
+    }
 }

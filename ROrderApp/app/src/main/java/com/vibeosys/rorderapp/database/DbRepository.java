@@ -31,6 +31,8 @@ import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
+import com.vibeosys.rorderapp.data.TakeAwaySourceDbDTO;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
@@ -210,6 +212,36 @@ public class DbRepository extends SQLiteOpenHelper {
 
         } catch (Exception e) {
             Log.e(TAG, "Error while adding Tables " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean insertTakeAwaySource(List<TakeAwaySourceDbDTO> sourceList) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (TakeAwaySourceDbDTO sourceDbDTO : sourceList) {
+                    contentValues.put(SqlContract.SqlTakeAwaySource.TAKE_AWAY_SOURCE_ID, sourceDbDTO.getSourceId());
+                    contentValues.put(SqlContract.SqlTakeAwaySource.SOURCE_NAME, sourceDbDTO.getSourceName());
+                    contentValues.put(SqlContract.SqlTakeAwaySource.SOURCE_URL, sourceDbDTO.getSourceImg());
+                    contentValues.put(SqlContract.SqlTakeAwaySource.DISCOUNT, sourceDbDTO.getDiscount());
+                    contentValues.put(SqlContract.SqlTakeAwaySource.ACTIVE, sourceDbDTO.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.insert(SqlContract.SqlTakeAwaySource.TABLE_NAME, null, contentValues);
+                    contentValues.clear();
+                    Log.d(TAG, "## Take Away source is Added Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while adding Take Away source " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
@@ -1549,7 +1581,7 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlOrderDetails.ORDER_ID, orderDetail.getOrderId());
                     if (orderDetail.getMenuId() != 0)
                         contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
-                    if (orderDetail.getMenuTitle() != null && orderDetail.getMenuTitle().isEmpty())
+                    if (orderDetail.getMenuTitle() != null && !orderDetail.getMenuTitle().isEmpty())
                         contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlOrderDetails.TABLE_NAME, contentValues,
@@ -1566,6 +1598,39 @@ public class DbRepository extends SQLiteOpenHelper {
                 if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                     sqLiteDatabase.close();
             }
+        }
+        return count != -1;
+    }
+
+    public boolean updateTakeAwaySource(List<TakeAwaySourceDbDTO> sourceList) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (TakeAwaySourceDbDTO sourceDbDTO : sourceList) {
+                    String[] where = new String[]{String.valueOf(sourceDbDTO.getSourceId())};
+                    if (sourceDbDTO.getSourceName() != null && !sourceDbDTO.getSourceName().isEmpty())
+                        contentValues.put(SqlContract.SqlTakeAwaySource.SOURCE_NAME, sourceDbDTO.getSourceName());
+                    if (!sourceDbDTO.getSourceImg().isEmpty() && sourceDbDTO.getSourceImg() != null)
+                        contentValues.put(SqlContract.SqlTakeAwaySource.SOURCE_URL, sourceDbDTO.getSourceImg());
+                    if (sourceDbDTO.getDiscount() != 0)
+                        contentValues.put(SqlContract.SqlTakeAwaySource.DISCOUNT, sourceDbDTO.getDiscount());
+                    contentValues.put(SqlContract.SqlTakeAwaySource.ACTIVE, sourceDbDTO.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.insert(SqlContract.SqlTakeAwaySource.TABLE_NAME, null, contentValues);
+                    contentValues.clear();
+                    Log.d(TAG, "## Take Away source is Added Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while adding Take Away source " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
         }
         return count != -1;
     }
@@ -2275,45 +2340,14 @@ public class DbRepository extends SQLiteOpenHelper {
         return count;
     }
 
-    public int getOrderCountFromTemp(int tableId, String custId) {
-        int count = 0;
-        SQLiteDatabase sqLiteDatabase = null;
-        Cursor cursor = null;
-        OrderHeaderDTO orderHeaderDTO = null;
-        try {
-            sqLiteDatabase = getReadableDatabase();
-            synchronized (sqLiteDatabase) {
-                String[] whereClause = new String[]{String.valueOf(tableId), custId};
-                cursor = sqLiteDatabase.rawQuery("select count(orders.OrderId) as Count from orders where " +
-                        SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID +
-                        "=?", whereClause);
-                if (cursor != null) {
-                    if (cursor.getCount() > 0) {
-                        cursor.moveToFirst();
-                        count = cursor.getInt(cursor.getColumnIndex("Count"));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                sqLiteDatabase.close();
-        }
-        return count;
-    }
-
-    public ArrayList<ChefOrderDetailsDTO> getRecChefOrder() {
+    public ArrayList<ChefOrderDetailsDTO> getCompletedRecordsChef() {
         ArrayList<ChefOrderDetailsDTO> ordres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                String[] where = new String[]{"1"};
+                String[] where = new String[]{"2"};
 
                 cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus," +
                         "orders.OrderNo,orders.TableNo,orders.OrderTime,orders.Orderdate,users.UserName,r_tables.TableNo " +
@@ -2356,15 +2390,46 @@ public class DbRepository extends SQLiteOpenHelper {
         return ordres;
     }
 
+    public int getOrderCountFromTemp(int tableId, String custId) {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        OrderHeaderDTO orderHeaderDTO = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{String.valueOf(tableId), custId};
+                cursor = sqLiteDatabase.rawQuery("select count(orders.OrderId) as Count from orders where " +
+                        SqlContract.SqlOrders.TABLE_NO + "=? AND " + SqlContract.SqlOrders.CUST_ID +
+                        "=?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        count = cursor.getInt(cursor.getColumnIndex("Count"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count;
+    }
 
-    public ArrayList<ChefOrderDetailsDTO> getCompletedRecordsChef() {
+
+    public ArrayList<ChefOrderDetailsDTO> getRecChefOrder() {
         ArrayList<ChefOrderDetailsDTO> ordres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                String[] where = new String[]{"2"};
+                String[] where = new String[]{"1"};
 
                 cursor = sqLiteDatabase.rawQuery("select orders.OrderId,orders.CustId,orders.OrderStatus," +
                         "orders.OrderNo,orders.TableNo,orders.OrderTime,orders.Orderdate,users.UserName,r_tables.TableNo " +
@@ -2620,5 +2685,45 @@ public class DbRepository extends SQLiteOpenHelper {
         deleteOrderDetails(custId);
         deleteOrder(custId);
         deleteCustomer(custId);
+    }
+
+    public ArrayList<TakeAwaySourceDTO> getTakeAwaySource() {
+        ArrayList<TakeAwaySourceDTO> takeAwaySourceDTOs = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("select * from " + SqlContract.
+                        SqlTakeAwaySource.TABLE_NAME + " where " + SqlContract.SqlTakeAwaySource.
+                        ACTIVE + "=1", null);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do {
+                            int takeSourceId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.TAKE_AWAY_SOURCE_ID));
+                            String name = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_NAME));
+                            String imgUrl = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_URL));
+                            double discount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.DISCOUNT));
+                            TakeAwaySourceDTO takeAwaySourceDTO = new TakeAwaySourceDTO(takeSourceId, name, imgUrl, discount);
+                            takeAwaySourceDTOs.add(takeAwaySourceDTO);
+                        } while (cursor.moveToNext());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Log.e(TAG, "Error in Take away source" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+
+        }
+        return takeAwaySourceDTOs;
     }
 }
