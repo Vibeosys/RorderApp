@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
+    <com.vibeosys.rorderapp.views.CustomTextView
         android:id="@+id/txtFeedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

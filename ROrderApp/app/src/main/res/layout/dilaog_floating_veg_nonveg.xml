@@ -13,7 +13,7 @@
         android:gravity="center_vertical|end"
         android:orientation="horizontal">
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -39,7 +39,7 @@
         android:gravity="center_vertical|end"
         android:orientation="horizontal">
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -66,7 +66,7 @@
         android:gravity="center_vertical|end"
         android:orientation="horizontal">
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -93,7 +93,7 @@
         android:gravity="center_vertical|end"
         android:orientation="horizontal">
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

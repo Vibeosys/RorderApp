@@ -27,7 +27,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center">
 
-                <EditText
+                <com.vibeosys.rorderapp.views.CustomEditText
                     android:id="@+id/search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

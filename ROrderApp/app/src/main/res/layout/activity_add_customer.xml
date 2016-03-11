@@ -26,7 +26,7 @@
             android:orientation="horizontal"
             android:padding="15dp">
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/dlg_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:orientation="horizontal"
             android:padding="4dp">
 
-            <EditText
+            <com.vibeosys.rorderapp.views.CustomEditText
                 android:id="@+id/txtCustomerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 android:inputType="textCapSentences"
                 android:singleLine="true" />
 
-            <EditText
+            <com.vibeosys.rorderapp.views.CustomEditText
                 android:id="@+id/txtCustCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 android:singleLine="true" />
         </LinearLayout>
 
-        <Button
+        <com.vibeosys.rorderapp.views.CustomButton
             android:id="@+id/btnAdd"
             style="@style/button_custom_new"
             android:layout_width="wrap_content"

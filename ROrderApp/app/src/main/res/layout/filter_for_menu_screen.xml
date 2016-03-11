@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="5dp"
-    android:background="@color/white_color">
+    android:background="@color/white_color"
+    android:orientation="vertical">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
-
-            <TextView
-                android:id="@+id/myServing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/filtertextStyle"
-                android:text="@string/my_serving"
-                android:layout_weight="3"/>
-            <CheckBox
-                android:id="@+id/chkMyserving"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:layout_weight="0.5"/>
-        </LinearLayout>
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp">
-        <TextView
-            android:id="@+id/unOccupy"
+        android:layout_margin="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal">
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/myServing"
+            style="@style/filtertextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/filtertextStyle"
             android:layout_weight="3"
-            android:text="@string/my_unoccupy"/>
+            android:text="@string/my_serving" />
+
+        <CheckBox
+            android:id="@+id/chkMyserving"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:checked="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:orientation="horizontal">
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/unOccupy"
+            style="@style/filtertextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/my_unoccupy" />
+
         <CheckBox
             android:id="@+id/chkUnoccupy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="false"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:checked="false" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
+            style="@style/largeText_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/filter_category"
             android:gravity="center"
-            style="@style/largeText_bold"/>
+            android:text="@string/filter_category" />
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -67,30 +73,32 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
-            android:choiceMode="singleChoice"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="20dp"
+            android:choiceMode="singleChoice">
 
         </ListView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtCancel"
+                style="@style/layout_cancel_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/reset"
-                style="@style/layout_cancel_button_style" />
-            <TextView
+                android:text="@string/reset" />
+
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtApply"
+                style="@style/layout_ok_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/apply"
-                style="@style/layout_ok_button_style"/>
+                android:text="@string/apply" />
 
 
         </LinearLayout>

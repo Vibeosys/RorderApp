@@ -16,7 +16,7 @@
         android:layout_marginStart="15dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/chefMenuNo_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:textColor="@color/listview_item"
             android:textSize="14sp" />
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/recyclerChefMenuName_previous"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:textSize="14sp" />
 
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/recyclerChefQty_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:textColor="@color/listview_item"
             android:textSize="14sp" />
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/recyclerQty_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,14 +65,14 @@
         android:layout_marginEnd="25dp"
         android:layout_marginStart="25dp">
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/recyclerChefMenuComment_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:paddingEnd="5dp"
             android:paddingStart="17dp"
             android:text="testing Note"
-            android:layout_marginBottom="4dp"
             android:textColor="@color/red"
             android:textSize="12sp" />
     </LinearLayout>

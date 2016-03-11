@@ -42,7 +42,7 @@
                     android:orientation="horizontal"
                     android:padding="2dp">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/txtTableName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                         android:textColor="@color/White"
                         android:textSize="15sp" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/txtTableNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,12 +98,12 @@
 
                     />
 
-                <TextView
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/txtUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
                     android:padding="4dp"
+                    android:text="Name"
                     android:textColor="@color/custom_text_inactive"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -114,7 +114,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <TextView
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/txtCapacity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

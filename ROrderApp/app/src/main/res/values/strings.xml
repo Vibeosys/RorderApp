@@ -12,7 +12,7 @@
     <string name="prompt_email">User name</string>
     <string name="prompt_password">Password</string>
     <string name="action_chef_sign_in">Sign in as chef</string>
-    <string name="action_waiter_sign_in">Sign in as waiter</string>
+    <string name="action_waiter_sign_in">Sign in as staff</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>

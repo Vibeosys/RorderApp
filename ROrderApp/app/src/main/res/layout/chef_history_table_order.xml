@@ -9,7 +9,6 @@
     android:orientation="horizontal">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,59 +24,62 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginLeft="4dp"
+                android:layout_weight="2"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/txtHistryTableName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="No"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"/>
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp" />
 
-                <TextView
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/orderTakenHistryBy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
                     android:layout_weight="1"
+                    android:paddingLeft="4dp"
                     android:text="1"
                     android:textColor="@color/black_color"
                     android:textSize="22sp" />
-                <TextView
+
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/txtHashHistry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="#"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"/>
-                <TextView
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp" />
+
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/orderNoHistry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
                     android:layout_weight="1"
+                    android:paddingLeft="4dp"
                     android:text="112"
                     android:textColor="@color/black_color"
                     android:textSize="22sp" />
 
             </LinearLayout>
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtServedNameHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Served by"
-                android:textSize="16sp"
-                android:textColor="@android:color/darker_gray"/>
-            <TextView
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp" />
+
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/orderFromTableNoHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,7 +98,7 @@
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/orderTimeHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +109,8 @@
                 android:gravity="center"
                 android:text="29 mins ago"
                 android:textColor="@color/listview_item" />
-            <TextView
+
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtExpLinkHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

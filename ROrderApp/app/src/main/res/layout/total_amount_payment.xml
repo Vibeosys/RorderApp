@@ -50,14 +50,14 @@
                         android:layout_marginRight="4dp"
                         android:src="@drawable/ic_table" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/TableNoTitle"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Customer table number was" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/TableNumber"
                         style="@style/largeTextbilling_bold"
                         android:layout_width="wrap_content"
@@ -79,14 +79,14 @@
                         android:layout_marginRight="4dp"
                         android:src="@drawable/waiter_filled" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/ServedByTitle"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Customer was served by" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/ServedByName"
                         style="@style/largeTextbilling_bold"
                         android:layout_width="wrap_content"
@@ -110,14 +110,14 @@
                         android:layout_marginRight="4dp"
                         android:src="@drawable/ic_overtime_" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/DateTimeTitle"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Bill generated on" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/DateDisplay"
                         style="@style/largeTextbilling_bold"
                         android:layout_width="wrap_content"
@@ -186,7 +186,7 @@
                     android:background="@color/text_hint"
                     android:gravity="center">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         style="@style/largeText_bold_bill"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -219,7 +219,7 @@
                     android:layout_marginBottom="2dp"
                     android:weightSum="2">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/AmtTitle"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
@@ -228,7 +228,7 @@
                         android:text="Amount" />
 
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/PaymentAmt"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
@@ -243,7 +243,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_weight="2">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/TaxTitle"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
@@ -252,7 +252,7 @@
                         android:text="Taxes" />
 
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/TaxAmt"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
@@ -296,7 +296,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_weight="2">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/DiscountTitle"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
@@ -305,7 +305,7 @@
                         android:text="Discount" />
 
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/DiscountAmt"
                         style="@style/largeTextBillingDtl"
                         android:layout_width="wrap_content"
@@ -337,7 +337,7 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/TotalTitle"
                             style="@style/total_bold_bill"
                             android:layout_width="wrap_content"
@@ -358,7 +358,7 @@
                                 android:layout_marginTop="1dp"
                                 android:src="@drawable/rupee_icon" />
 
-                            <TextView
+                            <com.vibeosys.rorderapp.views.CustomTextView
                                 android:id="@+id/TotalAmt"
                                 style="@style/total_bold_bill"
                                 android:layout_width="wrap_content"
@@ -383,7 +383,7 @@
                 android:paddingStart="20dp"
                 android:paddingTop="5dp">
 
-                <Button
+                <com.vibeosys.rorderapp.views.CustomButton
                     android:id="@+id/BillDetailsPayment"
                     style="@style/button_custom_new"
                     android:layout_width="wrap_content"
@@ -394,7 +394,7 @@
                     android:gravity="center"
                     android:text="@string/btn_pay_now" />
 
-                <Button
+                <com.vibeosys.rorderapp.views.CustomButton
                     android:id="@+id/btnBillSummary"
                     style="@style/button_custom_new"
                     android:layout_width="wrap_content"
@@ -424,7 +424,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_add_white" />
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="4dp"

@@ -3,39 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="@dimen/activity_vertical_margin"
-    >
+    android:padding="@dimen/activity_vertical_margin">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtCustomerName"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:hint="@string/table_hint_customer_name"
-        android:layout_weight="1"/>
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_weight="1">
-        <TextView
-            android:id="@+id/txtCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/cancel_string"
-            style="@style/layout_cancel_button_style" />
-        <TextView
-            android:id="@+id/txtReserve"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/reserve_table"
-           style="@style/layout_ok_button_style"/>
-    </LinearLayout>
+        <com.vibeosys.rorderapp.views.CustomEditText
+            android:id="@+id/txtCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:hint="@string/table_hint_customer_name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_weight="1">
+
+            <com.vibeosys.rorderapp.views.CustomTextView
+                android:id="@+id/txtCancel"
+                style="@style/layout_cancel_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/cancel_string" />
+
+            <com.vibeosys.rorderapp.views.CustomTextView
+                android:id="@+id/txtReserve"
+                style="@style/layout_ok_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/reserve_table" />
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>

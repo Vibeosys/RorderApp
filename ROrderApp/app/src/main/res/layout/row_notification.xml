@@ -5,7 +5,7 @@
     android:layout_margin="@dimen/activity_horizontal_margin"
     android:orientation="vertical">
 
-    <TextView
+    <com.vibeosys.rorderapp.views.CustomTextView
         android:id="@+id/txtNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

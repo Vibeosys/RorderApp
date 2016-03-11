@@ -22,7 +22,7 @@
             android:orientation="vertical"
             android:padding="1dp">
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtMenuName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:text="Manchurian"
                 android:textColor="@color/listview_item" />
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         </LinearLayout>
 
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/txtMenuPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             android:padding="1dp"
             android:src="@drawable/ic_action_minus" />
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/txtOderQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             android:text="Qty"
             android:textColor="@color/black_overlay" />
 
-        <TextView
+        <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/txtQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

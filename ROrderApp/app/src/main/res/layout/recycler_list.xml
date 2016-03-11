@@ -53,7 +53,7 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerTxtTableNo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                             android:textColor="@color/black_color"
                             android:textSize="12sp" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerTableNoTab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                             android:textColor="@color/black_color"
                             android:textSize="16sp" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/txtHash"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                             android:textColor="@color/black_color"
                             android:textSize="12sp" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerOrderNoTab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                             android:layout_weight="1"
                             android:src="@drawable/icon_hours_glass" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerOrderTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
                     android:layout_weight="0.5"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/recyclerServedByName"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -189,7 +189,7 @@
                             android:textColor="@color/White"
                             android:textSize="14sp" />-->
 
-                        <Button
+                        <com.vibeosys.rorderapp.views.CustomButton
                             android:id="@+id/recyclerOrderDoneBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
@@ -199,12 +199,12 @@
                             android:textColor="@color/White"
                             android:textSize="12sp" />
 
-                            <!--<ImageView
-                                android:id="@+id/recyclerChefOrderDonIcon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="35dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_action_tick_chef" />-->
+                        <!--<ImageView
+                            android:id="@+id/recyclerChefOrderDonIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_action_tick_chef" />-->
                     </LinearLayout>
 
                 </LinearLayout>

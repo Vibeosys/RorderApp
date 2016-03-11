@@ -62,7 +62,7 @@
                     android:layout_marginTop="20dp"
                     android:textColorHint="@color/light_grey">
 
-                    <EditText
+                    <com.vibeosys.rorderapp.views.CustomEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/light_grey">
 
-                    <EditText
+                    <com.vibeosys.rorderapp.views.CustomEditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -117,7 +117,7 @@
                         android:padding="5dp"
                         android:src="@drawable/ico_new_servedby" />
 
-                    <Button
+                    <com.vibeosys.rorderapp.views.CustomButton
                         android:id="@+id/email_sign_in_button"
                         style="@style/button_custom_new"
                         android:layout_width="match_parent"
@@ -139,7 +139,7 @@
                         android:background="@color/amber"
                         android:src="@drawable/ic_cook" />
 
-                    <Button
+                    <com.vibeosys.rorderapp.views.CustomButton
                         android:id="@+id/email_sign_in_chef"
                         style="@style/button_custom_new"
                         android:layout_width="match_parent"
@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/loginversionId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

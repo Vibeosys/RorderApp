@@ -25,7 +25,7 @@
             android:orientation="horizontal"
             android:padding="15dp">
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/dlg_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:textColor="@color/White"
                 android:textSize="18sp" />
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/dlg_skip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
-            <TextView
+            <com.vibeosys.rorderapp.views.CustomTextView
                 android:id="@+id/txtThank"
                 style="@style/layout_ok_button_style"
                 android:layout_width="wrap_content"

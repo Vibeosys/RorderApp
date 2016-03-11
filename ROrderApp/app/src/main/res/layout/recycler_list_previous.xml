@@ -54,7 +54,7 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerTxtTableNo_Previous"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                             android:textColor="@color/black_color"
                             android:textSize="12sp" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerTableNoTab_Previous"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                             android:textColor="@color/black_color"
                             android:textSize="16sp" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/txtHash_Previous"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                             android:textColor="@color/black_color"
                             android:textSize="12sp" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerOrderNoTab_Previous"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
                             android:layout_weight="1"
                             android:src="@drawable/icon_hours_glass" />
 
-                        <TextView
+                        <com.vibeosys.rorderapp.views.CustomTextView
                             android:id="@+id/recyclerOrderTime_Previous"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                     android:layout_weight="0.5"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/recyclerServedByName_Previous"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -218,10 +218,10 @@
                 android:id="@+id/recyclerMenuList_Previous"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="4dp"
                 android:paddingBottom="2dp"
                 android:scrollbarAlwaysDrawVerticalTrack="false"
-                android:scrollbars="none"
-                android:layout_marginBottom="4dp">
+                android:scrollbars="none">
 
             </ListView>
         </LinearLayout>

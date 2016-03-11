@@ -7,7 +7,7 @@
 
     <include layout="@layout/activity_add_customer" />
 
-    <TextView
+    <com.vibeosys.rorderapp.views.CustomTextView
         android:id="@+id/txtDeleteHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

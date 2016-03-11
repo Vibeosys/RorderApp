@@ -59,7 +59,7 @@
                     android:orientation="horizontal"
                     android:padding="2dp">
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/txtMenuName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                         android:text="Manchurian"
                         android:textColor="@color/listview_item" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/txtMenuTag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                         android:textColor="@color/listview_item"
                         android:textSize="10sp" />
 
-                    <TextView
+                    <com.vibeosys.rorderapp.views.CustomTextView
                         android:id="@+id/txtCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                     android:layout_weight="1"
                     android:src="@drawable/rupee_icon" />
 
-                <TextView
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/txtMenuPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                       android:textColor="@color/listview_item"
                       android:textSize="12sp" />-->
 
-                <TextView
+                <com.vibeosys.rorderapp.views.CustomTextView
                     android:id="@+id/txtMenuQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
