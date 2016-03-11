@@ -35,6 +35,7 @@ import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDbDTO;
+import com.vibeosys.rorderapp.data.UploadTakeAway;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
@@ -474,6 +475,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlBill.IS_PAYED, bill.isPayed());
                     contentValues.put(SqlContract.SqlBill.PAID_BY, bill.getPayedBy());
                     contentValues.put(SqlContract.SqlBill.DISCOUNT, bill.getDiscount());
+                    contentValues.put(SqlContract.SqlBill.TAKE_AWAY_NO, bill.getTakeawayNo());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlBill.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -598,7 +600,6 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlTakeAway.DISCOUNT, takeAwayDbDTO.getDiscount());
                     contentValues.put(SqlContract.SqlTakeAway.DELIVERY_CHG, takeAwayDbDTO.getDeliveryCharges());
                     contentValues.put(SqlContract.SqlTakeAway.CUST_ID, takeAwayDbDTO.getCustId());
-                    contentValues.put(SqlContract.SqlTakeAway.RESTAURANT_ID, takeAwayDbDTO.getRestaurantId());
                     contentValues.put(SqlContract.SqlTakeAway.USER_ID, takeAwayDbDTO.getUserId());
                     contentValues.put(SqlContract.SqlTakeAway.SOURCE_ID, takeAwayDbDTO.getSourceId());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
@@ -729,12 +730,12 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlOrders.ORDER_DATE, String.valueOf(order.getOrderDt()));
                     if (order.getOrderTm() != null)
                         contentValues.put(SqlContract.SqlOrders.ORDER_TIME, String.valueOf(order.getOrderTm()));
-                    //contentValues.put(SqlContract.SqlOrders.CREATED_DATE, String.valueOf(order.getCreatedDate()));
-                    // contentValues.put(SqlContract.SqlOrders.UPDATED_DATE, String.valueOf(order.getUpdatedDate()));
                     contentValues.put(SqlContract.SqlOrders.TABLE_NO, order.getTableId());
                     contentValues.put(SqlContract.SqlOrders.USER_ID, order.getUserId());
                     contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
                     contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
+                    contentValues.put(SqlContract.SqlOrders.TAKE_AWAY_NO, order.getTakeawayNo());
+                    contentValues.put(SqlContract.SqlOrders.ORDER_TYPE, order.getOrderType());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlOrders.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -1533,6 +1534,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlBill.PAID_BY, bill.getPayedBy());
                     if (bill.getDiscount() != 0)
                         contentValues.put(SqlContract.SqlBill.DISCOUNT, bill.getDiscount());
+                    if (bill.getTakeawayNo() != 0)
+                        contentValues.put(SqlContract.SqlBill.TAKE_AWAY_NO, bill.getTakeawayNo());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     if (contentValues.size() != 0)
                         count = sqLiteDatabase.update(SqlContract.SqlBill.TABLE_NAME, contentValues, SqlContract.SqlBill.BILL_NO + "=?", whereClause);
@@ -1642,6 +1645,10 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlOrders.ORDER_AMOUNT, order.getOrderAmt());
                     if (order.getCustId() != null && !order.getCustId().isEmpty())
                         contentValues.put(SqlContract.SqlOrders.CUST_ID, order.getCustId());
+                    if (order.getTakeawayNo() != 0)
+                        contentValues.put(SqlContract.SqlOrders.TAKE_AWAY_NO, order.getTakeawayNo());
+                    if (order.getOrderType() != 0)
+                        contentValues.put(SqlContract.SqlOrders.ORDER_TYPE, order.getOrderType());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlOrders.TABLE_NAME, contentValues,
                             SqlContract.SqlOrders.ORDER_ID + "=?", whereClause);
@@ -2269,8 +2276,6 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlTakeAway.DELIVERY_CHG, takeAwayDbDTO.getDeliveryCharges());
                     if (takeAwayDbDTO.getCustId() != null && !takeAwayDbDTO.getCustId().isEmpty())
                         contentValues.put(SqlContract.SqlTakeAway.CUST_ID, takeAwayDbDTO.getCustId());
-                    if (takeAwayDbDTO.getRestaurantId() != 0)
-                        contentValues.put(SqlContract.SqlTakeAway.RESTAURANT_ID, takeAwayDbDTO.getRestaurantId());
                     if (takeAwayDbDTO.getUserId() != 0)
                         contentValues.put(SqlContract.SqlTakeAway.USER_ID, takeAwayDbDTO.getUserId());
                     if (takeAwayDbDTO.getSourceId() != 0)
@@ -2867,5 +2872,36 @@ public class DbRepository extends SQLiteOpenHelper {
 
         }
         return takeAwaySourceDTOs;
+    }
+
+    public boolean insertTakeAway(UploadTakeAway takeAwayDbDTO, int userId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                contentValues.put(SqlContract.SqlTakeAway.TAKE_AWAY_ID, takeAwayDbDTO.getTakeawayId());
+                contentValues.put(SqlContract.SqlTakeAway.DISCOUNT, takeAwayDbDTO.getDiscount());
+                contentValues.put(SqlContract.SqlTakeAway.DELIVERY_CHG, takeAwayDbDTO.getDeliveryCharges());
+                contentValues.put(SqlContract.SqlTakeAway.CUST_ID, takeAwayDbDTO.getCustId());
+                contentValues.put(SqlContract.SqlTakeAway.USER_ID, userId);
+                contentValues.put(SqlContract.SqlTakeAway.SOURCE_ID, takeAwayDbDTO.getSourceId());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                count = sqLiteDatabase.insert(SqlContract.SqlTakeAway.TABLE_NAME, null, contentValues);
+                contentValues.clear();
+                Log.d(TAG, "## Take away is added successfully using UploadTakeAway" + takeAwayDbDTO.getTakeawayId());
+
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "## Error at insert take away using UploadTakeAway" + e.toString());
+        } finally {
+            {
+                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                    sqLiteDatabase.close();
+            }
+        }
+        return count != -1;
     }
 }

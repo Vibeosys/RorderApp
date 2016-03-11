@@ -23,12 +23,12 @@ public class OrdersDbDTO extends BaseDTO {
     private String orderDate;
     private Time orderTm;
     private String orderTime;
-    //private Date createdDate;
-    //private Date updatedDate;
     private int tableId;
     private int userId;
     private double orderAmt;
     private int restaurantId;
+    private int takeawayNo;
+    private int orderType;
 
     public OrdersDbDTO() {
     }
@@ -194,6 +194,22 @@ public class OrdersDbDTO extends BaseDTO {
 
     public void setCustId(String custId) {
         this.custId = custId;
+    }
+
+    public int getTakeawayNo() {
+        return takeawayNo;
+    }
+
+    public void setTakeawayNo(int takeawayNo) {
+        this.takeawayNo = takeawayNo;
+    }
+
+    public int getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(int orderType) {
+        this.orderType = orderType;
     }
 
     public static List<OrdersDbDTO> deserializeOrders(List<String> serializedStringList) {

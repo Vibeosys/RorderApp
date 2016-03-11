@@ -46,6 +46,7 @@ public class SqlContract {
         public final static String IS_PAYED = "IsPayed";
         public final static String PAID_BY = "PayedBy";
         public final static String DISCOUNT = "Discount";
+        public final static String TAKE_AWAY_NO = "TakeawayNo";
     }
 
     public abstract class SqlBillDetails {
@@ -109,6 +110,8 @@ public class SqlContract {
         public final static String TABLE_NO = "TableNo";
         public final static String USER_ID = "UserId";
         public final static String ORDER_AMOUNT = "OrderAmount";
+        public final static String TAKE_AWAY_NO = "TakeawayNo";
+        public final static String ORDER_TYPE = "OrderType";
     }
 
     public abstract class SqlTempOrder {

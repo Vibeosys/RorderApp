@@ -26,6 +26,7 @@ public class BillDbDTO extends BaseDTO {
     private int isPayed;
     private int payedBy;
     private double discount;
+    private int takeawayNo;
 
     public BillDbDTO() {
     }
@@ -138,6 +139,14 @@ public class BillDbDTO extends BaseDTO {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public int getTakeawayNo() {
+        return takeawayNo;
+    }
+
+    public void setTakeawayNo(int takeawayNo) {
+        this.takeawayNo = takeawayNo;
     }
 
     public static List<BillDbDTO> deserializeBill(List<String> serializedStringList) {
