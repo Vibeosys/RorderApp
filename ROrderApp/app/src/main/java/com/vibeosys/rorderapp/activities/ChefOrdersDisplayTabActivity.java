@@ -31,14 +31,17 @@ public class ChefOrdersDisplayTabActivity extends BaseActivity{
         getSupportActionBar();
         setTitle("Chef's Kitchen");
 
-        tab_layout = (TabLayout) findViewById(R.id.tab_layout);
+        tab_layout = (TabLayout) findViewById(R.id.tab_layout_chef);
 
         tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
+        tab_layout.addTab(tab_layout.newTab().setText("DINING ORDERS"));
+        tab_layout.addTab(tab_layout.newTab().setText("TAKE AWAY ORDERS"));
         tab_layout.addTab(tab_layout.newTab().setText("PREVIOUS ORDERS"));
+
 
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
         tab_layout.setSelectedTabIndicatorHeight(4);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pagerChef);
 
         final ChefPagerTabAdapter chefPagerTabAdapter = new ChefPagerTabAdapter(getSupportFragmentManager(), tab_layout.getTabCount());
         viewPager.setAdapter(chefPagerTabAdapter);

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,13 +33,14 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
     OrderViewHolder holder;
     private tabCompleteButton mTabCompleteButton;
     DbRepository dbRepository;
-    Utility utility = new Utility();
+    Utility utility;// = new Utility();
     ProgressDialog dialog;
 
     public ChefRecyclerViewAdapter(ArrayList<ChefOrderDetailsDTO> orderHeaderDTOs, Context context, DbRepository dbRepository) {
         this.mOrderHeaderDTOs = orderHeaderDTOs;
         this.mContext = context;
         this.dbRepository = dbRepository;
+        utility = new Utility();
     }
 
     @Override
@@ -64,6 +66,8 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
         ChefMenuAdapter adapter = new ChefMenuAdapter(mOrderHeaderDTOs.get(position).getmMenuChild(), mContext);
         holder.menuList.setAdapter(adapter);
 
+
+
         utility.setListViewHeightBasedOnChildren(holder.menuList);
         holder.btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,32 +75,11 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
                 if (mTabCompleteButton != null) {
                     mTabCompleteButton.tabComplete(mOrderHeaderDTOs.get(position).getmNewOrderId());
 
-//                    mOrderHeaderDTOs.remove(position);
-//                    notifyDataSetChanged();
-
-                } else {
 
                 }
             }
         });
-        // holder.menuList.setScrollContainer(false);
-        /*holder.menuList.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
 
-                }
-                v.onTouchEvent(event);
-                return true;
-            }
-        });*/
 
 
     }
@@ -155,19 +138,23 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
             int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
             for (int i = 0; i < listAdapter.getCount(); i++) {
                 View listItem = listAdapter.getView(i, null, listView);
-                if (listItem instanceof ViewGroup) {
+                if (listItem instanceof View) {
                     listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        totalHeight += listItem.getMeasuredHeight();
                 }
                 listItem.measure(0, 0);
+
                 totalHeight += listItem.getMeasuredHeight();
             }
-
+            int demo = listView.getDividerHeight();
             ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalHeight / 2;//+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+            params.height = totalHeight; //+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+           // params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+           // Math.round(totalHeight);
 
-            // params.height = params.height / 2;
-            // Math.round(params.height);
             listView.setLayoutParams(params);
+            listView.requestLayout();
+
         }
     }
 

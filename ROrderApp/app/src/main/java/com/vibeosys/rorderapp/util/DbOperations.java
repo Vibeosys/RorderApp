@@ -121,6 +121,7 @@ public class DbOperations {
                 }
             }
         });
+
         FragmentChefPlacedOrder.runOnUI(new Runnable() {
             @Override
             public void run() {

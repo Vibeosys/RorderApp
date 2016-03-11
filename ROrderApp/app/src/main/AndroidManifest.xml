@@ -80,6 +80,7 @@
             android:name=".activities.CustomerFeedBackActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
+
         <activity android:name=".activities.ChefOrdersDisplayActivity"></activity>
         <activity
             android:name=".activities.FeedbackActivity"
@@ -93,8 +94,9 @@
             android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".activities.SettingPrinterActivity"></activity>
-        <activity android:name=".activities.ChefOrdersDisplayTabActivity">
 
+        <activity android:name=".activities.ChefOrdersDisplayTabActivity"
+            android:screenOrientation="landscape">
         </activity>
         <service
             android:name=".service.SyncService"

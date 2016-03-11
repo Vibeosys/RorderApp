@@ -99,6 +99,7 @@ public class FragmentChefTabMyServing extends BaseFragment
             chefRecycle.invalidate();
 
 
+
         }
     }
 
@@ -111,7 +112,7 @@ public class FragmentChefTabMyServing extends BaseFragment
             TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
             mServerSyncManager.syncDataWithServer(true);
-
+            chefRecycle.invalidate();
 
         } else {
             showMyDialog(getActivity());
@@ -125,7 +126,7 @@ public class FragmentChefTabMyServing extends BaseFragment
         String message = null;
 
         dialog.dismiss();
-
+        chefRecycle.invalidate();
         try {
            /* errorCode = data.getInt(String.valueOf(errorCode));
             errorString = data.getString("errorCode");
@@ -159,6 +160,7 @@ public class FragmentChefTabMyServing extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+
 
     }
 }

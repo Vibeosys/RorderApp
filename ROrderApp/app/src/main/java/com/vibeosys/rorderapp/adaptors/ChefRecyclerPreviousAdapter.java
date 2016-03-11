@@ -51,7 +51,7 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
         holder.preTxtOrderNo.setText(""+mOrderHeaderDTO.get(position).getmOrderNumner());
         holder.preTxtWaiterName.setText(""+mOrderHeaderDTO.get(position).getmUserName());
         holder.preTxtOrderTime.setText(""+mOrderHeaderDTO.get(position).TimeDiff());
-        ChefMenuAdapter adapter = new ChefMenuAdapter(mOrderHeaderDTO.get(position).getmMenuChild(), mContext);
+        ChefMenuPreviousAdapter adapter = new ChefMenuPreviousAdapter(mOrderHeaderDTO.get(position).getmMenuChild(), mContext);
         holder.preMenuList.setAdapter(adapter);
         utilityPrevious.setListViewHeightBasedOnChildren(holder.preMenuList);
     }
@@ -105,7 +105,7 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
             }
 
             ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalHeight / 2;//+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+            params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
 
             // params.height = params.height / 2;
             // Math.round(params.height);
