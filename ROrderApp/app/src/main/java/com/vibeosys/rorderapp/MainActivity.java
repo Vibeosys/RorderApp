@@ -83,7 +83,7 @@ import java.util.UUID;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static Handler UIHandler;
+
     TabLayout tab_layout;
     DrawerLayout drawer;
 
@@ -438,13 +438,4 @@ public class MainActivity extends BaseActivity
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
     }
 
-    static {
-        UIHandler = new Handler(Looper.getMainLooper());
-
-    }
-
-    public static void runOnUI(Runnable runnable) {
-        UIHandler.post(runnable);
-
-    }
 }

@@ -454,7 +454,8 @@ public class ServerSyncManager
         if (updateJsonList.size() != 0) {
             List<OrdersDbDTO> orderUpdates = OrdersDbDTO.deserializeOrders(updateJsonList);
             String message = "";
-
+            String tableMessage = "";
+            String takeAwayMessage = "";
             for (OrdersDbDTO order : orderUpdates) {
                 int userId = 0;
                 if (order.isOrderStatus() == 2) {
@@ -465,9 +466,15 @@ public class ServerSyncManager
                         Log.d(TAG, "## userId is not given");
                     }
                     if (userId == mSessionManager.getUserId()) {
-                        int tableNo = mDbRepository.getTaleNo(myOrder.getTableId());
-                        message = "Table # " + tableNo + " order ready to pickup";
-                        NotificationOrderDTO notificationOrderDTO = new NotificationOrderDTO(
+                        int tableId = myOrder.getTableId();
+                        int tableNo = mDbRepository.getTaleNo(tableId);
+                        int takeAwayOrder = myOrder.getTakeawayNo();
+                        tableMessage = "Table # " + tableNo + " order ready to pickup";
+                        takeAwayMessage = "# " + takeAwayOrder + " order ready to deliver";
+                        message = tableId == 0 ? takeAwayMessage : tableMessage;
+
+                        NotificationOrderDTO
+                                notificationOrderDTO = new NotificationOrderDTO(
                                 myOrder.getOrderNo(), myOrder.getUserId(), myOrder.isOrderStatus(),
                                 message, tableNo);
                         NotificationActivity.notifications.add(notificationOrderDTO);

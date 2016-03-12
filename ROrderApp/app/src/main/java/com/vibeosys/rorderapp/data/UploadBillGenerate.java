@@ -7,10 +7,14 @@ public class UploadBillGenerate extends BaseDTO {
 
     String custId;
     int tableId;
-    public UploadBillGenerate( int tableId,String custId) {
+    int takeawayNo;
+
+    public UploadBillGenerate(int tableId, String custId, int takeawayNo) {
         this.custId = custId;
         this.tableId = tableId;
+        this.takeawayNo = takeawayNo;
     }
+
     public String getCustId() {
         return custId;
     }
@@ -27,5 +31,11 @@ public class UploadBillGenerate extends BaseDTO {
         this.tableId = tableId;
     }
 
+    public int getTakeawayNo() {
+        return takeawayNo;
+    }
 
+    public void setTakeawayNo(int takeawayNo) {
+        this.takeawayNo = takeawayNo;
+    }
 }

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -55,8 +57,8 @@ import java.util.UUID;
  * Created by akshay on 08-03-2016.
  */
 public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.OnStringResultReceived,
-        ServerSyncManager.OnStringErrorReceived {
-
+        ServerSyncManager.OnStringErrorReceived, AdapterView.OnItemClickListener {
+    public static Handler UIHandler;
     private TextView mTxtTotalCount;
     private GridView mGridView;
     private int mSourceId;
@@ -67,7 +69,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
     TextView txtTotalCount;
     GridView gridView;
     ArrayList<TakeAwayDTO> takeAwayDTOs;
-    TakeAwayGridAdapter gridAdapter;
+    public static TakeAwayGridAdapter gridAdapter;
 
     @Nullable
     @Override
@@ -93,6 +95,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         takeAwayDTOs = mDbRepository.getTakeAwayList();
         gridAdapter = new TakeAwayGridAdapter(getActivity().getApplicationContext(), takeAwayDTOs);
         gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(this);
         return view;
     }
 
@@ -254,7 +257,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
             if (errorCode == 0) {
                 mTakeAwayNo = Integer.parseInt(message);
                 mServerSyncManager.syncDataWithServer(false);
-                callToMenuIntent(mTakeAwayNo, 0, custid.toString());
+                callToMenuIntent(mTakeAwayNo, custid.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -262,9 +265,10 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     }
 
-    private void callToMenuIntent(int takeAwayNo, int tableId, String custId) {
+    private void callToMenuIntent(int takeAwayNo, String custId) {
         showProgress(false);
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, 0, takeAwayNo);
+        double givenDiscount = mDbRepository.getTakeAwayDiscount(takeAwayNo);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(0, custId, 0, takeAwayNo, givenDiscount);
         BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
         if (billDetailsDTO != null) {
             Intent intentBillDetails = new Intent(getActivity().getApplicationContext(), BillDetailsActivity.class);
@@ -279,6 +283,25 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 //        intentOpenTableMenu.putExtra("TableId", tableId);
             startActivity(intentOpenTableMenu);
         }
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TakeAwayDTO takeAwayDTO = (TakeAwayDTO) gridAdapter.getItem(position);
+        String custId = takeAwayDTO.getmCustId();
+        Log.i(TAG, "## Customer Id " + custId);
+        callToMenuIntent(takeAwayDTO.getmTakeawayNo(), custId);
+        Log.i(TAG, "##" + takeAwayDTO.getmTakeawayNo() + " Is Clicked");
+    }
+
+    static {
+        UIHandler = new Handler(Looper.getMainLooper());
+
+    }
+
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
 
     }
 }

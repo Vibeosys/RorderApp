@@ -11,9 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by akshay on 11-03-2016.
@@ -26,6 +28,13 @@ public class TakeAwayGridAdapter extends BaseAdapter {
     public TakeAwayGridAdapter(Context mContext, ArrayList<TakeAwayDTO> mTakeawayList) {
         this.mContext = mContext;
         this.mTakeawayList = mTakeawayList;
+    }
+
+    public void refresh(ArrayList<TakeAwayDTO> takeAways) {
+        if (mTakeawayList != null)
+            this.mTakeawayList.clear();
+        this.mTakeawayList = takeAways;
+        notifyDataSetChanged();
     }
 
     @Override

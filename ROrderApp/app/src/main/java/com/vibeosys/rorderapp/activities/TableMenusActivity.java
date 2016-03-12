@@ -91,11 +91,13 @@ public class TableMenusActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_menu_main);
+
         tableCommonInfoDTO = getIntent().getParcelableExtra("tableCustInfo");
         mTableId = tableCommonInfoDTO.getTableId();
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
         mTakeAwayNo = tableCommonInfoDTO.getTakeAwayNo();
+
         Log.i("##", "##" + mTakeAwayNo);
         setTitle(getResources().getString(R.string.title_search_cuisine));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -117,10 +119,16 @@ public class TableMenusActivity extends BaseActivity implements
         llCurrentOrder = (LinearLayout) findViewById(R.id.llCurrentOrder);
         imgFloat = (ImageButton) findViewById(R.id.fab);
         txtTableNo = (TextView) findViewById(R.id.txtTableNo);
-        txtTableNo.setText("T-" + mTableNo);
+
+        String tableIndicator = "T-" + mTableNo;
+        String orderIndicator = "# " + mTakeAwayNo;
+        String strIndicator = mTableNo != 0 ? tableIndicator : orderIndicator;
+        txtTableNo.setText(strIndicator);
+
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
         orderListAdapter.setCustomButtonListner(this);
         listMenus.setAdapter(orderListAdapter);
+
         orderListAdapter.notifyDataSetChanged();
         llCurrentOrder.setOnClickListener(this);
         txtBillGenerate.setOnClickListener(this);
@@ -406,7 +414,7 @@ public class TableMenusActivity extends BaseActivity implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showProgress(true);
-                UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId);
+                UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId, mTakeAwayNo);
                 Gson gson = new Gson();
                 String serializedJsonString = gson.toJson(uploadBillGenerate);
                 Log.d(TAG, "##" + serializedJsonString);
@@ -614,5 +622,6 @@ public class TableMenusActivity extends BaseActivity implements
         String stringTitle = getResources().getString(R.string.error_msg_title_for_server);
         String stringMessage = getResources().getString(R.string.error_msg_for_server_details_bill);
         customAlterDialog(stringTitle, stringMessage);
+        Log.d(TAG, "##" + error.toString());
     }
 }

@@ -22,6 +22,7 @@ import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
 import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
 import com.vibeosys.rorderapp.fragments.FragmentChefTabMyServing;
+import com.vibeosys.rorderapp.fragments.FragmentTakeAway;
 import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 
 import java.util.ArrayList;
@@ -152,6 +153,15 @@ public class DbOperations {
                 }
             }
         });
+        FragmentTakeAway.runOnUI(new Runnable() {
+            public void run() {
+                try {
+                    FragmentTakeAway.gridAdapter.refresh(dbRepository.getTakeAwayList());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         return isInserted & isUpdated;
     }
 
@@ -203,6 +213,16 @@ public class DbOperations {
 
         boolean isInserted = dbRepository.insertTakeAway(inserts);
         boolean isUpdated = dbRepository.updateTakeAway(updates);
+        FragmentTakeAway.runOnUI(new Runnable() {
+            public void run() {
+                try {
+                    FragmentTakeAway.gridAdapter.refresh(dbRepository.getTakeAwayList());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         return isInserted & isUpdated;
     }
 
@@ -238,7 +258,7 @@ public class DbOperations {
         for (TableTransactionDbDTO deleteDto : tableTransactionDelete) {
             dbRepository.cleanData(deleteDto.getCustId(), deleteDto.getUserId(), myUserId);
         }
-        MainActivity.runOnUI(new Runnable() {
+        FragmentWaiterTable.runOnUI(new Runnable() {
             public void run() {
                 try {
                     FragmentWaiterTable.adapter.refresh(dbRepository.getTableRecords(""));

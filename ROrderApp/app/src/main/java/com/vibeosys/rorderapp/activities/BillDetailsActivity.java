@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,9 +15,9 @@ import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
+import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
-import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -36,8 +37,12 @@ public class BillDetailsActivity extends BaseActivity {
     //private TextView mTxtServicesCharges;
     private TextView mTxtDiscountAmount;
     private TextView mTxtTotalPayableAmnount;
-    TextView txtDiscountTitle;
+    private TextView mTxtDiscountTitle;
+    private TextView mTxtTableNoTitle, mTxtServedByTitle, mTxtAddress;
     private double mDiscount = 0.00;
+    private double mDiscPer = 0.0;
+    private LinearLayout layoutLocation;
+    private ImageView mImgTable;
 
     @Override
     protected String getScreenName() {
@@ -61,6 +66,7 @@ public class BillDetailsActivity extends BaseActivity {
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
         mTakeAwayNo = tableCommonInfoDTO.getTakeAwayNo();
+        mDiscPer = tableCommonInfoDTO.getDiscount();
 
         mTxtTableNo = (TextView) findViewById(R.id.TableNumber);
         //TextView orderNo = (TextView) findViewById(R.id.OrderNumber);
@@ -68,17 +74,22 @@ public class BillDetailsActivity extends BaseActivity {
         mTxtBillDate = (TextView) findViewById(R.id.DateDisplay);
         mTxtNetAmount = (TextView) findViewById(R.id.PaymentAmt);
         mTxtTotalTaxes = (TextView) findViewById(R.id.TaxAmt);
+        mTxtTableNoTitle = (TextView) findViewById(R.id.TableNoTitle);
+        mTxtServedByTitle = (TextView) findViewById(R.id.ServedByTitle);
+        mTxtAddress = (TextView) findViewById(R.id.txtAddress);
+        layoutLocation = (LinearLayout) findViewById(R.id.layoutLocation);
         //mTxtServicesCharges = (TextView) findViewById(R.id.ServicesChrgAmt);
         mTxtDiscountAmount = (TextView) findViewById(R.id.DiscountAmt);
         mTxtTotalPayableAmnount = (TextView) findViewById(R.id.TotalAmt);
-        txtDiscountTitle = (TextView) findViewById(R.id.DiscountTitle);
+        mTxtDiscountTitle = (TextView) findViewById(R.id.DiscountTitle);
+        mImgTable = (ImageView) findViewById(R.id.imgTable);
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
         LinearLayout mLayoutAddDiscount = (LinearLayout) findViewById(R.id.layout_discount_per);
 
         mBillDetailsDTOs = mDbRepository.getBillDetailsRecords(custId);
 
-        displayData(0);
+        displayData(mDiscPer);
 
         payment_bill_details.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,14 +163,32 @@ public class BillDetailsActivity extends BaseActivity {
 
         double netAmount = mBillDetailsDTOs.getNetAmount();
         double totalPaybleAmount = mBillDetailsDTOs.getTotalPayableAmt();
+        TakeAwayDTO takeAwayDTO = mDbRepository.getTakeAway(mTakeAwayNo);
 
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         if (percenatge != 0) {
             mDiscount = Math.round((netAmount * percenatge) / 100);
             totalPaybleAmount = Math.round(totalPaybleAmount - mDiscount);
         }
-        mTxtTableNo.setText(" # " + mBillDetailsDTOs.getTableNo());
+
+        if (mTableId != 0) {
+            mTxtTableNoTitle.setText("Customer table number was");
+            mTxtTableNo.setText(" # " + mBillDetailsDTOs.getTableNo());
+            layoutLocation.setVisibility(View.GONE);
+            mTxtServedByTitle.setText("Customer was served by");
+            mImgTable.setImageResource(R.drawable.ic_table);
+        } else {
+            mTxtTableNoTitle.setText("Order for " + takeAwayDTO.getmCustName() + " was ");
+            mTxtTableNo.setText(" # " + mTakeAwayNo);
+            layoutLocation.setVisibility(View.VISIBLE);
+            mTxtAddress.setText(takeAwayDTO.getmCustAddress());
+            mTxtServedByTitle.setText("Order was delivered by");
+            mImgTable.setImageResource(R.drawable.ic_person);
+        }
+
         //orderNo.setText("");
+
+
         mTxtServedBy.setText(mBillDetailsDTOs.getServedByName());
         Log.d("##", "##" + mBillDetailsDTOs.getBillDate());
         java.util.Date date = new ROrderDateUtils().getFormattedDate(mBillDetailsDTOs.getBillDate());
@@ -169,7 +198,7 @@ public class BillDetailsActivity extends BaseActivity {
         long billTime = lngTime + dateUtils.getTimeOffsetAsPerLocal(5, 30);
         mTxtBillDate.setText(dateUtils.getLocalDateInReadableFormat(date) + " at " +
                 dateUtils.getLocalTimeInReadableFormat(new Date(billTime)));
-        txtDiscountTitle.setText("Discount (" + percenatge + "%)");
+        mTxtDiscountTitle.setText("Discount (" + percenatge + "%)");
         mTxtNetAmount.setText(String.format("%.2f", netAmount));
         mTxtTotalTaxes.setText(String.format("%.2f", mBillDetailsDTOs.getTotalTax()));
         //mTxtServicesCharges.setText(String.format("%.2f", mDiscount));
