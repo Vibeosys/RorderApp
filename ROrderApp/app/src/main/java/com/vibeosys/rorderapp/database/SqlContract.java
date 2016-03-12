@@ -135,6 +135,7 @@ public class SqlContract {
         public final static String CUST_NAME = "CustName";
         public final static String CUST_PHONE = "CustPhone";
         public final static String CUST_EMAIL = "CustEmail";
+        public final static String CUST_ADDRESS = "CustAddress";
     }
 
     public abstract class SqlTableTransaction {

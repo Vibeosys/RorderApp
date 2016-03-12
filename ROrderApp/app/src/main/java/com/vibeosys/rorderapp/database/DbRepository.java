@@ -32,6 +32,7 @@ import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDbDTO;
@@ -1151,6 +1152,8 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues = new ContentValues();
                 contentValues.put(SqlContract.SqlCustomer.CUST_ID, customer.getCustId());
                 contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customer.getCustName());
+                contentValues.put(SqlContract.SqlCustomer.CUST_PHONE, customer.getCustPhone());
+                contentValues.put(SqlContract.SqlCustomer.CUST_ADDRESS, customer.getCustAddress());
                 if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                 count = sqLiteDatabase.insert(SqlContract.SqlCustomer.TABLE_NAME, null, contentValues);
                 contentValues.clear();
@@ -1864,6 +1867,8 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues = new ContentValues();
                     contentValues.put(SqlContract.SqlCustomer.CUST_ID, customerDbDTO.getCustId());
                     contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customerDbDTO.getCustName());
+                    contentValues.put(SqlContract.SqlCustomer.CUST_ADDRESS, customerDbDTO.getCustAddress());
+                    contentValues.put(SqlContract.SqlCustomer.CUST_PHONE, customerDbDTO.getCustPhone());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlCustomer.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -1893,6 +1898,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues = new ContentValues();
                     if (customerDbDTO.getCustName() != null)
                         contentValues.put(SqlContract.SqlCustomer.CUST_NAME, customerDbDTO.getCustName());
+                    if (customerDbDTO.getCustAddress() != null)
+                        contentValues.put(SqlContract.SqlCustomer.CUST_ADDRESS, customerDbDTO.getCustAddress());
+                    if (customerDbDTO.getCustPhone() != null)
+                        contentValues.put(SqlContract.SqlCustomer.CUST_PHONE, customerDbDTO.getCustPhone());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlCustomer.TABLE_NAME, contentValues,
                             SqlContract.SqlCustomer.CUST_ID + "=?", where);
@@ -2903,5 +2912,59 @@ public class DbRepository extends SQLiteOpenHelper {
             }
         }
         return count != -1;
+    }
+
+    public ArrayList<TakeAwayDTO> getTakeAwayList() {
+        ArrayList<TakeAwayDTO> takeAways = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("Select takeaway.TakeawayId,takeaway.TakeawayNo," +
+                        "takeaway.CustId,takeaway.SourceId,takeaway.Discount,takeaway.DeliveryCharges," +
+                        "takeaway.UserId,users.UserName,customer.CustName,customer.CustPhone," +
+                        "customer.CustAddress,takeaway_source.SourceName,orders.OrderStatus from takeaway left join " +
+                        "users on users.UserId=takeaway.UserId left join customer on customer.CustId=" +
+                        "takeaway.CustId left join takeaway_source on takeaway_source.SourceId=takeaway.SourceId " +
+                        "left join orders on takeaway.TakeawayNo=orders.TakeawayNo", null);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do {
+                            String takeawayId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAway.TAKE_AWAY_ID));
+                            int takeawayNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTakeAway.TAKE_AWAY_NO));
+                            double discount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlTakeAway.DISCOUNT));
+                            double deliveryCharges = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlTakeAway.DELIVERY_CHG));
+                            String custId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAway.CUST_ID));
+                            int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTakeAway.USER_ID));
+                            int sourceId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTakeAway.SOURCE_ID));
+                            String custName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_NAME));
+                            String custAddress = cursor.getString(cursor.getColumnIndex("CustAddress"));
+                            String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                            String custPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_PHONE));
+                            String sourceName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_NAME));
+                            int orderStatus = cursor.getInt(cursor.getColumnIndex("OrderStatus"));
+                            TakeAwayDTO takeaway = new TakeAwayDTO(takeawayId, takeawayNo, discount,
+                                    deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName, orderStatus);
+                            takeAways.add(takeaway);
+                        } while (cursor.moveToNext());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Log.e(TAG, "Error in Take away source" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+
+        }
+        return takeAways;
     }
 }

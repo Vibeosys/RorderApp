@@ -126,7 +126,6 @@ public class TableGridAdapter extends BaseAdapter {
         } else viewHolder = (TableGridAdapter.ViewHolder) row.getTag();
 
         RestaurantTables hotelTableDTO = mHotelTables.get(position);
-        Log.d(TAG, hotelTableDTO.toString());
         viewHolder.txtCapacity.setText("" + hotelTableDTO.getmCapacity());
         viewHolder.txtTableNumber.setText("" + hotelTableDTO.getmTableNo());
         viewHolder.textTableCategory.setText(hotelTableDTO.getmTableCategoryName().toUpperCase());

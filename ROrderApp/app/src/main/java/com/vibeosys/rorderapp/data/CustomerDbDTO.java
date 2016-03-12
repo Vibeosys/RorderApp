@@ -15,7 +15,7 @@ public class CustomerDbDTO extends BaseDTO {
     private String custId;
     private String custName;
     private String custAddress;
-
+    private String custPhone;
    /* public CustomerDbDTO() {
     }*/
 
@@ -24,10 +24,11 @@ public class CustomerDbDTO extends BaseDTO {
         this.custName = custName;
     }
 
-    public CustomerDbDTO(String custId, String custName, String custAddress) {
+    public CustomerDbDTO(String custId, String custName, String custAddress, String custPhone) {
         this.custId = custId;
         this.custName = custName;
         this.custAddress = custAddress;
+        this.custPhone = custPhone;
     }
 
     public String getCustId() {
@@ -44,6 +45,22 @@ public class CustomerDbDTO extends BaseDTO {
 
     public void setCustName(String custName) {
         this.custName = custName;
+    }
+
+    public String getCustAddress() {
+        return custAddress;
+    }
+
+    public void setCustAddress(String custAddress) {
+        this.custAddress = custAddress;
+    }
+
+    public String getCustPhone() {
+        return custPhone;
+    }
+
+    public void setCustPhone(String custPhone) {
+        this.custPhone = custPhone;
     }
 
     public static List<CustomerDbDTO> deserializeCustomer(List<String> serializedStringList) {

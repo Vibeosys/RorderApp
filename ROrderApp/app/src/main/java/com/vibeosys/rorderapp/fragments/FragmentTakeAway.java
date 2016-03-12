@@ -1,11 +1,17 @@
 package com.vibeosys.rorderapp.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +21,26 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.activities.BillDetailsActivity;
+import com.vibeosys.rorderapp.activities.TableMenusActivity;
+import com.vibeosys.rorderapp.adaptors.TakeAwayGridAdapter;
 import com.vibeosys.rorderapp.adaptors.TakeAwaySourceAdapter;
+import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
+import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
+import com.vibeosys.rorderapp.data.UploadTakeAway;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -44,6 +59,15 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     private TextView mTxtTotalCount;
     private GridView mGridView;
+    private int mSourceId;
+    private int mTakeAwayNo;
+    private UUID custid;
+    private ProgressBar mProgressBar;
+    private LinearLayout mMainLayout;
+    TextView txtTotalCount;
+    GridView gridView;
+    ArrayList<TakeAwayDTO> takeAwayDTOs;
+    TakeAwayGridAdapter gridAdapter;
 
     @Nullable
     @Override
@@ -59,6 +83,16 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
                 showWaitingDialog(savedInstanceState);
             }
         });
+        mServerSyncManager.setOnStringResultReceived(this);
+        mServerSyncManager.setOnStringErrorReceived(this);
+
+        mProgressBar = (ProgressBar) view.findViewById(R.id.select_reto_progress);
+        mMainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
+        txtTotalCount = (TextView) view.findViewById(R.id.txtCount);
+        gridView = (GridView) view.findViewById(R.id.gridview);
+        takeAwayDTOs = mDbRepository.getTakeAwayList();
+        gridAdapter = new TakeAwayGridAdapter(getActivity().getApplicationContext(), takeAwayDTOs);
+        gridView.setAdapter(gridAdapter);
         return view;
     }
 
@@ -75,6 +109,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         final EditText txtCustomerName = (EditText) dlg.findViewById(R.id.txtCustomerName);
         final EditText txtCustomerAddress = (EditText) dlg.findViewById(R.id.txtCustomerAddress);
         final EditText txtDiscountPer = (EditText) dlg.findViewById(R.id.txtDiscountPer);
+        final EditText txtDeliveryCharges = (EditText) dlg.findViewById(R.id.txtDeliveryChrgs);
 
         TextView txtPlaceOrder = (TextView) dlg.findViewById(R.id.txtPlaceOrder);
         TextView txtCancel = (TextView) dlg.findViewById(R.id.txtCancel);
@@ -84,7 +119,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         txtDiscountPer.setEnabled(false);
 
         ArrayList<TakeAwaySourceDTO> tableTransactionDbDTOs = mDbRepository.getTakeAwaySource();
-        final TakeAwaySourceAdapter adapter = new TakeAwaySourceAdapter(getActivity().getApplicationContext(),
+        final TakeAwaySourceAdapter adapter = new TakeAwaySourceAdapter(getContext(),
                 tableTransactionDbDTOs);
         spnSource.setAdapter(adapter);
 
@@ -111,6 +146,13 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
                 String strName = txtCustomerName.getText().toString();
                 String strAddress = txtCustomerAddress.getText().toString();
+                double discount = Double.parseDouble(txtDiscountPer.getText().toString());
+                String strDeliveryCharges = txtDeliveryCharges.getText().toString();
+                double deliveryCharges = 0;
+                if (!TextUtils.isEmpty(strDeliveryCharges)) {
+                    deliveryCharges = Double.parseDouble(strDeliveryCharges);
+                }
+
 
                 if (TextUtils.isEmpty(strName)) {
                     txtCustomerName.setError("Field is required");
@@ -125,15 +167,23 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
                 if (wrongCredential) {
                     focus.requestFocus();
                 } else {
-                    UUID custid = UUID.randomUUID();
-                    CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), strName, strAddress);
+                    showProgress(true);
+                    custid = UUID.randomUUID();
+                    CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), strName, strAddress, "123");
                     //here inserting custmer to custmer table
                     mDbRepository.insertCustomerDetails(customer);
+                    UUID takeAwayId = UUID.randomUUID();
+                    UploadTakeAway uploadTakeAway = new UploadTakeAway(takeAwayId.toString(), discount, deliveryCharges, custid.toString(), mSourceId);
+                    mDbRepository.insertTakeAway(uploadTakeAway, mSessionManager.getUserId());
                     // showProgress(true);
-                    TableDataDTO[] tableDataDTOs = new TableDataDTO[3];
+                    TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
                     Gson gson = new Gson();
                     String serializedJsonString = gson.toJson(customer);
                     tableDataDTOs[0] = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
+
+                    String serializedTake = gson.toJson(uploadTakeAway);
+                    tableDataDTOs[1] = new TableDataDTO(ConstantOperations.ADD_TAKEAWAY, serializedTake);
+                    mServerSyncManager.uploadDataToServer(tableDataDTOs);
                     dlg.dismiss();
                 }
             }
@@ -143,6 +193,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 TakeAwaySourceDTO takeAwaySourceDTo = (TakeAwaySourceDTO) adapter.getItem(position);
                 txtDiscountPer.setText(String.format("%.2f", takeAwaySourceDTo.getDiscount()));
+                mSourceId = takeAwaySourceDTo.getTakeAwayId();
             }
 
             @Override
@@ -153,21 +204,80 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         dlg.show();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mMainLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mMainLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mMainLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mMainLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
     @Override
     public void onStingErrorReceived(@NonNull VolleyError error) {
         String title = "Server Error";
         String message = "" + error.toString();
         customAlterDialog(title, message);
+        Log.d("##", "##" + message);
     }
 
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
-
+        showProgress(false);
         try {
             int errorCode = data.getInt("errorCode");
             String message = data.getString("message");
+            if (errorCode == 0) {
+                mTakeAwayNo = Integer.parseInt(message);
+                mServerSyncManager.syncDataWithServer(false);
+                callToMenuIntent(mTakeAwayNo, 0, custid.toString());
+            }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private void callToMenuIntent(int takeAwayNo, int tableId, String custId) {
+        showProgress(false);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, 0, takeAwayNo);
+        BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
+        if (billDetailsDTO != null) {
+            Intent intentBillDetails = new Intent(getActivity().getApplicationContext(), BillDetailsActivity.class);
+            intentBillDetails.putExtra("tableCustInfo", tableCommonInfoDTO);
+//        intentOpenTableMenu.putExtra("TableNo", tableNo);
+//        intentOpenTableMenu.putExtra("TableId", tableId);
+            startActivity(intentBillDetails);
+        } else {
+            Intent intentOpenTableMenu = new Intent(getActivity().getApplicationContext(), TableMenusActivity.class);
+            intentOpenTableMenu.putExtra("tableCustInfo", tableCommonInfoDTO);
+//        intentOpenTableMenu.putExtra("TableNo", tableNo);
+//        intentOpenTableMenu.putExtra("TableId", tableId);
+            startActivity(intentOpenTableMenu);
         }
 
     }

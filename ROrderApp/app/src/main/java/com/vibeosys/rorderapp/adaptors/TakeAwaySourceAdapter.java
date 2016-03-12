@@ -59,8 +59,6 @@ public class TakeAwaySourceAdapter extends BaseAdapter {
 
         TakeAwaySourceDTO takeAwaySourceDTO = mSources.get(position);
         viewHolder.txtName.setText(takeAwaySourceDTO.getName());
-        mImageLoader = CustomVolleyRequestQueue.getInstance(mContext)
-                .getImageLoader();
         //Image URL - This can point to any image file supported by Android
         final String url = takeAwaySourceDTO.getImgUrl();
         if (url != null && !url.isEmpty()) {

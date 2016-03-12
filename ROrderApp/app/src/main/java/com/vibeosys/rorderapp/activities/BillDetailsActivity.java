@@ -26,7 +26,7 @@ public class BillDetailsActivity extends BaseActivity {
 
     private BillDetailsDTO mBillDetailsDTOs;
     private TableCommonInfoDTO tableCommonInfoDTO;
-    private int mTableId, mTableNo;
+    private int mTableId, mTableNo, mTakeAwayNo;
     private String custId;
     private TextView mTxtTableNo;
     private TextView mTxtServedBy;
@@ -60,7 +60,7 @@ public class BillDetailsActivity extends BaseActivity {
         mTableId = tableCommonInfoDTO.getTableId();
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
-
+        mTakeAwayNo = tableCommonInfoDTO.getTakeAwayNo();
 
         mTxtTableNo = (TextView) findViewById(R.id.TableNumber);
         //TextView orderNo = (TextView) findViewById(R.id.OrderNumber);

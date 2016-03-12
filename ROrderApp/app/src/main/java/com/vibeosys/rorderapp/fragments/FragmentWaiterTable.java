@@ -104,7 +104,7 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
     @Override
     public void onResume() {
         super.onResume();
-        txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + hotelTableDTOs.size() + " tables are occupied");
+        txtTotalCount.setText("" + mDbRepository.getOccupiedTable() + " out of " + mDbRepository.getTableRecords("").size() + " tables are occupied");
     }
 
     @Override
@@ -157,7 +157,7 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
     private void callToMenuIntent(int tableNo, int tableId, String custId) {
 
 
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo, 0);
         BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
         if (billDetailsDTO != null) {
             Intent intentBillDetails = new Intent(getActivity().getApplicationContext(), BillDetailsActivity.class);

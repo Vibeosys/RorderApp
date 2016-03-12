@@ -17,7 +17,6 @@ public class TakeAwayDbDTO extends BaseDTO {
     private double discount;
     private double deliveryCharges;
     private String custId;
-    private int restaurantId;
     private int userId;
     private int sourceId;
 
@@ -62,14 +61,6 @@ public class TakeAwayDbDTO extends BaseDTO {
 
     public void setCustId(String custId) {
         this.custId = custId;
-    }
-
-    public int getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(int restaurantId) {
-        this.restaurantId = restaurantId;
     }
 
     public int getUserId() {

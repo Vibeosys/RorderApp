@@ -30,6 +30,7 @@ import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.UploadOrderDetails;
 import com.vibeosys.rorderapp.data.UploadOrderHeader;
+import com.vibeosys.rorderapp.util.AppConstants;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
@@ -57,12 +58,14 @@ public class TableOrderActivity extends BaseActivity implements
     private TableCommonInfoDTO tableCommonInfo;
     private int mTableNo;
     private int mTableId;
+    private int mTakeAwayNo;
     private String mCustId;
     private OrderHeaderDTO mCurrentOrder;
     private UUID mOrderId;
     private Context mContext = this;
     private int mOrderFlag;
     private ProgressBar mProgressBar;
+    private int mOrderType;
 
     @Override
     protected String getScreenName() {
@@ -77,6 +80,8 @@ public class TableOrderActivity extends BaseActivity implements
         mTableNo = tableCommonInfo.getTableNo();
         mTableId = tableCommonInfo.getTableId();
         mCustId = tableCommonInfo.getCustId();
+        mTakeAwayNo = tableCommonInfo.getTakeAwayNo();
+        mOrderType = mTableId != 0 ? AppConstants.DINE_IN : AppConstants.TAKE_AWAY;
         setContentView(R.layout.activity_table_order);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mOrdersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
@@ -232,7 +237,7 @@ public class TableOrderActivity extends BaseActivity implements
                     sendDetails.add(sendOrder);
                 }
                 mOrderId = UUID.randomUUID();
-                UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails);
+                UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType);
                 Gson gson = new Gson();
 
                 String serializedJsonString = gson.toJson(sendOrder);

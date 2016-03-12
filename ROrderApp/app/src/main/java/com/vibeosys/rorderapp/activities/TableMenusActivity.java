@@ -69,7 +69,7 @@ public class TableMenusActivity extends BaseActivity implements
     private ListView listMenus;
     private TextView txtTotalAmount, txtTotalItems, txtBillGenerate;
     private LinearLayout txtPreviousOrder;
-    private int mTableId, mTableNo;
+    private int mTableId, mTableNo, mTakeAwayNo;
     private String custId;
     private ImageButton imgFloat;
     private LinearLayout llCurrentOrder;
@@ -95,6 +95,8 @@ public class TableMenusActivity extends BaseActivity implements
         mTableId = tableCommonInfoDTO.getTableId();
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
+        mTakeAwayNo = tableCommonInfoDTO.getTakeAwayNo();
+        Log.i("##", "##" + mTakeAwayNo);
         setTitle(getResources().getString(R.string.title_search_cuisine));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
