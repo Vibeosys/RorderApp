@@ -68,10 +68,12 @@ public class FragmentChefTabMyServing extends BaseFragment
         View view = inflater.inflate(R.layout.chef_tab_layout, container, false);
 
 
-        ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
+       ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
+     //   ArrayList<ChefOrderDetailsDTO> order1 = mDbRepository.getRecChefOrder("1");
         mDbRepository.addMenuList(orders);
         chefRecycle = (RecyclerView) view.findViewById(R.id.ChefRecycler);
         adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
+     //   adapterRecycle = new ChefRecyclerViewAdapter(order1, getActivity().getApplicationContext(), mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         chefRecycle.setLayoutManager(layoutManager);
 

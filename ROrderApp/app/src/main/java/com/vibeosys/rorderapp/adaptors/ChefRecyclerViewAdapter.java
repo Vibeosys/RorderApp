@@ -2,6 +2,7 @@ package com.vibeosys.rorderapp.adaptors;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,12 +61,39 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
     @Override
     public void onBindViewHolder(OrderViewHolder holder, final int position) {
         holder.txtOrderNo.setText("" + mOrderHeaderDTOs.get(position).getmOrderNumner());
-        holder.txtTableNo.setText("" + mOrderHeaderDTOs.get(position).getmTableNo());
+        //   holder.txtTableNo.setText("" + mOrderHeaderDTOs.get(position).getmTableNo());
         holder.txtOrderTime.setText(mOrderHeaderDTOs.get(position).TimeDiff() + " ago");
         holder.txtWaiterName.setText(mOrderHeaderDTOs.get(position).getmUserName());
         ChefMenuAdapter adapter = new ChefMenuAdapter(mOrderHeaderDTOs.get(position).getmMenuChild(), mContext);
         holder.menuList.setAdapter(adapter);
+        if (mOrderHeaderDTOs.get(position).getmTableNo() == 0) {
 
+            holder.txtTableNo.setText("" + mOrderHeaderDTOs.get(position).getmTakeAwayNumber());//here take away number is going to set
+            holder.layout.setBackgroundColor(mContext.getResources().getColor(R.color.chef_take_away_back));
+            holder.tableNumberTitle.setVisibility(View.GONE);
+            holder.hrsGlassIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_hour_white));
+            holder.servedByIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ico_new_servedby));
+            int colour = Color.WHITE;
+            holder.takeAwayTitle.setTextColor(colour);
+            holder.txtHash.setTextColor(colour);
+            holder.txtOrderNo.setTextColor(colour);
+            holder.txtOrderTime.setTextColor(colour);
+            holder.txtWaiterName.setTextColor(colour);
+            holder.txtTableNo.setTextColor(colour);
+        } else {
+            holder.hrsGlassIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_hours_glass));
+            holder.servedByIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ico_served_by_black));
+            holder.tableNumberTitle.setVisibility(View.VISIBLE);
+            holder.txtTableNo.setText("" + mOrderHeaderDTOs.get(position).getmTableNo());//here table number is going to set
+            holder.takeAwayTitle.setVisibility(View.GONE);
+            int colour = Color.BLACK;
+            holder.takeAwayTitle.setTextColor(colour);
+            holder.txtHash.setTextColor(colour);
+            holder.txtOrderNo.setTextColor(colour);
+            holder.txtOrderTime.setTextColor(colour);
+            holder.txtWaiterName.setTextColor(colour);
+            holder.txtTableNo.setTextColor(colour);
+        }
 
 
         utility.setListViewHeightBasedOnChildren(holder.menuList);
@@ -79,7 +107,6 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
                 }
             }
         });
-
 
 
     }
@@ -98,9 +125,15 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
         TextView txtOrderNo;
         TextView txtWaiterName;
         TextView txtOrderTime;
+        TextView takeAwayTitle;
+        TextView tableNumberTitle;
         Button btnComplete;
         ListView menuList;
         ImageView btnDone;
+        LinearLayout layout;
+        TextView txtHash;
+        ImageView servedByIcon, hrsGlassIcon;
+
 
         public OrderViewHolder(View itemView) {
             super(itemView);
@@ -110,8 +143,13 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
             txtWaiterName = (TextView) itemView.findViewById(R.id.recyclerServedByName);
             txtOrderTime = (TextView) itemView.findViewById(R.id.recyclerOrderTime);
             btnComplete = (Button) itemView.findViewById(R.id.recyclerOrderDoneBtn);
+            takeAwayTitle = (TextView) itemView.findViewById(R.id.recyclerTxtTakeAwayNo);
+            tableNumberTitle = (TextView) itemView.findViewById(R.id.recyclerTxtTableNo);
             menuList = (ListView) itemView.findViewById(R.id.recyclerMenuList);
-
+            layout = (LinearLayout) itemView.findViewById(R.id.orderHeaderDtl);
+            txtHash = (TextView) itemView.findViewById(R.id.txtHash);
+            servedByIcon = (ImageView) itemView.findViewById(R.id.servedByIcon);
+            hrsGlassIcon = (ImageView) itemView.findViewById(R.id.hrsGlassIcon);
             //LinearLayout mlinearlayout = (LinearLayout)itemView.findViewById(R.id.recycler_row_layout);
         }
     }
@@ -140,7 +178,7 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
                 View listItem = listAdapter.getView(i, null, listView);
                 if (listItem instanceof View) {
                     listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                        totalHeight += listItem.getMeasuredHeight();
+                    totalHeight += listItem.getMeasuredHeight();
                 }
                 listItem.measure(0, 0);
 
@@ -149,8 +187,8 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
             int demo = listView.getDividerHeight();
             ViewGroup.LayoutParams params = listView.getLayoutParams();
             params.height = totalHeight; //+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-           // params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-           // Math.round(totalHeight);
+            // params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+            // Math.round(totalHeight);
 
             listView.setLayoutParams(params);
             listView.requestLayout();

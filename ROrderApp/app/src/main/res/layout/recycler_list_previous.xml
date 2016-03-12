@@ -55,12 +55,21 @@
                         android:orientation="horizontal">
 
                         <com.vibeosys.rorderapp.views.CustomTextView
-                            android:id="@+id/recyclerTxtTableNo_Previous"
+                            android:id="@+id/recyclerTxtTableNoTitle_Previous"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="Table "
+                            android:textColor="@color/black_color"
+                            android:textSize="12sp" />
+                        <com.vibeosys.rorderapp.views.CustomTextView
+                            android:id="@+id/recyclerTxtTakeAwayTitle_Previous"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="TakeAway"
                             android:textColor="@color/black_color"
                             android:textSize="12sp" />
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,10 +50,22 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
     public void onBindViewHolder(ChefRecyclerPreviousAdapter.OrderViewHolderPrevious holder, int position) {
         holder.preTxtTableNo.setText(""+mOrderHeaderDTO.get(position).getmTableNo());
         holder.preTxtOrderNo.setText(""+mOrderHeaderDTO.get(position).getmOrderNumner());
-        holder.preTxtWaiterName.setText(""+mOrderHeaderDTO.get(position).getmUserName());
-        holder.preTxtOrderTime.setText(""+mOrderHeaderDTO.get(position).TimeDiff());
+        holder.preTxtWaiterName.setText("" + mOrderHeaderDTO.get(position).getmUserName());
+        holder.preTxtOrderTime.setText("" + mOrderHeaderDTO.get(position).TimeDiff());
         ChefMenuPreviousAdapter adapter = new ChefMenuPreviousAdapter(mOrderHeaderDTO.get(position).getmMenuChild(), mContext);
         holder.preMenuList.setAdapter(adapter);
+        if(mOrderHeaderDTO.get(position).getmTableNo()==0)
+        {
+            holder.takeAwayTitle.setVisibility(View.VISIBLE);
+            holder.preTxtTableNo.setText(""+mOrderHeaderDTO.get(position).getmTakeAwayNumber());//here take away number is going to set
+          //  holder.layout.setBackgroundResource(R.color.blue);
+            holder.tableNumberTitle.setVisibility(View.GONE);
+        }
+        else {
+            holder.tableNumberTitle.setVisibility(View.VISIBLE);
+            holder.preTxtTableNo.setText(""+mOrderHeaderDTO.get(position).getmTableNo());//here table number is going to set
+            holder.takeAwayTitle.setVisibility(View.GONE);
+        }
         utilityPrevious.setListViewHeightBasedOnChildren(holder.preMenuList);
     }
 
@@ -68,9 +81,12 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
         TextView preTxtOrderNo;
         TextView preTxtWaiterName;
         TextView preTxtOrderTime;
+        TextView takeAwayTitle;
+        TextView tableNumberTitle;
         Button preBtnComplete;
         ListView preMenuList;
         ImageView preBtnDone;
+        LinearLayout layout;
 
         public OrderViewHolderPrevious(View itemView) {
             super(itemView);
@@ -80,6 +96,8 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
              preTxtWaiterName= (TextView) itemView.findViewById(R.id.recyclerServedByName_Previous);
              preTxtOrderTime = (TextView) itemView.findViewById(R.id.recyclerOrderTime_Previous);
              preBtnDone = (ImageView) itemView.findViewById(R.id.recyclerChefOrderDonIcon_Previous);
+            takeAwayTitle = (TextView)itemView.findViewById(R.id.recyclerTxtTakeAwayTitle_Previous);
+            tableNumberTitle=(TextView)itemView.findViewById(R.id.recyclerTxtTableNoTitle_Previous);
              //preBtnComplete =  (Button) itemView.findViewById(R.id.recyclerOrderDoneBtn);
              preMenuList = (ListView) itemView.findViewById(R.id.recyclerMenuList_Previous);
 
@@ -88,15 +106,15 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
     public class UtilityPrevious {
         public void setListViewHeightBasedOnChildren(ListView listView) {
 
-            ChefMenuAdapter listAdapter = (ChefMenuAdapter) listView.getAdapter();
-            if (listAdapter == null) {
+            ChefMenuPreviousAdapter adapter = (ChefMenuPreviousAdapter) listView.getAdapter();
+            if (adapter == null) {
                 // pre-condition
                 return;
             }
 
             int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-            for (int i = 0; i < listAdapter.getCount(); i++) {
-                View listItem = listAdapter.getView(i, null, listView);
+            for (int i = 0; i < adapter.getCount(); i++) {
+                View listItem = adapter.getView(i, null, listView);
                 if (listItem instanceof ViewGroup) {
                     listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 }
@@ -105,7 +123,7 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
             }
 
             ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+            params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
 
             // params.height = params.height / 2;
             // Math.round(params.height);

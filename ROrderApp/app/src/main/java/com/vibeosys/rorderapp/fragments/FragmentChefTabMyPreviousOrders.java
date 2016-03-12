@@ -30,7 +30,7 @@ public class FragmentChefTabMyPreviousOrders extends BaseFragment {
     private ListView listView;
     private ArrayList<ChefOrderDetailsDTO> list = new ArrayList<>();
     private RecyclerView chefRecycle_Previous;
-    public static ChefRecyclerPreviousAdapter adapterRecycle;
+    public static ChefRecyclerPreviousAdapter adapterRecycle_previous;
     ProgressDialog dialog;
 
     @Nullable
@@ -43,11 +43,11 @@ public class FragmentChefTabMyPreviousOrders extends BaseFragment {
         ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getCompletedRecordsChef();
         mDbRepository.addMenuList(orders);
         chefRecycle_Previous = (RecyclerView) view.findViewById(R.id.ChefRecycler_previous);
-        adapterRecycle = new ChefRecyclerPreviousAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
+        adapterRecycle_previous = new ChefRecyclerPreviousAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         chefRecycle_Previous.setLayoutManager(layoutManager);
 
-        chefRecycle_Previous.setAdapter(adapterRecycle);
+        chefRecycle_Previous.setAdapter(adapterRecycle_previous);
         /*adapterRecycle.tabSetCompleteBtn(this);
         mServerSyncManager.setOnStringResultReceived(this);*/
 

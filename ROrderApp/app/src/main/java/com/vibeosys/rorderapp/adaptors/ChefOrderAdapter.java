@@ -143,10 +143,17 @@ public class ChefOrderAdapter extends BaseExpandableListAdapter {
         String str = chefOrderDetailsDTO.TimeDiff();
         groupHolder.placedOrderTime.setText("" + chefOrderDetailsDTO.TimeDiff() + " ago");
         // groupHolder.placedOrderTime.setText(""+chefOrderDetailsDTO.getOrderTm());
-        groupHolder.getGroupTableNo.setText("" + chefOrderDetailsDTO.getmTableNo());
+      //  groupHolder.getGroupTableNo.setText("" + chefOrderDetailsDTO.getmTableNo());
         groupHolder.groupTextView.setText(chefOrderDetailsDTO.getmUserName());
         groupHolder.getGroupOrderNo.setText("" + chefOrderDetailsDTO.getmOrderNumner());
-
+        if(chefOrderDetailsDTO.getmTableNo()==0)
+        {
+            groupHolder.getGroupTableNo.setText(""+chefOrderDetailsDTO.getmTakeAwayNumber());
+        }
+        else
+        {
+            groupHolder.getGroupTableNo.setText("" + chefOrderDetailsDTO.getmTableNo());
+        }
 
         groupHolder.orderDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override

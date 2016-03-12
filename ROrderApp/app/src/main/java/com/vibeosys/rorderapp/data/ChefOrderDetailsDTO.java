@@ -28,6 +28,8 @@ public class ChefOrderDetailsDTO {
     private String mOrderTime;
     private Time orderTm;
     private Date orderDt;
+    private int mTakeAwayNumber;
+    private int mOrderType;
     /* private Date mplacedOrderDate;
      private Time morderTime;*/
     private ArrayList<ChefMenuDetailsDTO> mMenuChild;
@@ -36,7 +38,7 @@ public class ChefOrderDetailsDTO {
     private boolean mOrderStatus;
 
     public ChefOrderDetailsDTO(String mNewOrderId, int mTableNo, String mUserName, int mOrderNumner,
-                               int mNewOrderStatus, String orderDate, String orderTime) {
+                               int mNewOrderStatus, String orderDate, String orderTime ,int mTakeAwayNumber ,int mOrderType ) {
         this.mNewOrderId = mNewOrderId;
         this.mTableNo = mTableNo;
         this.mUserName = mUserName;
@@ -44,6 +46,8 @@ public class ChefOrderDetailsDTO {
         this.mNewOrderStatus = mNewOrderStatus;
         this.mOrderDate = orderDate;
         this.mOrderTime = orderTime;
+        this.mTakeAwayNumber = mTakeAwayNumber;
+        this.mOrderType = mOrderType;
 
     }
 
@@ -175,5 +179,19 @@ public class ChefOrderDetailsDTO {
             str = "1 min";
         return str;
     }
+    public int getmTakeAwayNumber() {
+        return mTakeAwayNumber;
+    }
 
+    public void setmTakeAwayNumber(int mTakeAwayNumber) {
+        this.mTakeAwayNumber = mTakeAwayNumber;
+    }
+
+    public int getmOrderType() {
+        return mOrderType;
+    }
+
+    public void setmOrderType(int mOrderType) {
+        this.mOrderType = mOrderType;
+    }
 }

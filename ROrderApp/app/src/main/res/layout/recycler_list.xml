@@ -31,6 +31,7 @@
                  >-->
 
             <LinearLayout
+                android:id="@+id/orderHeaderDtl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/recycle_chef_order_header"
@@ -60,6 +61,16 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="Table "
+                            android:textColor="@color/black_color"
+                            android:textSize="12sp" />
+
+                        <com.vibeosys.rorderapp.views.CustomTextView
+                            android:id="@+id/recyclerTxtTakeAwayNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Take Away "
                             android:textColor="@color/black_color"
                             android:textSize="12sp" />
 

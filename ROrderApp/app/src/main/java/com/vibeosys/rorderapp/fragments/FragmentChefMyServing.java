@@ -90,23 +90,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         float smallWidth = Math.min(widthDp, heigthDp);
 
-        /*if (widthDp >= 590 && heigthDp >= 400) {
-         //   Toast.makeText(getContext(), "finally you are at 6 inches", Toast.LENGTH_LONG).show();
-            View view1 = inflater.inflate(R.layout.chef_tab_layout, container, false);
-            listView = (ListView)view1.findViewById(R.id.listChef);
-            chefTabListAdapter = new ChefTabListAdapter(getActivity().getApplicationContext(),list);
-            listView.setAdapter(chefTabListAdapter);
-            ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
-            mDbRepository.addMenuList(orders);
-            RecyclerView chefRecycle = (RecyclerView) view1.findViewById(R.id.ChefRecycler);
-            ChefRecyclerViewAdapter adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext());
-            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL);
-            chefRecycle.setLayoutManager(layoutManager);
-            chefRecycle.setAdapter(adapterRecycle);
 
-            return view1;
-
-        }*/
         if (widthDp <= 450 && widthDp < 590) {
            // Toast.makeText(getContext(), "finally you are at normall screen", Toast.LENGTH_LONG).show();
         }
