@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
+import com.vibeosys.rorderapp.util.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,10 +76,12 @@ public class TakeAwayGridAdapter extends BaseAdapter {
         TakeAwayDTO takeAwayDTO = mTakeawayList.get(position);
         int orderStatus = takeAwayDTO.getOrderStatus();
         Log.d("##", takeAwayDTO.getmTakeawayNo() + "## " + orderStatus);
-        if (orderStatus == 1) {
+        if (orderStatus == AppConstants.TAKAWAY_STATUS_PENDING) {
             viewHolder.layoutIsReady.setBackgroundColor(mContext.getResources().getColor(R.color.red));
-        } else if (orderStatus == 2) {
+        } else if (orderStatus == AppConstants.TAKAWAY_STATUS_READY) {
             viewHolder.layoutIsReady.setBackgroundColor(mContext.getResources().getColor(R.color.dark_green_color));
+        } else if (orderStatus == AppConstants.TAKAWAY_STATUS_DELIVERED || orderStatus == 0) {
+            viewHolder.layoutIsReady.setBackgroundColor(mContext.getResources().getColor(R.color.light_grey));
         }
         viewHolder.txtTakeAwayNo.setText("" + takeAwayDTO.getmTakeawayNo());
         viewHolder.txtCustomerName.setText("" + takeAwayDTO.getmCustName());

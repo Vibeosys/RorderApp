@@ -19,6 +19,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -62,8 +63,10 @@ import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
+import com.vibeosys.rorderapp.fragments.FragmentTakeAway;
 import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.AnalyticsApplication;
@@ -95,6 +98,7 @@ public class MainActivity extends BaseActivity
     // private Tracker mTracker;
     private int selectedTab;
     List<RestaurantTables> sortedTables;
+    ArrayList<TakeAwayDTO> takeAwayDTOSorted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +169,13 @@ public class MainActivity extends BaseActivity
                 public void onTabSelected(TabLayout.Tab tab) {
                     selectedTab = tab.getPosition();
                     viewPager.setCurrentItem(selectedTab);
+                    if (selectedTab == 0) {
+                        txtSearch.setHint(R.string.search_table);
+                        txtSearch.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    } else if (selectedTab == 1) {
+                        txtSearch.setHint(R.string.search_order);
+                        txtSearch.setInputType(InputType.TYPE_CLASS_TEXT);
+                    }
                 }
 
                 @Override
@@ -188,10 +199,8 @@ public class MainActivity extends BaseActivity
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (selectedTab == 0) {
                         if (s.length() == 0) {
-                            if (selectedTab == 0) {
-                                txtSearch.setHint(R.string.search_table);
-                                FragmentWaiterTable.adapter.refresh(mDbRepository.getTableRecords(""));
-                            }
+                            FragmentWaiterTable.adapter.refresh(mDbRepository.getTableRecords(""));
+
 
                         } else {
                             try {
@@ -205,6 +214,21 @@ public class MainActivity extends BaseActivity
 
                         }
                         FragmentWaiterTable.adapter.notifyDataSetChanged();
+                    }
+                    if (selectedTab == 1) {
+                        if (s.length() <= 2) {
+                            ArrayList<TakeAwayDTO> list = mDbRepository.getTakeAwayList();
+                            mDbRepository.setTakeAwayStatus(list);
+                            FragmentTakeAway.gridAdapter.refresh(list);
+                        } else {
+                            try {
+                                FragmentTakeAway.gridAdapter.refresh(sortList(mDbRepository.getTakeAwayList(), s.toString()));
+                            } catch (Exception e) {
+                                Log.e(TAG, "##" + e.toString());
+                                e.printStackTrace();
+                                //Toast.makeText(getActivity().getApplicationContext(), "You should Enter number", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
 
                 }
@@ -228,6 +252,25 @@ public class MainActivity extends BaseActivity
             }
         }
         return mHotelTables;
+    }
+
+    private ArrayList<TakeAwayDTO> sortList(ArrayList<TakeAwayDTO> takeAwayDTOs, String search) {
+        ArrayList<TakeAwayDTO> takeAway = new ArrayList<TakeAwayDTO>();
+
+        for (TakeAwayDTO takeAwayDTO : takeAwayDTOs) {
+            if (takeAwayDTO.getmCustName().toLowerCase().contains(search.toLowerCase())) {
+                takeAway.add(takeAwayDTO);
+            } else if (String.valueOf(takeAwayDTO.getmTakeawayNo()).contains(search.toLowerCase())) {
+                takeAway.add(takeAwayDTO);
+            } else if (takeAwayDTO.getmCustAddress().toLowerCase().contains(search.toLowerCase())) {
+                takeAway.add(takeAwayDTO);
+            } else if (takeAwayDTO.getCustPhone().contains(search)) {
+                takeAway.add(takeAwayDTO);
+            }
+        }
+        mDbRepository.setTakeAwayStatus(takeAway);
+        return takeAway;
+
     }
 
     @Override

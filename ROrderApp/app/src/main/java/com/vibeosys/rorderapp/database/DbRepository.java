@@ -40,6 +40,8 @@ import com.vibeosys.rorderapp.data.UploadTakeAway;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
+import com.vibeosys.rorderapp.util.AppConstants;
+import com.vibeosys.rorderapp.util.ChefDateUtil;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.SessionManager;
 
@@ -361,7 +363,7 @@ public class DbRepository extends SQLiteOpenHelper {
             synchronized (sqLiteDatabase) {
                 String[] whereclause = new String[]{custId};
                 cursor = sqLiteDatabase.rawQuery("select bill.BillNo,bill.BillDate,bill.NetAmount,bill.BillTime," +
-                        "bill.TotalTaxAmount,bill.TotalPayAmount,users.UserName,r_tables.TableNo" +
+                        "bill.TotalTaxAmount,bill.TotalPayAmount,bill.IsPayed,users.UserName,r_tables.TableNo" +
                         " from bill left Join users On users.UserId = bill.UserId" +
                         " Left join r_tables on bill.TableId=r_tables.TableId where bill.CustId=?", whereclause);
 
@@ -378,8 +380,10 @@ public class DbRepository extends SQLiteOpenHelper {
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
                         String billTime = cursor.getString(cursor.getColumnIndex(SqlContract.SqlBill.BILL_TIME));
+                        int isPaid = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlBill.IS_PAYED));
                         billDetailsRecords = new BillDetailsDTO(billNo, billDate, netAmount,
                                 totalTaxAmount, totalPayAbleTax, userName, tableNo, billTime);
+                        billDetailsRecords.setBillPayed(isPaid);
                     }
 
                 }
@@ -603,6 +607,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlTakeAway.CUST_ID, takeAwayDbDTO.getCustId());
                     contentValues.put(SqlContract.SqlTakeAway.USER_ID, takeAwayDbDTO.getUserId());
                     contentValues.put(SqlContract.SqlTakeAway.SOURCE_ID, takeAwayDbDTO.getSourceId());
+                    contentValues.put(SqlContract.SqlTakeAway.DATE, String.valueOf(takeAwayDbDTO.getOrderDt()));
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlTakeAway.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -1786,7 +1791,7 @@ public class DbRepository extends SQLiteOpenHelper {
                             // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
                             int takeAwayNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TAKE_AWAY_NO));
                             int orderType = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TYPE));
-                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime,takeAwayNo,orderType);
+                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime, takeAwayNo, orderType);
                             AscindingOrdres.add(chefOrderDetailsDTO);
                         } while (cursor.moveToNext());
                     }
@@ -1839,7 +1844,7 @@ public class DbRepository extends SQLiteOpenHelper {
                             int takeAwayNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TAKE_AWAY_NO));
                             int orderType = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TYPE));
                             // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime,takeAwayNo,orderType);
+                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime, takeAwayNo, orderType);
                             ordres.add(chefOrderDetailsDTO);
                         } while (cursor.moveToNext());
                     }
@@ -1859,6 +1864,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return ordres;
     }
+
     public ArrayList<ChefMenuDetailsDTO> getChefMenu(String orderId) {
         ArrayList<ChefMenuDetailsDTO> menudetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
@@ -2340,6 +2346,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlTakeAway.USER_ID, takeAwayDbDTO.getUserId());
                     if (takeAwayDbDTO.getSourceId() != 0)
                         contentValues.put(SqlContract.SqlTakeAway.SOURCE_ID, takeAwayDbDTO.getSourceId());
+                    if (takeAwayDbDTO.getCreatedDate() != null)
+                        contentValues.put(SqlContract.SqlTakeAway.DATE, takeAwayDbDTO.getCreatedDate() /*String.valueOf(takeAwayDbDTO.getOrderDt())*/);
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlTakeAway.TABLE_NAME, contentValues,
                             SqlContract.SqlTakeAway.TAKE_AWAY_ID + "=?", where);
@@ -2580,7 +2588,7 @@ public class DbRepository extends SQLiteOpenHelper {
                             int takeAwayNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TAKE_AWAY_NO));
                             int orderType = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TYPE));
                             // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime,takeAwayNo,orderType);
+                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime, takeAwayNo, orderType);
                             ordres.add(chefOrderDetailsDTO);
                         } while (cursor.moveToNext());
                     }
@@ -2664,7 +2672,7 @@ public class DbRepository extends SQLiteOpenHelper {
                             int takeAwayNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TAKE_AWAY_NO));
                             int orderType = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TYPE));
                             // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime,takeAwayNo,orderType);
+                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime, takeAwayNo, orderType);
                             ordres.add(chefOrderDetailsDTO);
                         } while (cursor.moveToNext());
                     }
@@ -2715,7 +2723,7 @@ public class DbRepository extends SQLiteOpenHelper {
                             int takeAwayNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.TAKE_AWAY_NO));
                             int orderType = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TYPE));
                             // Time orderTime = Time.valueOf(cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_TIME)));
-                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime,takeAwayNo,orderType);
+                            ChefOrderDetailsDTO chefOrderDetailsDTO = new ChefOrderDetailsDTO(orderId, tableNo, userName, orderNumber, orderStatus, orderDate, orderTime, takeAwayNo, orderType);
                             ordres.add(chefOrderDetailsDTO);
                         } while (cursor.moveToNext());
                     }
@@ -2735,6 +2743,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return ordres;
     }
+
     public void addMenuList(ArrayList<ChefOrderDetailsDTO> list) {
 
         SQLiteDatabase sqLiteDatabase = null;
@@ -3047,19 +3056,25 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public ArrayList<TakeAwayDTO> getTakeAwayList() {
+        ROrderDateUtils dateUtils = new ROrderDateUtils();
+        String date = dateUtils.getLocalSQLCurrentDate();
+        String time = dateUtils.getSqlOffsetTime(AppConstants.ORDER_TIME_HOUR, AppConstants.ORDER_TIME_MINUTE);
+
         ArrayList<TakeAwayDTO> takeAways = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                cursor = sqLiteDatabase.rawQuery("Select takeaway.TakeawayId,takeaway.TakeawayNo," +
-                        "takeaway.CustId,takeaway.SourceId,takeaway.Discount,takeaway.DeliveryCharges," +
+                String strQuery = "Select takeaway.TakeawayId,takeaway.TakeawayNo,takeaway.CustId," +
+                        "takeaway.SourceId,takeaway.Discount,takeaway.DeliveryCharges," +
                         "takeaway.UserId,users.UserName,customer.CustName,customer.CustPhone," +
-                        "customer.CustAddress,takeaway_source.SourceName,orders.OrderStatus from takeaway left join " +
-                        "users on users.UserId=takeaway.UserId left join customer on customer.CustId=" +
-                        "takeaway.CustId left join takeaway_source on takeaway_source.SourceId=takeaway.SourceId " +
-                        "left join orders on takeaway.TakeawayNo=orders.TakeawayNo", null);
+                        "customer.CustAddress,takeaway_source.SourceName " +
+                        "from takeaway left join users on users.UserId=takeaway.UserId " +
+                        "left join customer on customer.CustId=takeaway.CustId " +
+                        "left join takeaway_source on takeaway_source.SourceId=takeaway.SourceId " +
+                        "where takeaway.CreatedDate>= '" + date + " " + time + "'";
+                cursor = sqLiteDatabase.rawQuery(strQuery, null);
                 if (cursor != null) {
 
                     if (cursor.getCount() > 0) {
@@ -3077,9 +3092,8 @@ public class DbRepository extends SQLiteOpenHelper {
                             String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                             String custPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_PHONE));
                             String sourceName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_NAME));
-                            int orderStatus = cursor.getInt(cursor.getColumnIndex("OrderStatus"));
                             TakeAwayDTO takeaway = new TakeAwayDTO(takeawayId, takeawayNo, discount,
-                                    deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName, orderStatus);
+                                    deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName);
                             takeAways.add(takeaway);
                         } while (cursor.moveToNext());
                     }
@@ -3131,6 +3145,37 @@ public class DbRepository extends SQLiteOpenHelper {
         return discount;
     }
 
+    public double getTakeAwayDeliveryChr(int takeAwayNo) {
+        double deliveryChr = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        OrderHeaderDTO orderHeaderDTO = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{String.valueOf(takeAwayNo)};
+                cursor = sqLiteDatabase.rawQuery("select " + SqlContract.SqlTakeAway.DELIVERY_CHG + " from "
+                        + SqlContract.SqlTakeAway.TABLE_NAME + " where " +
+                        SqlContract.SqlTakeAway.TAKE_AWAY_NO + "=?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        deliveryChr = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTakeAway.DELIVERY_CHG));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return deliveryChr;
+    }
+
     public TakeAwayDTO getTakeAway(int takeAwayNo) {
         TakeAwayDTO takeAway = null;
         SQLiteDatabase sqLiteDatabase = null;
@@ -3141,10 +3186,10 @@ public class DbRepository extends SQLiteOpenHelper {
                 cursor = sqLiteDatabase.rawQuery("Select takeaway.TakeawayId,takeaway.TakeawayNo," +
                         "takeaway.CustId,takeaway.SourceId,takeaway.Discount,takeaway.DeliveryCharges," +
                         "takeaway.UserId,users.UserName,customer.CustName,customer.CustPhone," +
-                        "customer.CustAddress,takeaway_source.SourceName,orders.OrderStatus from takeaway left join " +
+                        "customer.CustAddress,takeaway_source.SourceName from takeaway left join " +
                         "users on users.UserId=takeaway.UserId left join customer on customer.CustId=" +
                         "takeaway.CustId left join takeaway_source on takeaway_source.SourceId=takeaway.SourceId " +
-                        "left join orders on takeaway.TakeawayNo=orders.TakeawayNo where takeaway.TakeawayNo=" + takeAwayNo, null);
+                        "where takeaway.TakeawayNo=" + takeAwayNo, null);
                 if (cursor != null) {
 
                     if (cursor.getCount() > 0) {
@@ -3161,11 +3206,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                         String custPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_PHONE));
                         String sourceName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_NAME));
-                        int orderStatus = cursor.getInt(cursor.getColumnIndex("OrderStatus"));
                         takeAway = new TakeAwayDTO(takeawayId, takeawayNo, discount,
-                                deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName, orderStatus);
-
-
+                                deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName);
                     }
                 }
             }
@@ -3182,5 +3224,60 @@ public class DbRepository extends SQLiteOpenHelper {
 
         }
         return takeAway;
+    }
+
+    public void setTakeAwayStatus(ArrayList<TakeAwayDTO> takeAwayDTOs) {
+
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        int countSPending = 0, countSReady = 0, countSDelivered = 0;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                for (TakeAwayDTO takeAway : takeAwayDTOs) {
+                    String[] where = new String[]{String.valueOf(takeAway.getmTakeawayNo())};
+                    String strQuery = "Select " + SqlContract.SqlOrders.ORDER_STATUS + " FROM "
+                            + SqlContract.SqlOrders.TABLE_NAME + " Where " + SqlContract.SqlOrders.TAKE_AWAY_NO + "=?";
+                    cursor = sqLiteDatabase.rawQuery(strQuery, where);
+                    if (cursor != null) {
+
+                        if (cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            do {
+                                int status = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_STATUS));
+                                if (status == AppConstants.TAKAWAY_STATUS_PENDING)
+                                    countSPending = countSPending + 1;
+                                if (status == AppConstants.TAKAWAY_STATUS_READY)
+                                    countSReady = countSReady + 1;
+                                if (status == AppConstants.TAKAWAY_STATUS_DELIVERED)
+                                    countSDelivered = countSDelivered + 1;
+                            } while (cursor.moveToNext());
+                        }
+                        if (countSPending > 0)
+                            takeAway.setOrderStatus(AppConstants.TAKAWAY_STATUS_PENDING);
+                        if (cursor.getCount() == countSReady)
+                            takeAway.setOrderStatus(AppConstants.TAKAWAY_STATUS_READY);
+                        if (cursor.getCount() == countSDelivered)
+                            takeAway.setOrderStatus(AppConstants.TAKAWAY_STATUS_DELIVERED);
+                    }
+
+                }
+
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Log.e(TAG, "Error in setTakeAwayStatus" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+
+        }
+
+
     }
 }

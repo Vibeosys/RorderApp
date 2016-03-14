@@ -45,11 +45,13 @@ import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
 import com.vibeosys.rorderapp.data.UploadTakeAway;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -92,7 +94,10 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         mMainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
         txtTotalCount = (TextView) view.findViewById(R.id.txtCount);
         gridView = (GridView) view.findViewById(R.id.gridview);
+
+
         takeAwayDTOs = mDbRepository.getTakeAwayList();
+        mDbRepository.setTakeAwayStatus(takeAwayDTOs);
         gridAdapter = new TakeAwayGridAdapter(getActivity().getApplicationContext(), takeAwayDTOs);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(this);
@@ -113,6 +118,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         final EditText txtCustomerAddress = (EditText) dlg.findViewById(R.id.txtCustomerAddress);
         final EditText txtDiscountPer = (EditText) dlg.findViewById(R.id.txtDiscountPer);
         final EditText txtDeliveryCharges = (EditText) dlg.findViewById(R.id.txtDeliveryChrgs);
+        final EditText txtPhNo = (EditText) dlg.findViewById(R.id.txtCustomerPhNo);
 
         TextView txtPlaceOrder = (TextView) dlg.findViewById(R.id.txtPlaceOrder);
         TextView txtCancel = (TextView) dlg.findViewById(R.id.txtCancel);
@@ -146,11 +152,14 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
                 txtCustomerAddress.setError(null);
                 txtCustomerName.setError(null);
+                txtPhNo.setError(null);
 
                 String strName = txtCustomerName.getText().toString();
                 String strAddress = txtCustomerAddress.getText().toString();
+                String strPhNo = txtPhNo.getText().toString();
                 double discount = Double.parseDouble(txtDiscountPer.getText().toString());
                 String strDeliveryCharges = txtDeliveryCharges.getText().toString();
+
                 double deliveryCharges = 0;
                 if (!TextUtils.isEmpty(strDeliveryCharges)) {
                     deliveryCharges = Double.parseDouble(strDeliveryCharges);
@@ -167,12 +176,17 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
                     focus = txtCustomerAddress;
                     wrongCredential = true;
                 }
+                if (TextUtils.isEmpty(strPhNo)) {
+                    txtPhNo.setError("Phone Number is required");
+                    focus = txtPhNo;
+                    wrongCredential = true;
+                }
                 if (wrongCredential) {
                     focus.requestFocus();
                 } else {
                     showProgress(true);
                     custid = UUID.randomUUID();
-                    CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), strName, strAddress, "123");
+                    CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), strName, strAddress, strPhNo);
                     //here inserting custmer to custmer table
                     mDbRepository.insertCustomerDetails(customer);
                     UUID takeAwayId = UUID.randomUUID();
@@ -268,7 +282,8 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
     private void callToMenuIntent(int takeAwayNo, String custId) {
         showProgress(false);
         double givenDiscount = mDbRepository.getTakeAwayDiscount(takeAwayNo);
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(0, custId, 0, takeAwayNo, givenDiscount);
+        double deliveryCharges = mDbRepository.getTakeAwayDeliveryChr(takeAwayNo);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(0, custId, 0, takeAwayNo, givenDiscount, deliveryCharges);
         BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
         if (billDetailsDTO != null) {
             Intent intentBillDetails = new Intent(getActivity().getApplicationContext(), BillDetailsActivity.class);

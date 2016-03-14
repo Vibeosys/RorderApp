@@ -4,8 +4,12 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by akshay on 10-03-2016.
@@ -19,6 +23,8 @@ public class TakeAwayDbDTO extends BaseDTO {
     private String custId;
     private int userId;
     private int sourceId;
+    private String createdDate;
+    private Date createdDt;
 
     public TakeAwayDbDTO() {
     }
@@ -79,6 +85,14 @@ public class TakeAwayDbDTO extends BaseDTO {
         this.sourceId = sourceId;
     }
 
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public static List<TakeAwayDbDTO> deserializeTakeAway(List<String> serializedStringList) {
         Gson gson = new Gson();
         ArrayList<TakeAwayDbDTO> objectList = new ArrayList<>();
@@ -93,5 +107,24 @@ public class TakeAwayDbDTO extends BaseDTO {
         }
 
         return objectList;
+    }
+
+    public Date getOrderDt() {
+        if (this.createdDate == null || this.createdDate.isEmpty())
+            return this.createdDt;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        //formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        java.util.Date value = null;
+        try {
+            value = formatter.parse(this.createdDate);
+            createdDt = new Date(value.getTime());
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTime(value);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return createdDt;
     }
 }

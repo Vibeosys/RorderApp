@@ -21,7 +21,7 @@ public class TakeAwayDTO {
 
     public TakeAwayDTO(String mTakeawayId, int mTakeawayNo, double mDiscount, double mDeliveryCharges,
                        String mCustId, int mUserId, int mSourceId, String mCustName, String mCustAddress,
-                       String userName, String custPhone, String sourceName, int orderStatus) {
+                       String userName, String custPhone, String sourceName) {
         this.mTakeawayId = mTakeawayId;
         this.mTakeawayNo = mTakeawayNo;
         this.mDiscount = mDiscount;
@@ -34,7 +34,6 @@ public class TakeAwayDTO {
         this.userName = userName;
         this.custPhone = custPhone;
         this.sourceName = sourceName;
-        this.orderStatus = orderStatus;
     }
 
     public String getmTakeawayId() {

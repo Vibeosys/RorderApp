@@ -17,6 +17,7 @@ public class BillDetailsDTO {
     private int tableNo;
     private Date billInDate;
     private String billTime;
+    private int billPayed;
 
     public BillDetailsDTO() {
     }
@@ -100,5 +101,13 @@ public class BillDetailsDTO {
 
     public void setBillTime(String billTime) {
         this.billTime = billTime;
+    }
+
+    public int getBillPayed() {
+        return billPayed;
+    }
+
+    public void setBillPayed(int billPayed) {
+        this.billPayed = billPayed;
     }
 }

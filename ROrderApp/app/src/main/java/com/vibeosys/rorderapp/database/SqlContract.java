@@ -195,6 +195,7 @@ public class SqlContract {
         public final static String RESTAURANT_ID = "RestaurantId";
         public final static String USER_ID = "UserId";
         public final static String SOURCE_ID = "SourceId";
+        public final static String DATE = "CreatedDate";
     }
 
     public abstract class SqlOrderType {

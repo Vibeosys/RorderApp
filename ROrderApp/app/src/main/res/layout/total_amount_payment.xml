@@ -288,6 +288,31 @@
 
                 </TableRow>
 
+                <TableRow
+                    android:id="@+id/rowDeliveryChr"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="2">
+
+                    <com.vibeosys.rorderapp.views.CustomTextView
+                        android:id="@+id/txtDeliveryChrg"
+                        style="@style/largeTextBillingDtl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Delivery Charge" />
+
+
+                    <com.vibeosys.rorderapp.views.CustomTextView
+                        android:id="@+id/deliveryAmt"
+                        style="@style/largeTextBillingDtl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center|right"
+                        android:text="10.00" />
+
+                </TableRow>
 
                 <!-- <TableRow
                      android:layout_marginBottom="2dp"
@@ -316,6 +341,7 @@
                  </TableRow>-->
 
                 <TableRow
+
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="2">

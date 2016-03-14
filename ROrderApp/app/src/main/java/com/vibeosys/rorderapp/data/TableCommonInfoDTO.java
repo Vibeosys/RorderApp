@@ -23,17 +23,19 @@ public class TableCommonInfoDTO implements Parcelable {
     private String mCustId;
     private int mTakeAwayNo;
     private double mDiscount;
+    private double mDeliveryCharges;
 
     public TableCommonInfoDTO() {
 
     }
 
-    public TableCommonInfoDTO(int tableId, String custId, int tableNo, int takeAwayNo, double discount) {
+    public TableCommonInfoDTO(int tableId, String custId, int tableNo, int takeAwayNo, double discount, double deliveryCharges) {
         mTableId = tableId;
         mCustId = custId;
         mTableNo = tableNo;
         mTakeAwayNo = takeAwayNo;
         mDiscount = discount;
+        mDeliveryCharges = deliveryCharges;
     }
 
     protected TableCommonInfoDTO(Parcel in) {
@@ -42,6 +44,7 @@ public class TableCommonInfoDTO implements Parcelable {
         mTableNo = in.readInt();
         mTakeAwayNo = in.readInt();
         mDiscount = in.readDouble();
+        mDeliveryCharges = in.readDouble();
     }
 
     @Override
@@ -56,6 +59,7 @@ public class TableCommonInfoDTO implements Parcelable {
         dest.writeInt(mTableNo);
         dest.writeInt(mTakeAwayNo);
         dest.writeDouble(mDiscount);
+        dest.writeDouble(mDeliveryCharges);
     }
 
     public int getTableId() {
@@ -96,5 +100,13 @@ public class TableCommonInfoDTO implements Parcelable {
 
     public void setDiscount(double mDiscount) {
         this.mDiscount = mDiscount;
+    }
+
+    public double getDeliveryCharges() {
+        return mDeliveryCharges;
+    }
+
+    public void setDeliveryCharges(double mDeliveryCharges) {
+        this.mDeliveryCharges = mDeliveryCharges;
     }
 }

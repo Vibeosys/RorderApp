@@ -30,6 +30,7 @@
     <string name="order_summary">Order Summary</string>
     <string name="bill_details">Bill Details</string>
     <string name="search_table">Search Table</string>
+    <string name="search_order">Search Order</string>
     <string name="filter_table">Filter Table</string>
     <string name="notification">Notifications</string>
     <string name="dialog_title_select_note">Select Note</string>
@@ -134,7 +135,7 @@
     <string name="print_bill_summary">Set the Bill printer setting to \n print the Bill</string>
     <string name="print_bill_edit_hint">Bill Printer Ip e.g. 192.168.1.2</string>
 
-    <string name="discount_per_hint">Discount in percentage</string>
+    <string name="discount_per_hint">Discount</string>
     <string name="discount_btn">Discount</string>
     <string name="customer_name">Name</string>
     <string name="customer_hint_address">Customer Address</string>
@@ -144,4 +145,5 @@
     <string name="quick_serve_tm">
         <![CDATA[ <strong>Quick</strong><small>Serve</small>&trade;]]>
         </string>
+    <string name="custPhNo">Phone Number</string>
 </resources>

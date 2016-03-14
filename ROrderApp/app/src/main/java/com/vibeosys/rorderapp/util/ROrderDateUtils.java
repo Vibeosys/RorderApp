@@ -17,6 +17,7 @@ public class ROrderDateUtils {
     final SimpleDateFormat dateReadFormat = new SimpleDateFormat("dd MMM yyyy");
     final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     final SimpleDateFormat timeReadFormat = new SimpleDateFormat("hh:mm aa");
+    final SimpleDateFormat SqlFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public String getGMTCurrentDate() {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -25,6 +26,10 @@ public class ROrderDateUtils {
 
     public String getLocalCurrentDate() {
         return dateFormat.format(new java.util.Date());
+    }
+
+    public String getLocalSQLCurrentDate() {
+        return SqlFormat.format(new java.util.Date());
     }
 
     public String getLocalDateInFormat(java.util.Date date) {
@@ -47,6 +52,12 @@ public class ROrderDateUtils {
     public String getGMTCurrentTime() {
         timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         return timeFormat.format(new java.util.Date());
+    }
+
+    public String getSqlOffsetTime(int hour, int min) {
+        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        long time = new java.util.Date().getTime() - getTimeOffsetAsPerLocal(hour, min);
+        return timeFormat.format(new java.util.Date(time));
     }
 
 

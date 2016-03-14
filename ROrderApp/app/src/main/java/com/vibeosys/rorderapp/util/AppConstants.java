@@ -8,4 +8,11 @@ public final class AppConstants {
     public final static int SERVICE_TIME_OUT = 30;// 30 sec app hit the server
     public final static int DINE_IN = 1;
     public final static int TAKE_AWAY = 2;
+    public final static int ORDER_TIME_HOUR = 2;// show the 2 hours and given minute before orders
+    public final static int ORDER_TIME_MINUTE = 0;
+
+    // status for take away order
+    public final static int TAKAWAY_STATUS_PENDING = 1;
+    public final static int TAKAWAY_STATUS_READY = 2;
+    public final static int TAKAWAY_STATUS_DELIVERED = 3;
 }
