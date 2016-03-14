@@ -69,6 +69,7 @@ public class FragmentChefTabMyServing extends BaseFragment
 
 
        ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
+
      //   ArrayList<ChefOrderDetailsDTO> order1 = mDbRepository.getRecChefOrder("1");
         mDbRepository.addMenuList(orders);
         chefRecycle = (RecyclerView) view.findViewById(R.id.ChefRecycler);
@@ -99,6 +100,7 @@ public class FragmentChefTabMyServing extends BaseFragment
             sendTabDataToServer(chefTabOrderId);
             mServerSyncManager.syncDataWithServer(true);
             chefRecycle.invalidate();
+
 
 
 

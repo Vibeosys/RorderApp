@@ -21,7 +21,10 @@ import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.fragments.FragmentChefMyServing;
 import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
+import com.vibeosys.rorderapp.fragments.FragmentChefTabDiningOrders;
+import com.vibeosys.rorderapp.fragments.FragmentChefTabMyPreviousOrders;
 import com.vibeosys.rorderapp.fragments.FragmentChefTabMyServing;
+import com.vibeosys.rorderapp.fragments.FragmentChefTabTakeAwayOrders;
 import com.vibeosys.rorderapp.fragments.FragmentTakeAway;
 import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 
@@ -150,6 +153,50 @@ public class DbOperations {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        });
+        FragmentChefTabDiningOrders.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    if(FragmentChefTabDiningOrders.adapterRecycleDining == null)
+                    {
+                        Log.d("chef tab dining ","##"+null);
+                    }
+                        else
+                    {
+                        FragmentChefTabDiningOrders.adapterRecycleDining.refresh(2);
+                    }
+
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        FragmentChefTabTakeAwayOrders.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                if(FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway ==null)
+                {
+                    Log.d("chef tab take away","##"+null);
+                }
+                    else
+                {
+                    FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway.refresh(2);
+                }
+            }
+        });
+        FragmentChefTabMyPreviousOrders.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                if(FragmentChefTabMyPreviousOrders.adapterRecycle_previous ==null)
+                {
+
+                }else {
+                    FragmentChefTabMyPreviousOrders.adapterRecycle_previous.refresh(2);
                 }
             }
         });

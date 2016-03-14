@@ -1,5 +1,21 @@
 package com.vibeosys.rorderapp.adaptors;
 
+import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
+
+import java.util.ArrayList;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -26,9 +42,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by akshay on 01-03-2016.
+ * Created by shrinivas on 14-03-2016.
  */
-public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerViewAdapter.OrderViewHolder> {
+public class ChefRecyclerTabTakeAwayAdapter extends RecyclerView.Adapter<ChefRecyclerTabTakeAwayAdapter.OrderViewHolder> {
     private ArrayList<ChefOrderDetailsDTO> mOrderHeaderDTOs;
     private Context mContext;
     OrderViewHolder holder;
@@ -37,7 +53,7 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
     Utility utility;// = new Utility();
     ProgressDialog dialog;
 
-    public ChefRecyclerViewAdapter(ArrayList<ChefOrderDetailsDTO> orderHeaderDTOs, Context context, DbRepository dbRepository) {
+    public ChefRecyclerTabTakeAwayAdapter(ArrayList<ChefOrderDetailsDTO> orderHeaderDTOs, Context context, DbRepository dbRepository) {
         this.mOrderHeaderDTOs = orderHeaderDTOs;
         this.mContext = context;
         this.dbRepository = dbRepository;
@@ -81,7 +97,7 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
             holder.txtOrderTime.setTextColor(colour);
             holder.txtWaiterName.setTextColor(colour);
             holder.txtTableNo.setTextColor(colour);
-        } else  if(mOrderHeaderDTOs.get(position).getmTableNo() != 0){
+        } else if(mOrderHeaderDTOs.get(position).getmTableNo() != 0) {
             holder.hrsGlassIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_hours_glass));
             holder.servedByIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ico_served_by_black));
             holder.tableNumberTitle.setVisibility(View.VISIBLE);
@@ -201,7 +217,7 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
     public void refresh(int status) {
         if (this.mOrderHeaderDTOs != null) {
             this.mOrderHeaderDTOs.clear();
-            this.mOrderHeaderDTOs = dbRepository.getRecChefOrder();
+            this.mOrderHeaderDTOs = dbRepository.getRecChefTakeAwayOrders();
             dbRepository.addMenuList(mOrderHeaderDTOs);
             notifyDataSetChanged();
 

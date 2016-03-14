@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.adaptors.ChefRecyclerTabTakeAwayAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefRecyclerViewAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefTabListAdapter;
 import com.vibeosys.rorderapp.data.ChefOrderCompleted;
@@ -33,14 +34,14 @@ import java.util.ArrayList;
  * Created by shrinivas on 09-03-2016.
  */
 public class FragmentChefTabTakeAwayOrders  extends BaseFragment
-        implements ChefRecyclerViewAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived
+        implements ChefRecyclerTabTakeAwayAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived
 {
     private ChefTabListAdapter chefTabListAdapter;
     public static Handler UIHandler;
     private ListView listView;
     private ArrayList<ChefOrderDetailsDTO> list = new ArrayList<>();
     private RecyclerView chefRecycleTakeAway;
-    public static ChefRecyclerViewAdapter adapterRecycleTakeAway;
+    public static ChefRecyclerTabTakeAwayAdapter adapterRecycleTakeAway;
     ProgressDialog dialog;
     @Nullable
     @Override
@@ -52,7 +53,7 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
         ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefTakeAwayOrders();
         mDbRepository.addMenuList(orders);
         chefRecycleTakeAway = (RecyclerView) view.findViewById(R.id.ChefRecycler);
-        adapterRecycleTakeAway = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
+        adapterRecycleTakeAway = new ChefRecyclerTabTakeAwayAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         chefRecycleTakeAway.setLayoutManager(layoutManager);
 

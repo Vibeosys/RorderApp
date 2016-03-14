@@ -34,7 +34,7 @@ public class ChefOrdersDisplayTabActivity extends BaseActivity{
         tab_layout = (TabLayout) findViewById(R.id.tab_layout_chef);
 
         tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
-        tab_layout.addTab(tab_layout.newTab().setText("DINING ORDERS"));
+        tab_layout.addTab(tab_layout.newTab().setText("DINE IN ORDERS"));
         tab_layout.addTab(tab_layout.newTab().setText("TAKE AWAY ORDERS"));
         tab_layout.addTab(tab_layout.newTab().setText("PREVIOUS ORDERS"));
 
@@ -45,6 +45,7 @@ public class ChefOrdersDisplayTabActivity extends BaseActivity{
 
         final ChefPagerTabAdapter chefPagerTabAdapter = new ChefPagerTabAdapter(getSupportFragmentManager(), tab_layout.getTabCount());
         viewPager.setAdapter(chefPagerTabAdapter);
+        viewPager.setOffscreenPageLimit(4);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
         tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

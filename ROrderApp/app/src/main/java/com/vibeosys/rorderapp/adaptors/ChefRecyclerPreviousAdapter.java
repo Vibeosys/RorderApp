@@ -1,6 +1,7 @@
 package com.vibeosys.rorderapp.adaptors;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,7 +55,37 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
         holder.preTxtOrderTime.setText("" + mOrderHeaderDTO.get(position).TimeDiff());
         ChefMenuPreviousAdapter adapter = new ChefMenuPreviousAdapter(mOrderHeaderDTO.get(position).getmMenuChild(), mContext);
         holder.preMenuList.setAdapter(adapter);
-        if(mOrderHeaderDTO.get(position).getmTableNo()==0)
+        if (mOrderHeaderDTO.get(position).getmTableNo() == 0) {
+
+            holder.takeAwayTitle.setVisibility(View.VISIBLE);
+            holder.preTxtTableNo.setText("" + mOrderHeaderDTO.get(position).getmTakeAwayNumber());//here take away number is going to set
+            holder.prelayout.setBackgroundColor(mContext.getResources().getColor(R.color.chef_take_away_back));
+            holder.tableNumberTitle.setVisibility(View.GONE);
+            holder.prehrsGlassIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_hour_white));
+            holder.preservedByIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ico_new_servedby));
+            int colour = Color.WHITE;
+            holder.takeAwayTitle.setTextColor(colour);
+            holder.pretxtHash.setTextColor(colour);
+            holder.preTxtOrderNo.setTextColor(colour);
+            holder.preTxtOrderTime.setTextColor(colour);
+            holder.preTxtWaiterName.setTextColor(colour);
+            holder.preTxtTableNo.setTextColor(colour);
+        } else if(mOrderHeaderDTO.get(position).getmTableNo() != 0){
+            holder.prehrsGlassIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_hours_glass));
+            holder.preservedByIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ico_served_by_black));
+            holder.tableNumberTitle.setVisibility(View.VISIBLE);
+            holder.preTxtTableNo.setText("" + mOrderHeaderDTO.get(position).getmTableNo());//here table number is going to set
+            holder.takeAwayTitle.setVisibility(View.GONE);
+            int colour = Color.BLACK;
+            holder.takeAwayTitle.setTextColor(colour);
+            holder.pretxtHash.setTextColor(colour);
+            holder.preTxtOrderNo.setTextColor(colour);
+            holder.preTxtOrderTime.setTextColor(colour);
+            holder.preTxtWaiterName.setTextColor(colour);
+            holder.preTxtTableNo.setTextColor(colour);
+            holder.prelayout.setBackgroundColor(mContext.getResources().getColor(R.color.chef_dining_background));
+        }
+        /*if(mOrderHeaderDTO.get(position).getmTableNo()==0)
         {
             holder.takeAwayTitle.setVisibility(View.VISIBLE);
             holder.preTxtTableNo.setText(""+mOrderHeaderDTO.get(position).getmTakeAwayNumber());//here take away number is going to set
@@ -65,7 +96,7 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
             holder.tableNumberTitle.setVisibility(View.VISIBLE);
             holder.preTxtTableNo.setText(""+mOrderHeaderDTO.get(position).getmTableNo());//here table number is going to set
             holder.takeAwayTitle.setVisibility(View.GONE);
-        }
+        }*/
         utilityPrevious.setListViewHeightBasedOnChildren(holder.preMenuList);
     }
 
@@ -83,10 +114,13 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
         TextView preTxtOrderTime;
         TextView takeAwayTitle;
         TextView tableNumberTitle;
+        TextView pretxtHash;
         Button preBtnComplete;
         ListView preMenuList;
         ImageView preBtnDone;
-        LinearLayout layout;
+        ImageView preservedByIcon;
+        ImageView prehrsGlassIcon;
+        LinearLayout prelayout;
 
         public OrderViewHolderPrevious(View itemView) {
             super(itemView);
@@ -98,6 +132,10 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
              preBtnDone = (ImageView) itemView.findViewById(R.id.recyclerChefOrderDonIcon_Previous);
             takeAwayTitle = (TextView)itemView.findViewById(R.id.recyclerTxtTakeAwayTitle_Previous);
             tableNumberTitle=(TextView)itemView.findViewById(R.id.recyclerTxtTableNoTitle_Previous);
+            pretxtHash = (TextView)itemView.findViewById(R.id.txtHash_Previous);
+            preservedByIcon =(ImageView)itemView.findViewById(R.id.servedByIcon_Previous);
+            prehrsGlassIcon = (ImageView)itemView.findViewById(R.id.hrsGlassIcon_Previous);
+            prelayout = (LinearLayout)itemView.findViewById(R.id.pre_headerChef);
              //preBtnComplete =  (Button) itemView.findViewById(R.id.recyclerOrderDoneBtn);
              preMenuList = (ListView) itemView.findViewById(R.id.recyclerMenuList_Previous);
 
@@ -129,5 +167,16 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
             // Math.round(params.height);
             listView.setLayoutParams(params);
         }
+    }
+    public void refresh(int status) {
+        if (this.mOrderHeaderDTO != null) {
+            this.mOrderHeaderDTO.clear();
+            this.mOrderHeaderDTO = dbRepository.getCompletedRecordsChef();
+            dbRepository.addMenuList(mOrderHeaderDTO);
+            notifyDataSetChanged();
+
+        }
+
+
     }
 }

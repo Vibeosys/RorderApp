@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefRecyclerViewAdapter;
+import com.vibeosys.rorderapp.adaptors.ChefRecylerTabDiningAdapter;
 import com.vibeosys.rorderapp.adaptors.ChefTabListAdapter;
 import com.vibeosys.rorderapp.data.ChefOrderCompleted;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
@@ -33,13 +34,13 @@ import java.util.ArrayList;
  * Created by shrinivas on 09-03-2016.
  */
 public class FragmentChefTabDiningOrders extends BaseFragment
-        implements ChefRecyclerViewAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived{
+        implements ChefRecylerTabDiningAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived{
     private ChefTabListAdapter chefTabListAdapter;
     public static Handler UIHandler;
     private ListView listView;
     private ArrayList<ChefOrderDetailsDTO> list = new ArrayList<>();
     private RecyclerView chefRecycleDining;
-    public static ChefRecyclerViewAdapter adapterRecycleDining;
+    public static ChefRecylerTabDiningAdapter adapterRecycleDining;
     ProgressDialog dialog;
 
     @Nullable
@@ -52,7 +53,7 @@ public class FragmentChefTabDiningOrders extends BaseFragment
         ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecordChefDining();
         mDbRepository.addMenuList(orders);
         chefRecycleDining = (RecyclerView) view.findViewById(R.id.ChefRecycler);
-        adapterRecycleDining = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
+        adapterRecycleDining = new ChefRecylerTabDiningAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         chefRecycleDining.setLayoutManager(layoutManager);
 
@@ -106,6 +107,7 @@ public class FragmentChefTabDiningOrders extends BaseFragment
 
         dialog.dismiss();
         chefRecycleDining.invalidate();
+
         try {
            /* errorCode = data.getInt(String.valueOf(errorCode));
             errorString = data.getString("errorCode");

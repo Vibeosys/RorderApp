@@ -126,9 +126,10 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
             tab_layout.setSelectedTabIndicatorHeight(4);
             final ViewPager viewPager = (ViewPager) findViewById(R.id.pagerChef);
 
-        final ChefPagerAdapter adapter = new ChefPagerAdapter
+            final ChefPagerAdapter adapter = new ChefPagerAdapter
                 (getSupportFragmentManager(), tab_layout.getTabCount());
-        viewPager.setAdapter(adapter);
+                viewPager.setOffscreenPageLimit(2);
+                viewPager.setAdapter(adapter);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
         tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

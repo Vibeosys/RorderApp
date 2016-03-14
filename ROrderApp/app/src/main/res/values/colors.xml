@@ -54,4 +54,5 @@
     <color name="ok_btn_colour">#2ecc71</color>
     <color name="light_green">#DCEDC8</color>
     <color name="chef_take_away_back">#cf1b27</color>
+    <color name="chef_dining_background">#ffe63b</color>
 </resources>
