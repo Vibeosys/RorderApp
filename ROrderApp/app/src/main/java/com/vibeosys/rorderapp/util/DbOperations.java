@@ -15,6 +15,7 @@ import com.vibeosys.rorderapp.data.OrderTypeDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDbDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
@@ -159,19 +160,14 @@ public class DbOperations {
         FragmentChefTabDiningOrders.runOnUI(new Runnable() {
             @Override
             public void run() {
-                try
-                {
-                    if(FragmentChefTabDiningOrders.adapterRecycleDining == null)
-                    {
-                        Log.d("chef tab dining ","##"+null);
-                    }
-                        else
-                    {
+                try {
+                    if (FragmentChefTabDiningOrders.adapterRecycleDining == null) {
+                        Log.d("chef tab dining ", "##" + null);
+                    } else {
                         FragmentChefTabDiningOrders.adapterRecycleDining.refresh(2);
                     }
 
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -179,12 +175,9 @@ public class DbOperations {
         FragmentChefTabTakeAwayOrders.runOnUI(new Runnable() {
             @Override
             public void run() {
-                if(FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway ==null)
-                {
-                    Log.d("chef tab take away","##"+null);
-                }
-                    else
-                {
+                if (FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway == null) {
+                    Log.d("chef tab take away", "##" + null);
+                } else {
                     FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway.refresh(2);
                 }
             }
@@ -192,10 +185,9 @@ public class DbOperations {
         FragmentChefTabMyPreviousOrders.runOnUI(new Runnable() {
             @Override
             public void run() {
-                if(FragmentChefTabMyPreviousOrders.adapterRecycle_previous ==null)
-                {
+                if (FragmentChefTabMyPreviousOrders.adapterRecycle_previous == null) {
 
-                }else {
+                } else {
                     FragmentChefTabMyPreviousOrders.adapterRecycle_previous.refresh(2);
                 }
             }
@@ -203,7 +195,9 @@ public class DbOperations {
         FragmentTakeAway.runOnUI(new Runnable() {
             public void run() {
                 try {
-                    FragmentTakeAway.gridAdapter.refresh(dbRepository.getTakeAwayList());
+                    ArrayList<TakeAwayDTO> takeAwayDTOs = dbRepository.getTakeAwayList();
+                    dbRepository.setTakeAwayStatus(takeAwayDTOs);
+                    FragmentTakeAway.gridAdapter.refresh(takeAwayDTOs);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -263,7 +257,9 @@ public class DbOperations {
         FragmentTakeAway.runOnUI(new Runnable() {
             public void run() {
                 try {
-                    FragmentTakeAway.gridAdapter.refresh(dbRepository.getTakeAwayList());
+                    ArrayList<TakeAwayDTO> takeAwayDTOs = dbRepository.getTakeAwayList();
+                    dbRepository.setTakeAwayStatus(takeAwayDTOs);
+                    FragmentTakeAway.gridAdapter.refresh(takeAwayDTOs);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

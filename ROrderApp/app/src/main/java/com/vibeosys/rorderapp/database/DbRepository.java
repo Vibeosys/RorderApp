@@ -3230,11 +3230,12 @@ public class DbRepository extends SQLiteOpenHelper {
 
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
-        int countSPending = 0, countSReady = 0, countSDelivered = 0;
+
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
                 for (TakeAwayDTO takeAway : takeAwayDTOs) {
+                    int countSPending = 0, countSReady = 0, countSDelivered = 0;
                     String[] where = new String[]{String.valueOf(takeAway.getmTakeawayNo())};
                     String strQuery = "Select " + SqlContract.SqlOrders.ORDER_STATUS + " FROM "
                             + SqlContract.SqlOrders.TABLE_NAME + " Where " + SqlContract.SqlOrders.TAKE_AWAY_NO + "=?";

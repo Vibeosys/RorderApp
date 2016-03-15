@@ -317,6 +317,5 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
-
     }
 }

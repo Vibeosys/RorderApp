@@ -80,7 +80,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|bottom">
+            android:gravity="left|bottom">
 
             <!--  <LinearLayout
                   android:layout_width="wrap_content"
@@ -109,26 +109,51 @@
               </LinearLayout>-->
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
-                    android:id="@+id/txtCustAddress"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="104,Rajey Apart, Baner, Pune"
-                    android:textColor="@color/drawer"
-                    android:textSize="15sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
-                    android:id="@+id/txtCustPh"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_action_location" />
+
+                    <com.vibeosys.rorderapp.views.CustomTextView
+                        android:id="@+id/txtCustAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="104,Rajey Apart, Baner, Pune"
+                        android:textColor="@color/drawer"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="8888888888"
-                    android:textColor="@color/drawer"
-                    android:textSize="15sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="2dp"
+                        android:src="@drawable/ic_phone" />
+
+                    <com.vibeosys.rorderapp.views.CustomTextView
+                        android:id="@+id/txtCustPh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8888888888"
+                        android:textColor="@color/drawer"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
