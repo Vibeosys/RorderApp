@@ -1,6 +1,8 @@
 package com.vibeosys.rorderapp.adaptors;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,18 +61,25 @@ public class TakeAwaySourceAdapter extends BaseAdapter {
 
         TakeAwaySourceDTO takeAwaySourceDTO = mSources.get(position);
         viewHolder.txtName.setText(takeAwaySourceDTO.getName());
+
         //Image URL - This can point to any image file supported by Android
         final String url = takeAwaySourceDTO.getImgUrl();
+        mImageLoader = CustomVolleyRequestQueue.getInstance(mContext)
+                .getImageLoader();
+        Log.i("##", "## " + url);
         if (url != null && !url.isEmpty()) {
             try {
+
                 mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.imgSource,
                         R.drawable.default_table, R.drawable.default_table));
                 viewHolder.imgSource.setImageUrl(url, mImageLoader);
+
+
             } catch (Exception e) {
-                viewHolder.imgSource.setImageResource(R.drawable.default_table);
+                //viewHolder.imgSource.setImageResource(R.drawable.default_table);
             }
         } else {
-            viewHolder.imgSource.setImageResource(R.drawable.default_table);
+            //viewHolder.imgSource.setImageResource(R.drawable.default_table);
         }
         return row;
     }
