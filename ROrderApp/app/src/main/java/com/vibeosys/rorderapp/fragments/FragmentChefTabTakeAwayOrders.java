@@ -69,16 +69,16 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
     @Override
     public void tabComplete(String chefTabOrderId) {
         if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
-            String stringTitle = "Network error";
-            String stringMessage = "No Internet connection is available.Please check internet connection.";
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage =  getResources().getString(R.string.error_msg_for_select_restaurant);
             customAlterDialog(stringTitle, stringMessage);
 
         } else {
-            dialog = ProgressDialog.show(getActivity(), "", "Please wait ...", true);
+            String dialogMessage = getResources().getString(R.string.dialog_fragment_msg);
+            dialog = ProgressDialog.show(getActivity(), "", dialogMessage, true);
             dialog.show();
             sendTabDataToServer(chefTabOrderId);
-            mServerSyncManager.syncDataWithServer(true);
-            chefRecycleTakeAway.invalidate();
+
 
 
 
@@ -93,8 +93,7 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
             String serializedJsonString = gson.toJson(chefOrderCompleted);
             TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
-            mServerSyncManager.syncDataWithServer(true);
-            chefRecycleTakeAway.invalidate();
+
 
         } else {
             showMyDialog(getActivity());
@@ -104,26 +103,30 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
     @Override
     public void onStingResultReceived(@NonNull JSONObject data) {
         int errorCode = -1;
-        String errorString = "";
+        int errorString = -1;
         String message = null;
 
-        dialog.dismiss();
-        chefRecycleTakeAway.invalidate();
+
         try {
-           /* errorCode = data.getInt(String.valueOf(errorCode));
-            errorString = data.getString("errorCode");
+
+            errorString = data.getInt("errorCode");
             message = data.getString("message");
-            if(errorCode == 0)
+            if(errorString == 0)
             {
-                Toast.makeText(getActivity(),"Data send to server",Toast.LENGTH_LONG).show();
+                mServerSyncManager.syncDataWithServer(true);
+                adapterRecycleTakeAway.refresh(1);
+                adapterRecycleTakeAway.notifyDataSetChanged();
+                chefRecycleTakeAway.invalidate();
+                dialog.dismiss();
             }
             else
             {
-                Toast.makeText(getActivity(),"Data  not send",Toast.LENGTH_LONG).show();
-            }*/
+
+            }
 
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }

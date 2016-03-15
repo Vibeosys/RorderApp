@@ -150,18 +150,22 @@ public class ChefRecyclerPreviousAdapter extends RecyclerView.Adapter<ChefRecycl
                 return;
             }
 
-            int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-            for (int i = 0; i < adapter.getCount(); i++) {
+           // int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+            /*for (int i = 0; i < adapter.getCount(); i++) {
                 View listItem = adapter.getView(i, null, listView);
                 if (listItem instanceof ViewGroup) {
                     listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 }
-                listItem.measure(0, 0);
+                listItem.measure(0 , 0);
                 totalHeight += listItem.getMeasuredHeight();
-            }
+            }*/
 
             ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+          //  params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+
+
+
+            params.height =(48*adapter.getCount()) ;
 
             // params.height = params.height / 2;
             // Math.round(params.height);

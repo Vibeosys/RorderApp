@@ -121,7 +121,6 @@ public class ChefRecyclerTabTakeAwayAdapter extends RecyclerView.Adapter<ChefRec
                 if (mTabCompleteButton != null) {
                     mTabCompleteButton.tabComplete(mOrderHeaderDTOs.get(position).getmNewOrderId());
 
-
                 }
             }
         });
@@ -192,7 +191,7 @@ public class ChefRecyclerTabTakeAwayAdapter extends RecyclerView.Adapter<ChefRec
             }
 
             int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-            for (int i = 0; i < listAdapter.getCount(); i++) {
+           /* for (int i = 0; i < listAdapter.getCount(); i++) {
                 View listItem = listAdapter.getView(i, null, listView);
                 if (listItem instanceof View) {
                     listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -201,13 +200,13 @@ public class ChefRecyclerTabTakeAwayAdapter extends RecyclerView.Adapter<ChefRec
                 listItem.measure(0, 0);
 
                 totalHeight += listItem.getMeasuredHeight();
-            }
+            }*/
             int demo = listView.getDividerHeight();
             ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalHeight; //+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+          //  params.height = totalHeight; //+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
             // params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
             // Math.round(totalHeight);
-
+            params.height = (48 * listAdapter.getCount());
             listView.setLayoutParams(params);
             listView.requestLayout();
 

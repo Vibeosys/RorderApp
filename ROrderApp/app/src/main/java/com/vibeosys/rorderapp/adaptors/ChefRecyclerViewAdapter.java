@@ -175,7 +175,7 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
                 return;
             }
 
-            int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+          /*  int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
             for (int i = 0; i < listAdapter.getCount(); i++) {
                 View listItem = listAdapter.getView(i, null, listView);
                 if (listItem instanceof View) {
@@ -185,13 +185,13 @@ public class ChefRecyclerViewAdapter extends RecyclerView.Adapter<ChefRecyclerVi
                 listItem.measure(0, 0);
 
                 totalHeight += listItem.getMeasuredHeight();
-            }
-            int demo = listView.getDividerHeight();
+            }*/
+         //   int demo = listView.getDividerHeight();
             ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalHeight; //+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+         //   params.height = totalHeight; //+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
             // params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
             // Math.round(totalHeight);
-
+            params.height = (48 * listAdapter.getCount() );
             listView.setLayoutParams(params);
             listView.requestLayout();
 

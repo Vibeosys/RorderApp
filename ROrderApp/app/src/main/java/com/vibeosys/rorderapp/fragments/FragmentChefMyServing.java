@@ -132,12 +132,13 @@ public class FragmentChefMyServing extends BaseFragment implements
     public void onDonClick(String ChefOrderId) {
         //       Log.d(TAG,"## button click"+ChefOrderId);
         if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
-            String stringTitle = "Network error";
-            String stringMessage = "No Internet connection is available.Please check internet connection.";
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
             customAlterDialog(stringTitle, stringMessage);
 
         } else {
-            dialog = ProgressDialog.show(getContext(),"","Please wait ...",true);
+            String dialogMessage = getResources().getString(R.string.dialog_fragment_msg);
+            dialog = ProgressDialog.show(getContext(),"",dialogMessage,true);
             dialog.show();
             sendToServer(ChefOrderId);
             mServerSyncManager.syncDataWithServer(true);

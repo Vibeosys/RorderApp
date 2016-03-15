@@ -110,99 +110,102 @@ public class DbOperations {
 
         boolean isInserted = dbRepository.insertOrders(orderInserts);
         boolean isUpdated = dbRepository.updateOrders(orderUpdates);
-        FragmentChefMyServing.runOnUI(new Runnable() {
-            @Override
-            public void run() {
+        if (FragmentChefMyServing.chefOrderAdapter != null) {
+            FragmentChefMyServing.runOnUI(new Runnable() {
+                @Override
+                public void run() {
 
-                try {
-                    if (FragmentChefMyServing.chefOrderAdapter == null) {
-                        Log.d("chef is null", "##" + null);
-                    } else {
+                    try {
                         FragmentChefMyServing.chefOrderAdapter.refresh(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d("exception in my serving", "##" + e.toString());
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d("exception in my serving", "##" + e.toString());
                 }
-            }
-        });
+            });
+        }
 
-        FragmentChefPlacedOrder.runOnUI(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (FragmentChefPlacedOrder.chefOrderAdapter == null) {
-                        Log.d("placed order adt", "##" + null);
-                    } else {
+        if (FragmentChefPlacedOrder.chefOrderAdapter != null) {
+            FragmentChefPlacedOrder.runOnUI(new Runnable() {
+                @Override
+                public void run() {
+                    try {
                         FragmentChefPlacedOrder.chefOrderAdapter.refresh(2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-            }
-        });
-        FragmentChefTabMyServing.runOnUI(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (FragmentChefTabMyServing.adapterRecycle == null) {
-                        Log.d("Place order Tab", "##" + null);
-                    } else {
+                }
+            });
+        }
+
+        if (FragmentChefTabMyServing.adapterRecycle != null) {
+            FragmentChefTabMyServing.runOnUI(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+
                         FragmentChefTabMyServing.adapterRecycle.refresh(2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
-        FragmentChefTabDiningOrders.runOnUI(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (FragmentChefTabDiningOrders.adapterRecycleDining == null) {
-                        Log.d("chef tab dining ", "##" + null);
-                    } else {
+            });
+        }
+        if (FragmentChefTabDiningOrders.adapterRecycleDining != null) {
+            FragmentChefTabDiningOrders.runOnUI(new Runnable() {
+                @Override
+                public void run() {
+                    try {
                         FragmentChefTabDiningOrders.adapterRecycleDining.refresh(2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        if (FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway != null) {
+            FragmentChefTabTakeAwayOrders.runOnUI(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway.refresh(2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
-        FragmentChefTabTakeAwayOrders.runOnUI(new Runnable() {
-            @Override
-            public void run() {
-                if (FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway == null) {
-                    Log.d("chef tab take away", "##" + null);
-                } else {
-                    FragmentChefTabTakeAwayOrders.adapterRecycleTakeAway.refresh(2);
-                }
-            }
-        });
-        FragmentChefTabMyPreviousOrders.runOnUI(new Runnable() {
-            @Override
-            public void run() {
-                if (FragmentChefTabMyPreviousOrders.adapterRecycle_previous == null) {
+            });
+        }
+        if (FragmentChefTabMyPreviousOrders.adapterRecycle_previous == null) {
+            FragmentChefTabMyPreviousOrders.runOnUI(new Runnable() {
+                @Override
+                public void run() {
+                    try
+                    {
+                        FragmentChefTabMyPreviousOrders.adapterRecycle_previous.refresh(2);
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
 
-                } else {
-                    FragmentChefTabMyPreviousOrders.adapterRecycle_previous.refresh(2);
                 }
-            }
-        });
-        FragmentTakeAway.runOnUI(new Runnable() {
-            public void run() {
-                try {
-                    ArrayList<TakeAwayDTO> takeAwayDTOs = dbRepository.getTakeAwayList();
-                    dbRepository.setTakeAwayStatus(takeAwayDTOs);
-                    FragmentTakeAway.gridAdapter.refresh(takeAwayDTOs);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            });
+        }
+        if (FragmentTakeAway.gridAdapter != null) {
+            FragmentTakeAway.runOnUI(new Runnable() {
+                public void run() {
+                    try {
+                        ArrayList<TakeAwayDTO> takeAwayDTOs = dbRepository.getTakeAwayList();
+                        dbRepository.setTakeAwayStatus(takeAwayDTOs);
+                        FragmentTakeAway.gridAdapter.refresh(takeAwayDTOs);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        }
+
         return isInserted & isUpdated;
     }
 

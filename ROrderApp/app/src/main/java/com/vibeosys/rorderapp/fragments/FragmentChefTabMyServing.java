@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -68,21 +69,19 @@ public class FragmentChefTabMyServing extends BaseFragment
         View view = inflater.inflate(R.layout.chef_tab_layout, container, false);
 
 
-       ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
+        ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefOrder();
 
-     //   ArrayList<ChefOrderDetailsDTO> order1 = mDbRepository.getRecChefOrder("1");
+
         mDbRepository.addMenuList(orders);
         chefRecycle = (RecyclerView) view.findViewById(R.id.ChefRecycler);
         adapterRecycle = new ChefRecyclerViewAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
-     //   adapterRecycle = new ChefRecyclerViewAdapter(order1, getActivity().getApplicationContext(), mDbRepository);
+
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         chefRecycle.setLayoutManager(layoutManager);
 
         chefRecycle.setAdapter(adapterRecycle);
         adapterRecycle.tabSetCompleteBtn(this);
         mServerSyncManager.setOnStringResultReceived(this);
-
-
         return view;
     }
 
@@ -90,37 +89,32 @@ public class FragmentChefTabMyServing extends BaseFragment
     @Override
     public void tabComplete(String chefTabOrderId) {
         if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
-            String stringTitle = "Network error";
-            String stringMessage = "No Internet connection is available.Please check internet connection.";
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
             customAlterDialog(stringTitle, stringMessage);
 
         } else {
-            dialog = ProgressDialog.show(getActivity(), "", "Please wait ...", true);
+
+            String dialogMessage = getResources().getString(R.string.dialog_fragment_msg);
+            dialog = ProgressDialog.show(getActivity(), "", dialogMessage, true);
             dialog.show();
             sendTabDataToServer(chefTabOrderId);
             mServerSyncManager.syncDataWithServer(true);
-            chefRecycle.invalidate();
-
-
 
 
         }
     }
 
+
     public void sendTabDataToServer(String chefTabOrderId) {
-        if (NetworkUtils.isActiveNetworkAvailable(getContext())) {
 
-            ChefOrderCompleted chefOrderCompleted = new ChefOrderCompleted(chefTabOrderId);
-            Gson gson = new Gson();
-            String serializedJsonString = gson.toJson(chefOrderCompleted);
-            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
-            mServerSyncManager.uploadDataToServer(tableDataDTO);
-            mServerSyncManager.syncDataWithServer(true);
-            chefRecycle.invalidate();
 
-        } else {
-            showMyDialog(getActivity());
-        }
+        ChefOrderCompleted chefOrderCompleted = new ChefOrderCompleted(chefTabOrderId);
+        Gson gson = new Gson();
+        String serializedJsonString = gson.toJson(chefOrderCompleted);
+        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
+        mServerSyncManager.uploadDataToServer(tableDataDTO);
+
     }
 
     @Override
@@ -129,24 +123,26 @@ public class FragmentChefTabMyServing extends BaseFragment
         String errorString = "";
         String message = null;
 
-        dialog.dismiss();
-        chefRecycle.invalidate();
+
         try {
-           /* errorCode = data.getInt(String.valueOf(errorCode));
-            errorString = data.getString("errorCode");
+
+            errorCode = data.getInt("errorCode");
             message = data.getString("message");
-            if(errorCode == 0)
-            {
-                Toast.makeText(getActivity(),"Data send to server",Toast.LENGTH_LONG).show();
+            if (errorCode == 0) {
+                mServerSyncManager.syncDataWithServer(true);
+                adapterRecycle.refresh(1);
+                adapterRecycle.notifyDataSetChanged();
+                chefRecycle.invalidate();
+                dialog.dismiss();
+
+            } else {
+
             }
-            else
-            {
-                Toast.makeText(getActivity(),"Data  not send",Toast.LENGTH_LONG).show();
-            }*/
-
-
         } catch (Exception e) {
+
+
             e.printStackTrace();
+
         }
     }
 
@@ -158,7 +154,7 @@ public class FragmentChefTabMyServing extends BaseFragment
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
-        //adapterRecycle.notifyDataSetChanged();
+
     }
 
     @Override

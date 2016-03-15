@@ -146,4 +146,5 @@
         <![CDATA[ <strong>Quick</strong><small>Serve</small>&trade;]]>
         </string>
     <string name="custPhNo">Phone Number</string>
+    <string name="dialog_fragment_msg">Please wait ...</string>
 </resources>

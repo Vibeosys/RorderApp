@@ -40,8 +40,8 @@ public class FragmentChefPlacedOrder extends BaseFragment
         chefOrderListHistory.setAdapter(chefOrderAdapter);
         if(!NetworkUtils.isActiveNetworkAvailable(getContext()))
         {
-            String stringTitle ="Network error";
-            String stringMessage="No Internet connection is available.Please check internet connection.";
+            String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
+            String stringMessage= getResources().getString(R.string.error_msg_for_select_restaurant);
             customAlterDialog(stringTitle,stringMessage);
         }
         chefOrderAdapter.notifyDataSetChanged();
