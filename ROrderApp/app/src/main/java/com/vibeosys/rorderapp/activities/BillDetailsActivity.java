@@ -46,6 +46,7 @@ public class BillDetailsActivity extends BaseActivity {
     private LinearLayout layoutLocation;
     private ImageView mImgTable;
     private TableRow mDeliveryChargeRow;
+    private TextView mBillStatus;
 
     @Override
     protected String getScreenName() {
@@ -89,6 +90,7 @@ public class BillDetailsActivity extends BaseActivity {
         mImgTable = (ImageView) findViewById(R.id.imgTable);
         mTxtDeliveryAmt = (TextView) findViewById(R.id.deliveryAmt);
         mDeliveryChargeRow = (TableRow) findViewById(R.id.rowDeliveryChr);
+        mBillStatus = (TextView) findViewById(R.id.billStatus);
 
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
@@ -98,6 +100,10 @@ public class BillDetailsActivity extends BaseActivity {
 
         if (mBillDetailsDTOs.getBillPayed() == 1) {
             payment_bill_details.setEnabled(false);
+            payment_bill_details.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.light_grey));
+            btnBillSummary.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.button_custom));
+            mBillStatus.setText("Bill Paid");
+            mLayoutAddDiscount.setVisibility(View.INVISIBLE);
         }
         displayData(mDiscPer);
 

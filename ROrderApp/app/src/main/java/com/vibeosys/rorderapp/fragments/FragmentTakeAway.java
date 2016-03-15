@@ -45,6 +45,7 @@ import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
 import com.vibeosys.rorderapp.data.UploadTakeAway;
 import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.PhoneNumberValidator;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 
@@ -178,6 +179,12 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
                 }
                 if (TextUtils.isEmpty(strPhNo)) {
                     txtPhNo.setError("Phone Number is required");
+                    focus = txtPhNo;
+                    wrongCredential = true;
+                }
+                PhoneNumberValidator validator = new PhoneNumberValidator();
+                if (validator.validatePhoneNumber(strPhNo) == false) {
+                    txtPhNo.setError("Number is Not valid");
                     focus = txtPhNo;
                     wrongCredential = true;
                 }
