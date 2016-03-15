@@ -607,7 +607,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlTakeAway.CUST_ID, takeAwayDbDTO.getCustId());
                     contentValues.put(SqlContract.SqlTakeAway.USER_ID, takeAwayDbDTO.getUserId());
                     contentValues.put(SqlContract.SqlTakeAway.SOURCE_ID, takeAwayDbDTO.getSourceId());
-                    contentValues.put(SqlContract.SqlTakeAway.DATE, String.valueOf(takeAwayDbDTO.getOrderDt()));
+                    contentValues.put(SqlContract.SqlTakeAway.DATE, takeAwayDbDTO.getCreatedDate());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlTakeAway.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -2347,7 +2347,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     if (takeAwayDbDTO.getSourceId() != 0)
                         contentValues.put(SqlContract.SqlTakeAway.SOURCE_ID, takeAwayDbDTO.getSourceId());
                     if (takeAwayDbDTO.getCreatedDate() != null)
-                        contentValues.put(SqlContract.SqlTakeAway.DATE, takeAwayDbDTO.getCreatedDate() /*String.valueOf(takeAwayDbDTO.getOrderDt())*/);
+                        contentValues.put(SqlContract.SqlTakeAway.DATE, takeAwayDbDTO.getCreatedDate());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlTakeAway.TABLE_NAME, contentValues,
                             SqlContract.SqlTakeAway.TAKE_AWAY_ID + "=?", where);
@@ -3066,14 +3066,14 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                String strQuery = "Select takeaway.TakeawayId,takeaway.TakeawayNo,takeaway.CustId," +
+                String strQuery = "Select takeaway.TakeawayId,takeaway.TakeawayNo,takeaway.CustId,takeaway.CreatedDate," +
                         "takeaway.SourceId,takeaway.Discount,takeaway.DeliveryCharges," +
                         "takeaway.UserId,users.UserName,customer.CustName,customer.CustPhone," +
                         "customer.CustAddress,takeaway_source.SourceName " +
                         "from takeaway left join users on users.UserId=takeaway.UserId " +
                         "left join customer on customer.CustId=takeaway.CustId " +
                         "left join takeaway_source on takeaway_source.SourceId=takeaway.SourceId " +
-                        "where takeaway.CreatedDate>= '" + date + " " + time + "'";
+                        "where takeaway.CreatedDate>= '" + date + "T" + time + "'";
                 cursor = sqLiteDatabase.rawQuery(strQuery, null);
                 if (cursor != null) {
 
@@ -3092,6 +3092,7 @@ public class DbRepository extends SQLiteOpenHelper {
                             String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
                             String custPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_PHONE));
                             String sourceName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_NAME));
+                            String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAway.DATE));
                             TakeAwayDTO takeaway = new TakeAwayDTO(takeawayId, takeawayNo, discount,
                                     deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName);
                             takeAways.add(takeaway);
