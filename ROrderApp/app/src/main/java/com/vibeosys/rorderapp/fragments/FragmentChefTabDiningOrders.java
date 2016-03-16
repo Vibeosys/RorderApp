@@ -63,8 +63,8 @@ public class FragmentChefTabDiningOrders extends BaseFragment
         chefRecycleDining.setAdapter(adapterRecycleDining);
         adapterRecycleDining.tabSetCompleteBtn(this);
         mServerSyncManager.setOnStringResultReceived(this);
-
-
+        adapterRecycleDining.notifyDataSetChanged();
+        chefRecycleDining.invalidate();
         return view;
     }
 
@@ -80,7 +80,9 @@ public class FragmentChefTabDiningOrders extends BaseFragment
             dialog = ProgressDialog.show(getActivity(), "", dialogMessage, true);
             dialog.show();
             sendTabDataToServer(chefTabOrderId);
-
+            mServerSyncManager.syncDataWithServer(true);
+            adapterRecycleDining.notifyDataSetChanged();
+            chefRecycleDining.invalidate();
 
         }
     }
@@ -93,6 +95,10 @@ public class FragmentChefTabDiningOrders extends BaseFragment
             String serializedJsonString = gson.toJson(chefOrderCompleted);
             TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
+            mServerSyncManager.syncDataWithServer(true);
+            adapterRecycleDining.refresh(1);
+            adapterRecycleDining.notifyDataSetChanged();
+            chefRecycleDining.invalidate();
 
 
         } else {
@@ -112,10 +118,10 @@ public class FragmentChefTabDiningOrders extends BaseFragment
             errorString = data.getInt("errorCode");
             message = data.getString("message");
             if (errorString == 0) {
-                mServerSyncManager.syncDataWithServer(true);
+               /* mServerSyncManager.syncDataWithServer(true);
                 adapterRecycleDining.refresh(1);
                 adapterRecycleDining.notifyDataSetChanged();
-                chefRecycleDining.invalidate();
+                chefRecycleDining.invalidate();*/
                 dialog.dismiss();
 
             } else {

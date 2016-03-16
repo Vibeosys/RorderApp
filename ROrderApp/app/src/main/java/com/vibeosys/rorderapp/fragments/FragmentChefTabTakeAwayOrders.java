@@ -62,7 +62,8 @@ ServerSyncManager.OnStringErrorReceived{
         chefRecycleTakeAway.setAdapter(adapterRecycleTakeAway);
         adapterRecycleTakeAway.tabSetCompleteBtn(this);
         mServerSyncManager.setOnStringResultReceived(this);
-
+        adapterRecycleTakeAway.notifyDataSetChanged();
+        chefRecycleTakeAway.invalidate();
 
         return view;
 
@@ -80,7 +81,8 @@ ServerSyncManager.OnStringErrorReceived{
             dialog = ProgressDialog.show(getActivity(), "", dialogMessage, true);
             dialog.show();
             sendTabDataToServer(chefTabOrderId);
-
+            mServerSyncManager.syncDataWithServer(true);
+            chefRecycleTakeAway.invalidate();
 
         }
     }
@@ -93,7 +95,10 @@ ServerSyncManager.OnStringErrorReceived{
             String serializedJsonString = gson.toJson(chefOrderCompleted);
             TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
-
+            mServerSyncManager.syncDataWithServer(true);
+            adapterRecycleTakeAway.refresh(1);
+            adapterRecycleTakeAway.notifyDataSetChanged();
+            chefRecycleTakeAway.invalidate();
 
         } else {
             showMyDialog(getActivity());
@@ -112,10 +117,10 @@ ServerSyncManager.OnStringErrorReceived{
             errorString = data.getInt("errorCode");
             message = data.getString("message");
             if (errorString == 0) {
-                mServerSyncManager.syncDataWithServer(true);
-                adapterRecycleTakeAway.refresh(1);
+               // mServerSyncManager.syncDataWithServer(true);
+                /*adapterRecycleTakeAway.refresh(1);
                 adapterRecycleTakeAway.notifyDataSetChanged();
-                chefRecycleTakeAway.invalidate();
+                chefRecycleTakeAway.invalidate();*/
                 dialog.dismiss();
             } else {
 

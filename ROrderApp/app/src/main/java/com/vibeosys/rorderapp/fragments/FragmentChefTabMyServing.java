@@ -84,6 +84,8 @@ public class FragmentChefTabMyServing extends BaseFragment
         chefRecycle.setAdapter(adapterRecycle);
         adapterRecycle.tabSetCompleteBtn(this);
         mServerSyncManager.setOnStringResultReceived(this);
+        adapterRecycle.notifyDataSetChanged();
+        chefRecycle.invalidate();
         return view;
     }
 
@@ -102,7 +104,7 @@ public class FragmentChefTabMyServing extends BaseFragment
             dialog.show();
             sendTabDataToServer(chefTabOrderId);
             mServerSyncManager.syncDataWithServer(true);
-
+            chefRecycle.invalidate();
 
         }
     }
@@ -116,6 +118,10 @@ public class FragmentChefTabMyServing extends BaseFragment
         String serializedJsonString = gson.toJson(chefOrderCompleted);
         TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
+        mServerSyncManager.syncDataWithServer(true);
+        adapterRecycle.refresh(1);
+        adapterRecycle.notifyDataSetChanged();
+        chefRecycle.invalidate();
 
     }
 
@@ -131,10 +137,10 @@ public class FragmentChefTabMyServing extends BaseFragment
             errorCode = data.getInt("errorCode");
             message = data.getString("message");
             if (errorCode == 0) {
-                mServerSyncManager.syncDataWithServer(true);
+               /* mServerSyncManager.syncDataWithServer(true);
                 adapterRecycle.refresh(1);
                 adapterRecycle.notifyDataSetChanged();
-                chefRecycle.invalidate();
+                chefRecycle.invalidate();*/
                 dialog.dismiss();
 
             } else {
