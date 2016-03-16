@@ -101,7 +101,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         String serializedBillPaid = gson.toJson(billPaidUpload);
         tableDataDTOs[2] = new TableDataDTO(ConstantOperations.PAID_BILL, serializedBillPaid);
         mServerSyncManager.uploadDataToServer(tableDataDTOs);
-
+        mServerSyncManager.syncDataWithServer(false);
         showFeedBackDialog();
        /* Intent i = new Intent(getApplicationContext(), FeedbackActivity.class);
         i.putExtra("tableCustInfo", tableCommonInfoDTO);

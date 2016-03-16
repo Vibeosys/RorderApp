@@ -67,7 +67,8 @@
                     android:id="@+id/txtCustomerName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/table_hint_customer_name" />
+                    android:hint="@string/table_hint_customer_name"
+                    android:inputType="textCapSentences" />
             </LinearLayout>
 
             <LinearLayout
@@ -89,6 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/customer_hint_address"
+                    android:inputType="textCapSentences"
                     android:singleLine="false" />
             </LinearLayout>
 

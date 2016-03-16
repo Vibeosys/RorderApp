@@ -262,8 +262,9 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     @Override
     public void onStingErrorReceived(@NonNull VolleyError error) {
+        showProgress(false);
         String title = "Server Error";
-        String message = "" + error.toString();
+        String message = "Server error try again";
         customAlterDialog(title, message);
         Log.d("##", "##" + message);
     }
