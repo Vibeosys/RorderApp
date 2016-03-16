@@ -63,7 +63,7 @@ public class TakeAwaySourceAdapter extends BaseAdapter {
         viewHolder.txtName.setText(takeAwaySourceDTO.getName());
 
         //Image URL - This can point to any image file supported by Android
-        final String url = takeAwaySourceDTO.getImgUrl();
+       /* final String url = takeAwaySourceDTO.getImgUrl();
         mImageLoader = CustomVolleyRequestQueue.getInstance(mContext)
                 .getImageLoader();
         Log.i("##", "## " + url);
@@ -80,7 +80,7 @@ public class TakeAwaySourceAdapter extends BaseAdapter {
             }
         } else {
             //viewHolder.imgSource.setImageResource(R.drawable.default_table);
-        }
+        }*/
         return row;
     }
 
