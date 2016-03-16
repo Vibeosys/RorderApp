@@ -163,4 +163,9 @@ public class FragmentChefTabMyServing extends BaseFragment
 
 
     }
+
+    @Override
+    protected String getScreenName() {
+        return "Chef dashboard my serving for tab";
+    }
 }

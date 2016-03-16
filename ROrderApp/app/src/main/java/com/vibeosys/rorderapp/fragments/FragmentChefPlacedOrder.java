@@ -23,31 +23,31 @@ import java.util.ArrayList;
 /**
  * Created by shrinivas on 15-02-2016.
  */
-public class FragmentChefPlacedOrder extends BaseFragment
-{
+public class FragmentChefPlacedOrder extends BaseFragment {
     private ExpandableListView chefOrderListHistory;
     public static ChefOrderAdapter chefOrderAdapter;
-    private ArrayList<ChefOrderDetailsDTO> listHistory  =new ArrayList<>();
+    private ArrayList<ChefOrderDetailsDTO> listHistory = new ArrayList<>();
     public static Handler UIHandler;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    //       return super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.chef_expandable_list_history,container,false);
-        chefOrderListHistory  =(ExpandableListView) view.findViewById(R.id.expListViewForChefHistory);
+        //       return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.chef_expandable_list_history, container, false);
+        chefOrderListHistory = (ExpandableListView) view.findViewById(R.id.expListViewForChefHistory);
         listHistory = mDbRepository.getOrderHeadesInAsc(2);
-        chefOrderAdapter = new ChefOrderAdapter(getActivity().getApplicationContext(),listHistory,mDbRepository);
+        chefOrderAdapter = new ChefOrderAdapter(getActivity().getApplicationContext(), listHistory, mDbRepository);
         chefOrderListHistory.setAdapter(chefOrderAdapter);
-        if(!NetworkUtils.isActiveNetworkAvailable(getContext()))
-        {
+        if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
-            String stringMessage= getResources().getString(R.string.error_msg_for_select_restaurant);
-            customAlterDialog(stringTitle,stringMessage);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
+            customAlterDialog(stringTitle, stringMessage);
         }
         chefOrderAdapter.notifyDataSetChanged();
 
         return view;
     }
+
     static {
         UIHandler = new Handler(Looper.getMainLooper());
     }
@@ -67,5 +67,10 @@ public class FragmentChefPlacedOrder extends BaseFragment
     public void onResume() {
 
         super.onResume();
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "Order History Mobile";
     }
 }

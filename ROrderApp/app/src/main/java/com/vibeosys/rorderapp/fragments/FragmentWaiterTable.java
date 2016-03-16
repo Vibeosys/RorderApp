@@ -110,6 +110,11 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
     }
 
     @Override
+    protected String getScreenName() {
+        return "Tables fragment";
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         HotelTableDTO hotelTableDTO = (HotelTableDTO) adapter.getItem(position);

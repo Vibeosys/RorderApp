@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * Created by shrinivas on 09-03-2016.
  */
 public class FragmentChefTabDiningOrders extends BaseFragment
-        implements ChefRecylerTabDiningAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived{
+        implements ChefRecylerTabDiningAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived {
     private ChefTabListAdapter chefTabListAdapter;
     public static Handler UIHandler;
     private ListView listView;
@@ -49,7 +49,8 @@ public class FragmentChefTabDiningOrders extends BaseFragment
         /*View view = inflater.inflate(R.layout.chef_tab_dining, container, false);
 
         return view;
-*/ View view = inflater.inflate(R.layout.chef_tab_layout, container, false);
+*/
+        View view = inflater.inflate(R.layout.chef_tab_layout, container, false);
         ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecordChefDining();
         mDbRepository.addMenuList(orders);
         chefRecycleDining = (RecyclerView) view.findViewById(R.id.ChefRecycler);
@@ -64,6 +65,7 @@ public class FragmentChefTabDiningOrders extends BaseFragment
 
         return view;
     }
+
     @Override
     public void tabComplete(String chefTabOrderId) {
         if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
@@ -78,8 +80,6 @@ public class FragmentChefTabDiningOrders extends BaseFragment
             sendTabDataToServer(chefTabOrderId);
 
 
-
-
         }
     }
 
@@ -91,7 +91,6 @@ public class FragmentChefTabDiningOrders extends BaseFragment
             String serializedJsonString = gson.toJson(chefOrderCompleted);
             TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
             mServerSyncManager.uploadDataToServer(tableDataDTO);
-
 
 
         } else {
@@ -110,17 +109,14 @@ public class FragmentChefTabDiningOrders extends BaseFragment
 
             errorString = data.getInt("errorCode");
             message = data.getString("message");
-            if(errorString == 0)
-            {
+            if (errorString == 0) {
                 mServerSyncManager.syncDataWithServer(true);
                 adapterRecycleDining.refresh(1);
                 adapterRecycleDining.notifyDataSetChanged();
                 chefRecycleDining.invalidate();
                 dialog.dismiss();
 
-            }
-            else
-            {
+            } else {
 
             }
 
@@ -146,5 +142,10 @@ public class FragmentChefTabDiningOrders extends BaseFragment
         super.onResume();
 
 
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "Chef dine in for Tab";
     }
 }

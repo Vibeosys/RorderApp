@@ -33,9 +33,8 @@ import java.util.ArrayList;
 /**
  * Created by shrinivas on 09-03-2016.
  */
-public class FragmentChefTabTakeAwayOrders  extends BaseFragment
-        implements ChefRecyclerTabTakeAwayAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived
-{
+public class FragmentChefTabTakeAwayOrders extends BaseFragment
+        implements ChefRecyclerTabTakeAwayAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived {
     private ChefTabListAdapter chefTabListAdapter;
     public static Handler UIHandler;
     private ListView listView;
@@ -43,6 +42,7 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
     private RecyclerView chefRecycleTakeAway;
     public static ChefRecyclerTabTakeAwayAdapter adapterRecycleTakeAway;
     ProgressDialog dialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
     public void tabComplete(String chefTabOrderId) {
         if (!NetworkUtils.isActiveNetworkAvailable(getContext())) {
             String stringTitle = getResources().getString(R.string.error_msg_title_for_network);
-            String stringMessage =  getResources().getString(R.string.error_msg_for_select_restaurant);
+            String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
             customAlterDialog(stringTitle, stringMessage);
 
         } else {
@@ -78,8 +78,6 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
             dialog = ProgressDialog.show(getActivity(), "", dialogMessage, true);
             dialog.show();
             sendTabDataToServer(chefTabOrderId);
-
-
 
 
         }
@@ -111,16 +109,13 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
 
             errorString = data.getInt("errorCode");
             message = data.getString("message");
-            if(errorString == 0)
-            {
+            if (errorString == 0) {
                 mServerSyncManager.syncDataWithServer(true);
                 adapterRecycleTakeAway.refresh(1);
                 adapterRecycleTakeAway.notifyDataSetChanged();
                 chefRecycleTakeAway.invalidate();
                 dialog.dismiss();
-            }
-            else
-            {
+            } else {
 
             }
 
@@ -147,5 +142,10 @@ public class FragmentChefTabTakeAwayOrders  extends BaseFragment
         super.onResume();
 
 
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "chef Tab take away orders";
     }
 }

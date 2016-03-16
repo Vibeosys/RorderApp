@@ -24,4 +24,9 @@ public class FragmentMyServing extends GridBaseFragment {
         setGridAdapter(v,categoryDTO.filterByCategory(hotels,2));*/
         return v;
     }
+
+    @Override
+    protected String getScreenName() {
+        return "My serving";
+    }
 }

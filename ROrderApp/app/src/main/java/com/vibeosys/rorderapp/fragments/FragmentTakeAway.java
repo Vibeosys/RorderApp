@@ -39,20 +39,16 @@ import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
-import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
 import com.vibeosys.rorderapp.data.UploadTakeAway;
-import com.vibeosys.rorderapp.service.SyncService;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.PhoneNumberValidator;
-import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -84,8 +80,8 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
             public void onClick(View view) {
                 //callWaitingIntent();
                 //Show waiting dialog
-                sendEventToGoogle("Action", "Float Waiting list");
-                showWaitingDialog(savedInstanceState);
+                sendEventToGoogle("Action", "Add take away");
+                showTakeawayDialog(savedInstanceState);
             }
         });
         mServerSyncManager.setOnStringResultReceived(this);
@@ -105,7 +101,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         return view;
     }
 
-    private void showWaitingDialog(Bundle savedInstanceState) {
+    private void showTakeawayDialog(Bundle savedInstanceState) {
         final Dialog dlg = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         View view = getLayoutInflater(savedInstanceState).inflate(R.layout.dialog_add_take_away, null);
         dlg.setContentView(view);
@@ -148,6 +144,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         txtPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendEventToGoogle("Action", "Place order from take away");
                 boolean wrongCredential = false;
                 View focus = null;
 
@@ -210,6 +207,8 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
                     mServerSyncManager.uploadDataToServer(tableDataDTOs);
                     dlg.dismiss();
                 }
+
+
             }
         });
         spnSource.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -324,5 +323,10 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "Take away";
     }
 }

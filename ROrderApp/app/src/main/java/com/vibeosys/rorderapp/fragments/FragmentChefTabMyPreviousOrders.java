@@ -30,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by shrinivas on 09-03-2016.
  */
-public class FragmentChefTabMyPreviousOrders extends BaseFragment  {
+public class FragmentChefTabMyPreviousOrders extends BaseFragment {
 
     private ChefTabListAdapter chefTabListAdapter;
     public static Handler UIHandler;
@@ -53,7 +53,7 @@ public class FragmentChefTabMyPreviousOrders extends BaseFragment  {
 
         adapterRecycle_previous = new ChefRecyclerPreviousAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
-      //  layoutManager.scrollToPositionWithOffset(4,20);
+        //  layoutManager.scrollToPositionWithOffset(4,20);
 
         chefRecycle_Previous.setNestedScrollingEnabled(false);
         chefRecycle_Previous.setLayoutManager(layoutManager);
@@ -79,5 +79,8 @@ public class FragmentChefTabMyPreviousOrders extends BaseFragment  {
     }
 
 
-
+    @Override
+    protected String getScreenName() {
+        return "Chef Order History for tab";
+    }
 }

@@ -90,6 +90,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
                     chkMyservingFlag = false;
 
                 }
+                sendEventToGoogle("Action", "Filter by my serving");
 
             }
         });
@@ -104,6 +105,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
                     chkUnoccupied = false;
 
                 }
+                sendEventToGoogle("Action", "Filter Occupancy");
             }
         });
 
@@ -129,6 +131,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            sendEventToGoogle("Action", "Table filter apply");
             Intent intent = new Intent();
             intent.putExtra("json", jsonObject.toString());//json data added here
             setResult(2, intent);

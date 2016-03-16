@@ -26,7 +26,7 @@ import com.vibeosys.rorderapp.util.SessionManager;
 /**
  * Created by mahesh on 10/29/2015.
  */
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     /**
      * Base Activity will give the basic implementation with async task support and other things
@@ -115,6 +115,27 @@ public class BaseFragment extends Fragment {
             return false;
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mTracker != null) {
+            hitActivity();
+        } else {
+            Log.d(TAG, "Analytics is not stated");
+        }
+    }
+
+    protected void hitActivity() {
+        String screenName = getScreenName();
+        Log.i(TAG, "Setting screen name: " + screenName);
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+
+    }
+
+    protected abstract String getScreenName();
 }
 
 

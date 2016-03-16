@@ -92,7 +92,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
 
         if (widthDp <= 450 && widthDp < 590) {
-           // Toast.makeText(getContext(), "finally you are at normall screen", Toast.LENGTH_LONG).show();
+            // Toast.makeText(getContext(), "finally you are at normall screen", Toast.LENGTH_LONG).show();
         }
 
         float widthDpi = matrics.xdpi;
@@ -138,7 +138,7 @@ public class FragmentChefMyServing extends BaseFragment implements
 
         } else {
             String dialogMessage = getResources().getString(R.string.dialog_fragment_msg);
-            dialog = ProgressDialog.show(getContext(),"",dialogMessage,true);
+            dialog = ProgressDialog.show(getContext(), "", dialogMessage, true);
             dialog.show();
             sendToServer(ChefOrderId);
             mServerSyncManager.syncDataWithServer(true);
@@ -211,6 +211,11 @@ public class FragmentChefMyServing extends BaseFragment implements
     public void onResume() {
 
         super.onResume();
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "Chef Mobile Dashboard";
     }
 
     @Override

@@ -30,6 +30,11 @@ public class GridBaseFragment extends BaseFragment implements AdapterView.OnItem
 
     }
 
+    @Override
+    protected String getScreenName() {
+        return "Grid base";
+    }
+
     protected void setGridAdapter(View v, ArrayList<RestaurantTables> hotels) {
         gridView = (GridView) v.findViewById(R.id.gridview);
         gridView.setOnItemClickListener(this);
