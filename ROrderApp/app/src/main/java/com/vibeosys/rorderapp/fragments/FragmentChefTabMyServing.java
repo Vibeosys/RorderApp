@@ -27,6 +27,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
@@ -51,7 +52,8 @@ import java.util.ArrayList;
  * Created by shrinivas on 02-03-2016.
  */
 public class FragmentChefTabMyServing extends BaseFragment
-        implements ChefRecyclerViewAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived {
+        implements ChefRecyclerViewAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived
+        ,ServerSyncManager.OnStringErrorReceived {
 
 
     private ChefTabListAdapter chefTabListAdapter;
@@ -136,7 +138,7 @@ public class FragmentChefTabMyServing extends BaseFragment
                 dialog.dismiss();
 
             } else {
-
+                dialog.dismiss();
             }
         } catch (Exception e) {
 
@@ -167,5 +169,13 @@ public class FragmentChefTabMyServing extends BaseFragment
     @Override
     protected String getScreenName() {
         return "Chef dashboard my serving for tab";
+    }
+
+    @Override
+    public void onStingErrorReceived(@NonNull VolleyError error) {
+        dialog.dismiss();
+        String StringTitle ="Server Error";
+        String StringMessage="Server Error,Try again";
+        customAlterDialog(StringTitle,StringMessage);
     }
 }

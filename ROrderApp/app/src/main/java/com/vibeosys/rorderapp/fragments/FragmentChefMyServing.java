@@ -22,6 +22,7 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefOrderAdapter;
@@ -49,7 +50,8 @@ import java.util.List;
  * Created by shrinivas on 15-02-2016.
  */
 public class FragmentChefMyServing extends BaseFragment implements
-        ChefOrderAdapter.OnDoneClickListener, ServerSyncManager.OnStringResultReceived {
+        ChefOrderAdapter.OnDoneClickListener, ServerSyncManager.OnStringResultReceived,
+        ServerSyncManager.OnStringErrorReceived {
 
     private ExpandableListView chefOrderList;
     private ListView listView;
@@ -223,5 +225,12 @@ public class FragmentChefMyServing extends BaseFragment implements
 
 
         super.onStart();
+    }
+    @Override
+    public void onStingErrorReceived(@NonNull VolleyError error) {
+        dialog.dismiss();
+        String StringTitle ="Server Error";
+        String StringMessage="Server Error,Try again";
+        customAlterDialog(StringTitle, StringMessage);
     }
 }

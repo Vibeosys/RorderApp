@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.ChefRecyclerViewAdapter;
@@ -34,7 +35,8 @@ import java.util.ArrayList;
  * Created by shrinivas on 09-03-2016.
  */
 public class FragmentChefTabDiningOrders extends BaseFragment
-        implements ChefRecylerTabDiningAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived {
+        implements ChefRecylerTabDiningAdapter.tabCompleteButton, ServerSyncManager.OnStringResultReceived
+        ,ServerSyncManager.OnStringErrorReceived {
     private ChefTabListAdapter chefTabListAdapter;
     public static Handler UIHandler;
     private ListView listView;
@@ -117,7 +119,7 @@ public class FragmentChefTabDiningOrders extends BaseFragment
                 dialog.dismiss();
 
             } else {
-
+                dialog.dismiss();
             }
 
 
@@ -147,5 +149,13 @@ public class FragmentChefTabDiningOrders extends BaseFragment
     @Override
     protected String getScreenName() {
         return "Chef dine in for Tab";
+    }
+
+    @Override
+    public void onStingErrorReceived(@NonNull VolleyError error) {
+        dialog.dismiss();
+        String StringTitle ="Server Error";
+        String StringMessage="Server Error,Try again";
+        customAlterDialog(StringTitle,StringMessage);
     }
 }

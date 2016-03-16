@@ -177,7 +177,7 @@ public class DbOperations {
                 }
             });
         }
-        if (FragmentChefTabMyPreviousOrders.adapterRecycle_previous == null) {
+        if (FragmentChefTabMyPreviousOrders.adapterRecycle_previous != null) {
             FragmentChefTabMyPreviousOrders.runOnUI(new Runnable() {
                 @Override
                 public void run() {
