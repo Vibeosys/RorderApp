@@ -51,10 +51,10 @@ ServerSyncManager.OnStringErrorReceived{
         /*View view = inflater.inflate(R.layout.chef_tab_take_away, container, false);
 
         return view;*/
-        View view = inflater.inflate(R.layout.chef_tab_layout, container, false);
+        View view = inflater.inflate(R.layout.chef_tab_take_away, container, false);
         ArrayList<ChefOrderDetailsDTO> orders = mDbRepository.getRecChefTakeAwayOrders();
         mDbRepository.addMenuList(orders);
-        chefRecycleTakeAway = (RecyclerView) view.findViewById(R.id.ChefRecycler);
+        chefRecycleTakeAway = (RecyclerView) view.findViewById(R.id.ChefRecycler_take_away);
         adapterRecycleTakeAway = new ChefRecyclerTabTakeAwayAdapter(orders, getActivity().getApplicationContext(), mDbRepository);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         chefRecycleTakeAway.setLayoutManager(layoutManager);

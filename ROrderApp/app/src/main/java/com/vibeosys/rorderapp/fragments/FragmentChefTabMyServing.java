@@ -86,6 +86,7 @@ public class FragmentChefTabMyServing extends BaseFragment
         mServerSyncManager.setOnStringResultReceived(this);
         adapterRecycle.notifyDataSetChanged();
         chefRecycle.invalidate();
+
         return view;
     }
 
@@ -103,7 +104,7 @@ public class FragmentChefTabMyServing extends BaseFragment
             dialog = ProgressDialog.show(getActivity(), "", dialogMessage, true);
             dialog.show();
             sendTabDataToServer(chefTabOrderId);
-            mServerSyncManager.syncDataWithServer(true);
+         //   mServerSyncManager.syncDataWithServer(true);
             chefRecycle.invalidate();
 
         }
@@ -119,8 +120,8 @@ public class FragmentChefTabMyServing extends BaseFragment
         TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CHEF_ORDER_PLACE, serializedJsonString);
         mServerSyncManager.uploadDataToServer(tableDataDTO);
         mServerSyncManager.syncDataWithServer(true);
-        adapterRecycle.refresh(1);
-        adapterRecycle.notifyDataSetChanged();
+       // adapterRecycle.refresh(1);
+       // adapterRecycle.notifyDataSetChanged();
         chefRecycle.invalidate();
 
     }

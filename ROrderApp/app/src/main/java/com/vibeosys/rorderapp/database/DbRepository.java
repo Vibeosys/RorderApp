@@ -1082,7 +1082,7 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrders.TABLE_NAME + " where OrderType = 2", null);
+                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrders.TABLE_NAME + " where OrderType = 2 and OrderStatus =1", null);
                 count = cursor.getCount();
             }
         } catch (Exception e) {
