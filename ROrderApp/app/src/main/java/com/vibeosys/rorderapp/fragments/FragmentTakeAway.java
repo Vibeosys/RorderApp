@@ -98,7 +98,23 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         gridAdapter = new TakeAwayGridAdapter(getActivity().getApplicationContext(), takeAwayDTOs);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(this);
+        int completeTakeAway= mDbRepository.getCompletedTakeAwayCount();
+        int getTakeAwayCount = mDbRepository.getTakeAwayCount();
+        txtTotalCount.setText(" "+completeTakeAway+" out of "+getTakeAwayCount+" Take Aways are completed");
+
+
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int completeTakeAway= mDbRepository.getCompletedTakeAwayCount();
+        int getTakeAwayCount = mDbRepository.getTakeAwayCount();
+        txtTotalCount.setText(" "+completeTakeAway+" out of "+getTakeAwayCount+" Take Aways are completed");
+
+
     }
 
     private void showTakeawayDialog(Bundle savedInstanceState) {

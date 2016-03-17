@@ -1075,7 +1075,49 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count;
     }
+    public int getTakeAwayCount() {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrders.TABLE_NAME + " where OrderType = 2", null);
+                count = cursor.getCount();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "## error at getTakeAwayCount table" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count;
+    }
 
+    public int getCompletedTakeAwayCount() {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrders.TABLE_NAME + " where OrderType = 2 and OrderStatus = 2", null);
+                count = cursor.getCount();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "## error at getTakeAwayCount table" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count;
+    }
     public int checkOrders() {
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
