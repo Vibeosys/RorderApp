@@ -99,7 +99,8 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(this);
         int completeTakeAway= mDbRepository.getCompletedTakeAwayCount();
-        int getTakeAwayCount = mDbRepository.getTakeAwayCount();
+      //  int getTakeAwayCount = mDbRepository.getTakeAwayCount();
+        int getTakeAwayCount = gridAdapter.getCount();
         txtTotalCount.setText(" "+completeTakeAway+" out of "+getTakeAwayCount+" Take Aways are completed");
 
 
@@ -111,7 +112,8 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
     public void onResume() {
         super.onResume();
         int completeTakeAway= mDbRepository.getCompletedTakeAwayCount();
-        int getTakeAwayCount = mDbRepository.getTakeAwayCount();
+      //  int getTakeAwayCount = mDbRepository.getTakeAwayCount();
+        int getTakeAwayCount = gridAdapter.getCount();
         txtTotalCount.setText(" "+completeTakeAway+" out of "+getTakeAwayCount+" Take Aways are completed");
 
 

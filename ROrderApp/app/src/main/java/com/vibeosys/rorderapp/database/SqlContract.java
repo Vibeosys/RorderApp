@@ -69,6 +69,7 @@ public class SqlContract {
         public final static String FOOD_TYPE = "FoodType";
         public final static String CATEGORY_ID = "CategoryId";
         public final static String IS_SPICY = "IsSpicy";
+        public final static String ROOM_ID="RoomId";
     }
 
     public abstract class SqlMenuCategory {
@@ -204,5 +205,46 @@ public class SqlContract {
         public final static String ORDER_TYPE_TITLE = "OrderTypeTitle";
         public final static String ACTIVE = "Active";
 
+    }
+    public abstract class  SqlPermissionSet
+    {
+        public final static String TABLE_NAME ="permission_set";
+        public final static String PERMISSION_ID="PermissionId";
+        public final static String PERMISSION_KEY="PermissionKey";
+        public final static String DESCRIPTION ="Description";
+        public final static String ACTIVE = "Active";
+    }
+    public abstract  class SqlRConfigSettings
+    {
+        public final static String TABLE_NAME ="r_config_settings";
+        public final static String CONFIG_KEY="ConfigKey";
+        public final static String CONFIG_VALUE="ConfigValue";
+    }
+    public abstract  class SqlRPrinters
+    {
+        public final static String TABLE_NAME="r_printers";
+        public final static String PRINTER_ID="PrinterId";
+        public final static String IP_ADDRESS="IpAddress";
+        public final static String PRINTER_NAME="PrinterName";
+        public final static String MODEL_NAME="ModelName";
+        public final static String COMPANY="Company";
+        public final static String MAC_ADDRESS="MacAddress";
+        public final static String ACTIVE = "Active";
+    }
+    public abstract  class SqlRRoomPrinter
+    {
+        public final static String TABLE_NAME="r_room_printer";
+        public final static String ROOM_ID="RoomId";
+        public final static String ROOM_TYPE_ID="RoomTypeId";
+        public final static String PRINTER_ID="PrinterId";
+        public final static String DESCRIPTION ="Description";
+        public final static String ACTIVE = "Active";
+    }
+    public abstract class SqlRRooms
+    {
+        public final static String TABLE_NAME="r_rooms";
+        public  final static String ROOM_ID="RoomId";
+        public final static String DESCRIPTION ="Description";
+        public final static String ACTIVE = "Active";
     }
 }
