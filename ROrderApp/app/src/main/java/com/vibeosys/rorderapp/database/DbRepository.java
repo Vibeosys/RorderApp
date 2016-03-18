@@ -28,10 +28,12 @@ import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.OrderTypeDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.PaymentModeDbDTO;
+import com.vibeosys.rorderapp.data.PermissionSetDbDTO;
 import com.vibeosys.rorderapp.data.PrintersDbDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
 import com.vibeosys.rorderapp.data.RoomTypesDbDTO;
+import com.vibeosys.rorderapp.data.RoomsDbDTO;
 import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
@@ -1079,6 +1081,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count;
     }
+
     public int getTakeAwayCount() {
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
@@ -1122,6 +1125,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count;
     }
+
     public int checkOrders() {
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
@@ -3329,8 +3333,10 @@ public class DbRepository extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Sqlite functions for printing
+     */
 
-    /*function for printing functions*/
     public boolean insertConfigSettings(List<ConfigSettingsDbDTO> configSettings) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
@@ -3351,7 +3357,36 @@ public class DbRepository extends SQLiteOpenHelper {
 
             }
         } catch (Exception e) {
-            Log.e("DbOperationsEx", "Error while  Config settings " + e.toString());
+            Log.e("DbOperationsEx", "Error while adding Config settings " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateConfigSettings(List<ConfigSettingsDbDTO> configSettings) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (ConfigSettingsDbDTO configSetting : configSettings) {
+                    String[] where = new String[]{configSetting.getConfigKey()};
+                    contentValues.put(SqlContract.SqlRConfigSettings.CONFIG_VALUE, configSetting.getConfigValue());
+
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.update(SqlContract.SqlRConfigSettings.TABLE_NAME,
+                            contentValues, SqlContract.SqlRConfigSettings.CONFIG_KEY + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Config settings  is Updated Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while updating  Config settings " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
@@ -3371,7 +3406,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 for (RoomTypesDbDTO roomT : roomType) {
                     contentValues.put(SqlContract.SqlRoomType.ROOM_TYPE_ID, roomT.getRoomTypeId());
                     contentValues.put(SqlContract.SqlRoomType.ROOM_TYPE, roomT.getRoomType());
-                    contentValues.put(SqlContract.SqlRoomType.ACTIVE,roomT.getActive());
+                    contentValues.put(SqlContract.SqlRoomType.ACTIVE, roomT.getActive());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlRoomType.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -3381,6 +3416,36 @@ public class DbRepository extends SQLiteOpenHelper {
             }
         } catch (Exception e) {
             Log.e("DbOperationsEx", "Error while  Room Type adding " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateRoomType(List<RoomTypesDbDTO> roomType) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (RoomTypesDbDTO roomT : roomType) {
+                    String[] where = new String[]{String.valueOf(roomT.getRoomTypeId())};
+                    if (roomT.getRoomType() != null)
+                        contentValues.put(SqlContract.SqlRoomType.ROOM_TYPE, roomT.getRoomType());
+                    contentValues.put(SqlContract.SqlRoomType.ACTIVE, roomT.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.update(SqlContract.SqlRoomType.TABLE_NAME, contentValues,
+                            SqlContract.SqlRoomType.ROOM_TYPE_ID + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Room Type is updated Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while  Room Type updating " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
@@ -3399,11 +3464,11 @@ public class DbRepository extends SQLiteOpenHelper {
                 for (PrintersDbDTO Printer : printers) {
                     contentValues.put(SqlContract.SqlRPrinters.PRINTER_ID, Printer.getPrinterId());
                     contentValues.put(SqlContract.SqlRPrinters.IP_ADDRESS, Printer.getIpAddress());
-                    contentValues.put(SqlContract.SqlRPrinters.PRINTER_NAME,Printer.getPrinterName());
-                    contentValues.put(SqlContract.SqlRPrinters.MODEL_NAME,Printer.getPrinterName());
-                    contentValues.put(SqlContract.SqlRPrinters.COMPANY,Printer.getCompany());
-                    contentValues.put(SqlContract.SqlRPrinters.MAC_ADDRESS,Printer.getMacAddress());
-                    contentValues.put(SqlContract.SqlRPrinters.ACTIVE,Printer.getActive());
+                    contentValues.put(SqlContract.SqlRPrinters.PRINTER_NAME, Printer.getPrinterName());
+                    contentValues.put(SqlContract.SqlRPrinters.MODEL_NAME, Printer.getPrinterName());
+                    contentValues.put(SqlContract.SqlRPrinters.COMPANY, Printer.getCompany());
+                    contentValues.put(SqlContract.SqlRPrinters.MAC_ADDRESS, Printer.getMacAddress());
+                    contentValues.put(SqlContract.SqlRPrinters.ACTIVE, Printer.getActive());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlRPrinters.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -3419,4 +3484,226 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count != -1;
     }
+
+    public boolean updatePrinters(List<PrintersDbDTO> printers) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (PrintersDbDTO printer : printers) {
+                    String[] where = new String[]{String.valueOf(printer.getPrinterId())};
+                    contentValues.put(SqlContract.SqlRPrinters.PRINTER_ID, printer.getPrinterId());
+                    if (printer.getIpAddress() != null)
+                        contentValues.put(SqlContract.SqlRPrinters.IP_ADDRESS, printer.getIpAddress());
+                    if (printer.getPrinterName() != null)
+                        contentValues.put(SqlContract.SqlRPrinters.PRINTER_NAME, printer.getPrinterName());
+                    if (printer.getModelName() != null)
+                        contentValues.put(SqlContract.SqlRPrinters.MODEL_NAME, printer.getModelName());
+                    if (printer.getCompany() != null)
+                        contentValues.put(SqlContract.SqlRPrinters.COMPANY, printer.getCompany());
+                    if (printer.getCompany() != null)
+                        contentValues.put(SqlContract.SqlRPrinters.MAC_ADDRESS, printer.getMacAddress());
+                    contentValues.put(SqlContract.SqlRPrinters.ACTIVE, printer.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.update(SqlContract.SqlRPrinters.TABLE_NAME, contentValues,
+                            SqlContract.SqlRPrinters.PRINTER_ID + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Printer is updated Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while  Printer updating " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean insertRooms(List<RoomsDbDTO> rooms) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (RoomsDbDTO room : rooms) {
+                    contentValues.put(SqlContract.SqlRRooms.ROOM_ID, room.getRoomId());
+                    contentValues.put(SqlContract.SqlRRooms.DESCRIPTION, room.getDescription());
+                    contentValues.put(SqlContract.SqlRRooms.ACTIVE, room.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.insert(SqlContract.SqlRRooms.TABLE_NAME, null, contentValues);
+                    contentValues.clear();
+                    Log.d(TAG, "## Room is Added Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while adding rooms " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateRooms(List<RoomsDbDTO> rooms) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (RoomsDbDTO room : rooms) {
+                    String[] where = new String[]{String.valueOf(room.getRoomId())};
+                    if (room.getDescription() != null)
+                        contentValues.put(SqlContract.SqlRRooms.DESCRIPTION, room.getDescription());
+                    contentValues.put(SqlContract.SqlRRooms.ACTIVE, room.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.update(SqlContract.SqlRRooms.TABLE_NAME, contentValues, SqlContract.SqlRRooms.ROOM_ID + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Room is updated Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while updating rooms " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean insertRoomPrinter(List<RoomPrintersDbDTO> roomPrinters) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (RoomPrintersDbDTO roomPrinter : roomPrinters) {
+                    contentValues.put(SqlContract.SqlRRoomPrinter.ROOM_ID, roomPrinter.getRoomId());
+                    contentValues.put(SqlContract.SqlRRoomPrinter.ROOM_TYPE_ID, roomPrinter.getRoomTypeId());
+                    contentValues.put(SqlContract.SqlRRoomPrinter.PRINTER_ID, roomPrinter.getPrinterId());
+                    contentValues.put(SqlContract.SqlRRoomPrinter.DESCRIPTION, roomPrinter.getDescription());
+                    contentValues.put(SqlContract.SqlRRoomPrinter.ACTIVE, roomPrinter.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.insert(SqlContract.SqlRRoomPrinter.TABLE_NAME, null, contentValues);
+                    contentValues.clear();
+                    Log.d(TAG, "## Room printer is Added Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while adding room printer " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateRoomPrinter(List<RoomPrintersDbDTO> roomPrinters) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (RoomPrintersDbDTO roomPrinter : roomPrinters) {
+                    String[] where = new String[]{String.valueOf(roomPrinter.getRoomId())};
+                    if (roomPrinter.getRoomTypeId() != 0)
+                        contentValues.put(SqlContract.SqlRRoomPrinter.ROOM_TYPE_ID, roomPrinter.getRoomTypeId());
+                    if (roomPrinter.getPrinterId() != 0)
+                        contentValues.put(SqlContract.SqlRRoomPrinter.PRINTER_ID, roomPrinter.getPrinterId());
+                    if (roomPrinter.getDescription() != null)
+                        contentValues.put(SqlContract.SqlRRoomPrinter.DESCRIPTION, roomPrinter.getDescription());
+                    contentValues.put(SqlContract.SqlRRoomPrinter.ACTIVE, roomPrinter.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.update(SqlContract.SqlRRoomPrinter.TABLE_NAME, contentValues, SqlContract.SqlRRoomPrinter.ROOM_ID + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Room printer is Updated Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while updating room printer " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean insertPermission(List<PermissionSetDbDTO> permissions) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (PermissionSetDbDTO permission : permissions) {
+                    contentValues.put(SqlContract.SqlPermissionSet.PERMISSION_ID, permission.getPermissionId());
+                    contentValues.put(SqlContract.SqlPermissionSet.PERMISSION_KEY, permission.getPermissionKey());
+                    contentValues.put(SqlContract.SqlPermissionSet.DESCRIPTION, permission.getDescription());
+                    contentValues.put(SqlContract.SqlPermissionSet.ACTIVE, permission.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.insert(SqlContract.SqlRRoomPrinter.TABLE_NAME, null, contentValues);
+                    contentValues.clear();
+                    Log.d(TAG, "## Permission is Added Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while adding permission " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updatePermission(List<PermissionSetDbDTO> permissions) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (PermissionSetDbDTO permission : permissions) {
+                    String[] where = new String[]{String.valueOf(permission.getPermissionId())};
+                    if (permission.getPermissionKey() != null)
+                        contentValues.put(SqlContract.SqlPermissionSet.PERMISSION_KEY, permission.getPermissionKey());
+                    if (permission.getDescription() != null)
+                        contentValues.put(SqlContract.SqlPermissionSet.DESCRIPTION, permission.getDescription());
+                    contentValues.put(SqlContract.SqlPermissionSet.ACTIVE, permission.getActive());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.update(SqlContract.SqlRRoomPrinter.TABLE_NAME, contentValues,
+                            SqlContract.SqlPermissionSet.PERMISSION_ID + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Permission is updated Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while updating permission " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    /* End of Printer Function*/
 }
