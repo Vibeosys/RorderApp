@@ -247,4 +247,11 @@ public class SqlContract {
         public final static String DESCRIPTION ="Description";
         public final static String ACTIVE = "Active";
     }
+    public  abstract class SqlRoomType
+    {
+        public  final static  String TABLE_NAME="room_type";
+        public final static String ROOM_TYPE_ID="RoomTypeId";
+        public final static String ROOM_TYPE ="RoomType";
+        public final static String ACTIVE = "Active";
+    }
 }
