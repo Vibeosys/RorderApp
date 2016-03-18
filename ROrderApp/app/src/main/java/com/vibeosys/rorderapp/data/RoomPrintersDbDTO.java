@@ -58,7 +58,7 @@ public class RoomPrintersDbDTO extends BaseDTO {
         this.active = active;
     }
 
-    public static List<RoomPrintersDbDTO> deserializeBill(List<String> serializedStringList) {
+    public static List<RoomPrintersDbDTO> deserializeRoomPrinters(List<String> serializedStringList) {
         Gson gson = new Gson();
         ArrayList<RoomPrintersDbDTO> objectList = new ArrayList<>();
         try {

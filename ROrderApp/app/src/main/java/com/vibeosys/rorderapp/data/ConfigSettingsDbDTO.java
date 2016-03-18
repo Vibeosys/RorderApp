@@ -31,7 +31,7 @@ public class ConfigSettingsDbDTO extends BaseDTO {
         this.configValue = configValue;
     }
 
-    public static List<ConfigSettingsDbDTO> deserializeBill(List<String> serializedStringList) {
+    public static List<ConfigSettingsDbDTO> deserializeConfigSettings(List<String> serializedStringList) {
         Gson gson = new Gson();
         ArrayList<ConfigSettingsDbDTO> objectList = new ArrayList<>();
         try {

@@ -76,7 +76,7 @@ public class PrintersDbDTO extends BaseDTO {
         this.active = active;
     }
 
-    public static List<PrintersDbDTO> deserializeBill(List<String> serializedStringList) {
+    public static List<PrintersDbDTO> deserializePrinters(List<String> serializedStringList) {
         Gson gson = new Gson();
         ArrayList<PrintersDbDTO> objectList = new ArrayList<>();
         try {

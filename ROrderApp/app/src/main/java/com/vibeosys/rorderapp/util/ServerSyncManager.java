@@ -333,6 +333,48 @@ public class ServerSyncManager
             downloadResults.put(DbTableNameConstants.ORDER_TYPE, jsonInsertList.size());
             dbOperations.addOrUpdateOrderType(jsonInsertList, tableValue.getUpdateJsonList());
         }
+        if(theTableData.containsKey(DbTableNameConstants.PERMISSION_SET)){
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.PERMISSION_SET);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.PERMISSION_SET,jsonInsertList.size());
+            dbOperations.addOrUpdatePermissionSet(jsonInsertList, tableValue.getUpdateJsonList());
+
+        }
+        if(theTableData.containsKey(DbTableNameConstants.R_CONFIG_SETTINGS)){
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_CONFIG_SETTINGS);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.R_CONFIG_SETTINGS,jsonInsertList.size());
+            dbOperations.addOrUpdateRconfigSettings(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if(theTableData.containsKey(DbTableNameConstants.R_PRINTERS))
+        {
+            TableJsonCollectionDTO tableValue =theTableData.get(DbTableNameConstants.R_PRINTERS);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.R_PRINTERS,jsonInsertList.size());
+            dbOperations.addOrUpdateRprinters(jsonInsertList, tableValue.getUpdateJsonList());
+
+        }
+        if(theTableData.containsKey(DbTableNameConstants.R_ROOM_PRINTER))
+        {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_ROOM_PRINTER);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.R_ROOM_PRINTER,jsonInsertList.size());
+            dbOperations.addOrUpdateRoomPrinters(jsonInsertList, tableValue.getUpdateJsonList());
+        }
+        if(theTableData.containsKey(DbTableNameConstants.R_ROOMS))
+        {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_ROOMS);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.R_ROOMS,jsonInsertList.size());
+            dbOperations.addOrUpdateRooms(jsonInsertList ,tableValue.getUpdateJsonList());
+        }
+        if(theTableData.containsKey(DbTableNameConstants.ROOM_TYPE))
+        {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_ROOMS);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.R_ROOMS,jsonInsertList.size());
+            dbOperations.addOrUpdateRoomType(jsonInsertList ,tableValue.getUpdateJsonList());
+        }
 
         if (mOnDownloadReceived != null)
             mOnDownloadReceived.onDownloadResultReceived(downloadResults);

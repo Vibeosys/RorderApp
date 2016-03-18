@@ -5,6 +5,7 @@ import android.util.Log;
 import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
+import com.vibeosys.rorderapp.data.ConfigSettingsDbDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
 import com.vibeosys.rorderapp.data.HotelTableDbDTO;
 import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
@@ -13,6 +14,11 @@ import com.vibeosys.rorderapp.data.MenuTagsDbDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDbDTO;
 import com.vibeosys.rorderapp.data.OrderTypeDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
+import com.vibeosys.rorderapp.data.PermissionSetDbDTO;
+import com.vibeosys.rorderapp.data.PrintersDbDTO;
+import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
+import com.vibeosys.rorderapp.data.RoomTypesDbDTO;
+import com.vibeosys.rorderapp.data.RoomsDbDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
@@ -315,5 +321,54 @@ public class DbOperations {
         });
 
         return isInserted & isUpdated & isDeleted;
+    }
+    public boolean addOrUpdatePermissionSet(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList)
+    {
+        List<PermissionSetDbDTO> permissionSetInsert = PermissionSetDbDTO.deserializePermission(jsonInsertList);
+        List<PermissionSetDbDTO> permissionSetUpdate = PermissionSetDbDTO.deserializePermission(updateJsonList);
+        boolean isInserted = dbRepository.insertPermission(permissionSetInsert);
+        boolean isUpdated = dbRepository.updatePermission(permissionSetUpdate);
+        return isInserted & isUpdated ;
+    }
+    public boolean addOrUpdateRconfigSettings(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList)
+    {
+        List<ConfigSettingsDbDTO> configSettingsInsert = ConfigSettingsDbDTO.deserializeConfigSettings(jsonInsertList);
+        List<ConfigSettingsDbDTO> configSettingsUpdate = ConfigSettingsDbDTO.deserializeConfigSettings(updateJsonList);
+        boolean isInserted = dbRepository.insertConfigSettings(configSettingsInsert);
+        boolean isUpdated = dbRepository.updateConfigSettings(configSettingsUpdate);
+        return isInserted & isUpdated ;
+    }
+    public boolean addOrUpdateRprinters(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList)
+    {
+        List<PrintersDbDTO> rPrinterInsert = PrintersDbDTO.deserializePrinters(jsonInsertList);
+        List<PrintersDbDTO> rPrinterUpdate = PrintersDbDTO.deserializePrinters(updateJsonList);
+        boolean isInserted = dbRepository.insertPrinters(rPrinterInsert);
+        boolean isUpdated = dbRepository.updatePrinters(rPrinterUpdate);
+        return isInserted & isUpdated ;
+    }
+    public boolean addOrUpdateRoomPrinters(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList)
+    {
+        List<RoomPrintersDbDTO> roomPrintersInsert  = RoomPrintersDbDTO.deserializeRoomPrinters(jsonInsertList);
+        List<RoomPrintersDbDTO> roomPrintersUpdate = RoomPrintersDbDTO.deserializeRoomPrinters(updateJsonList);
+        boolean isInserted = dbRepository.insertRoomPrinter(roomPrintersInsert);
+        boolean isUpdated = dbRepository.updateRoomPrinter(roomPrintersUpdate);
+        return isInserted & isUpdated ;
+    }
+    public  boolean addOrUpdateRooms(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList)
+    {
+        List<RoomsDbDTO> roomsInsert = RoomsDbDTO.deserializeRooms(jsonInsertList);
+        List<RoomsDbDTO> roomsUpdate = RoomsDbDTO.deserializeRooms(updateJsonList);
+        boolean isInserted = dbRepository.insertRooms(roomsInsert);
+        boolean isUpdated = dbRepository.updateRooms(roomsUpdate);
+        return  isInserted & isUpdated;
+    }
+    public  boolean addOrUpdateRoomType(ArrayList<String> jsonInsertList, ArrayList<String> updateJsonList)
+    {
+        List<RoomTypesDbDTO> RoomTypesInsert = RoomTypesDbDTO.deserializeRoomType(jsonInsertList);
+        List<RoomTypesDbDTO> RoomTypeUpdate = RoomTypesDbDTO.deserializeRoomType(updateJsonList);
+        boolean isInserted =dbRepository.insertRoomType(RoomTypesInsert);
+        boolean isUpdated = dbRepository.updateRoomType(RoomTypeUpdate);
+
+        return  isInserted & isUpdated;
     }
 }

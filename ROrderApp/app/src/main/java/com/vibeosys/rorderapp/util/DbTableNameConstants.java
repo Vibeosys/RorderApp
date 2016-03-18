@@ -22,4 +22,10 @@ public class DbTableNameConstants {
     public static final String TAKE_AWAY_SOURCE = SqlContract.SqlTakeAwaySource.TABLE_NAME;
     public static final String TAKE_AWAY = SqlContract.SqlTakeAway.TABLE_NAME;
     public static final String ORDER_TYPE = SqlContract.SqlOrderType.TABLE_NAME;
+    public static final String PERMISSION_SET = SqlContract.SqlPermissionSet.TABLE_NAME;
+    public static final String R_CONFIG_SETTINGS= SqlContract.SqlRConfigSettings.TABLE_NAME;
+    public static final String R_PRINTERS = SqlContract.SqlRPrinters.TABLE_NAME;
+    public static final String R_ROOM_PRINTER = SqlContract.SqlRRoomPrinter.TABLE_NAME;
+    public static final String R_ROOMS =SqlContract.SqlRRooms.TABLE_NAME;
+    public static final String ROOM_TYPE= SqlContract.SqlRoomType.TABLE_NAME;
 }

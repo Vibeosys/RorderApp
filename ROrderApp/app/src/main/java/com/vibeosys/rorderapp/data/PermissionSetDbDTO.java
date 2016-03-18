@@ -49,7 +49,7 @@ public class PermissionSetDbDTO extends BaseDTO {
         this.active = active;
     }
 
-    public static List<PermissionSetDbDTO> deserializeBill(List<String> serializedStringList) {
+    public static List<PermissionSetDbDTO> deserializePermission(List<String> serializedStringList) {
         Gson gson = new Gson();
         ArrayList<PermissionSetDbDTO> objectList = new ArrayList<>();
         try {
