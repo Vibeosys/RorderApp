@@ -95,4 +95,8 @@ public class PropertyFileReader {
     public String getBillPrinterIp() {
         return mProperties.getProperty(PropertyTypeConstants.BILL_PRINTER_IP);
     }
+
+    public String getUserPermission() {
+        return mProperties.getProperty(PropertyTypeConstants.USER_PERMISSION);
+    }
 }

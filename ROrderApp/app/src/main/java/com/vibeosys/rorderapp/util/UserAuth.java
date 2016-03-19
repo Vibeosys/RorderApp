@@ -28,7 +28,7 @@ public class UserAuth {
     private OnUpdateUserResultReceived mOnUpdateUserResultReceived;
 
     public static boolean isUserLoggedIn(Context context, String userName) {
-        if ( userName == null || userName == "") {
+        if (userName == null || userName == "") {
             Intent theLoginIntent = new Intent(context, LoginActivity.class);
             //theLoginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             theLoginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -69,6 +69,7 @@ public class UserAuth {
         theSessionManager.setUserRollId(userInfo.getmRoleId());
         theSessionManager.setUserRestaurantId(userInfo.getmRestaurantId());
         theSessionManager.setUserId(userInfo.getmUserId());
+        theSessionManager.setUserPermission(userInfo.getmPermission());
         //theSessionManager.setUserRegdApiKey(userInfo.getApiKey());
 
         //updateUserDetailsOnServer(context, userInfo);
@@ -76,7 +77,7 @@ public class UserAuth {
 
     private boolean postUserUpdate(UserDTO userInfo, Context context) {
         DbRepository newDataBase = new DbRepository(context, SessionManager.getInstance(context));
-       // boolean isRecordUpdated = newDataBase.updateUserAuthenticationInfo(userInfo);
+        // boolean isRecordUpdated = newDataBase.updateUserAuthenticationInfo(userInfo);
         //boolean isRecordAddedToAllUsers = newDataBase.addOrUpdateUserToAllUsers(userInfo);
         return true; //isRecordUpdated && isRecordAddedToAllUsers;
     }
@@ -89,7 +90,8 @@ public class UserAuth {
         theSessionManager.setUserActive(false);
         theSessionManager.setUserRollId(0);
         theSessionManager.setUserRestaurantId(0);
-       // theSessionManager.setUserPhotoUrl(null);
+        theSessionManager.setUserPermission(null);
+        // theSessionManager.setUserPhotoUrl(null);
         //theSessionManager.setUserLoginRegdSource(RegistrationSourceTypes.NONE);
         theSessionManager.setUserRegdApiKey(null);
 

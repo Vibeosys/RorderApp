@@ -22,6 +22,7 @@ public final class PropertyTypeConstants {
     public static final String KOT_PRINTER_IP = "printer.kot.ip";
     public static final String BILL_PRINTER_IP = "printer.bill.ip";
 
+    public static final String USER_PERMISSION = "user.permission";
 
     //Specific to Shared Pref for Session Manager to consume
     public static final String USER_ID = "user.id";

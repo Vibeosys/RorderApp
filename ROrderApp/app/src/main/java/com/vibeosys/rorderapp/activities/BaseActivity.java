@@ -45,6 +45,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
@@ -265,5 +266,27 @@ public abstract class BaseActivity extends AppCompatActivity {
                     .build());
         else
             Log.d(TAG, "Analytics is not stated");
+    }
+
+    private ArrayList<Integer> getPermissionSet() {
+        ArrayList<Integer> permissions = new ArrayList<>();
+        String strPermissions = mSessionManager.getUserPermission();
+        String[] result = strPermissions.split("\\|");
+        for (String s : result) {
+            permissions.add(Integer.parseInt(s));
+            Log.d(TAG, "##" + s);
+        }
+        return permissions;
+    }
+
+    protected boolean getPermissionStatus(int id) {
+        boolean status = false;
+        ArrayList<Integer> permissions = getPermissionSet();
+        if (permissions.contains(id)) {
+            status = true;
+        } else {
+            status = false;
+        }
+        return status;
     }
 }

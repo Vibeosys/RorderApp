@@ -15,4 +15,12 @@ public final class AppConstants {
     public final static int TAKAWAY_STATUS_PENDING = 1;
     public final static int TAKAWAY_STATUS_READY = 2;
     public final static int TAKAWAY_STATUS_DELIVERED = 3;
+
+    // Permissions constants
+    public final static String PERMISSION_PLACE_ORDER = "PLACE_ORDER";
+    public final static String PERMISSION_PRINT_BILL = "PRINT_BILL";
+    public final static String PERMISSION_CANCEL_ORDER = "CANCEL_ORDER";
+    public final static String PERMISSION_VIEW_DASHBOARD = "VIEW_DASHBOARD";
+    public final static String PERMISSION_CHANGE_RESTAURANT_DATA = "CHANGE_RESTAURANT_DATA";
+
 }

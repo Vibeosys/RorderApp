@@ -18,6 +18,7 @@ public class UserDbDTO extends BaseDTO {
     private int active;
     private int roleId;
     private int restaurantId;
+    private String permissions;
 
     public UserDbDTO() {
     }
@@ -79,6 +80,13 @@ public class UserDbDTO extends BaseDTO {
         this.roleId = roleId;
     }
 
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
+    }
 
     public static List<UserDbDTO> deserializeUser(List<String> serializedStringList) {
         Gson gson = new Gson();

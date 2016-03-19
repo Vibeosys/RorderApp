@@ -185,6 +185,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlUser.ACTIVE, dbUser.isActive());
                     contentValues.put(SqlContract.SqlUser.ROLE_ID, dbUser.getRoleId());
                     contentValues.put(SqlContract.SqlUser.RESTAURANTID, dbUser.getRestaurantId());
+                    contentValues.put(SqlContract.SqlUser.PERMISSIONS, dbUser.getPermissions());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlUser.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -269,6 +270,7 @@ public class DbRepository extends SQLiteOpenHelper {
         boolean active;
         int rollId;
         int restaurantId;
+        String permission;
         UserDTO user = null;
         try {
             sqLiteDatabase = getReadableDatabase();
@@ -286,7 +288,9 @@ public class DbRepository extends SQLiteOpenHelper {
                         active = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.ACTIVE)));
                         rollId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.ROLE_ID));
                         restaurantId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlUser.RESTAURANTID));
+                        permission = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.PERMISSIONS));
                         user = new UserDTO(userId, name, active, rollId, restaurantId);
+                        user.setmPermission(permission);
                     }
                 }
             }
@@ -2364,6 +2368,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlUser.ROLE_ID, dbUser.getRoleId());
                     if (dbUser.getRestaurantId() != 0)
                         contentValues.put(SqlContract.SqlUser.RESTAURANTID, dbUser.getRestaurantId());
+                    if (dbUser.getPermissions() != null)
+                        contentValues.put(SqlContract.SqlUser.PERMISSIONS, dbUser.getPermissions());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlUser.TABLE_NAME, contentValues,
                             SqlContract.SqlUser.USER_ID + "=?", whereClause);
@@ -3712,4 +3718,38 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     /* End of Printer Function*/
+
+    /*
+    * Read Permission
+    * */
+
+    public int getPermissionId(String key) {
+        int id = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{key};
+                cursor = sqLiteDatabase.rawQuery("select " + SqlContract.SqlPermissionSet.PERMISSION_ID + " from "
+                        + SqlContract.SqlPermissionSet.TABLE_NAME + " where " +
+                        SqlContract.SqlPermissionSet.PERMISSION_KEY + "=?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        id = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlPermissionSet.PERMISSION_ID));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return id;
+    }
 }

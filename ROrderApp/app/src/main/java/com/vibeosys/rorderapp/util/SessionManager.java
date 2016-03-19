@@ -94,6 +94,8 @@ public class SessionManager {
         editor.putString(PropertyTypeConstants.KOT_PRINTER_IP, mPropertyFileReader.getKotPrinterIp());
         editor.putString(PropertyTypeConstants.BILL_PRINTER_IP, mPropertyFileReader.getBillPrinterIp());
 
+        editor.putString(PropertyTypeConstants.USER_PERMISSION, mPropertyFileReader.getUserPermission());
+
         editor.apply();
         return true;
     }
@@ -270,6 +272,14 @@ public class SessionManager {
 
     public void setBillPrinterIp(String ip) {
         setValuesInSharedPrefs(PropertyTypeConstants.BILL_PRINTER_IP, ip);
+    }
+
+    public String getUserPermission() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.USER_PERMISSION, null);
+    }
+
+    public void setUserPermission(String permission) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_PERMISSION, permission);
     }
 
     private static void setValuesInSharedPrefs(String sharedPrefKey, String sharedPrefValue) {

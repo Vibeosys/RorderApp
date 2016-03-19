@@ -11,6 +11,7 @@ public class UserDTO {
     private boolean mActive;
     private int mRoleId;
     private int mRestaurantId;
+    private String mPermission;
 
     public UserDTO(int mUserId, String mUserName, String mPassword, boolean mActive, int mRoleId, int mRestaurantId) {
         this.mUserId = mUserId;
@@ -20,6 +21,7 @@ public class UserDTO {
         this.mRoleId = mRoleId;
         this.mRestaurantId = mRestaurantId;
     }
+
     public UserDTO(int mUserId, String mUserName, boolean mActive, int mRoleId, int mRestaurantId) {
         this.mUserId = mUserId;
         this.mUserName = mUserName;
@@ -27,6 +29,7 @@ public class UserDTO {
         this.mRoleId = mRoleId;
         this.mRestaurantId = mRestaurantId;
     }
+
     public int getmUserId() {
         return mUserId;
     }
@@ -73,5 +76,13 @@ public class UserDTO {
 
     public void setmRestaurantId(int mRestaurantId) {
         this.mRestaurantId = mRestaurantId;
+    }
+
+    public String getmPermission() {
+        return mPermission;
+    }
+
+    public void setmPermission(String mPermission) {
+        this.mPermission = mPermission;
     }
 }
