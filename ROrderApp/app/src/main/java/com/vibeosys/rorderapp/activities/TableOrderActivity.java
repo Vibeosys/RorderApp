@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
@@ -42,7 +43,9 @@ import org.json.JSONObject;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -61,11 +64,12 @@ public class TableOrderActivity extends BaseActivity implements
     private int mTakeAwayNo;
     private String mCustId;
     private OrderHeaderDTO mCurrentOrder;
-    private UUID mOrderId;
     private Context mContext = this;
     private int mOrderFlag;
     private ProgressBar mProgressBar;
     private int mOrderType;
+    private int resultCount = 0;
+    private Set<Integer> keyRoomId;
 
     @Override
     protected String getScreenName() {
@@ -229,9 +233,10 @@ public class TableOrderActivity extends BaseActivity implements
             if (sendOrderHeader.getOrderDetailsDTOs().size() <= 0) {
                 showEmptyOrderDialog(mContext);
             } else {
-                showProgress(true);
+
                 List<OrderDetailsDTO> orderDetailsDTOs = sendOrderHeader.getOrderDetailsDTOs();
-                ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+                HashMap<Integer, List<OrderDetailsDTO>> sortOrderByKitchen = new HashMap<>();
+                /*ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
                 for (OrderDetailsDTO orderDetail : orderDetailsDTOs) {
                     UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
                     sendDetails.add(sendOrder);
@@ -243,7 +248,48 @@ public class TableOrderActivity extends BaseActivity implements
                 String serializedJsonString = gson.toJson(sendOrder);
                 Log.d(TAG, "##" + serializedJsonString);
                 TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
-                mServerSyncManager.uploadDataToServer(tableDataDTO);
+                mServerSyncManager.uploadDataToServer(tableDataDTO);*/
+                showProgress(true);
+                for (OrderDetailsDTO order : orderDetailsDTOs) {
+                    int roomId = order.getRoomId();
+                    if (!sortOrderByKitchen.containsKey(roomId)) {
+                        List<OrderDetailsDTO> orderList = new ArrayList<>();
+                        orderList.add(order);
+                        sortOrderByKitchen.put(roomId, orderList);
+                    } else {
+                        List<OrderDetailsDTO> orderList = sortOrderByKitchen.get(roomId);
+                        orderList.add(order);
+                        sortOrderByKitchen.put(roomId, orderList);
+                    }
+                }
+                keyRoomId = sortOrderByKitchen.keySet();
+                for (Integer i : keyRoomId) {
+                    ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+                    List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
+                    for (OrderDetailsDTO orderDetail : orderListByRoom) {
+                        UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
+                        sendDetails.add(sendOrder);
+                    }
+
+                    UUID mOrderId;
+                    mOrderId = UUID.randomUUID();
+                    UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType);
+                    Gson gson = new Gson();
+
+                    String serializedJsonString = gson.toJson(sendOrder);
+                    Log.d(TAG, "##" + serializedJsonString);
+                    TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
+                    try {
+                        Thread.sleep(200);
+                        mServerSyncManager.uploadDataToServer(tableDataDTO);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+
             }
         } else {
             showMyDialog(mContext);
@@ -256,6 +302,8 @@ public class TableOrderActivity extends BaseActivity implements
         showProgress(false);
         int errorCode = -1;
         String message = null;
+        int orderNo = 0;
+        String orderId = null;
         try {
             errorCode = data.getInt("errorCode");
             message = data.getString("message");
@@ -263,24 +311,38 @@ public class TableOrderActivity extends BaseActivity implements
             e.printStackTrace();
         }
         if (errorCode == 0) {
+
+            JSONObject jsMessage = null;
+            try {
+                jsMessage = new JSONObject(message);
+                orderNo = jsMessage.getInt("orderNo");
+                orderId = jsMessage.getString("orderId");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             // Order is Successfully Placed. Delete all temp entry and add data in order table.
             String currentDate = new ROrderDateUtils().getGMTCurrentDate();
             String currentTime = new ROrderDateUtils().getGMTCurrentTime();
             ArrayList<OrdersDbDTO> orders = new ArrayList<>();
-            orders.add(new OrdersDbDTO(mOrderId.toString(), Integer.parseInt(message), mCustId,
+            orders.add(new OrdersDbDTO(orderId, orderNo, mCustId,
                     Date.valueOf(currentDate), Time.valueOf(currentTime), mTableId, mSessionManager.getUserId(), 1));
             mDbRepository.insertOrders(orders);
-            mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
-            mServerSyncManager.syncDataWithServer(true);
-            Toast.makeText(getApplicationContext(), getResources().getString
-                    (R.string.order_place_success), Toast.LENGTH_SHORT).show();
-            Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-            iMenu.putExtra("tableCustInfo", tableCommonInfo);
-            startActivity(iMenu);
-            finish();
+            resultCount++;
+            if (resultCount == keyRoomId.size()) {
+                mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
+                mServerSyncManager.syncDataWithServer(true);
+                Toast.makeText(getApplicationContext(), getResources().getString
+                        (R.string.order_place_success), Toast.LENGTH_SHORT).show();
+                Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
+                iMenu.putExtra("tableCustInfo", tableCommonInfo);
+                startActivity(iMenu);
+                finish();
+            }
+
         } else if (errorCode != 104) {
-            String stringTitle = getResources().getString(R.string.alert_dialog);
-            customAlterDialog(stringTitle, message);
+           /* String stringTitle = getResources().getString(R.string.alert_dialog);
+            customAlterDialog(stringTitle, message);*/
         }
 
 

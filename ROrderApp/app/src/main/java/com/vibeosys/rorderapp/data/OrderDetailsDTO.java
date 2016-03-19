@@ -14,8 +14,9 @@ public class OrderDetailsDTO {
     private double mMenuUnitPrice;
     private String mMenuTitle;
     private String mNote;
+    private int mRoomId;
 
-    public OrderDetailsDTO(int mOrderDetailsId, double mOrderPrice, int mOrderQuantity,String mOrderId, int mMenuId,
+    public OrderDetailsDTO(int mOrderDetailsId, double mOrderPrice, int mOrderQuantity, String mOrderId, int mMenuId,
                            String mMenuTitle, double mMenuUnitPrice, String mNote) {
         this.mOrderDetailsId = mOrderDetailsId;
         this.mOrderPrice = mOrderPrice;
@@ -89,5 +90,13 @@ public class OrderDetailsDTO {
 
     public void setmNote(String mNote) {
         this.mNote = mNote;
+    }
+
+    public int getRoomId() {
+        return mRoomId;
+    }
+
+    public void setRoomId(int mRoomId) {
+        this.mRoomId = mRoomId;
     }
 }

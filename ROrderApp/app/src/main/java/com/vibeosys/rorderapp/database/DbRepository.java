@@ -550,6 +550,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlMenu.FOOD_TYPE, menu.isFoodType());
                     contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
                     contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.isSpicy());
+                    contentValues.put(SqlContract.SqlMenu.ROOM_ID, menu.getRoomId());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlMenu.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -1160,7 +1161,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 String[] whereClause = new String[]{String.valueOf(tableId), custId};
                 double orderAmount = 0;
                 cursor = sqLiteDatabase.rawQuery("Select temp_order.TempOrderId,temp_order.Quantity,temp_order.Note," +
-                        "temp_order.MenuId,temp_order.OrderDate,temp_order.OrderTime,menu.MenuTitle," +
+                        "temp_order.MenuId,temp_order.OrderDate,temp_order.OrderTime,menu.MenuTitle,menu.RoomId," +
                         "menu.Price from temp_order left join menu where " +
                         "temp_order.MenuId=menu.MenuId and temp_order.TableId=? and temp_order.CustId=?", whereClause);
                 if (cursor != null) {
@@ -1176,8 +1177,11 @@ public class DbRepository extends SQLiteOpenHelper {
                             String note = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTempOrder.NOTE));
                             double orderPice = menuPrice * orderQuantity;
                             orderAmount = orderAmount + orderPice;
-                            OrderDetailsDTO orderDetails = new OrderDetailsDTO(orderDetailsTempId, orderPice
+                            int roomId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.ROOM_ID));
+                            OrderDetailsDTO
+                                    orderDetails = new OrderDetailsDTO(orderDetailsTempId, orderPice
                                     , orderQuantity, "", menuId, menuTitle, menuPrice, note);
+                            orderDetails.setRoomId(roomId);
                             orderDetailsList.add(orderDetails);
                         } while (cursor.moveToNext());
                     }
@@ -2258,6 +2262,8 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlMenu.FOOD_TYPE, menu.isFoodType());
                     if (menu.getCategoryId() != 0)
                         contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
+                    if (menu.getRoomId() != 0)
+                        contentValues.put(SqlContract.SqlMenu.ROOM_ID, menu.getRoomId());
                     contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.isSpicy());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlMenu.TABLE_NAME, contentValues,

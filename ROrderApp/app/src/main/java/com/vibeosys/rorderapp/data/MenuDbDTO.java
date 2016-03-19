@@ -23,6 +23,7 @@ public class MenuDbDTO extends BaseDTO {
     private boolean foodType;
     private boolean isSpicy;
     private int categoryId;
+    private int roomId;
 
     public MenuDbDTO() {
     }
@@ -114,6 +115,14 @@ public class MenuDbDTO extends BaseDTO {
 
     public void setIsSpicy(boolean isSpicy) {
         this.isSpicy = isSpicy;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
     public static List<MenuDbDTO> deserializeMenu(List<String> serializedStringList) {
