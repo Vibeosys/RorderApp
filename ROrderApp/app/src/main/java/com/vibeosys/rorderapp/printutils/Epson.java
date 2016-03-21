@@ -2,6 +2,7 @@ package com.vibeosys.rorderapp.printutils;
 
 import android.content.Context;
 import android.util.*;
+import android.util.Log;
 
 import com.epson.eposprint.*;
 import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
@@ -66,7 +67,7 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
 
             mMethod = "addText";
             mBuilder.addText(printDataDTO.getBody().getMenus().toString());
-
+            Log.d("##", "##" + printDataDTO.getBody().getMenus().toString());
             int[] status = new int[1];
             int[] battery = new int[1];
             try {

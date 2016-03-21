@@ -3756,7 +3756,6 @@ public class DbRepository extends SQLiteOpenHelper {
     public ArrayList<PrinterDetailsDTO> getPrinterDetails(int roomType) {
         ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
-        sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
         PrinterDetailsDTO printerDetailsDTO = null;
         try {
@@ -3797,5 +3796,46 @@ public class DbRepository extends SQLiteOpenHelper {
                 sqLiteDatabase.close();
         }
         return detailsArray;
+    }
+
+    public PrinterDetailsDTO getPrinterDetailsByRoom(int roomId) {
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        PrinterDetailsDTO printerDetailsDTO = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] where = new String[]{String.valueOf(roomId)};
+
+                cursor = sqLiteDatabase.rawQuery("SELECT r_room_printer.RoomId,r_room_printer.PrinterId,r_printers.PrinterId," +
+                        " r_printers.IpAddress,r_printers.PrinterName,r_printers.ModelName,r_printers.MacAddress," +
+                        " r_printers.Company,r_room_printer.Active from r_printers left join r_room_printer " +
+                        " on r_room_printer.PrinterId = r_printers.PrinterId where r_room_printer.Active =1 and r_room_printer.RoomId =?", where);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        int printerId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRRoomPrinter.PRINTER_ID));
+                        String ipAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.IP_ADDRESS));
+                        String printerName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.PRINTER_NAME));
+                        String printerModelName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.MODEL_NAME));
+                        String macAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.MAC_ADDRESS));
+                        String printerCompany = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.COMPANY));
+                        printerDetailsDTO = new PrinterDetailsDTO(printerId, ipAddress, printerName,
+                                printerModelName, macAddress, printerCompany);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while getting getPrinterDetailsByRoom data " + e.toString());
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return printerDetailsDTO;
     }
 }

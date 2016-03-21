@@ -27,10 +27,15 @@ import com.vibeosys.rorderapp.adaptors.OrderSummaryAdapter;
 import com.vibeosys.rorderapp.data.OrderDetailsDTO;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
+import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.UploadOrderDetails;
 import com.vibeosys.rorderapp.data.UploadOrderHeader;
+import com.vibeosys.rorderapp.printutils.PrintBody;
+import com.vibeosys.rorderapp.printutils.PrintDataDTO;
+import com.vibeosys.rorderapp.printutils.PrintPaper;
+import com.vibeosys.rorderapp.printutils.PrinterFactory;
 import com.vibeosys.rorderapp.util.AppConstants;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.NetworkUtils;
@@ -279,15 +284,19 @@ public class TableOrderActivity extends BaseActivity implements
                         UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType);
                         Gson gson = new Gson();
 
+                        //Kot Printing
+                        printKot(orderListByRoom, i);
+
+
                         String serializedJsonString = gson.toJson(sendOrder);
                         Log.d(TAG, "##" + serializedJsonString);
                         TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
-                        try {
-                            Thread.sleep(200);
-                            mServerSyncManager.uploadDataToServer(tableDataDTO);
-                        } catch (InterruptedException e) {
+                        /*try {*/
+                        //Thread.sleep(200);
+                        mServerSyncManager.uploadDataToServer(tableDataDTO);
+                        /*} catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
+                        }*/
 
 
                     }
@@ -300,6 +309,33 @@ public class TableOrderActivity extends BaseActivity implements
         } else {
             customAlterDialog(getResources().getString(R.string.dialog_access_denied), getResources().getString(R.string.access_denied_place_order));
         }
+    }
+
+    private void printKot(List<OrderDetailsDTO> orderListByRoom, int roomId) {
+
+        PrintBody printBody = new PrintBody();
+        HashMap<Integer, OrderDetailsDTO> hshMap = new HashMap<>();
+        /**
+         * Create hash map for kot printing 1 menu item and add quantity */
+
+        for (OrderDetailsDTO order : orderListByRoom) {
+            int menuId = order.getMenuId();
+            if (hshMap.containsKey(menuId)) {
+                OrderDetailsDTO hshOrder = hshMap.get(menuId);
+                hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + order.getOrderQuantity());
+            } else {
+                hshMap.put(menuId, order);
+            }
+        }
+        printBody.setMenus(hshMap);
+        Log.d("##", "##" + printBody.getMenus().toString());
+        PrinterDetailsDTO printerDetails = mDbRepository.getPrinterDetailsByRoom(roomId);
+        PrinterFactory printerFactory = new PrinterFactory();
+        PrintPaper printPaper = printerFactory.getPrinter(printerDetails);
+        printPaper.setPrinter(getApplicationContext(), printerDetails);
+        printPaper.openPrinter();
+        printPaper.printText(new PrintDataDTO(printBody));
+
     }
 
 
