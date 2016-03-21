@@ -7,13 +7,13 @@ public class PrintDataDTO {
 
     private String mHeader;
     private String mFooter;
-    private String mBody;
+    private PrintBody mBody;
 
 
     public PrintDataDTO() {
     }
 
-    public PrintDataDTO(String mBody) {
+    public PrintDataDTO(PrintBody mBody) {
         this.mBody = mBody;
     }
 
@@ -33,11 +33,11 @@ public class PrintDataDTO {
         this.mFooter = mFooter;
     }
 
-    public String getBody() {
+    public PrintBody getBody() {
         return mBody;
     }
 
-    public void setBody(String mBody) {
+    public void setBody(PrintBody mBody) {
         this.mBody = mBody;
     }
 }

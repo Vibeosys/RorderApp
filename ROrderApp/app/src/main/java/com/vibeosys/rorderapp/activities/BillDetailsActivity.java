@@ -13,7 +13,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.epson.easyselect.DeviceType;
 import com.epson.epsonio.DevType;
 import com.epson.epsonio.EpsonIoException;
 import com.epson.epsonio.Finder;
@@ -21,10 +20,12 @@ import com.epson.epsonio.IoStatus;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
-import com.vibeosys.rorderapp.data.PrinterDetails;
+import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
-import com.vibeosys.rorderapp.printutils.EpsonTMP20;
+import com.vibeosys.rorderapp.printutils.PrintBody;
+import com.vibeosys.rorderapp.printutils.PrintDataDTO;
+import com.vibeosys.rorderapp.printutils.PrintPaper;
 import com.vibeosys.rorderapp.printutils.PrinterFactory;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
@@ -154,11 +155,10 @@ public class BillDetailsActivity extends BaseActivity {
                 /*PrinterFactory factory = new PrinterFactory();
                 String testing ="epson_tm_p20";
                 factory.getPrinter(testing);*/
-               // EpsonTMP20 test = new  EpsonTMP20();
                 int err = IoStatus.SUCCESS;
                 try {
 
-                    Finder.start(getBaseContext(), DevType.TCP,"192:168:1:142");
+                    Finder.start(getBaseContext(), DevType.TCP, "192:168:1:142");
 
                 } catch (EpsonIoException e) {
                     err = e.getStatus();
@@ -167,10 +167,17 @@ public class BillDetailsActivity extends BaseActivity {
                 /*test.openPrinter();
                 test.printText("Testing");
                 test.closePrinter();*/
-                ArrayList<PrinterDetails> detailsArray = new ArrayList<>();
-                detailsArray =  mDbRepository.getPrinterDetails("1");
-                Toast.makeText(getApplicationContext(),"Data is fetched",Toast.LENGTH_LONG).show();
-
+                ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
+                detailsArray = mDbRepository.getPrinterDetails(1);
+                //Toast.makeText(getApplicationContext(), "Data is fetched", Toast.LENGTH_LONG).show();
+                for (PrinterDetailsDTO printerDetail : detailsArray) {
+                    PrinterFactory printerFactory = new PrinterFactory();
+                    PrintPaper printPaper = printerFactory.getPrinter(printerDetail);
+                    printPaper.setPrinter(getApplicationContext(), printerDetail);
+                    printPaper.openPrinter();
+                    printPaper.printText(new PrintDataDTO(new PrintBody()));
+                    //printPaper.closePrinter();
+                }
 
             }
         });

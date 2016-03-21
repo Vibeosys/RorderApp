@@ -29,7 +29,7 @@ import com.vibeosys.rorderapp.data.OrderTypeDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.PaymentModeDbDTO;
 import com.vibeosys.rorderapp.data.PermissionSetDbDTO;
-import com.vibeosys.rorderapp.data.PrinterDetails;
+import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
 import com.vibeosys.rorderapp.data.PrintersDbDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
@@ -48,7 +48,6 @@ import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
 import com.vibeosys.rorderapp.util.AppConstants;
-import com.vibeosys.rorderapp.util.ChefDateUtil;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.SessionManager;
 
@@ -3753,16 +3752,17 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return id;
     }
-    public ArrayList<PrinterDetails> getPrinterDetails(String RoomType) {
-        ArrayList<PrinterDetails> detailsArray = new ArrayList<>();
+
+    public ArrayList<PrinterDetailsDTO> getPrinterDetails(int roomType) {
+        ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
-        PrinterDetails printerDetails = null;
+        PrinterDetailsDTO printerDetailsDTO = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                String[] where = new String[]{RoomType};
+                String[] where = new String[]{String.valueOf(roomType)};
 
                 cursor = sqLiteDatabase.rawQuery("SELECT r_room_printer.RoomId,r_room_printer.PrinterId,r_printers.PrinterId," +
                         " r_printers.IpAddress,r_printers.PrinterName,r_printers.ModelName,r_printers.MacAddress," +
@@ -3772,7 +3772,7 @@ public class DbRepository extends SQLiteOpenHelper {
 
                     if (cursor.getCount() > 0) {
                         cursor.moveToFirst();
-                        do{
+                        do {
                             int printerId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRRoomPrinter.PRINTER_ID));
                             String ipAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.IP_ADDRESS));
                             String printerName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.PRINTER_NAME));
@@ -3780,9 +3780,9 @@ public class DbRepository extends SQLiteOpenHelper {
                             String macAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.MAC_ADDRESS));
                             String printerCompany = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.COMPANY));
 
-                            printerDetails = new PrinterDetails(printerId, ipAddress, printerName, printerModelName, macAddress, printerCompany);
-                            detailsArray.add(printerDetails);
-                        }while (cursor.moveToNext());
+                            printerDetailsDTO = new PrinterDetailsDTO(printerId, ipAddress, printerName, printerModelName, macAddress, printerCompany);
+                            detailsArray.add(printerDetailsDTO);
+                        } while (cursor.moveToNext());
                     }
                 }
             }
@@ -3796,6 +3796,6 @@ public class DbRepository extends SQLiteOpenHelper {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
         }
-        return  detailsArray;
+        return detailsArray;
     }
 }

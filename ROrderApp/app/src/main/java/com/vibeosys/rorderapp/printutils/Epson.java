@@ -1,18 +1,20 @@
 package com.vibeosys.rorderapp.printutils;
 
 import android.content.Context;
-import android.util.Printer;
+import android.util.*;
 
 import com.epson.eposprint.*;
+import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
 
 /**
  * Created by akshay on 29-02-2016.
  */
-public class EpsonTMP20 implements PrintPaper, StatusChangeEventListener, BatteryStatusChangeEventListener {
+public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStatusChangeEventListener {
 
     private int mDeviceType = Print.DEVTYPE_BLUETOOTH;
-    private String mIpAddress = "00:01:90:C2:A8:4F";
-    private String mPrinterName = "TM-P20";
+    PrinterDetailsDTO printerDetails;
+    /* private String mIpAddress = "00:01:90:C2:A8:4F";
+     private String mPrinterName = "TM-P20";*/
     private int mLanguage = Builder.MODEL_ANK;
     private int mEnabled = Print.TRUE;
     private int mInterval = 1000;
@@ -25,11 +27,12 @@ public class EpsonTMP20 implements PrintPaper, StatusChangeEventListener, Batter
     static final int SIZEHEIGHT_MAX = 8;
 
     @Override
-    public void setPrinter(Context context) {
+    public void setPrinter(Context context, PrinterDetailsDTO printerDetails) {
         this.mContext = context;
+        this.printerDetails = printerDetails;
         this.mPrinter = new Print(mContext);
         try {
-            this.mPrinter.openPrinter(mDeviceType, mIpAddress, Print.FALSE, mInterval);
+            this.mPrinter.openPrinter(mDeviceType, printerDetails.getmIpAddress(), Print.FALSE, mInterval);
         } catch (EposException e) {
             e.printStackTrace();
         }
@@ -56,12 +59,13 @@ public class EpsonTMP20 implements PrintPaper, StatusChangeEventListener, Batter
     @Override
     public void printText(PrintDataDTO printDataDTO) {
 
+        android.util.Log.d("##", "## epson Printer selected");
         try {
             mMethod = "Builder";
-            mBuilder = new Builder(mPrinterName, mLanguage, mContext);
+            mBuilder = new Builder(printerDetails.getmModelName(), mLanguage, mContext);
 
             mMethod = "addText";
-            mBuilder.addText(printDataDTO.getBody());
+            mBuilder.addText(printDataDTO.getBody().getMenus().toString());
 
             int[] status = new int[1];
             int[] battery = new int[1];

@@ -3,7 +3,7 @@ package com.vibeosys.rorderapp.data;
 /**
  * Created by shrinivas on 19-03-2016.
  */
-public class PrinterDetails {
+public class PrinterDetailsDTO {
     int mPrinterId;
     String mIpAddress;
     String mPrinterName;
@@ -11,7 +11,7 @@ public class PrinterDetails {
     String mMacAddress;
     String mCompany;
 
-   public PrinterDetails(int mPrinterId,String mIpAddress,String mPrinterName,String mModelName,String mMacAddress,String mCompany)
+   public PrinterDetailsDTO(int mPrinterId, String mIpAddress, String mPrinterName, String mModelName, String mMacAddress, String mCompany)
     {
         this.mPrinterId = mPrinterId;
         this.mIpAddress =mIpAddress;
