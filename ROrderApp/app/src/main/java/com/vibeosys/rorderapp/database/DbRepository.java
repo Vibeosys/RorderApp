@@ -29,6 +29,7 @@ import com.vibeosys.rorderapp.data.OrderTypeDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.PaymentModeDbDTO;
 import com.vibeosys.rorderapp.data.PermissionSetDbDTO;
+import com.vibeosys.rorderapp.data.PrinterDetails;
 import com.vibeosys.rorderapp.data.PrintersDbDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
@@ -3751,5 +3752,50 @@ public class DbRepository extends SQLiteOpenHelper {
                 sqLiteDatabase.close();
         }
         return id;
+    }
+    public ArrayList<PrinterDetails> getPrinterDetails(String RoomType) {
+        ArrayList<PrinterDetails> detailsArray = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = null;
+        PrinterDetails printerDetails = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] where = new String[]{RoomType};
+
+                cursor = sqLiteDatabase.rawQuery("SELECT r_room_printer.RoomId,r_room_printer.PrinterId,r_printers.PrinterId," +
+                        " r_printers.IpAddress,r_printers.PrinterName,r_printers.ModelName,r_printers.MacAddress," +
+                        " r_printers.Company,r_room_printer.Active from r_printers left join r_room_printer " +
+                        " on r_room_printer.PrinterId = r_printers.PrinterId where r_room_printer.Active =1 and r_room_printer.RoomTypeId =?", where);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do{
+                            int printerId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRRoomPrinter.PRINTER_ID));
+                            String ipAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.IP_ADDRESS));
+                            String printerName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.PRINTER_NAME));
+                            String printerModelName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.MODEL_NAME));
+                            String macAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.MAC_ADDRESS));
+                            String printerCompany = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.COMPANY));
+
+                            printerDetails = new PrinterDetails(printerId, ipAddress, printerName, printerModelName, macAddress, printerCompany);
+                            detailsArray.add(printerDetails);
+                        }while (cursor.moveToNext());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while getting printer data " + e.toString());
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return  detailsArray;
     }
 }

@@ -11,14 +11,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.epson.easyselect.DeviceType;
+import com.epson.epsonio.DevType;
+import com.epson.epsonio.EpsonIoException;
+import com.epson.epsonio.Finder;
+import com.epson.epsonio.IoStatus;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.PrinterDetails;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
+import com.vibeosys.rorderapp.printutils.EpsonTMP20;
+import com.vibeosys.rorderapp.printutils.PrinterFactory;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -94,6 +104,7 @@ public class BillDetailsActivity extends BaseActivity {
 
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
+        Button TestingPrint = (Button) findViewById(R.id.BillTesting);
         LinearLayout mLayoutAddDiscount = (LinearLayout) findViewById(R.id.layout_discount_per);
 
         mBillDetailsDTOs = mDbRepository.getBillDetailsRecords(custId);
@@ -130,13 +141,39 @@ public class BillDetailsActivity extends BaseActivity {
                 startActivityForResult(i, 1);
             }
         });
+
         mLayoutAddDiscount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDiscountDialog();
             }
         });
+        TestingPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*PrinterFactory factory = new PrinterFactory();
+                String testing ="epson_tm_p20";
+                factory.getPrinter(testing);*/
+               // EpsonTMP20 test = new  EpsonTMP20();
+                int err = IoStatus.SUCCESS;
+                try {
 
+                    Finder.start(getBaseContext(), DevType.TCP,"192:168:1:142");
+
+                } catch (EpsonIoException e) {
+                    err = e.getStatus();
+                    e.printStackTrace();
+                }
+                /*test.openPrinter();
+                test.printText("Testing");
+                test.closePrinter();*/
+                ArrayList<PrinterDetails> detailsArray = new ArrayList<>();
+                detailsArray =  mDbRepository.getPrinterDetails("1");
+                Toast.makeText(getApplicationContext(),"Data is fetched",Toast.LENGTH_LONG).show();
+
+
+            }
+        });
     }
 
     private void showDiscountDialog() {
