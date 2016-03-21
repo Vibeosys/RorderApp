@@ -31,6 +31,8 @@ import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by shrinivas on 08-02-2016.
@@ -105,7 +107,7 @@ public class BillDetailsActivity extends BaseActivity {
 
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
-        Button TestingPrint = (Button) findViewById(R.id.BillTesting);
+        Button billPrinting = (Button) findViewById(R.id.BillPrinting);
         LinearLayout mLayoutAddDiscount = (LinearLayout) findViewById(R.id.layout_discount_per);
 
         mBillDetailsDTOs = mDbRepository.getBillDetailsRecords(custId);
@@ -149,26 +151,24 @@ public class BillDetailsActivity extends BaseActivity {
                 showDiscountDialog();
             }
         });
-        TestingPrint.setOnClickListener(new View.OnClickListener() {
+        billPrinting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*PrinterFactory factory = new PrinterFactory();
-                String testing ="epson_tm_p20";
-                factory.getPrinter(testing);*/
-                int err = IoStatus.SUCCESS;
-                try {
 
-                    Finder.start(getBaseContext(), DevType.TCP, "192:168:1:142");
 
-                } catch (EpsonIoException e) {
-                    err = e.getStatus();
-                    e.printStackTrace();
-                }
-                /*test.openPrinter();
-                test.printText("Testing");
-                test.closePrinter();*/
                 ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
                 detailsArray = mDbRepository.getPrinterDetails(1);
+                mBillDetailsDTOs.getBillNo();
+                ArrayList<String> getOrderId = new ArrayList<>();
+                getOrderId=  mDbRepository.getOderIdForPrinting("3", custId);
+                HashMap<String, ArrayList<String>> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
+                for(Map.Entry<String, ArrayList<String>> entry :billdetails.entrySet())
+                {
+                    String key = entry.getKey();
+                    Log.d("BillDetails", "##" + key);
+                    ArrayList<String> value = entry.getValue();
+                    Log.d("BillDetails","##"+value);
+                }
                 //Toast.makeText(getApplicationContext(), "Data is fetched", Toast.LENGTH_LONG).show();
                 for (PrinterDetailsDTO printerDetail : detailsArray) {
                     PrinterFactory printerFactory = new PrinterFactory();
@@ -176,7 +176,9 @@ public class BillDetailsActivity extends BaseActivity {
                     printPaper.setPrinter(getApplicationContext(), printerDetail);
                     printPaper.openPrinter();
                     printPaper.printText(new PrintDataDTO(new PrintBody()));
-                    //printPaper.closePrinter();
+
+                    printPaper.closePrinter();
+
                 }
 
             }

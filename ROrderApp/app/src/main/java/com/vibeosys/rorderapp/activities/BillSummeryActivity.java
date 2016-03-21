@@ -3,12 +3,16 @@ package com.vibeosys.rorderapp.activities;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.OrderSummaryAdapter;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
+import com.vibeosys.rorderapp.util.AppConstants;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 
 import java.util.ArrayList;
 
@@ -24,6 +28,7 @@ public class BillSummeryActivity extends BaseActivity {
     private int mTableNo;
     private int mTableId;
     private String mCustId;
+    private Button mPrintBillDetails;
 
     @Override
     protected String getScreenName() {
@@ -42,6 +47,7 @@ public class BillSummeryActivity extends BaseActivity {
         mTableId = tableCommonInfo.getTableId();
         mCustId = tableCommonInfo.getCustId();
         mOrdersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
+     //   mPrintBillDetails = (Button)findViewById(R.id.PrintBillDetails);
         mList = mDbRepository.getOrdersOfTable(mTableId, mCustId);
         mDbRepository.getOrederDetailsGroupByID(mList);
         mAdapter = new OrderSummaryAdapter(getApplicationContext(), mList);
@@ -82,7 +88,27 @@ public class BillSummeryActivity extends BaseActivity {
                 return false;
             }
         });
+       /* mPrintBillDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // int mPermissionId = mDbRepository.getPermissionId(AppConstants.PERMISSION_PRINT_BILL);
+               // if(getPermissionStatus(mPermissionId))
+               // {
+                    if(NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
+                    {
+                        ArrayList<String> getOderIdFor = mDbRepository.getOderIdForPrinting("3",mCustId) ;
+                        Toast.makeText(getApplicationContext(),"Button is clicked",Toast.LENGTH_LONG);
+                    }
+
+               // }
+              //  else {
+               //     customAlterDialog(getResources().getString(R.string.dialog_access_denied), getResources().getString(R.string.access_denied_print_bill));
+               // }
+
+            }
+        });*/
     }
+
 
     protected void OnBackPressed() {
         super.onBackPressed();

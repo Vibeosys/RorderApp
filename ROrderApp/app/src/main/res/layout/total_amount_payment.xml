@@ -469,7 +469,7 @@
                 android:paddingTop="5dp">
 
                 <com.vibeosys.rorderapp.views.CustomButton
-                    android:id="@+id/BillTesting"
+                    android:id="@+id/BillPrinting"
                     style="@style/button_custom_new"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

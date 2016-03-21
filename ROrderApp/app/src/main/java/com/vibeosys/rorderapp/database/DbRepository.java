@@ -3838,4 +3838,120 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return printerDetailsDTO;
     }
+    public ArrayList<String> getOderIdForPrinting(String OrderStatus,String CustmerId) {
+        ArrayList<String> getOrderId = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = null;
+       // PrinterDetails printerDetails = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] where = new String[]{OrderStatus,CustmerId};
+                // String[] where = new String[]{CustmerId};
+                cursor = sqLiteDatabase.rawQuery("SELECT orders.OrderId from orders where "+ SqlContract.SqlOrders.ORDER_STATUS +" =? AND "+ SqlContract.SqlOrders.CUST_ID+"=?"  , where);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do{
+
+                            String printerCompany = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
+
+
+                            getOrderId.add(printerCompany);
+                        }while (cursor.moveToNext());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return  getOrderId;
+    }
+
+    public HashMap<String, ArrayList<String>> getMenuDetailsForOrderPrint(ArrayList<String> getOrderId) {
+
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = null;
+        HashMap<String, ArrayList<String>> billdetails = new HashMap<String, ArrayList<String>>();
+        String previousQty, previousOrderPrice, previousTotalPrice;
+
+
+
+
+
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                for (int i = 0; i <= getOrderId.size(); i++) {
+                    ArrayList<String> listTemp = new ArrayList<String>();
+                    double TotalPriceForQty =0;
+                    String OrderId = getOrderId.get(i);
+                    String[] where = new String[]{OrderId};
+                    cursor = sqLiteDatabase.rawQuery("SELECT order_details.MenuId,order_details.MenuTitle,order_details.OrderQuantity,order_details.OrderPrice " +
+                            "from order_details  where " + SqlContract.SqlOrderDetails.ORDER_ID + " =?", where);
+                    if (cursor != null) {
+
+                        if (cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            do {
+
+                                int MenuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_ID));
+                                String MenuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_TITLE));
+                                int MenuQty = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_QUANTITY));
+                                double OrderPrice = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_PRICE));
+                                TotalPriceForQty = (MenuQty * OrderPrice);
+                                if (billdetails.containsKey(MenuName)) {
+                                    listTemp =billdetails.get(MenuName);
+                                   // ArrayList<String> temp = billdetails.get(MenuName);
+                                    previousQty = listTemp.get(0);
+                                    previousOrderPrice = listTemp.get(1);
+                                    previousTotalPrice = listTemp.get(2);
+                                    int Qty = Integer.parseInt(previousQty) + MenuQty;
+                                    double orderPrice = (Double.parseDouble(previousOrderPrice));
+                                    TotalPriceForQty = (Double.parseDouble(previousTotalPrice) + TotalPriceForQty) ;
+                                    listTemp.clear();
+                                    billdetails.remove(MenuName);
+                                    listTemp.add(0,String.valueOf(Qty));
+                                    listTemp.add(1,String.valueOf(orderPrice));
+                                    listTemp.add(2, String.valueOf(TotalPriceForQty));
+
+                                    billdetails.put(MenuName, listTemp);
+
+                                } else if(!billdetails.containsKey(MenuName)){
+                                    listTemp.add(0,String.valueOf(MenuQty));
+                                    listTemp.add(1,String.valueOf(OrderPrice));
+                                    listTemp.add(2,String.valueOf(TotalPriceForQty));
+                                    billdetails.put(MenuName, listTemp);
+                                }
+
+                            } while (cursor.moveToNext());
+                        }
+                    }
+                }
+
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return billdetails;
+    }
+
 }
