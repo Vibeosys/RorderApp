@@ -20,11 +20,14 @@ import com.epson.epsonio.IoStatus;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.OrderDetailsDTO;
 import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
+import com.vibeosys.rorderapp.data.RoomsDbDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.printutils.PrintBody;
 import com.vibeosys.rorderapp.printutils.PrintDataDTO;
+import com.vibeosys.rorderapp.printutils.PrintHeader;
 import com.vibeosys.rorderapp.printutils.PrintPaper;
 import com.vibeosys.rorderapp.printutils.PrinterFactory;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
@@ -161,24 +164,38 @@ public class BillDetailsActivity extends BaseActivity {
                 mBillDetailsDTOs.getBillNo();
                 ArrayList<String> getOrderId = new ArrayList<>();
                 getOrderId=  mDbRepository.getOderIdForPrinting("3", custId);
-                HashMap<String, ArrayList<String>> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
-                for(Map.Entry<String, ArrayList<String>> entry :billdetails.entrySet())
+                HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
+               /* for(Map.Entry<String, ArrayList<String>> entry :billdetails.entrySet())
                 {
                     String key = entry.getKey();
                     Log.d("BillDetails", "##" + key);
                     ArrayList<String> value = entry.getValue();
                     Log.d("BillDetails","##"+value);
-                }
+                }*/
                 //Toast.makeText(getApplicationContext(), "Data is fetched", Toast.LENGTH_LONG).show();
                 for (PrinterDetailsDTO printerDetail : detailsArray) {
+
+                    PrintBody printBody=new PrintBody();
+                    printBody.setMenus(billdetails);
+                    ROrderDateUtils dateUtils =  new ROrderDateUtils();
+                    PrintHeader header= new PrintHeader("Captain : "+mSessionManager.getUserName(),"Table #"
+                            +mTableNo, dateUtils.getLocalDateInReadableFormat(new java.util.Date())+" "+dateUtils.getLocalTimeInReadableFormat());
+                    header.setAddress("Baner");
+                    header.setNumber("Bill No."+mBillDetailsDTOs.getBillNo());
+                    header.setRestaurantName(mSessionManager.getUserRestaurantName());
+                    header.setPhoneNumber("020-26817136");
+                    String footer="Powered by QuickServe";
+                    PrintDataDTO printData=new PrintDataDTO();
+                    printData.setHeader(header);
+                    printData.setFooter(footer);
+                    printData.setBody(printBody);
+                    printData.setType(PrintDataDTO.BILL);
+                    printData.setBillDetailsDTO(mBillDetailsDTOs);
                     PrinterFactory printerFactory = new PrinterFactory();
                     PrintPaper printPaper = printerFactory.getPrinter(printerDetail);
                     printPaper.setPrinter(getApplicationContext(), printerDetail);
                     printPaper.openPrinter();
-                    printPaper.printText(new PrintDataDTO(new PrintBody()));
-
-                    printPaper.closePrinter();
-
+                    printPaper.printText(printData);
                 }
 
             }

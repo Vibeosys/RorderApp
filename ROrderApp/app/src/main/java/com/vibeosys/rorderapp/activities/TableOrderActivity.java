@@ -343,6 +343,7 @@ public class TableOrderActivity extends BaseActivity implements
         printData.setHeader(header);
         printData.setFooter(footer);
         printData.setBody(printBody);
+        printData.setType(PrintDataDTO.KOT);
         printPaper.printText(printData);
 
     }

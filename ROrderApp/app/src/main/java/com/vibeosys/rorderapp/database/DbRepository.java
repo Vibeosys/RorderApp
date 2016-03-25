@@ -3877,27 +3877,20 @@ public class DbRepository extends SQLiteOpenHelper {
         return  getOrderId;
     }
 
-    public HashMap<String, ArrayList<String>> getMenuDetailsForOrderPrint(ArrayList<String> getOrderId) {
+    public HashMap<Integer, OrderDetailsDTO> getMenuDetailsForOrderPrint(ArrayList<String> getOrderId) {
 
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
-        HashMap<String, ArrayList<String>> billdetails = new HashMap<String, ArrayList<String>>();
+        HashMap<Integer, OrderDetailsDTO> billdetails = new HashMap<>();
         String previousQty, previousOrderPrice, previousTotalPrice;
-
-
-
-
-
-        try {
+   try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
                 for (int i = 0; i <= getOrderId.size(); i++) {
-                    ArrayList<String> listTemp = new ArrayList<String>();
-                    double TotalPriceForQty =0;
                     String OrderId = getOrderId.get(i);
                     String[] where = new String[]{OrderId};
-                    cursor = sqLiteDatabase.rawQuery("SELECT order_details.MenuId,order_details.MenuTitle,order_details.OrderQuantity,order_details.OrderPrice " +
+                    cursor = sqLiteDatabase.rawQuery("SELECT * " +
                             "from order_details  where " + SqlContract.SqlOrderDetails.ORDER_ID + " =?", where);
                     if (cursor != null) {
 
@@ -3905,11 +3898,11 @@ public class DbRepository extends SQLiteOpenHelper {
                             cursor.moveToFirst();
                             do {
 
-                                int MenuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_ID));
-                                String MenuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_TITLE));
-                                int MenuQty = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_QUANTITY));
-                                double OrderPrice = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_PRICE));
-                                TotalPriceForQty = (MenuQty * OrderPrice);
+                                int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_ID));
+                                String menuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_TITLE));
+                                int menuQty = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_QUANTITY));
+                                double orderPrice = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_PRICE));
+                               /* TotalPriceForQty = (MenuQty * OrderPrice);
                                 if (billdetails.containsKey(MenuName)) {
                                     listTemp =billdetails.get(MenuName);
                                    // ArrayList<String> temp = billdetails.get(MenuName);
@@ -3932,6 +3925,15 @@ public class DbRepository extends SQLiteOpenHelper {
                                     listTemp.add(1,String.valueOf(OrderPrice));
                                     listTemp.add(2,String.valueOf(TotalPriceForQty));
                                     billdetails.put(MenuName, listTemp);
+                                }*/
+                                if(billdetails.containsKey(menuId))
+                                {
+                                    OrderDetailsDTO hshOrder = billdetails.get(menuId);
+                                    hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + menuQty);
+                                    hshOrder.setOrderPrice(hshOrder.getOrderPrice()+orderPrice);
+                                }else {
+                                    billdetails.put(menuId,new OrderDetailsDTO(0,orderPrice, menuQty,"",menuId,
+                                    menuName,0.0,""));
                                 }
 
                             } while (cursor.moveToNext());

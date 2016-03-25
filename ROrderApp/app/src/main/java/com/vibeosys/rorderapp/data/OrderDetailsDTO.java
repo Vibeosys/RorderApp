@@ -16,6 +16,7 @@ public class OrderDetailsDTO {
     private String mNote;
     private int mRoomId;
 
+
     public OrderDetailsDTO(int mOrderDetailsId, double mOrderPrice, int mOrderQuantity, String mOrderId, int mMenuId,
                            String mMenuTitle, double mMenuUnitPrice, String mNote) {
         this.mOrderDetailsId = mOrderDetailsId;

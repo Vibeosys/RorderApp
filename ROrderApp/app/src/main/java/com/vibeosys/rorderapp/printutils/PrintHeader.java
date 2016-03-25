@@ -7,6 +7,12 @@ public class PrintHeader {
     private String servedBy;
     private String tableNo;
     private String time;
+    private String restaurantName;
+    private String billType;
+    private String address;
+    private String phoneNumber;
+    private String number;
+
 
     public PrintHeader(String servedBy, String tableNo, String time) {
         this.servedBy = servedBy;
@@ -36,5 +42,45 @@ public class PrintHeader {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public String getBillType() {
+        return billType;
+    }
+
+    public void setBillType(String billType) {
+        this.billType = billType;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }
