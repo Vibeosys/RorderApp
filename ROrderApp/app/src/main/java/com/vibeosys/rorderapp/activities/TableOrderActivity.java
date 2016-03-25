@@ -34,6 +34,7 @@ import com.vibeosys.rorderapp.data.UploadOrderDetails;
 import com.vibeosys.rorderapp.data.UploadOrderHeader;
 import com.vibeosys.rorderapp.printutils.PrintBody;
 import com.vibeosys.rorderapp.printutils.PrintDataDTO;
+import com.vibeosys.rorderapp.printutils.PrintHeader;
 import com.vibeosys.rorderapp.printutils.PrintPaper;
 import com.vibeosys.rorderapp.printutils.PrinterFactory;
 import com.vibeosys.rorderapp.util.AppConstants;
@@ -233,9 +234,10 @@ public class TableOrderActivity extends BaseActivity implements
     }
 
     private void placeOrder() {
+
         // OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId());
-        int permissionId = mDbRepository.getPermissionId(AppConstants.PERMISSION_PLACE_ORDER);
-        if (getPermissionStatus(permissionId)) {
+       /* int permissionId = mDbRepository.getPermissionId(AppConstants.PERMISSION_PLACE_ORDER);
+        if (getPermissionStatus(permissionId)) {*/
             if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
                 OrderHeaderDTO sendOrderHeader = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
                 if (sendOrderHeader.getOrderDetailsDTOs().size() <= 0) {
@@ -306,9 +308,9 @@ public class TableOrderActivity extends BaseActivity implements
             } else {
                 showMyDialog(mContext);
             }
-        } else {
+        /*} else {
             customAlterDialog(getResources().getString(R.string.dialog_access_denied), getResources().getString(R.string.access_denied_place_order));
-        }
+        }*/
     }
 
     private void printKot(List<OrderDetailsDTO> orderListByRoom, int roomId) {
@@ -334,7 +336,14 @@ public class TableOrderActivity extends BaseActivity implements
         PrintPaper printPaper = printerFactory.getPrinter(printerDetails);
         printPaper.setPrinter(getApplicationContext(), printerDetails);
         printPaper.openPrinter();
-        printPaper.printText(new PrintDataDTO(printBody));
+        PrintHeader header= new PrintHeader("Served By "+mSessionManager.getUserName(),"Table #"
+                +mTableNo,new ROrderDateUtils().getLocalTimeInReadableFormat());
+        String footer="Powered by QuickServe";
+        PrintDataDTO printData=new PrintDataDTO();
+        printData.setHeader(header);
+        printData.setFooter(footer);
+        printData.setBody(printBody);
+        printPaper.printText(printData);
 
     }
 

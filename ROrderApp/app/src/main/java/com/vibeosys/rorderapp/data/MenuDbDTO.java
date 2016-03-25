@@ -18,10 +18,10 @@ public class MenuDbDTO extends BaseDTO {
     private double price;
     private String ingredients;
     private String tags;
-    private boolean availabilityStatus;
-    private boolean active;
-    private boolean foodType;
-    private boolean isSpicy;
+    private int availabilityStatus;
+    private int active;
+    private int foodType;
+    private int isSpicy;
     private int categoryId;
     private int roomId;
 
@@ -76,30 +76,37 @@ public class MenuDbDTO extends BaseDTO {
         this.tags = tags;
     }
 
-    public boolean isAvailabilityStatus() {
+    public int getAvailabilityStatus() {
         return availabilityStatus;
     }
 
-    public void setAvailabilityStatus(boolean availabilityStatus) {
+    public void setAvailabilityStatus(int availabilityStatus) {
         this.availabilityStatus = availabilityStatus;
     }
 
-    public boolean isActive() {
+    public int getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(int active) {
         this.active = active;
     }
 
-    public boolean isFoodType() {
+    public int getFoodType() {
         return foodType;
     }
 
-    public void setFoodType(boolean foodType) {
+    public void setFoodType(int foodType) {
         this.foodType = foodType;
     }
 
+    public int getIsSpicy() {
+        return isSpicy;
+    }
+
+    public void setIsSpicy(int isSpicy) {
+        this.isSpicy = isSpicy;
+    }
 
     public int getCategoryId() {
         return categoryId;
@@ -107,14 +114,6 @@ public class MenuDbDTO extends BaseDTO {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public boolean isSpicy() {
-        return isSpicy;
-    }
-
-    public void setIsSpicy(boolean isSpicy) {
-        this.isSpicy = isSpicy;
     }
 
     public int getRoomId() {

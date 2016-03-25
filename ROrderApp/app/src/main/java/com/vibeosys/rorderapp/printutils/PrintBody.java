@@ -18,4 +18,11 @@ public class PrintBody {
     public void setMenus(HashMap<Integer, OrderDetailsDTO> menus) {
         this.menus = menus;
     }
+
+    @Override
+    public String toString() {
+        return "PrintBody{" +
+                "menus=" + menus +
+                '}';
+    }
 }

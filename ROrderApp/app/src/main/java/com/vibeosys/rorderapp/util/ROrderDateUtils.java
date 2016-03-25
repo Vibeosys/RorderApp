@@ -44,6 +44,10 @@ public class ROrderDateUtils {
         return timeReadFormat.format(date);
     }
 
+    public String getLocalTimeInReadableFormat() {
+        return timeReadFormat.format(new java.util.Date());
+    }
+
     public String getGMTDateInFormat(Date date) {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         return dateFormat.format(date);

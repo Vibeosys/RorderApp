@@ -549,11 +549,11 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlMenu.PRICE, menu.getPrice());
                     contentValues.put(SqlContract.SqlMenu.INGREDIENTS, menu.getIngredients());
                     contentValues.put(SqlContract.SqlMenu.TAGS, menu.getTags());
-                    contentValues.put(SqlContract.SqlMenu.AVAIL_STATUS, menu.isAvailabilityStatus());
-                    contentValues.put(SqlContract.SqlMenu.ACTIVE, menu.isActive());
-                    contentValues.put(SqlContract.SqlMenu.FOOD_TYPE, menu.isFoodType());
+                    contentValues.put(SqlContract.SqlMenu.AVAIL_STATUS, menu.getAvailabilityStatus());
+                    contentValues.put(SqlContract.SqlMenu.ACTIVE, menu.getActive());
+                    contentValues.put(SqlContract.SqlMenu.FOOD_TYPE, menu.getFoodType());
                     contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
-                    contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.isSpicy());
+                    contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.getIsSpicy());
                     contentValues.put(SqlContract.SqlMenu.ROOM_ID, menu.getRoomId());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlMenu.TABLE_NAME, null, contentValues);
@@ -2261,14 +2261,14 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlMenu.INGREDIENTS, menu.getIngredients());
                     if (menu.getTags() != null && menu.getTags().isEmpty())
                         contentValues.put(SqlContract.SqlMenu.TAGS, menu.getTags());
-                    contentValues.put(SqlContract.SqlMenu.AVAIL_STATUS, menu.isAvailabilityStatus());
-                    contentValues.put(SqlContract.SqlMenu.ACTIVE, menu.isActive());
-                    contentValues.put(SqlContract.SqlMenu.FOOD_TYPE, menu.isFoodType());
+                    contentValues.put(SqlContract.SqlMenu.AVAIL_STATUS, menu.getAvailabilityStatus());
+                    contentValues.put(SqlContract.SqlMenu.ACTIVE, menu.getActive());
+                    contentValues.put(SqlContract.SqlMenu.FOOD_TYPE, menu.getFoodType());
                     if (menu.getCategoryId() != 0)
                         contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
                     if (menu.getRoomId() != 0)
                         contentValues.put(SqlContract.SqlMenu.ROOM_ID, menu.getRoomId());
-                    contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.isSpicy());
+                    contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.getIsSpicy());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlMenu.TABLE_NAME, contentValues,
                             SqlContract.SqlMenu.MENU_ID + "=?", whereClause);

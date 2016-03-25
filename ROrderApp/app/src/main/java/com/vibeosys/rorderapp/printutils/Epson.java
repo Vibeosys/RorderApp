@@ -1,18 +1,24 @@
 package com.vibeosys.rorderapp.printutils;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.util.*;
 import android.util.Log;
 
 import com.epson.eposprint.*;
+import com.vibeosys.rorderapp.data.OrderDetailsDTO;
+import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
+
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by akshay on 29-02-2016.
  */
 public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStatusChangeEventListener {
 
-    private int mDeviceType = Print.DEVTYPE_BLUETOOTH;
+    private int mDeviceType = Print.DEVTYPE_TCP;
     PrinterDetailsDTO printerDetails;
     /* private String mIpAddress = "00:01:90:C2:A8:4F";
      private String mPrinterName = "TM-P20";*/
@@ -66,8 +72,22 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
             mBuilder = new Builder(printerDetails.getmModelName(), mLanguage, mContext);
 
             mMethod = "addText";
-            mBuilder.addText(printDataDTO.getBody().getMenus().toString());
-            Log.d("##", "##" + printDataDTO.getBody().getMenus().toString());
+            //mBuilder.addText(printDataDTO.getBody().getMenus().toString());
+            //mBuilder.addText(printDataDTO.getHeader());
+            //mBuilder.addFeedLine(Builder.LINE_MEDIUM);
+            String strPrint=printDataDTO.getKotPrint(45,3,5);
+           Log.d("##","##"+strPrint);
+           // mBuilder.addTextAlign(Builder.ALIGN_LEFT);*/
+            mBuilder.addTextLineSpace(Builder.LINE_THIN_DOUBLE);
+            mBuilder.addText(strPrint);
+            /*mBuilder.addFeedLine(Builder.LINE_MEDIUM_DOUBLE);*/
+            mBuilder.addCut(Builder.CUT_FEED);
+
+           /* for( int i =0;i<= menusHashMap.size();i++)
+            {
+
+            }*/
+            /*Log.d("##", "##" + printDataDTO.getBody().getMenus().toString());*/
             int[] status = new int[1];
             int[] battery = new int[1];
             try {
@@ -82,7 +102,7 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
         } catch (EposException e) {
             System.err.println("Error at method " + mMethod);
         } finally {
-            // closePrinter();
+             closePrinter();
         }
 
     }
