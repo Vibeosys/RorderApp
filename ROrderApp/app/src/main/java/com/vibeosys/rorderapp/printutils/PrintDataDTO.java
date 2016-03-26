@@ -419,7 +419,7 @@ public class PrintDataDTO {
             builder.addText(strMargin);
             builder.addText(this.mHeader.getCustAddress()+"\n");
             builder.addText(strMargin);
-            builder.addText(this.mHeader.getPhoneNumber()+"\n");
+            builder.addText(this.mHeader.getPhNo()+"\n");
             builder.addText(strMargin);
             //builder.addTextAlign(builder.ALIGN_LEFT);
             builder.addText(this.mHeader.getNumber() + "\n");

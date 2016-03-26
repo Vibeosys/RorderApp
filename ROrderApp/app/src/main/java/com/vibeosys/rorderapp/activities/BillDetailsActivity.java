@@ -307,7 +307,7 @@ public class BillDetailsActivity extends BaseActivity {
         header.setBillType("Take Away");
         header.setCustName("Customer Name: " + takeAwayDTO.getmCustName());
         header.setCustAddress("Customer Address:" + takeAwayDTO.getmCustAddress());
-        header.setPhoneNumber("Customer Ph.:" + takeAwayDTO.getCustPhone());
+        header.setPhNo("Customer Ph.:" + takeAwayDTO.getCustPhone());
         header.setRestaurantName(mSessionManager.getUserRestaurantName());
         header.setPhoneNumber(restaurantDTO.getmPhoneNumber());
         String footer = "Powered by QuickServe";
