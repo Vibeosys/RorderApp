@@ -273,9 +273,9 @@ public class TableOrderActivity extends BaseActivity implements
                         }
                     }
                     keyRoomId = sortOrderByKitchen.keySet();
-                    for (Integer i : keyRoomId) {
+                    for (final Integer i : keyRoomId) {
                         ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
-                        List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
+                        final List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
                         for (OrderDetailsDTO orderDetail : orderListByRoom) {
                             UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
                             sendDetails.add(sendOrder);
@@ -287,7 +287,13 @@ public class TableOrderActivity extends BaseActivity implements
                         Gson gson = new Gson();
 
                         //Kot Printing
-                        printKot(orderListByRoom, i);
+                        Thread t = new Thread() {
+                            public void run() {
+                                printKot(orderListByRoom, i);
+                            }
+                        };
+                        t.start();
+                        //
 
 
                         String serializedJsonString = gson.toJson(sendOrder);
@@ -338,6 +344,10 @@ public class TableOrderActivity extends BaseActivity implements
         printPaper.openPrinter();
         PrintHeader header= new PrintHeader("Served By :"+mSessionManager.getUserName(),"Table No.: #"
                 +mTableNo,new ROrderDateUtils().getLocalTimeInReadableFormat());
+        if (mTableId==0)
+        {
+            header.setTableNo("Take Away No.: #"+mTakeAwayNo);
+        }
         String footer="Powered by QuickServe";
         PrintDataDTO printData=new PrintDataDTO();
         printData.setHeader(header);

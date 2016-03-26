@@ -15,8 +15,9 @@ import com.epson.eposprint.*;
  */
 public class PrintDataDTO {
 
-    public static final int BILL = 1;
+    public static final int BILL_DINE_IN = 1;
     public static final int KOT = 2;
+    public static final int BILL_TAKE_AWAY = 3;
     private PrintHeader mHeader;
     private String mFooter;
     private PrintBody mBody;
@@ -72,8 +73,10 @@ public class PrintDataDTO {
     }
 
     public Builder getPrint(Builder builder, int maxNoChar, int padding, int margin) {
-        if (this.type == BILL)
+        if (this.type == BILL_DINE_IN)
             return getPrintBill(builder, maxNoChar, margin, padding);
+        else if(this.type==BILL_TAKE_AWAY)
+            return getPrintTakeBill(builder, maxNoChar, margin, padding);
         else
             return getKotPrint(builder, maxNoChar, padding, margin);
     }
@@ -253,6 +256,9 @@ public class PrintDataDTO {
             // builder.addText(strMargin);
             builder.addText(getCentreAlign(this.mHeader.getPhoneNumber(), maxChar, margin) + "\n");
             // builder.addText(strMargin);
+            builder.addText(getCentreAlign("Tax Invoice",maxChar,margin)+"\n");
+            builder.addText(strPadding);
+            builder.addText(strLine+"\n");
             builder.addText(getCentreAlign(this.mHeader.getBillType(), maxChar, margin) + "\n");
             builder.addText(strMargin);
             //builder.addTextAlign(builder.ALIGN_LEFT);
@@ -372,6 +378,103 @@ public class PrintDataDTO {
             builder.addText(strPadding + "\n");
             builder.addText(strMargin);
             builder.addText(getCentreAlign(this.mFooter, maxNoChar, margin) + "\n");
+        } catch (EposException e) {
+            e.printStackTrace();
+        }
+
+        return builder;
+    }
+
+    public Builder getPrintTakeBill(Builder builder, int maxChar, int margin, int padding) {
+
+        String strLine = "";
+        for (int i = 0; i < maxChar; i++) {
+            strLine = strLine + "_";
+        }
+        String strMargin = "";
+        for (int i = 0; i < margin; i++) {
+            strMargin = strMargin + " ";
+        }
+        String strPadding = "";
+        for (int i = 0; i < padding; i++) {
+            strPadding = strPadding + " ";
+        }
+        try {
+            //builder.addPageBegin();
+            //builder.addTextAlign(builder.ALIGN_CENTER);
+            //builder.addTextSize(1, 1);
+            //builder.addText(strMargin);
+            builder.addText(getCentreAlign(this.mHeader.getRestaurantName(), maxChar, margin) + "\n");
+            builder.addText(strMargin);
+            builder.addText(getCentreAlign(this.mHeader.getAddress(), maxChar, margin) + "\n");
+            // builder.addText(strMargin);
+            builder.addText(getCentreAlign(this.mHeader.getPhoneNumber(), maxChar, margin) + "\n");
+            // builder.addText(strMargin);
+            builder.addText(getCentreAlign("Tax Invoice",maxChar,margin)+"\n");
+            builder.addText(strPadding);
+            builder.addText(strLine+"\n");
+            builder.addText(getCentreAlign(this.mHeader.getBillType(), maxChar, margin) + "\n");
+            builder.addText(strMargin);
+            builder.addText(this.mHeader.getCustName()+"\n");
+            builder.addText(strMargin);
+            builder.addText(this.mHeader.getCustAddress()+"\n");
+            builder.addText(strMargin);
+            builder.addText(this.mHeader.getPhoneNumber()+"\n");
+            builder.addText(strMargin);
+            //builder.addTextAlign(builder.ALIGN_LEFT);
+            builder.addText(this.mHeader.getNumber() + "\n");
+            builder.addText(strMargin);
+            builder.addText(this.mHeader.getTableNo() + "\n");
+            builder.addText(strMargin);
+            builder.addText(this.mHeader.getTime() + "\n");
+           /* builder.addText(strMargin);
+            builder.addText(this.mHeader.getServedBy() + "\n");*/
+            builder.addText(strPadding);
+            builder.addText(strLine + "\n");
+            String strDesc = "Description";
+            String strQty = "Qty    Amt";
+            //strPrint.append(getSpaceString(strAmout.length(),maxNoChar,margin+strAmout.length()));
+            String column = strDesc + getSpaceString(strDesc.length() + strQty.length() + 2, maxChar, margin) + strQty;
+            builder.addText(strMargin);
+            builder.addText(column + "\n");
+            builder.addText(strPadding);
+            builder.addText(strLine + "\n");
+            HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
+            Set<Integer> keys = menusHashMap.keySet();
+            String menuList = "";
+            for (Integer i : keys) {
+                OrderDetailsDTO orderMenu = menusHashMap.get(i);
+                String menuTitle = orderMenu.getMenuTitle();
+                int menuLength = menuTitle.length();
+                String quantity = String.valueOf(orderMenu.getOrderQuantity()) + "    " + String.format("%.2f", orderMenu.getOrderPrice());
+                String space = getSpaceString(menuTitle.length() + quantity.length(), maxChar, margin);
+                menuTitle = menuTitle + space + quantity;
+                //menuTitle = menuTitle + strMargin + strPadding;
+                builder.addText(strMargin);
+                builder.addText(menuTitle + "\n");
+                menuList = menuList + menuTitle + "\n";
+            }
+            //builder.addText(menuList);
+            builder.addText(strPadding);
+            builder.addText(strLine + "\n");
+            //String net="Net Amount";
+            String netSpace = getSpaceString(String.format("%.2f", billDetailsDTO.getNetAmount()).length(), 10, 0);
+            builder.addText(rightAlign("Net Amount" + netSpace + String.format("%.2f", billDetailsDTO.getNetAmount()) + "", maxChar) + "\n");
+            String taxSpace = getSpaceString(String.format("%.2f", billDetailsDTO.getTotalTax()).length(), 10, 0);
+            builder.addText(rightAlign("Taxes" + taxSpace + String.format("%.2f", billDetailsDTO.getTotalTax()) + "", maxChar) + "\n");
+            String discSpace = getSpaceString(String.format("%.2f", billDetailsDTO.getDiscount()).length(), 10, 0);
+            builder.addText(rightAlign("Discount" + discSpace + String.format("%.2f", billDetailsDTO.getDiscount()) + "", maxChar) + "\n");
+            String deliverySpace = getSpaceString(String.format("%.2f", billDetailsDTO.getDeliveryChr()).length(), 10, 0);
+            builder.addText(rightAlign("Delivery Charges" + deliverySpace + String.format("%.2f", billDetailsDTO.getDeliveryChr()) + "", maxChar) + "\n");
+            //strPrint.append(rightAlign("Discount"+billDetailsDTO.get))
+            builder.addText(strPadding);
+            builder.addText(strLine + "\n");
+            String totalSpace=getSpaceString(String.format("%.2f", billDetailsDTO.getTotalPayableAmt()).length(),10,0);
+            builder.addText(rightAlign("Total Amount"+totalSpace + String.format("%.2f", billDetailsDTO.getTotalPayableAmt()) + "", maxChar) + "\n");
+            builder.addText(strPadding);
+            builder.addText(strLine);
+            builder.addText(getCentreAlign(this.mFooter, maxChar, margin) + "\n");
+            //builder.addPageEnd();
         } catch (EposException e) {
             e.printStackTrace();
         }

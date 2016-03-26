@@ -12,7 +12,12 @@ public class PrintHeader {
     private String address;
     private String phoneNumber;
     private String number;
+    private String custName;
+    private String custAddress;
+    private String phNo;
 
+    public PrintHeader() {
+    }
 
     public PrintHeader(String servedBy, String tableNo, String time) {
         this.servedBy = servedBy;
@@ -82,5 +87,29 @@ public class PrintHeader {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
+    public String getCustAddress() {
+        return custAddress;
+    }
+
+    public void setCustAddress(String custAddress) {
+        this.custAddress = custAddress;
+    }
+
+    public String getPhNo() {
+        return phNo;
+    }
+
+    public void setPhNo(String phNo) {
+        this.phNo = phNo;
     }
 }

@@ -19,6 +19,7 @@ public class BillDetailsDTO {
     private String billTime;
     private int billPayed;
     private double discount;
+    private double deliveryChr;
     public BillDetailsDTO() {
     }
 
@@ -117,5 +118,13 @@ public class BillDetailsDTO {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public double getDeliveryChr() {
+        return deliveryChr;
+    }
+
+    public void setDeliveryChr(double deliveryChr) {
+        this.deliveryChr = deliveryChr;
     }
 }
