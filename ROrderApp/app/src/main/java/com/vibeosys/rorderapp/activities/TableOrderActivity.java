@@ -336,7 +336,7 @@ public class TableOrderActivity extends BaseActivity implements
         PrintPaper printPaper = printerFactory.getPrinter(printerDetails);
         printPaper.setPrinter(getApplicationContext(), printerDetails);
         printPaper.openPrinter();
-        PrintHeader header= new PrintHeader("Served By "+mSessionManager.getUserName(),"Table #"
+        PrintHeader header= new PrintHeader("Served By :"+mSessionManager.getUserName(),"Table No.: #"
                 +mTableNo,new ROrderDateUtils().getLocalTimeInReadableFormat());
         String footer="Powered by QuickServe";
         PrintDataDTO printData=new PrintDataDTO();

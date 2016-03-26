@@ -18,7 +18,7 @@ public class BillDetailsDTO {
     private Date billInDate;
     private String billTime;
     private int billPayed;
-
+    private double discount;
     public BillDetailsDTO() {
     }
 
@@ -109,5 +109,13 @@ public class BillDetailsDTO {
 
     public void setBillPayed(int billPayed) {
         this.billPayed = billPayed;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }

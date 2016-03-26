@@ -160,10 +160,10 @@ public class BillDetailsActivity extends BaseActivity {
 
 
                 ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
-                detailsArray = mDbRepository.getPrinterDetails(1);
+                detailsArray = mDbRepository.getPrinterDetails(2);
                 mBillDetailsDTOs.getBillNo();
                 ArrayList<String> getOrderId = new ArrayList<>();
-                getOrderId=  mDbRepository.getOderIdForPrinting("3", custId);
+                getOrderId = mDbRepository.getOderIdForPrinting("3", custId);
                 HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
                /* for(Map.Entry<String, ArrayList<String>> entry :billdetails.entrySet())
                 {
@@ -173,30 +173,34 @@ public class BillDetailsActivity extends BaseActivity {
                     Log.d("BillDetails","##"+value);
                 }*/
                 //Toast.makeText(getApplicationContext(), "Data is fetched", Toast.LENGTH_LONG).show();
-                for (PrinterDetailsDTO printerDetail : detailsArray) {
-
-                    PrintBody printBody=new PrintBody();
-                    printBody.setMenus(billdetails);
-                    ROrderDateUtils dateUtils =  new ROrderDateUtils();
-                    PrintHeader header= new PrintHeader("Captain : "+mSessionManager.getUserName(),"Table #"
-                            +mTableNo, dateUtils.getLocalDateInReadableFormat(new java.util.Date())+" "+dateUtils.getLocalTimeInReadableFormat());
-                    header.setAddress("Baner");
-                    header.setNumber("Bill No."+mBillDetailsDTOs.getBillNo());
-                    header.setRestaurantName(mSessionManager.getUserRestaurantName());
-                    header.setPhoneNumber("020-26817136");
-                    String footer="Powered by QuickServe";
-                    PrintDataDTO printData=new PrintDataDTO();
-                    printData.setHeader(header);
-                    printData.setFooter(footer);
-                    printData.setBody(printBody);
-                    printData.setType(PrintDataDTO.BILL);
-                    printData.setBillDetailsDTO(mBillDetailsDTOs);
-                    PrinterFactory printerFactory = new PrinterFactory();
-                    PrintPaper printPaper = printerFactory.getPrinter(printerDetail);
-                    printPaper.setPrinter(getApplicationContext(), printerDetail);
-                    printPaper.openPrinter();
-                    printPaper.printText(printData);
-                }
+                //for (PrinterDetailsDTO printerDetail : detailsArray) {
+                PrinterDetailsDTO printerDetail = detailsArray.get(1);
+                PrintBody printBody = new PrintBody();
+                printBody.setMenus(billdetails);
+                ROrderDateUtils dateUtils = new ROrderDateUtils();
+                PrintHeader header = new PrintHeader("By : " + mSessionManager.getUserName(), "Table #:"
+                        + mTableNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
+                header.setAddress("Baner");
+                header.setNumber("Bill No.: " + mBillDetailsDTOs.getBillNo());
+                if (mTableId != 0)
+                    header.setBillType("Dine-In");
+                else
+                    header.setBillType("Take Away");
+                header.setRestaurantName(mSessionManager.getUserRestaurantName());
+                header.setPhoneNumber("020-26817136");
+                String footer = "Powered by QuickServe";
+                PrintDataDTO printData = new PrintDataDTO();
+                printData.setHeader(header);
+                printData.setFooter(footer);
+                printData.setBody(printBody);
+                printData.setType(PrintDataDTO.BILL);
+                printData.setBillDetailsDTO(mBillDetailsDTOs);
+                PrinterFactory printerFactory = new PrinterFactory();
+                PrintPaper printPaper = printerFactory.getPrinter(printerDetail);
+                printPaper.setPrinter(getApplicationContext(), printerDetail);
+                printPaper.openPrinter();
+                printPaper.printText(printData);
+                // }
 
             }
         });
@@ -286,6 +290,10 @@ public class BillDetailsActivity extends BaseActivity {
         //mTxtServicesCharges.setText(String.format("%.2f", mDiscount));
         mTxtDiscountAmount.setText(String.format("%.2f", mDiscount));
         mTxtTotalPayableAmnount.setText(String.format("%.2f", totalPaybleAmount));
+
+        mBillDetailsDTOs.setDiscount(mDiscount);
+        mBillDetailsDTOs.setNetAmount(netAmount);
+        mBillDetailsDTOs.setTotalPayableAmt(totalPaybleAmount);
     }
 
 }
