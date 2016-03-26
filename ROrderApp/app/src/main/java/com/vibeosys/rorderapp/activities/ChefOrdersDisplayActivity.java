@@ -117,9 +117,9 @@ public class ChefOrdersDisplayActivity extends BaseActivity {
         {
             tab_layout = (TabLayout) findViewById(R.id.tab_layout_chef);
 
-            tab_layout.addTab(tab_layout.newTab().setText("CURRENT ORDERS"));
+            tab_layout.addTab(tab_layout.newTab().setText("COMPLETED ORDERS"));
 
-            tab_layout.addTab(tab_layout.newTab().setText("ORDER HISTORY"));
+            tab_layout.addTab(tab_layout.newTab().setText("CURRENT  ORDERS"));
 
 
             tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);

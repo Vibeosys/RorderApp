@@ -97,7 +97,11 @@
 
         <activity android:name=".activities.ChefOrdersDisplayTabActivity"
             android:screenOrientation="landscape">
+
         </activity>
+        <activity
+            android:name=".activities.CompletedOrdersScreen"
+            android:parentActivityName=".MainActivity"></activity>
         <service
             android:name=".service.SyncService"
             android:exported="false" />

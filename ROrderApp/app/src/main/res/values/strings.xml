@@ -70,6 +70,7 @@
     <string name="nav_my_profile">My Profile</string>
     <string name="nav_log_out">Log Out</string>
     <string name="nav_about_us">About Us</string>
+    <string name ="completed_Orders">Completed Orders</string>>
     <string name="hint_restaurant_id">Enter Restaurant Id</string>
     <string name="error_select_restaurant">Id Must be a Number</string>
     <string name="error_select_restaurant_id">Restaurant Id is needed</string>
@@ -97,7 +98,7 @@
          ranking based on past orders. </p>
          <p>For more information or tie-ups, please visit our website
           <a href ="http://www.vibeosys.com">www.vibeosys.com</a> </p>
-         <p>For business inquiry please contact
+         <p>For business inquiries please contact
           <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a></p>
           <p><b>QuickServe&trade;</b> is a registered trademark of Vibeosys Software Pvt Ltd. </p>
         ]]>
@@ -120,7 +121,7 @@
     <string name="str_non_veg">Non Veg Only</string>
     <string name="veg">Veg Only</string>
     <string name="company_info">
-       <![CDATA[  <p style="text-align:center"><b>QuickServe&trade;</b>is product of Vibeosys Software Pvt.Ltd.For business inquiry
+       <![CDATA[  <p style="text-align:center"><b>QuickServe&trade;</b> is product of Vibeosys Software Pvt.Ltd.For business inquiries
         please contact  <a href ="mailto:info@vibeosys.com?Subject=Business%20Inquiry">info@vibeosys.com</a></p> ]]>
         </string>
     <string name="version_no">QuickServe V.</string>

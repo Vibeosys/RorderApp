@@ -45,6 +45,7 @@ import com.vibeosys.rorderapp.activities.AddCustomerActivity;
 import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.BillDetailsActivity;
 import com.vibeosys.rorderapp.activities.ChefOrdersDisplayActivity;
+import com.vibeosys.rorderapp.activities.CompletedOrdersScreen;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.NotificationActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
@@ -66,6 +67,7 @@ import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
+import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
 import com.vibeosys.rorderapp.fragments.FragmentTakeAway;
 import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 import com.vibeosys.rorderapp.service.SyncService;
@@ -400,6 +402,13 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.settings) {
             Intent iSetting = new Intent(getApplicationContext(), SettingPrinterActivity.class);
             startActivity(iSetting);
+        }
+        else if(id == R.id.completed_ordres)
+        {
+
+            Intent selectRestoIntent = new Intent(getApplicationContext(), CompletedOrdersScreen.class);
+            startActivity(selectRestoIntent);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

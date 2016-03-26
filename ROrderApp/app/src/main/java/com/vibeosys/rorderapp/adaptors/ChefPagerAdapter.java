@@ -22,11 +22,13 @@ public class ChefPagerAdapter extends FragmentPagerAdapter{
         switch (position)
         {
             case 0:
-                FragmentChefMyServing fragmentChefMyServing = new FragmentChefMyServing();
-                return fragmentChefMyServing;
-            case 1:
                 FragmentChefPlacedOrder fragmentChefPlacedOrder = new FragmentChefPlacedOrder();
                 return fragmentChefPlacedOrder;
+
+            case 1:
+
+                 FragmentChefMyServing fragmentChefMyServing = new FragmentChefMyServing();
+                 return fragmentChefMyServing;
 
             default:
                 return null;

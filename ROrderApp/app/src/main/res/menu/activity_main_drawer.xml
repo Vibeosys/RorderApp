@@ -15,6 +15,10 @@
             android:id="@+id/about_us"
             android:icon="@drawable/ic_action_info"
             android:title="@string/nav_about_us" />
+        <item
+            android:id="@+id/completed_ordres"
+            android:icon="@drawable/ico_new_servedby"
+            android:title="@string/completed_Orders" />
 
     </group>
 
