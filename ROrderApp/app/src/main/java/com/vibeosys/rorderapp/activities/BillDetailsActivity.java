@@ -31,6 +31,7 @@ import com.vibeosys.rorderapp.printutils.PrintDataDTO;
 import com.vibeosys.rorderapp.printutils.PrintHeader;
 import com.vibeosys.rorderapp.printutils.PrintPaper;
 import com.vibeosys.rorderapp.printutils.PrinterFactory;
+import com.vibeosys.rorderapp.util.AppConstants;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
 import java.util.ArrayList;
@@ -158,23 +159,28 @@ public class BillDetailsActivity extends BaseActivity {
         billPrinting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
-                detailsArray = mDbRepository.getPrinterDetails(2);
-                mBillDetailsDTOs.getBillNo();
-                ArrayList<String> getOrderId = new ArrayList<>();
-                getOrderId = mDbRepository.getOderIdForPrinting("3", custId);
-                RestaurantDTO restaurantDTO=mDbRepository.getRestaurantDetails(mSessionManager.getUserRestaurantName());
-                HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
-               /* for (PrinterDetailsDTO printerDetail : detailsArray) {*/
-                PrinterDetailsDTO printerDetail=detailsArray.get(1);
-                    if (mTableId != 0) {
-                        printDineIn(billdetails, printerDetail,restaurantDTO);
-                    } else {
-                        printTakeAway(billdetails,printerDetail,restaurantDTO);
+                int permissionId = mDbRepository.getPermissionId(AppConstants.PERMISSION_PRINT_BILL);
+                if (getPermissionStatus(permissionId)) {
+                    ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
+                    detailsArray = mDbRepository.getPrinterDetails(2);
+                    mBillDetailsDTOs.getBillNo();
+                    ArrayList<String> getOrderId = new ArrayList<>();
+                    getOrderId = mDbRepository.getOderIdForPrinting("3", custId);
+                    RestaurantDTO restaurantDTO = mDbRepository.getRestaurantDetails(mSessionManager.getUserRestaurantName());
+                    HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
+                    for (PrinterDetailsDTO printerDetail : detailsArray) {
+                        if (mTableId != 0) {
+                            printDineIn(billdetails, printerDetail, restaurantDTO);
+                        } else {
+                            printTakeAway(billdetails, printerDetail, restaurantDTO);
+                        }
+
                     }
 
-                //}
-
+                }
+                else {
+                    customAlterDialog(getResources().getString(R.string.dialog_access_denied), getResources().getString(R.string.access_denied_place_order));
+                }
             }
         });
     }

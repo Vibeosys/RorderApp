@@ -236,8 +236,8 @@ public class TableOrderActivity extends BaseActivity implements
     private void placeOrder() {
 
         // OrderHeaderDTO currentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId());
-       /* int permissionId = mDbRepository.getPermissionId(AppConstants.PERMISSION_PLACE_ORDER);
-        if (getPermissionStatus(permissionId)) {*/
+        int permissionId = mDbRepository.getPermissionId(AppConstants.PERMISSION_PLACE_ORDER);
+        if (getPermissionStatus(permissionId)) {
             if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
                 OrderHeaderDTO sendOrderHeader = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), mCustId);
                 if (sendOrderHeader.getOrderDetailsDTOs().size() <= 0) {
@@ -314,9 +314,9 @@ public class TableOrderActivity extends BaseActivity implements
             } else {
                 showMyDialog(mContext);
             }
-        /*} else {
+        } else {
             customAlterDialog(getResources().getString(R.string.dialog_access_denied), getResources().getString(R.string.access_denied_place_order));
-        }*/
+        }
     }
 
     private void printKot(List<OrderDetailsDTO> orderListByRoom, int roomId) {
