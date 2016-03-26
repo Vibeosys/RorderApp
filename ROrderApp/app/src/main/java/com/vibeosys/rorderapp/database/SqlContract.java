@@ -176,6 +176,12 @@ public class SqlContract {
         public final static String RESTAURANT_ID = "RestaurantId";
         public final static String RESTAURANT_NAME = "RestaurantTitle";
         public final static String RESTAURANT_URL = "LogoUrl";
+        public final static String RESTAURANT_ADDRESS="Address";
+        public final static String RESTAURANT_AREA ="Area";
+        public final static String RESTAURANT_CITY="City";
+        public final static String RESTAURANT_COUNTRY="Country";
+        public final static String RESTAURANT_PHONE="Phone";
+        public final static String RESTAURANT_FOOTER="Footer";
     }
 
     public abstract class SqlTakeAwaySource {

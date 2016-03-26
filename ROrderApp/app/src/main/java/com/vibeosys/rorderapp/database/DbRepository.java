@@ -31,6 +31,7 @@ import com.vibeosys.rorderapp.data.PaymentModeDbDTO;
 import com.vibeosys.rorderapp.data.PermissionSetDbDTO;
 import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
 import com.vibeosys.rorderapp.data.PrintersDbDTO;
+import com.vibeosys.rorderapp.data.RestaurantDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
 import com.vibeosys.rorderapp.data.RoomTypesDbDTO;
@@ -3956,4 +3957,57 @@ public class DbRepository extends SQLiteOpenHelper {
         return billdetails;
     }
 
+    public RestaurantDTO getRestaurantDetails(String restaurantName) {
+
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getReadableDatabase();
+        RestaurantDTO restaurantDTO = null;
+        Cursor cursor = null;
+
+
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+
+                    String[] where = new String[]{restaurantName};
+                    cursor = sqLiteDatabase.rawQuery("SELECT * " +
+                            "from restaurant  where " + SqlContract.SqlRestaurant.RESTAURANT_NAME + " =?", where);
+                    if (cursor != null) {
+
+                        if (cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            do {
+
+                                int restaurantId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_ID));
+                                String restaurantNM = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_NAME));
+                                String restaurantLogUrl = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_URL));
+                                String  restaurantAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS));
+                                String restaurantArea = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_AREA));
+                                String restaurantCity = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_CITY));
+                                String restaurantCountry = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY));
+                                String restaurantPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_PHONE));
+                                String restaurantFooter = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_FOOTER));
+                                restaurantDTO = new RestaurantDTO(restaurantId,restaurantNM,restaurantLogUrl,
+                                        restaurantAddress,restaurantArea,restaurantCity,restaurantCountry,
+                                        restaurantPhone,restaurantFooter);
+
+                            } while (cursor.moveToNext());
+                        }
+                    }
+
+
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return restaurantDTO;
+    }
 }
