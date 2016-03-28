@@ -287,15 +287,15 @@ public class TableOrderActivity extends BaseActivity implements
                         Gson gson = new Gson();
 
                         //Kot Printing
-                        Thread t = new Thread() {
+                        /*Thread t = new Thread() {
                             public void run() {
                                 printKot(orderListByRoom, i);
                             }
                         };
-                        t.start();
+                        t.start();*/
                         //
 
-
+                        printKot(orderListByRoom, i);
                         String serializedJsonString = gson.toJson(sendOrder);
                         Log.d(TAG, "##" + serializedJsonString);
                         TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
