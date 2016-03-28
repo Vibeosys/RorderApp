@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Set;
 
 import com.epson.eposprint.*;
+import com.vibeosys.rorderapp.data.RestaurantDTO;
+import com.vibeosys.rorderapp.database.DbRepository;
 
 /**
  * Created by akshay on 29-02-2016.
@@ -23,6 +25,8 @@ public class PrintDataDTO {
     private PrintBody mBody;
     private int type;
     private BillDetailsDTO billDetailsDTO;
+    DbRepository mDbRepository;
+    String mConstantFooter = "Powered by QuickServe";
 
     public PrintDataDTO() {
     }
@@ -149,7 +153,7 @@ public class PrintDataDTO {
         return strSpace;
     }
 
-    public String getCentreAlign(String str, int maxChar, int margin) {
+    public String getCentreAlign(String str, int maxChar, int margin) {//
         String outStr;
         int space = (maxChar / 2) - (str.length() / 2);
         String strSpace = "";
@@ -250,11 +254,21 @@ public class PrintDataDTO {
             //builder.addTextAlign(builder.ALIGN_CENTER);
             //builder.addTextSize(1, 1);
             //builder.addText(strMargin);
+            // Here applying text style
+            builder.addTextSize(1,2);
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED,Builder.FALSE,Builder.TRUE,Builder.PARAM_UNSPECIFIED);
             builder.addText(getCentreAlign(this.mHeader.getRestaurantName(), maxChar, margin) + "\n");
+           // builder.addTextStyle(Builder.PARAM_UNSPECIFIED,Builder.TRUE,Builder.PARAM_UNSPECIFIED,Builder.PARAM_UNSPECIFIED);
             //builder.addText(strMargin);
+            // Here removing  text style
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED,Builder.FALSE,Builder.FALSE,Builder.PARAM_UNSPECIFIED);
+
+            builder.addTextSize(1, 1);
+            builder.addText(strMargin);
             builder.addText(getCentreAlign(this.mHeader.getAddress(), maxChar, margin) + "\n");
             // builder.addText(strMargin);
-            builder.addText(getCentreAlign(this.mHeader.getPhoneNumber(), maxChar, margin) + "\n");
+            String restaurantPh ="Ph: ".concat(this.mHeader.getPhoneNumber());
+            builder.addText(getCentreAlign(restaurantPh, maxChar, margin) + "\n");
             // builder.addText(strMargin);
             builder.addText(getCentreAlign("Tax Invoice",maxChar,margin)+"\n");
             builder.addText(strPadding);
@@ -275,8 +289,13 @@ public class PrintDataDTO {
             String strQty = "Qty    Amt";
             //strPrint.append(getSpaceString(strAmout.length(),maxNoChar,margin+strAmout.length()));
             String column = strDesc + getSpaceString(strDesc.length() + strQty.length() + 2, maxChar, margin) + strQty;
+
             builder.addText(strMargin);
+
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.TRUE, Builder.PARAM_UNSPECIFIED);
             builder.addText(column + "\n");
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.FALSE, Builder.PARAM_UNSPECIFIED);
+
             builder.addText(strPadding);
             builder.addText(strLine + "\n");
             HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
@@ -307,11 +326,20 @@ public class PrintDataDTO {
             //strPrint.append(rightAlign("Discount"+billDetailsDTO.get))
             builder.addText(strPadding);
             builder.addText(strLine + "\n");
-            String totalSpace=getSpaceString(String.format("%.2f", billDetailsDTO.getTotalPayableAmt()).length(),10,0);
-            builder.addText(rightAlign("Total Amount"+totalSpace + String.format("%.2f", billDetailsDTO.getTotalPayableAmt()) + "", maxChar) + "\n");
+            String totalSpace =getSpaceString(String.format("%.2f", billDetailsDTO.getTotalPayableAmt()).length(),10,0);
+
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.TRUE, Builder.PARAM_UNSPECIFIED);
+            builder.addText(rightAlign("Total Amount" + totalSpace + String.format("%.2f", billDetailsDTO.getTotalPayableAmt()) + "", maxChar) + "\n");
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.FALSE, Builder.PARAM_UNSPECIFIED);
+
             builder.addText(strPadding);
             builder.addText(strLine);
-            builder.addText(getCentreAlign(this.mFooter, maxChar, margin) + "\n");
+/*            builder.addText(""+mFooterPrint);
+            builder.addText(getCentreAlign(this.mFooter, maxChar, margin) + "\n");*/
+            builder.addTextAlign(Builder.ALIGN_CENTER);
+            builder.addText("" + this.mFooter+"\n");
+            builder.addText(strLine);
+            builder.addText(getCentreAlign(mConstantFooter, maxChar, margin) + "\n");
             //builder.addPageEnd();
         } catch (EposException e) {
             e.printStackTrace();
@@ -404,11 +432,20 @@ public class PrintDataDTO {
             //builder.addTextAlign(builder.ALIGN_CENTER);
             //builder.addTextSize(1, 1);
             //builder.addText(strMargin);
+
+            /*Here Apply text size and font size*/
+            builder.addTextSize(1, 2);
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.TRUE, Builder.PARAM_UNSPECIFIED);
             builder.addText(getCentreAlign(this.mHeader.getRestaurantName(), maxChar, margin) + "\n");
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.FALSE, Builder.PARAM_UNSPECIFIED);
+            /*Here removing text size and font size*/
+            builder.addTextSize(1, 1);
+
             builder.addText(strMargin);
             builder.addText(getCentreAlign(this.mHeader.getAddress(), maxChar, margin) + "\n");
             // builder.addText(strMargin);
-            builder.addText(getCentreAlign(this.mHeader.getPhoneNumber(), maxChar, margin) + "\n");
+            String restaurantPh ="Ph: ".concat(this.mHeader.getPhoneNumber());
+            builder.addText(getCentreAlign(restaurantPh, maxChar, margin) + "\n");
             // builder.addText(strMargin);
             builder.addText(getCentreAlign("Tax Invoice",maxChar,margin)+"\n");
             builder.addText(strPadding);
@@ -417,7 +454,21 @@ public class PrintDataDTO {
             builder.addText(strMargin);
             builder.addText(this.mHeader.getCustName()+"\n");
             builder.addText(strMargin);
-            builder.addText(this.mHeader.getCustAddress()+"\n");
+            if(this.mHeader.getCustAddress().length() >=41)
+            {
+                String testFirst32 = this.mHeader.getCustAddress().substring(0,41);
+                String test="      ";
+                String testSecond32=this.mHeader.getCustAddress().substring(41);
+                String FinalTesting = test.concat(testSecond32);
+                builder.addText(""+testFirst32+"\n");
+                builder.addText(""+FinalTesting);
+            }
+            else
+            {
+                builder.addText(""+this.mHeader.getCustAddress().toString());
+            }
+
+          //  builder.addText(this.mHeader.getCustAddress()+"\n");
             builder.addText(strMargin);
             builder.addText(this.mHeader.getPhNo()+"\n");
             builder.addText(strMargin);
@@ -436,7 +487,9 @@ public class PrintDataDTO {
             //strPrint.append(getSpaceString(strAmout.length(),maxNoChar,margin+strAmout.length()));
             String column = strDesc + getSpaceString(strDesc.length() + strQty.length() + 2, maxChar, margin) + strQty;
             builder.addText(strMargin);
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.TRUE, Builder.PARAM_UNSPECIFIED);
             builder.addText(column + "\n");
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.FALSE, Builder.PARAM_UNSPECIFIED);
             builder.addText(strPadding);
             builder.addText(strLine + "\n");
             HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
@@ -470,10 +523,15 @@ public class PrintDataDTO {
             builder.addText(strPadding);
             builder.addText(strLine + "\n");
             String totalSpace=getSpaceString(String.format("%.2f", billDetailsDTO.getTotalPayableAmt()).length(),10,0);
-            builder.addText(rightAlign("Total Amount"+totalSpace + String.format("%.2f", billDetailsDTO.getTotalPayableAmt()) + "", maxChar) + "\n");
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.TRUE, Builder.PARAM_UNSPECIFIED);
+            builder.addText(rightAlign("Total Amount" + totalSpace + String.format("%.2f", billDetailsDTO.getTotalPayableAmt()) + "", maxChar) + "\n");
+            builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.FALSE, Builder.PARAM_UNSPECIFIED);
             builder.addText(strPadding);
             builder.addText(strLine);
-            builder.addText(getCentreAlign(this.mFooter, maxChar, margin) + "\n");
+            builder.addTextAlign(Builder.ALIGN_CENTER);
+            builder.addText("" + this.mFooter+"\n");
+            builder.addText(strLine);
+            builder.addText(getCentreAlign(mConstantFooter, maxChar, margin) + "\n");
             //builder.addPageEnd();
         } catch (EposException e) {
             e.printStackTrace();

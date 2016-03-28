@@ -169,13 +169,14 @@ public class BillDetailsActivity extends BaseActivity {
                     RestaurantDTO restaurantDTO = mDbRepository.getRestaurantDetails(mSessionManager.getUserRestaurantName());
                     HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
                     for (PrinterDetailsDTO printerDetail : detailsArray) {
+
                         if (mTableId != 0) {
                             printDineIn(billdetails, printerDetail, restaurantDTO);
                         } else {
                             printTakeAway(billdetails, printerDetail, restaurantDTO);
                         }
-
                     }
+
 
                 }
                 else {
@@ -282,12 +283,26 @@ public class BillDetailsActivity extends BaseActivity {
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         PrintHeader header = new PrintHeader("By : " + mSessionManager.getUserName(), "Table #:"
                 + mTableNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
-        header.setAddress(restaurantDTO.getmArea());
+        String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity()) ;
+        if(Full_Address.length() >=37)
+        {
+            String subStringFirst= Full_Address.substring(0,37);
+            String subStringSecond = Full_Address.substring(38);
+            header.setAddress(subStringFirst+"\n"+"     "+subStringSecond);
+
+        }
+        else
+        {
+            header.setAddress(Full_Address);
+        }
+
+        //header.setAddress(restaurantDTO.getmArea());
         header.setNumber("Bill No.: " + mBillDetailsDTOs.getBillNo());
         header.setBillType("Dine-In");
         header.setRestaurantName(mSessionManager.getUserRestaurantName());
         header.setPhoneNumber(restaurantDTO.getmPhoneNumber());
-        String footer = "Powered by QuickServe";
+      //  String footer = "Powered by QuickServe";
+        String footer = restaurantDTO.getmFooter();
         PrintDataDTO printData = new PrintDataDTO();
         printData.setHeader(header);
         printData.setFooter(footer);
@@ -308,15 +323,29 @@ public class BillDetailsActivity extends BaseActivity {
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         PrintHeader header = new PrintHeader("", "Take Away No.: #"
                 + mTakeAwayNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
-        header.setAddress(restaurantDTO.getmArea());
+       String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity()) ;
+        if(Full_Address.length() >=37)
+        {
+            String subStringFirst= Full_Address.substring(0,37);
+            String subStringSecond = Full_Address.substring(38);
+            header.setAddress(subStringFirst+"\n"+"     "+subStringSecond);
+
+        }
+        else
+        {
+            header.setAddress(Full_Address);
+        }
+
+       // header.setAddress(restaurantDTO.getmArea());
         header.setNumber("Bill No.: " + mBillDetailsDTOs.getBillNo());
         header.setBillType("Take Away");
-        header.setCustName("Customer Name: " + takeAwayDTO.getmCustName());
-        header.setCustAddress("Customer Address:" + takeAwayDTO.getmCustAddress());
-        header.setPhNo("Customer Ph.:" + takeAwayDTO.getCustPhone());
+        header.setCustName("Name: " + takeAwayDTO.getmCustName());
+        header.setCustAddress("Address:" + takeAwayDTO.getmCustAddress()+"\n");
+        header.setPhNo("Phone.:" + takeAwayDTO.getCustPhone());
         header.setRestaurantName(mSessionManager.getUserRestaurantName());
         header.setPhoneNumber(restaurantDTO.getmPhoneNumber());
-        String footer = "Powered by QuickServe";
+      //  String footer = "Powered by QuickServe";
+        String footer = restaurantDTO.getmFooter();
         PrintDataDTO printData = new PrintDataDTO();
         printData.setHeader(header);
         printData.setFooter(footer);

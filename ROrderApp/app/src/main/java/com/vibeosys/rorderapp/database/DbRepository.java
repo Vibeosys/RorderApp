@@ -3764,10 +3764,10 @@ public class DbRepository extends SQLiteOpenHelper {
             synchronized (sqLiteDatabase) {
                 String[] where = new String[]{String.valueOf(roomType)};
 
-                cursor = sqLiteDatabase.rawQuery("SELECT r_room_printer.RoomId,r_room_printer.PrinterId,r_printers.PrinterId,r_room_printer.Description," +
-                        " r_printers.IpAddress,r_printers.PrinterName,r_printers.ModelName,r_printers.MacAddress," +
-                        " r_printers.Company,r_room_printer.Active from r_printers left join r_room_printer " +
-                        " on r_room_printer.PrinterId = r_printers.PrinterId where r_room_printer.Active =1 and r_room_printer.RoomTypeId =?", where);
+                cursor = sqLiteDatabase.rawQuery("SELECT r_room_printer.RoomId,r_room_printer.PrinterId,r_printers.PrinterId,r_room_printer.Description,r_room_printer.RoomTypeId," +
+                        "r_printers.IpAddress,r_printers.PrinterName,r_printers.ModelName,r_printers.MacAddress," +
+                        "r_printers.Company,r_room_printer.Active from r_printers left join r_room_printer " +
+                        "on r_room_printer.PrinterId = r_printers.PrinterId where r_room_printer.Active =1 and r_room_printer.RoomId = ?", where);
                 if (cursor != null) {
 
                     if (cursor.getCount() > 0) {
