@@ -1,5 +1,7 @@
 package com.vibeosys.rorderapp.printutils;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by akshay on 25-03-2016.
  */
@@ -15,6 +17,7 @@ public class PrintHeader {
     private String custName;
     private String custAddress;
     private String phNo;
+    private Bitmap bmpIcon;
 
     public PrintHeader() {
     }
@@ -112,4 +115,13 @@ public class PrintHeader {
     public void setPhNo(String phNo) {
         this.phNo = phNo;
     }
+
+    public Bitmap getBmpIcon() {
+        return bmpIcon;
+    }
+
+    public void setBmpIcon(Bitmap bmpIcon) {
+        this.bmpIcon = bmpIcon;
+    }
+
 }

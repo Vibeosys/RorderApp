@@ -5,8 +5,20 @@ package com.vibeosys.rorderapp.printutils.exceptions;
  */
 public class PrintException extends Exception {
 
+    String message;
     public PrintException(String str)
     {
         super(str);
+        this.message=str;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

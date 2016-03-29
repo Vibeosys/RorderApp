@@ -105,7 +105,7 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
            // mBuilder.addTextAlign(Builder.ALIGN_LEFT);*//*
             mBuilder.addTextLineSpace(Builder.LINE_THIN_DOUBLE);
             mBuilder.addText(strPrint);*/
-            mBuilder = printDataDTO.getPrint(mBuilder, 45, 3, 5);
+            mBuilder = printDataDTO.getPrint(mBuilder, 47, 1, 3);
             /*mBuilder.addFeedLine(Builder.LINE_MEDIUM_DOUBLE);*/
             mBuilder.addCut(Builder.CUT_FEED);
 

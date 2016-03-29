@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -313,6 +315,9 @@ public class BillDetailsActivity extends BaseActivity {
         PrintHeader header = new PrintHeader("By : " + mSessionManager.getUserName(), "Table #:"
                 + mTableNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
         String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity());
+        header.setBmpIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                R.drawable.ic_launcher));
+
         if (Full_Address.length() >= 37) {
             String subStringFirst = Full_Address.substring(0, 37);
             String subStringSecond = Full_Address.substring(38);
@@ -340,14 +345,14 @@ public class BillDetailsActivity extends BaseActivity {
         try {
             printPaper.setPrinter(getApplicationContext(), printerDetail);
         } catch (OpenPrinterException e) {
-            customAlterDialog("Printer Error", e.getMessage());
+          //  customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         printPaper.openPrinter();
         try {
             printPaper.printText(printData);
         } catch (PrintException e) {
-            customAlterDialog("Printer Error", e.getMessage());
+          //  customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         return "Success";
@@ -360,7 +365,10 @@ public class BillDetailsActivity extends BaseActivity {
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         PrintHeader header = new PrintHeader("", "Take Away No.: #"
                 + mTakeAwayNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
+        Bitmap icon=BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                R.drawable.ic_launcher);
         String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity());
+        header.setBmpIcon(icon);
         if (Full_Address.length() >= 37) {
             String subStringFirst = Full_Address.substring(0, 37);
             String subStringSecond = Full_Address.substring(38);
@@ -391,14 +399,14 @@ public class BillDetailsActivity extends BaseActivity {
         try {
             printPaper.setPrinter(getApplicationContext(), printerDetail);
         } catch (OpenPrinterException e) {
-            customAlterDialog("Printer Error", e.getMessage());
+           // customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         printPaper.openPrinter();
         try {
             printPaper.printText(printData);
         } catch (PrintException e) {
-            customAlterDialog("Printer Error", e.getMessage());
+          //  customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         return "Success";
