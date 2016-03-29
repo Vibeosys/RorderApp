@@ -24,6 +24,7 @@ public class MenuDbDTO extends BaseDTO {
     private int isSpicy;
     private int categoryId;
     private int roomId;
+    private int fbTypeId;
 
     public MenuDbDTO() {
     }
@@ -122,6 +123,14 @@ public class MenuDbDTO extends BaseDTO {
 
     public void setRoomId(int roomId) {
         this.roomId = roomId;
+    }
+
+    public int getFbTypeId() {
+        return fbTypeId;
+    }
+
+    public void setFbTypeId(int fbTypeId) {
+        this.fbTypeId = fbTypeId;
     }
 
     public static List<MenuDbDTO> deserializeMenu(List<String> serializedStringList) {

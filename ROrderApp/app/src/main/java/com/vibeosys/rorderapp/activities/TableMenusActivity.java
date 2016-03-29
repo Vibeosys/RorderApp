@@ -571,6 +571,7 @@ public class TableMenusActivity extends BaseActivity implements
         ImageButton btnNoveg = (ImageButton) dlg.findViewById(R.id.btnNonVeg);
         ImageButton btnReset = (ImageButton) dlg.findViewById(R.id.btnReset);
         ImageButton btnClose = (ImageButton) dlg.findViewById(R.id.btnClose);
+        ImageButton btnBeverage=(ImageButton)dlg.findViewById(R.id.btnBeverages);
         btnVeg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -582,7 +583,7 @@ public class TableMenusActivity extends BaseActivity implements
         btnNoveg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                allMenus = sortVegNon(mDbRepository.getOrderMenu(custId), 0);
+                allMenus = sortVegNon(mDbRepository.getOrderMenu(custId), 2);
                 ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
                 dlg.dismiss();
             }
@@ -591,6 +592,14 @@ public class TableMenusActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 allMenus = mDbRepository.getOrderMenu(custId);
+                ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
+                dlg.dismiss();
+            }
+        });
+        btnBeverage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allMenus = sortVegNon(mDbRepository.getOrderMenu(custId), 3);
                 ((OrderListAdapter) listMenus.getAdapter()).refresh(allMenus);
                 dlg.dismiss();
             }
@@ -606,14 +615,13 @@ public class TableMenusActivity extends BaseActivity implements
 
     private List<OrderMenuDTO> sortVegNon(ArrayList<OrderMenuDTO> menus, int i) {
         List<OrderMenuDTO> menuDTOs = new ArrayList<OrderMenuDTO>();
-        boolean flag = i == 0 ? false : true;
+        //boolean flag = i == 0 ? false : true;
         for (OrderMenuDTO menu : menus) {
-            if (menu.ismFoodType() == flag)
+            if (menu.getFbType() == i)
                 menuDTOs.add(menu);
         }
         Collections.sort(menuDTOs);
         return menuDTOs;
-
     }
 
     @Override

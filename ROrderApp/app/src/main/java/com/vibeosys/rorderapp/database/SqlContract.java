@@ -71,6 +71,7 @@ public class SqlContract {
         public final static String CATEGORY_ID = "CategoryId";
         public final static String IS_SPICY = "IsSpicy";
         public final static String ROOM_ID = "RoomId";
+        public final static String FB_TYPE_ID = "FbTypeId";
     }
 
     public abstract class SqlMenuCategory {
@@ -176,12 +177,12 @@ public class SqlContract {
         public final static String RESTAURANT_ID = "RestaurantId";
         public final static String RESTAURANT_NAME = "RestaurantTitle";
         public final static String RESTAURANT_URL = "LogoUrl";
-        public final static String RESTAURANT_ADDRESS="Address";
-        public final static String RESTAURANT_AREA ="Area";
-        public final static String RESTAURANT_CITY="City";
-        public final static String RESTAURANT_COUNTRY="Country";
-        public final static String RESTAURANT_PHONE="Phone";
-        public final static String RESTAURANT_FOOTER="Footer";
+        public final static String RESTAURANT_ADDRESS = "Address";
+        public final static String RESTAURANT_AREA = "Area";
+        public final static String RESTAURANT_CITY = "City";
+        public final static String RESTAURANT_COUNTRY = "Country";
+        public final static String RESTAURANT_PHONE = "Phone";
+        public final static String RESTAURANT_FOOTER = "Footer";
     }
 
     public abstract class SqlTakeAwaySource {

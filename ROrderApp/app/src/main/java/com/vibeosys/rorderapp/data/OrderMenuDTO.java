@@ -21,13 +21,14 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
     private int mShow;
     private boolean mSpicy;
     private String mNote;
+    private int fbType;
 
     public OrderMenuDTO() {
     }
 
     public OrderMenuDTO(int mMenuId, String mMenuTitle, String mImage, boolean mFoodType,
                         String mTags, String mCategory, double mPrice, int mQuantity, int mShow,
-                        boolean isSpicy, boolean avail) {
+                        boolean isSpicy, boolean avail, int fbType) {
         this.mMenuId = mMenuId;
         this.mMenuTitle = mMenuTitle;
         this.mImage = mImage;
@@ -39,6 +40,7 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
         this.mShow = mShow;
         this.mSpicy = isSpicy;
         this.mAvail = avail;
+        this.fbType = fbType;
     }
 
     public int getmMenuId() {
@@ -135,6 +137,14 @@ public class OrderMenuDTO implements Comparable<OrderMenuDTO> {
 
     public void setNote(String mNote) {
         this.mNote = mNote;
+    }
+
+    public int getFbType() {
+        return fbType;
+    }
+
+    public void setFbType(int fbType) {
+        this.fbType = fbType;
     }
 
     @Override

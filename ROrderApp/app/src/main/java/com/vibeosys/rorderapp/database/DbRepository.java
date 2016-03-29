@@ -557,6 +557,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
                     contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.getIsSpicy());
                     contentValues.put(SqlContract.SqlMenu.ROOM_ID, menu.getRoomId());
+                    contentValues.put(SqlContract.SqlMenu.FB_TYPE_ID, menu.getFbTypeId());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlMenu.TABLE_NAME, null, contentValues);
                     contentValues.clear();
@@ -811,7 +812,7 @@ public class DbRepository extends SQLiteOpenHelper {
             String[] whereClause = new String[]{custId};
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType,menu.Image," +
+                cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType,menu.Image,menu.FbTypeId," +
                         "menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle," +
                         "menu.AvailabilityStatus,menu.Active,menu.Price ,(Select temp_order.Quantity " +
                         "from temp_order   where menu.MenuId=temp_order.MenuId and temp_order.CustId=?)" +
@@ -837,8 +838,9 @@ public class DbRepository extends SQLiteOpenHelper {
                             double menuPrice = Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
                             int quantity = cursor.getInt(cursor.getColumnIndex("Quantity"));
                             int iAvail = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.AVAIL_STATUS));
+                            int fbType=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.FB_TYPE_ID));
                             boolean isAvail = iAvail == 1 ? true : false;
-                            OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, quantity, OrderMenuDTO.SHOW, isSpicy, isAvail);
+                            OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, quantity, OrderMenuDTO.SHOW, isSpicy, isAvail,fbType);
                             //table.setJsonSync();
                             orderMenus.add(orderMenu);
                         } while (cursor.moveToNext());
@@ -2270,6 +2272,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlMenu.CATEGORY_ID, menu.getCategoryId());
                     if (menu.getRoomId() != 0)
                         contentValues.put(SqlContract.SqlMenu.ROOM_ID, menu.getRoomId());
+                    if (menu.getFbTypeId() != 0)
+                        contentValues.put(SqlContract.SqlMenu.FB_TYPE_ID, menu.getFbTypeId());
                     contentValues.put(SqlContract.SqlMenu.IS_SPICY, menu.getIsSpicy());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlMenu.TABLE_NAME, contentValues,
@@ -3466,6 +3470,7 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count != -1;
     }
+
     public boolean insertRestaurant(List<RestaurantDbDTO> restaurant) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
@@ -3475,15 +3480,15 @@ public class DbRepository extends SQLiteOpenHelper {
             synchronized (sqLiteDatabase) {
                 contentValues = new ContentValues();
                 for (RestaurantDbDTO restaurantDbDTO : restaurant) {
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ID,restaurantDbDTO.getRestaurantId() );
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ID, restaurantDbDTO.getRestaurantId());
                     contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_NAME, restaurantDbDTO.getTitle());
                     contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_URL, restaurantDbDTO.getLogoUrl());
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS,restaurantDbDTO.getAddress());
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_AREA,restaurantDbDTO.getArea());
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_CITY,restaurantDbDTO.getCity());
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY,restaurantDbDTO.getCountry());
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_PHONE,restaurantDbDTO.getPhone());
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_FOOTER,restaurantDbDTO.getFooter());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS, restaurantDbDTO.getAddress());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_AREA, restaurantDbDTO.getArea());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_CITY, restaurantDbDTO.getCity());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY, restaurantDbDTO.getCountry());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_PHONE, restaurantDbDTO.getPhone());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_FOOTER, restaurantDbDTO.getFooter());
 
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.insert(SqlContract.SqlRestaurant.TABLE_NAME, null, contentValues);
@@ -3512,24 +3517,25 @@ public class DbRepository extends SQLiteOpenHelper {
                 for (RestaurantDbDTO restaurantDbDTO : restaurant) {
                     String[] where = new String[]{String.valueOf(restaurantDbDTO.getRestaurantId())};
                     if (restaurantDbDTO.getTitle() != null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_NAME, restaurantDbDTO.getTitle());
-                    if(restaurantDbDTO.getLogoUrl()!=null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_URL, restaurantDbDTO.getLogoUrl());
-                    if( restaurantDbDTO.getAddress()!=null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS,restaurantDbDTO.getAddress());
-                    if(restaurantDbDTO.getArea()!=null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_AREA,restaurantDbDTO.getArea());
-                    if(restaurantDbDTO.getCity()!=null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_CITY,restaurantDbDTO.getCity());
-                    if(restaurantDbDTO.getCountry()!=null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY,restaurantDbDTO.getCountry());
-                    if(restaurantDbDTO.getPhone()!=null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_PHONE,restaurantDbDTO.getPhone());
-                    if(restaurantDbDTO.getFooter()!=null)
-                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_FOOTER,restaurantDbDTO.getFooter());
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_NAME, restaurantDbDTO.getTitle());
+                    if (restaurantDbDTO.getLogoUrl() != null)
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_URL, restaurantDbDTO.getLogoUrl());
+                    if (restaurantDbDTO.getAddress() != null)
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS, restaurantDbDTO.getAddress());
+                    if (restaurantDbDTO.getArea() != null)
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_AREA, restaurantDbDTO.getArea());
+                    if (restaurantDbDTO.getCity() != null)
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_CITY, restaurantDbDTO.getCity());
+                    if (restaurantDbDTO.getCountry() != null)
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY, restaurantDbDTO.getCountry());
+                    if (restaurantDbDTO.getPhone() != null)
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_PHONE, restaurantDbDTO.getPhone());
+                    if (restaurantDbDTO.getFooter() != null)
+                        contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_FOOTER, restaurantDbDTO.getFooter());
 
 
-                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();//update statement;
+                    if (!sqLiteDatabase.isOpen())
+                        sqLiteDatabase = getWritableDatabase();//update statement;
                     count = sqLiteDatabase.update(SqlContract.SqlRestaurant.TABLE_NAME, contentValues,
                             SqlContract.SqlRestaurant.RESTAURANT_ID + "=?", where);
                     contentValues.clear();
@@ -3920,29 +3926,30 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return printerDetailsDTO;
     }
-    public ArrayList<String> getOderIdForPrinting(String OrderStatus,String CustmerId) {
+
+    public ArrayList<String> getOderIdForPrinting(String OrderStatus, String CustmerId) {
         ArrayList<String> getOrderId = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
-       // PrinterDetails printerDetails = null;
+        // PrinterDetails printerDetails = null;
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                String[] where = new String[]{OrderStatus,CustmerId};
+                String[] where = new String[]{OrderStatus, CustmerId};
                 // String[] where = new String[]{CustmerId};
-                cursor = sqLiteDatabase.rawQuery("SELECT orders.OrderId from orders where "+ SqlContract.SqlOrders.ORDER_STATUS +" =? AND "+ SqlContract.SqlOrders.CUST_ID+"=?"  , where);
+                cursor = sqLiteDatabase.rawQuery("SELECT orders.OrderId from orders where " + SqlContract.SqlOrders.ORDER_STATUS + " =? AND " + SqlContract.SqlOrders.CUST_ID + "=?", where);
                 if (cursor != null) {
 
                     if (cursor.getCount() > 0) {
                         cursor.moveToFirst();
-                        do{
+                        do {
 
                             String printerCompany = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
 
 
                             getOrderId.add(printerCompany);
-                        }while (cursor.moveToNext());
+                        } while (cursor.moveToNext());
                     }
                 }
             }
@@ -3956,7 +3963,7 @@ public class DbRepository extends SQLiteOpenHelper {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
         }
-        return  getOrderId;
+        return getOrderId;
     }
 
     public HashMap<Integer, OrderDetailsDTO> getMenuDetailsForOrderPrint(ArrayList<String> getOrderId) {
@@ -3966,7 +3973,7 @@ public class DbRepository extends SQLiteOpenHelper {
         Cursor cursor = null;
         HashMap<Integer, OrderDetailsDTO> billdetails = new HashMap<>();
         String previousQty, previousOrderPrice, previousTotalPrice;
-   try {
+        try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
                 for (int i = 0; i <= getOrderId.size(); i++) {
@@ -4008,14 +4015,13 @@ public class DbRepository extends SQLiteOpenHelper {
                                     listTemp.add(2,String.valueOf(TotalPriceForQty));
                                     billdetails.put(MenuName, listTemp);
                                 }*/
-                                if(billdetails.containsKey(menuId))
-                                {
+                                if (billdetails.containsKey(menuId)) {
                                     OrderDetailsDTO hshOrder = billdetails.get(menuId);
                                     hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + menuQty);
-                                    hshOrder.setOrderPrice(hshOrder.getOrderPrice()+orderPrice);
-                                }else {
-                                    billdetails.put(menuId,new OrderDetailsDTO(0,orderPrice, menuQty,"",menuId,
-                                    menuName,0.0,""));
+                                    hshOrder.setOrderPrice(hshOrder.getOrderPrice() + orderPrice);
+                                } else {
+                                    billdetails.put(menuId, new OrderDetailsDTO(0, orderPrice, menuQty, "", menuId,
+                                            menuName, 0.0, ""));
                                 }
 
                             } while (cursor.moveToNext());
@@ -4050,32 +4056,31 @@ public class DbRepository extends SQLiteOpenHelper {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
 
-                    String[] where = new String[]{restaurantName};
-                    cursor = sqLiteDatabase.rawQuery("SELECT * " +
-                            "from restaurant  where " + SqlContract.SqlRestaurant.RESTAURANT_NAME + " =?", where);
-                    if (cursor != null) {
+                String[] where = new String[]{restaurantName};
+                cursor = sqLiteDatabase.rawQuery("SELECT * " +
+                        "from restaurant  where " + SqlContract.SqlRestaurant.RESTAURANT_NAME + " =?", where);
+                if (cursor != null) {
 
-                        if (cursor.getCount() > 0) {
-                            cursor.moveToFirst();
-                            do {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do {
 
-                                int restaurantId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_ID));
-                                String restaurantNM = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_NAME));
-                                String restaurantLogUrl = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_URL));
-                                String  restaurantAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS));
-                                String restaurantArea = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_AREA));
-                                String restaurantCity = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_CITY));
-                                String restaurantCountry = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY));
-                                String restaurantPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_PHONE));
-                                String restaurantFooter = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_FOOTER));
-                                restaurantDTO = new RestaurantDTO(restaurantId,restaurantNM,restaurantLogUrl,
-                                        restaurantAddress,restaurantArea,restaurantCity,restaurantCountry,
-                                        restaurantPhone,restaurantFooter);
+                            int restaurantId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_ID));
+                            String restaurantNM = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_NAME));
+                            String restaurantLogUrl = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_URL));
+                            String restaurantAddress = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS));
+                            String restaurantArea = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_AREA));
+                            String restaurantCity = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_CITY));
+                            String restaurantCountry = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY));
+                            String restaurantPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_PHONE));
+                            String restaurantFooter = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRestaurant.RESTAURANT_FOOTER));
+                            restaurantDTO = new RestaurantDTO(restaurantId, restaurantNM, restaurantLogUrl,
+                                    restaurantAddress, restaurantArea, restaurantCity, restaurantCountry,
+                                    restaurantPhone, restaurantFooter);
 
-                            } while (cursor.moveToNext());
-                        }
+                        } while (cursor.moveToNext());
                     }
-
+                }
 
 
             }

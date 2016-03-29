@@ -152,4 +152,5 @@
     <string name="dialog_access_denied">Access Denied</string>
     <string name="access_denied_place_order">You have not access to place order contact to your manager</string>
     <string name="access_denied_print_bill">You have not access to print bill contact to your manager</string>
+    <string name="beverages">Beverages</string>
 </resources>

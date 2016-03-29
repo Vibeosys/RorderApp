@@ -98,10 +98,19 @@ public class OrderListAdapter extends BaseAdapter {
         }
         Log.d(TAG, menu.toString());
         viewHolder.txtMenuTitle.setText(menu.getmMenuTitle());
-        if (menu.ismFoodType()) {
+        if (menu.getFbType()==1) {
+            viewHolder.imgFoodType.setVisibility(View.VISIBLE);
             viewHolder.imgFoodType.setImageResource(R.drawable.veg_icon);
-        } else if (!menu.ismFoodType()) {
+        } else if (menu.getFbType()==2) {
+            viewHolder.imgFoodType.setVisibility(View.VISIBLE);
             viewHolder.imgFoodType.setImageResource(R.drawable.non_veg_icon);
+        }
+        else if(menu.getFbType()==3){
+            viewHolder.imgFoodType.setVisibility(View.VISIBLE);
+            viewHolder.imgFoodType.setImageResource(R.drawable.beverage_icon);
+        }
+        else {
+            viewHolder.imgFoodType.setVisibility(View.INVISIBLE);
         }
 
         if (menu.isSpicy()) {
