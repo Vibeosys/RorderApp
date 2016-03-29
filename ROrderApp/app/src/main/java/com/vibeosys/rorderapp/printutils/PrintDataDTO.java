@@ -375,12 +375,12 @@ public class PrintDataDTO {
             builder.addText(time + "\n");
             builder.addText(strPadding);
             builder.addText(strLine);
-            builder.addText(strPadding + "\n");
+          //  builder.addText(strPadding + "\n");
             builder.addText(strMargin);
             String strDesc = "Description";
             builder.addText(strDesc);
             builder.addText(getSpaceString(strDesc.length(), maxNoChar, margin + 6));
-            builder.addText("Qty\n");
+            builder.addText("Qty"+"\n");
             builder.addText(strPadding);
             builder.addText(strLine);
             builder.addText(strPadding + "\n");
