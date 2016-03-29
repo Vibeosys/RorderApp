@@ -276,39 +276,7 @@ public class TableOrderActivity extends BaseActivity implements
                         }
                     }
                     keyRoomId = sortOrderByKitchen.keySet();
-                    for (final Integer i : keyRoomId) {
-                        ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
-                        final List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
-                        for (OrderDetailsDTO orderDetail : orderListByRoom) {
-                            UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
-                            sendDetails.add(sendOrder);
-                        }
 
-                        UUID mOrderId;
-                        mOrderId = UUID.randomUUID();
-                        UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType);
-                        Gson gson = new Gson();
-
-                        //Kot Printing
-                        /*Thread t = new Thread() {
-                            public void run() {
-                                printKot(orderListByRoom, i);
-                            }
-                        };
-                        t.start();*/
-                        //
-
-                        //printKot(orderListByRoom, i);
-                        String serializedJsonString = gson.toJson(sendOrder);
-                        Log.d(TAG, "##" + serializedJsonString);
-                        TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
-                        /*try {*/
-                        //Thread.sleep(200);
-                        mServerSyncManager.uploadDataToServer(tableDataDTO);
-                        /*} catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }*/
-                    }
 
                     AsyncPrintData asyncPrintData = new AsyncPrintData();
                     asyncPrintData.execute(sortOrderByKitchen);
@@ -360,7 +328,16 @@ public class TableOrderActivity extends BaseActivity implements
                     Date.valueOf(currentDate), Time.valueOf(currentTime), mTableId, mSessionManager.getUserId(), 1));
             mDbRepository.insertOrders(orders);
             resultCount++;
-
+            if (resultCount == keyRoomId.size()) {
+                mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
+                mServerSyncManager.syncDataWithServer(true);
+                Toast.makeText(getApplicationContext(), getResources().getString
+                        (R.string.order_place_success), Toast.LENGTH_SHORT).show();
+                Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
+                iMenu.putExtra("tableCustInfo", tableCommonInfo);
+                startActivity(iMenu);
+                finish();
+            }
 
         } else if (errorCode != 104) {
            /* String stringTitle = getResources().getString(R.string.alert_dialog);
@@ -412,6 +389,7 @@ public class TableOrderActivity extends BaseActivity implements
     }
 
     private class AsyncPrintData extends AsyncTask<HashMap<Integer, List<OrderDetailsDTO>>, Void, String> {
+        List<OrderDetailsDTO> orderListByRoom;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -423,7 +401,7 @@ public class TableOrderActivity extends BaseActivity implements
             keyRoomId = params[0].keySet();
             for (final Integer i : keyRoomId) {
                 ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
-                final List<OrderDetailsDTO> orderListByRoom = params[0].get(i);
+                orderListByRoom= params[0].get(i);
                 for (OrderDetailsDTO orderDetail : orderListByRoom) {
                     UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
                     sendDetails.add(sendOrder);
@@ -484,16 +462,39 @@ public class TableOrderActivity extends BaseActivity implements
             showProgress(false);
             if(str.equals("Success"))
             {
-                if (resultCount == keyRoomId.size()) {
-                    mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
-                    mServerSyncManager.syncDataWithServer(true);
-                    Toast.makeText(getApplicationContext(), getResources().getString
-                            (R.string.order_place_success), Toast.LENGTH_SHORT).show();
-                    Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-                    iMenu.putExtra("tableCustInfo", tableCommonInfo);
-                    startActivity(iMenu);
-                    finish();
+                for (final Integer i : keyRoomId) {
+                    ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+                    for (OrderDetailsDTO orderDetail : orderListByRoom) {
+                        UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
+                        sendDetails.add(sendOrder);
+                    }
+
+                    UUID mOrderId;
+                    mOrderId = UUID.randomUUID();
+                    UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType);
+                    Gson gson = new Gson();
+
+                    //Kot Printing
+                        /*Thread t = new Thread() {
+                            public void run() {
+                                printKot(orderListByRoom, i);
+                            }
+                        };
+                        t.start();*/
+                    //
+
+                    //printKot(orderListByRoom, i);
+                    String serializedJsonString = gson.toJson(sendOrder);
+                    Log.d(TAG, "##" + serializedJsonString);
+                    TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
+                        /*try {*/
+                    //Thread.sleep(200);
+                    mServerSyncManager.uploadDataToServer(tableDataDTO);
+                        /*} catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }*/
                 }
+
             }
             else {
                 customAlterDialog("Printer Error",str);
