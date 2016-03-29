@@ -75,6 +75,7 @@ public class BillDetailsActivity extends BaseActivity {
     private TableRow mDeliveryChargeRow;
     private TextView mBillStatus;
     private ProgressBar mProgressBar;
+    private LinearLayout mScrollBill;
 
     @Override
     protected String getScreenName() {
@@ -120,6 +121,7 @@ public class BillDetailsActivity extends BaseActivity {
         mDeliveryChargeRow = (TableRow) findViewById(R.id.rowDeliveryChr);
         mBillStatus = (TextView) findViewById(R.id.billStatus);
         mProgressBar = (ProgressBar) findViewById(R.id.select_reto_progress);
+        mScrollBill = (LinearLayout) findViewById(R.id.scrollBill);
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
         Button billPrinting = (Button) findViewById(R.id.BillPrinting);
