@@ -366,7 +366,7 @@ public class ServerSyncManager
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_ROOMS);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.R_ROOMS,jsonInsertList.size());
-            dbOperations.addOrUpdateRooms(jsonInsertList ,tableValue.getUpdateJsonList());
+            dbOperations.addOrUpdateRooms(jsonInsertList, tableValue.getUpdateJsonList());
         }
         if(theTableData.containsKey(DbTableNameConstants.ROOM_TYPE))
         {
@@ -374,6 +374,13 @@ public class ServerSyncManager
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
             downloadResults.put(DbTableNameConstants.R_ROOMS,jsonInsertList.size());
             dbOperations.addOrUpdateRoomType(jsonInsertList ,tableValue.getUpdateJsonList());
+        }
+        if(theTableData.containsKey(DbTableNameConstants.RESTAURANT))
+        {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.RESTAURANT);
+            ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
+            downloadResults.put(DbTableNameConstants.RESTAURANT,jsonInsertList.size());
+            dbOperations.addOrUpdateRestaurant(jsonInsertList,tableValue.getUpdateJsonList());
         }
 
         if (mOnDownloadReceived != null)

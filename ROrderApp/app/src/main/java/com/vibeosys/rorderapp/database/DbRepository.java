@@ -32,6 +32,7 @@ import com.vibeosys.rorderapp.data.PermissionSetDbDTO;
 import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
 import com.vibeosys.rorderapp.data.PrintersDbDTO;
 import com.vibeosys.rorderapp.data.RestaurantDTO;
+import com.vibeosys.rorderapp.data.RestaurantDbDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
 import com.vibeosys.rorderapp.data.RoomTypesDbDTO;
@@ -3465,6 +3466,86 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return count != -1;
     }
+    public boolean insertRestaurant(List<RestaurantDbDTO> restaurant) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (RestaurantDbDTO restaurantDbDTO : restaurant) {
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ID,restaurantDbDTO.getRestaurantId() );
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_NAME, restaurantDbDTO.getTitle());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_URL, restaurantDbDTO.getLogoUrl());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS,restaurantDbDTO.getAddress());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_AREA,restaurantDbDTO.getArea());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_CITY,restaurantDbDTO.getCity());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY,restaurantDbDTO.getCountry());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_PHONE,restaurantDbDTO.getPhone());
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_FOOTER,restaurantDbDTO.getFooter());
+
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.insert(SqlContract.SqlRestaurant.TABLE_NAME, null, contentValues);
+                    contentValues.clear();
+                    Log.d(TAG, "## Restaurant is Added Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while  Restaurant  adding " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
+    public boolean updateRestaurant(List<RestaurantDbDTO> restaurant) {
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (RestaurantDbDTO restaurantDbDTO : restaurant) {
+                    String[] where = new String[]{String.valueOf(restaurantDbDTO.getRestaurantId())};
+                    if (restaurantDbDTO.getTitle() != null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_NAME, restaurantDbDTO.getTitle());
+                    if(restaurantDbDTO.getLogoUrl()!=null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_URL, restaurantDbDTO.getLogoUrl());
+                    if( restaurantDbDTO.getAddress()!=null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_ADDRESS,restaurantDbDTO.getAddress());
+                    if(restaurantDbDTO.getArea()!=null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_AREA,restaurantDbDTO.getArea());
+                    if(restaurantDbDTO.getCity()!=null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_CITY,restaurantDbDTO.getCity());
+                    if(restaurantDbDTO.getCountry()!=null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_COUNTRY,restaurantDbDTO.getCountry());
+                    if(restaurantDbDTO.getPhone()!=null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_PHONE,restaurantDbDTO.getPhone());
+                    if(restaurantDbDTO.getFooter()!=null)
+                    contentValues.put(SqlContract.SqlRestaurant.RESTAURANT_FOOTER,restaurantDbDTO.getFooter());
+
+
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();//update statement;
+                    count = sqLiteDatabase.update(SqlContract.SqlRestaurant.TABLE_NAME, contentValues,
+                            SqlContract.SqlRestaurant.RESTAURANT_ID + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Restaurant is updated Successfully");
+                }
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while  Updating Restaurant " + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
+    }
+
 
     public boolean insertPrinters(List<PrintersDbDTO> printers) {
         SQLiteDatabase sqLiteDatabase = null;

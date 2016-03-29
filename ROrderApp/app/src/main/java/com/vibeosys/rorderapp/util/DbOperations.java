@@ -16,6 +16,7 @@ import com.vibeosys.rorderapp.data.OrderTypeDbDTO;
 import com.vibeosys.rorderapp.data.OrdersDbDTO;
 import com.vibeosys.rorderapp.data.PermissionSetDbDTO;
 import com.vibeosys.rorderapp.data.PrintersDbDTO;
+import com.vibeosys.rorderapp.data.RestaurantDbDTO;
 import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
 import com.vibeosys.rorderapp.data.RoomTypesDbDTO;
 import com.vibeosys.rorderapp.data.RoomsDbDTO;
@@ -370,5 +371,13 @@ public class DbOperations {
         boolean isUpdated = dbRepository.updateRoomType(RoomTypeUpdate);
 
         return  isInserted & isUpdated;
+    }
+    public boolean addOrUpdateRestaurant(ArrayList<String>jsonInsertList,ArrayList<String> updateJsonList)
+    {
+        List<RestaurantDbDTO> insertRestaurant =    RestaurantDbDTO.deserializeRestaurant(jsonInsertList);
+        List<RestaurantDbDTO> updateRestaurant =    RestaurantDbDTO.deserializeRestaurant(jsonInsertList);
+        boolean isRestaurantInserted = dbRepository.insertRestaurant(insertRestaurant);
+        boolean isUpdateRestaurant = dbRepository.updateRestaurant(updateRestaurant);
+        return isRestaurantInserted & isUpdateRestaurant;
     }
 }

@@ -28,4 +28,5 @@ public class DbTableNameConstants {
     public static final String R_ROOM_PRINTER = SqlContract.SqlRRoomPrinter.TABLE_NAME;
     public static final String R_ROOMS =SqlContract.SqlRRooms.TABLE_NAME;
     public static final String ROOM_TYPE= SqlContract.SqlRoomType.TABLE_NAME;
+    public static final String RESTAURANT = SqlContract.SqlRestaurant.TABLE_NAME;
 }
