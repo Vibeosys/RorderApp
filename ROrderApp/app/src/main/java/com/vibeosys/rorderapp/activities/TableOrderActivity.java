@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -37,6 +38,8 @@ import com.vibeosys.rorderapp.printutils.PrintDataDTO;
 import com.vibeosys.rorderapp.printutils.PrintHeader;
 import com.vibeosys.rorderapp.printutils.PrintPaper;
 import com.vibeosys.rorderapp.printutils.PrinterFactory;
+import com.vibeosys.rorderapp.printutils.exceptions.OpenPrinterException;
+import com.vibeosys.rorderapp.printutils.exceptions.PrintException;
 import com.vibeosys.rorderapp.util.AppConstants;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.NetworkUtils;
@@ -295,7 +298,7 @@ public class TableOrderActivity extends BaseActivity implements
                         t.start();*/
                         //
 
-                        printKot(orderListByRoom, i);
+                        //printKot(orderListByRoom, i);
                         String serializedJsonString = gson.toJson(sendOrder);
                         Log.d(TAG, "##" + serializedJsonString);
                         TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
@@ -305,9 +308,10 @@ public class TableOrderActivity extends BaseActivity implements
                         /*} catch (InterruptedException e) {
                             e.printStackTrace();
                         }*/
-
-
                     }
+
+                    AsyncPrintData asyncPrintData = new AsyncPrintData();
+                    asyncPrintData.execute(sortOrderByKitchen);
 
 
                 }
@@ -320,41 +324,6 @@ public class TableOrderActivity extends BaseActivity implements
     }
 
     private void printKot(List<OrderDetailsDTO> orderListByRoom, int roomId) {
-
-        PrintBody printBody = new PrintBody();
-        HashMap<Integer, OrderDetailsDTO> hshMap = new HashMap<>();
-        /**
-         * Create hash map for kot printing 1 menu item and add quantity */
-
-        for (OrderDetailsDTO order : orderListByRoom) {
-            int menuId = order.getMenuId();
-            if (hshMap.containsKey(menuId)) {
-                OrderDetailsDTO hshOrder = hshMap.get(menuId);
-                hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + order.getOrderQuantity());
-            } else {
-                hshMap.put(menuId, order);
-            }
-        }
-        printBody.setMenus(hshMap);
-        Log.d("##", "##" + printBody.getMenus().toString());
-        PrinterDetailsDTO printerDetails = mDbRepository.getPrinterDetailsByRoom(roomId);
-        PrinterFactory printerFactory = new PrinterFactory();
-        PrintPaper printPaper = printerFactory.getPrinter(printerDetails);
-        printPaper.setPrinter(getApplicationContext(), printerDetails);
-        printPaper.openPrinter();
-        PrintHeader header= new PrintHeader("Served By :"+mSessionManager.getUserName(),"Table No.: #"
-                +mTableNo,new ROrderDateUtils().getLocalTimeInReadableFormat());
-        if (mTableId==0)
-        {
-            header.setTableNo("Take Away No.: #"+mTakeAwayNo);
-        }
-        String footer="Powered by QuickServe";
-        PrintDataDTO printData=new PrintDataDTO();
-        printData.setHeader(header);
-        printData.setFooter(footer);
-        printData.setBody(printBody);
-        printData.setType(PrintDataDTO.KOT);
-        printPaper.printText(printData);
 
     }
 
@@ -391,16 +360,7 @@ public class TableOrderActivity extends BaseActivity implements
                     Date.valueOf(currentDate), Time.valueOf(currentTime), mTableId, mSessionManager.getUserId(), 1));
             mDbRepository.insertOrders(orders);
             resultCount++;
-            if (resultCount == keyRoomId.size()) {
-                mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
-                mServerSyncManager.syncDataWithServer(true);
-                Toast.makeText(getApplicationContext(), getResources().getString
-                        (R.string.order_place_success), Toast.LENGTH_SHORT).show();
-                Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
-                iMenu.putExtra("tableCustInfo", tableCommonInfo);
-                startActivity(iMenu);
-                finish();
-            }
+
 
         } else if (errorCode != 104) {
            /* String stringTitle = getResources().getString(R.string.alert_dialog);
@@ -449,5 +409,96 @@ public class TableOrderActivity extends BaseActivity implements
         String stringTitle = getResources().getString(R.string.error_msg_title_for_server);
         String stringMessage = getResources().getString(R.string.error_msg_for_server_details);
         customAlterDialog(stringTitle, stringMessage);
+    }
+
+    private class AsyncPrintData extends AsyncTask<HashMap<Integer, List<OrderDetailsDTO>>, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+        }
+
+        @Override
+        protected String doInBackground(HashMap<Integer, List<OrderDetailsDTO>>... params) {
+            keyRoomId = params[0].keySet();
+            for (final Integer i : keyRoomId) {
+                ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+                final List<OrderDetailsDTO> orderListByRoom = params[0].get(i);
+                for (OrderDetailsDTO orderDetail : orderListByRoom) {
+                    UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
+                    sendDetails.add(sendOrder);
+                }
+
+                printKot(orderListByRoom, i);
+                PrintBody printBody = new PrintBody();
+                HashMap<Integer, OrderDetailsDTO> hshMap = new HashMap<>();
+                /**
+                 * Create hash map for kot printing 1 menu item and add quantity */
+
+                for (OrderDetailsDTO order : orderListByRoom) {
+                    int menuId = order.getMenuId();
+                    if (hshMap.containsKey(menuId)) {
+                        OrderDetailsDTO hshOrder = hshMap.get(menuId);
+                        hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + order.getOrderQuantity());
+                    } else {
+                        hshMap.put(menuId, order);
+                    }
+                }
+                printBody.setMenus(hshMap);
+                Log.d("##", "##" + printBody.getMenus().toString());
+                PrinterDetailsDTO printerDetails = mDbRepository.getPrinterDetailsByRoom(i);
+                PrinterFactory printerFactory = new PrinterFactory();
+                PrintPaper printPaper = printerFactory.getPrinter(printerDetails);
+                try {
+                    printPaper.setPrinter(getApplicationContext(), printerDetails);
+                } catch (OpenPrinterException e) {
+                    resultCount=0;
+                    return e.getMessage();
+                }
+
+                printPaper.openPrinter();
+                PrintHeader header = new PrintHeader("Served By :" + mSessionManager.getUserName(), "Table No.: #"
+                        + mTableNo, new ROrderDateUtils().getLocalTimeInReadableFormat());
+                if (mTableId == 0) {
+                    header.setTableNo("Take Away No.: #" + mTakeAwayNo);
+                }
+                String footer = "Powered by QuickServe";
+                PrintDataDTO printData = new PrintDataDTO();
+                printData.setHeader(header);
+                printData.setFooter(footer);
+                printData.setBody(printBody);
+                printData.setType(PrintDataDTO.KOT);
+                try {
+                    printPaper.printText(printData);
+                } catch (PrintException e) {
+                    resultCount=0;
+                    return e.getMessage();
+                }
+            }
+            return "Success";
+        }
+
+        @Override
+        protected void onPostExecute(String str) {
+            super.onPostExecute(str);
+            showProgress(false);
+            if(str.equals("Success"))
+            {
+                if (resultCount == keyRoomId.size()) {
+                    mDbRepository.clearUpdateTempData(mTableId, mTableNo, mCustId);
+                    mServerSyncManager.syncDataWithServer(true);
+                    Toast.makeText(getApplicationContext(), getResources().getString
+                            (R.string.order_place_success), Toast.LENGTH_SHORT).show();
+                    Intent iMenu = new Intent(getApplicationContext(), TableMenusActivity.class);
+                    iMenu.putExtra("tableCustInfo", tableCommonInfo);
+                    startActivity(iMenu);
+                    finish();
+                }
+            }
+            else {
+                customAlterDialog("Printer Error",str);
+            }
+
+        }
     }
 }

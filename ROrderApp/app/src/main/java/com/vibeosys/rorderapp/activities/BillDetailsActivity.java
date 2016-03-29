@@ -1,7 +1,12 @@
 package com.vibeosys.rorderapp.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +38,8 @@ import com.vibeosys.rorderapp.printutils.PrintDataDTO;
 import com.vibeosys.rorderapp.printutils.PrintHeader;
 import com.vibeosys.rorderapp.printutils.PrintPaper;
 import com.vibeosys.rorderapp.printutils.PrinterFactory;
+import com.vibeosys.rorderapp.printutils.exceptions.OpenPrinterException;
+import com.vibeosys.rorderapp.printutils.exceptions.PrintException;
 import com.vibeosys.rorderapp.util.AppConstants;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 
@@ -65,6 +74,7 @@ public class BillDetailsActivity extends BaseActivity {
     private ImageView mImgTable;
     private TableRow mDeliveryChargeRow;
     private TextView mBillStatus;
+    private ProgressBar mProgressBar;
 
     @Override
     protected String getScreenName() {
@@ -109,7 +119,7 @@ public class BillDetailsActivity extends BaseActivity {
         mTxtDeliveryAmt = (TextView) findViewById(R.id.deliveryAmt);
         mDeliveryChargeRow = (TableRow) findViewById(R.id.rowDeliveryChr);
         mBillStatus = (TextView) findViewById(R.id.billStatus);
-
+        mProgressBar = (ProgressBar) findViewById(R.id.select_reto_progress);
         Button payment_bill_details = (Button) findViewById(R.id.BillDetailsPayment);
         Button btnBillSummary = (Button) findViewById(R.id.btnBillSummary);
         Button billPrinting = (Button) findViewById(R.id.BillPrinting);
@@ -161,29 +171,46 @@ public class BillDetailsActivity extends BaseActivity {
             public void onClick(View v) {
                 int permissionId = mDbRepository.getPermissionId(AppConstants.PERMISSION_PRINT_BILL);
                 if (getPermissionStatus(permissionId)) {
-                    ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
-                    detailsArray = mDbRepository.getPrinterDetails(2);
-                    mBillDetailsDTOs.getBillNo();
-                    ArrayList<String> getOrderId = new ArrayList<>();
-                    getOrderId = mDbRepository.getOderIdForPrinting("3", custId);
-                    RestaurantDTO restaurantDTO = mDbRepository.getRestaurantDetails(mSessionManager.getUserRestaurantName());
-                    HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
-                    for (PrinterDetailsDTO printerDetail : detailsArray) {
-
-                        if (mTableId != 0) {
-                            printDineIn(billdetails, printerDetail, restaurantDTO);
-                        } else {
-                            printTakeAway(billdetails, printerDetail, restaurantDTO);
-                        }
-                    }
-
-
-                }
-                else {
+                    AsyncPrint print = new AsyncPrint();
+                    print.execute();
+                } else {
                     customAlterDialog(getResources().getString(R.string.dialog_access_denied), getResources().getString(R.string.access_denied_place_order));
                 }
             }
         });
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mScrollBill.setVisibility(show ? View.GONE : View.VISIBLE);
+            mScrollBill.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mScrollBill.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mScrollBill.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 
     private void showDiscountDialog() {
@@ -277,22 +304,19 @@ public class BillDetailsActivity extends BaseActivity {
         mBillDetailsDTOs.setDeliveryChr(mDeliveryCharges);
     }
 
-    public void printDineIn(HashMap<Integer, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail,RestaurantDTO restaurantDTO) {
+    public String printDineIn(HashMap<Integer, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail, RestaurantDTO restaurantDTO) {
         PrintBody printBody = new PrintBody();
         printBody.setMenus(billdetails);
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         PrintHeader header = new PrintHeader("By : " + mSessionManager.getUserName(), "Table #:"
                 + mTableNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
-        String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity()) ;
-        if(Full_Address.length() >=37)
-        {
-            String subStringFirst= Full_Address.substring(0,37);
+        String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity());
+        if (Full_Address.length() >= 37) {
+            String subStringFirst = Full_Address.substring(0, 37);
             String subStringSecond = Full_Address.substring(38);
-            header.setAddress(subStringFirst+"\n"+"     "+subStringSecond);
+            header.setAddress(subStringFirst + "\n" + "     " + subStringSecond);
 
-        }
-        else
-        {
+        } else {
             header.setAddress(Full_Address);
         }
 
@@ -301,7 +325,7 @@ public class BillDetailsActivity extends BaseActivity {
         header.setBillType("Dine-In");
         header.setRestaurantName(mSessionManager.getUserRestaurantName());
         header.setPhoneNumber(restaurantDTO.getmPhoneNumber());
-      //  String footer = "Powered by QuickServe";
+        //  String footer = "Powered by QuickServe";
         String footer = restaurantDTO.getmFooter();
         PrintDataDTO printData = new PrintDataDTO();
         printData.setHeader(header);
@@ -311,40 +335,48 @@ public class BillDetailsActivity extends BaseActivity {
         printData.setBillDetailsDTO(mBillDetailsDTOs);
         PrinterFactory printerFactory = new PrinterFactory();
         PrintPaper printPaper = printerFactory.getPrinter(printerDetail);
-        printPaper.setPrinter(getApplicationContext(), printerDetail);
+        try {
+            printPaper.setPrinter(getApplicationContext(), printerDetail);
+        } catch (OpenPrinterException e) {
+            customAlterDialog("Printer Error", e.getMessage());
+            return e.getMessage();
+        }
         printPaper.openPrinter();
-        printPaper.printText(printData);
+        try {
+            printPaper.printText(printData);
+        } catch (PrintException e) {
+            customAlterDialog("Printer Error", e.getMessage());
+            return e.getMessage();
+        }
+        return "Success";
     }
 
-    public void printTakeAway(HashMap<Integer, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail,RestaurantDTO restaurantDTO){
+    public String printTakeAway(HashMap<Integer, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail, RestaurantDTO restaurantDTO) {
         TakeAwayDTO takeAwayDTO = mDbRepository.getTakeAway(mTakeAwayNo);
         PrintBody printBody = new PrintBody();
         printBody.setMenus(billdetails);
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         PrintHeader header = new PrintHeader("", "Take Away No.: #"
                 + mTakeAwayNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
-       String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity()) ;
-        if(Full_Address.length() >=37)
-        {
-            String subStringFirst= Full_Address.substring(0,37);
+        String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity());
+        if (Full_Address.length() >= 37) {
+            String subStringFirst = Full_Address.substring(0, 37);
             String subStringSecond = Full_Address.substring(38);
-            header.setAddress(subStringFirst+"\n"+"     "+subStringSecond);
+            header.setAddress(subStringFirst + "\n" + "     " + subStringSecond);
 
-        }
-        else
-        {
+        } else {
             header.setAddress(Full_Address);
         }
 
-       // header.setAddress(restaurantDTO.getmArea());
+        // header.setAddress(restaurantDTO.getmArea());
         header.setNumber("Bill No.: " + mBillDetailsDTOs.getBillNo());
         header.setBillType("Take Away");
         header.setCustName("Name: " + takeAwayDTO.getmCustName());
-        header.setCustAddress("Address:" + takeAwayDTO.getmCustAddress()+"\n");
+        header.setCustAddress("Address:" + takeAwayDTO.getmCustAddress() + "\n");
         header.setPhNo("Phone.:" + takeAwayDTO.getCustPhone());
         header.setRestaurantName(mSessionManager.getUserRestaurantName());
         header.setPhoneNumber(restaurantDTO.getmPhoneNumber());
-      //  String footer = "Powered by QuickServe";
+        //  String footer = "Powered by QuickServe";
         String footer = restaurantDTO.getmFooter();
         PrintDataDTO printData = new PrintDataDTO();
         printData.setHeader(header);
@@ -354,9 +386,56 @@ public class BillDetailsActivity extends BaseActivity {
         printData.setBillDetailsDTO(mBillDetailsDTOs);
         PrinterFactory printerFactory = new PrinterFactory();
         PrintPaper printPaper = printerFactory.getPrinter(printerDetail);
-        printPaper.setPrinter(getApplicationContext(), printerDetail);
+        try {
+            printPaper.setPrinter(getApplicationContext(), printerDetail);
+        } catch (OpenPrinterException e) {
+            customAlterDialog("Printer Error", e.getMessage());
+            return e.getMessage();
+        }
         printPaper.openPrinter();
-        printPaper.printText(printData);
+        try {
+            printPaper.printText(printData);
+        } catch (PrintException e) {
+            customAlterDialog("Printer Error", e.getMessage());
+            return e.getMessage();
+        }
+        return "Success";
     }
 
+    private class AsyncPrint extends AsyncTask<Void, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String result = "Fail";
+            ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
+            detailsArray = mDbRepository.getPrinterDetails(2);
+            mBillDetailsDTOs.getBillNo();
+            ArrayList<String> getOrderId = new ArrayList<>();
+            getOrderId = mDbRepository.getOderIdForPrinting("3", custId);
+            RestaurantDTO restaurantDTO = mDbRepository.getRestaurantDetails(mSessionManager.getUserRestaurantName());
+            HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
+            for (PrinterDetailsDTO printerDetail : detailsArray) {
+
+                if (mTableId != 0) {
+                    result = printDineIn(billdetails, printerDetail, restaurantDTO);
+                } else {
+                    result = printTakeAway(billdetails, printerDetail, restaurantDTO);
+                }
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String str) {
+            super.onPostExecute(str);
+            showProgress(false);
+            if (!str.equals("Success"))
+                customAlterDialog("Print Error", str);
+        }
+    }
 }

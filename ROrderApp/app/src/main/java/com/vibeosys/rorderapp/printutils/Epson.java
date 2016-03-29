@@ -9,6 +9,8 @@ import com.epson.eposprint.*;
 import com.vibeosys.rorderapp.data.OrderDetailsDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
+import com.vibeosys.rorderapp.printutils.exceptions.OpenPrinterException;
+import com.vibeosys.rorderapp.printutils.exceptions.PrintException;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -34,7 +36,7 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
     static final int SIZEHEIGHT_MAX = 8;
 
     @Override
-    public void setPrinter(Context context, PrinterDetailsDTO printerDetails) {
+    public void setPrinter(Context context, PrinterDetailsDTO printerDetails) throws OpenPrinterException {
         this.mContext = context;
         this.printerDetails = printerDetails;
         this.mPrinter = new Print(mContext);
@@ -42,6 +44,29 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
             this.mPrinter.openPrinter(mDeviceType, printerDetails.getmIpAddress(), Print.FALSE, mInterval);
         } catch (EposException e) {
             e.printStackTrace();
+            switch (e.getErrorStatus()) {
+                case EposException.ERR_PARAM:
+                    throw new OpenPrinterException("Could not found printer please Check Connection");
+                case EposException.ERR_OPEN:
+                    throw new OpenPrinterException("Could not found printer please Check Connection");
+                case EposException.ERR_CONNECT:
+                    throw new OpenPrinterException("Could not found printer please Check Connection");
+                case EposException.ERR_TIMEOUT:
+                    throw new OpenPrinterException("Could not found printer please restart printer");
+                case EposException.ERR_MEMORY:
+                    throw new OpenPrinterException("Could not found printer please Check Connection");
+                case EposException.ERR_ILLEGAL:
+                    throw new OpenPrinterException("Could not found printer please contact administrator");
+                case EposException.ERR_PROCESSING:
+                    throw new OpenPrinterException("Could not found printer please contact administrator");
+                case EposException.ERR_UNSUPPORTED:
+                    throw new OpenPrinterException("Selected printer is not supported");
+                case EposException.ERR_OFF_LINE:
+                    throw new OpenPrinterException("Printer is offline please Check Connection");
+                case EposException.ERR_FAILURE:
+                    throw new OpenPrinterException("Could not found printer please Check Connection");
+            }
+            //throw new OpenPrinterException("Could not found printer");
         }
     }
 
@@ -64,7 +89,7 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
     }
 
     @Override
-    public void printText(PrintDataDTO printDataDTO) {
+    public void printText(PrintDataDTO printDataDTO) throws PrintException {
 
         android.util.Log.d("##", "## epson Printer selected");
         try {
@@ -80,7 +105,7 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
            // mBuilder.addTextAlign(Builder.ALIGN_LEFT);*//*
             mBuilder.addTextLineSpace(Builder.LINE_THIN_DOUBLE);
             mBuilder.addText(strPrint);*/
-            mBuilder=printDataDTO.getPrint(mBuilder,45,3,5);
+            mBuilder = printDataDTO.getPrint(mBuilder, 45, 3, 5);
             /*mBuilder.addFeedLine(Builder.LINE_MEDIUM_DOUBLE);*/
             mBuilder.addCut(Builder.CUT_FEED);
 
@@ -97,13 +122,36 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
 
             } catch (EposException e) {
                 System.err.println("Error at printing data " + mMethod);
+                throw new PrintException(e.getMessage());
             }
 
 
         } catch (EposException e) {
             System.err.println("Error at method " + mMethod);
+            switch (e.getErrorStatus()) {
+                case EposException.ERR_PARAM:
+                    throw new PrintException("Could not connect printer please Check Connection");
+                case EposException.ERR_OPEN:
+                    throw new PrintException("Could not connect printer please Check Connection");
+                case EposException.ERR_CONNECT:
+                    throw new PrintException("Could not connect printer please Check Connection");
+                case EposException.ERR_TIMEOUT:
+                    throw new PrintException("Could not connect printer please restart printer");
+                case EposException.ERR_MEMORY:
+                    throw new PrintException("Could not print the data low memory space");
+                case EposException.ERR_ILLEGAL:
+                    throw new PrintException("Could not connect printer please contact administrator");
+                case EposException.ERR_PROCESSING:
+                    throw new PrintException("Could not connect printer please contact administrator");
+                case EposException.ERR_UNSUPPORTED:
+                    throw new PrintException("Selected printer is not supported");
+                case EposException.ERR_OFF_LINE:
+                    throw new PrintException("Printer is offline please Check Connection");
+                case EposException.ERR_FAILURE:
+                    throw new PrintException("Could not connect printer please Check Connection");
+            }
         } finally {
-             closePrinter();
+            closePrinter();
         }
 
     }
