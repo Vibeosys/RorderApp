@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -51,6 +52,7 @@ import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
 import com.vibeosys.rorderapp.util.ConstantOperations;
+import com.vibeosys.rorderapp.util.NetworkUtils;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 
@@ -123,10 +125,30 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
             Log.i(TAG, "## Customer Id " + custId);
             callToMenuIntent(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId(), custId);
         } else {
-            showReserveDialog(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId());
+            if (NetworkUtils.isActiveNetworkAvailable(getContext()))
+                showReserveDialog(hotelTableDTO.getmTableNo(), hotelTableDTO.getmTableId());
+            else
+                customAlterNetworkDialog("Network error", "Please check the internet connection");
         }
         Log.i(TAG, "##" + hotelTableDTO.getmTableNo() + "Is Clicked");
     }
+
+    private void customAlterNetworkDialog(String title, String message) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("" + title);
+            builder.setIcon(R.drawable.ic_action_warning_yellow);
+            builder.setMessage(message);
+            builder.setCancelable(false);
+            builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Settings.ACTION_SETTINGS));
+                }
+            });
+            builder.show();
+
+    }
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -427,7 +449,7 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
     @Override
     public void onStingErrorReceived(@NonNull VolleyError error) {
         showProgress(false);
-        customAlterDialog("Warning Error", "" + error.toString());
+        customAlterDialog("Warning Error", "Server error please contact to administrator");
 
     }
 

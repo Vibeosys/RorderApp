@@ -4096,4 +4096,40 @@ public class DbRepository extends SQLiteOpenHelper {
         }
         return restaurantDTO;
     }
+
+    public int getConfigValue(String configKey)
+    {
+        int result=0;
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+
+                String[] where = new String[]{configKey};
+                cursor = sqLiteDatabase.rawQuery("SELECT * " +
+                        "from r_config_settings  where " + SqlContract.SqlRConfigSettings.CONFIG_KEY + " =?", where);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        result=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRConfigSettings.CONFIG_VALUE));
+                    }
+                }
+
+
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+       return result;
+    }
 }

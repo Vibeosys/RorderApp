@@ -27,6 +27,7 @@ public class PrintDataDTO {
     private PrintBody mBody;
     private int type;
     private BillDetailsDTO billDetailsDTO;
+    private int mConfigBarcode, mConfigLogo;
     DbRepository mDbRepository;
     String mConstantFooter = "Powered by QuickServe(TM)";
 
@@ -76,6 +77,22 @@ public class PrintDataDTO {
 
     public void setBillDetailsDTO(BillDetailsDTO billDetailsDTO) {
         this.billDetailsDTO = billDetailsDTO;
+    }
+
+    public int getConfigLogo() {
+        return mConfigLogo;
+    }
+
+    public void setConfigLogo(int mConfigLogo) {
+        this.mConfigLogo = mConfigLogo;
+    }
+
+    public int getConfigBarcode() {
+        return mConfigBarcode;
+    }
+
+    public void setConfigBarcode(int mConfigBarcode) {
+        this.mConfigBarcode = mConfigBarcode;
     }
 
     public Builder getPrint(Builder builder, int maxNoChar, int padding, int margin) {
@@ -294,7 +311,7 @@ public class PrintDataDTO {
             String strDesc = "Description";
             String strQty = "Qty    Amount";
             //strPrint.append(getSpaceString(strAmout.length(),maxNoChar,margin+strAmout.length()));
-            String column = strDesc + getSpaceString(strDesc.length() + strQty.length() , maxChar, margin) + strQty;
+            String column = strDesc + getSpaceString(strDesc.length() + strQty.length(), maxChar, margin) + strQty;
 
             builder.addText(strMargin);
 
@@ -355,7 +372,8 @@ public class PrintDataDTO {
             builder.addText(strMargin);
             builder.addText(strMargin);*/
             builder.addTextAlign(Builder.ALIGN_CENTER);
-            builder.addBarcode(part2, Builder.BARCODE_CODE39, Builder.HRI_BELOW, Builder.FONT_A, Builder.PARAM_UNSPECIFIED, 80);
+            if (mConfigBarcode == 1)
+                builder.addBarcode(part2, Builder.BARCODE_CODE39, Builder.HRI_BELOW, Builder.FONT_A, Builder.PARAM_UNSPECIFIED, 80);
             //   builder.addPageEnd();
             //   builder.addPageEnd();
         } catch (EposException e) {
@@ -504,7 +522,7 @@ public class PrintDataDTO {
             String strDesc = "Description";
             String strQty = "Qty    Amount";
             //strPrint.append(getSpaceString(strAmout.length(),maxNoChar,margin+strAmout.length()));
-            String column = strDesc + getSpaceString(strDesc.length() + strQty.length() , maxChar, margin) + strQty;
+            String column = strDesc + getSpaceString(strDesc.length() + strQty.length(), maxChar, margin) + strQty;
             builder.addText(strMargin);
             builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.TRUE, Builder.PARAM_UNSPECIFIED);
             builder.addText(column + "\n");
@@ -559,8 +577,8 @@ public class PrintDataDTO {
             String part2 = parts[1];
             builder.addTextAlign(Builder.ALIGN_CENTER);
             builder.addBarcode(part2, Builder.BARCODE_CODE39, Builder.HRI_BELOW, Builder.FONT_A, Builder.PARAM_UNSPECIFIED, 80);
-          //  builder.addText(strLine);
-          //  builder.addText(getCentreAlign(mConstantFooter, maxChar, margin) + "\n");
+            //  builder.addText(strLine);
+            //  builder.addText(getCentreAlign(mConstantFooter, maxChar, margin) + "\n");
             //builder.addPageEnd();
         } catch (EposException e) {
             e.printStackTrace();

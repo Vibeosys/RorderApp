@@ -385,7 +385,7 @@ public class TableMenusActivity extends BaseActivity implements
                 genrateBill();
 
             } else {
-                startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
+                customAlterNetworkDialog(getResources().getString(R.string.error_msg_title_for_network), getResources().getString(R.string.network_error));
             }
         }
         if (id == R.id.txtPreviousOrders) {
@@ -400,6 +400,22 @@ public class TableMenusActivity extends BaseActivity implements
             sendEventToGoogle("Action", "Veg-Non veg Filter");
             showVegNonVeg();
         }
+
+    }
+
+    private void customAlterNetworkDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("" + title);
+        builder.setIcon(R.drawable.ic_action_warning_yellow);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_SETTINGS));
+            }
+        });
+        builder.show();
 
     }
 
@@ -571,7 +587,7 @@ public class TableMenusActivity extends BaseActivity implements
         ImageButton btnNoveg = (ImageButton) dlg.findViewById(R.id.btnNonVeg);
         ImageButton btnReset = (ImageButton) dlg.findViewById(R.id.btnReset);
         ImageButton btnClose = (ImageButton) dlg.findViewById(R.id.btnClose);
-        ImageButton btnBeverage=(ImageButton)dlg.findViewById(R.id.btnBeverages);
+        ImageButton btnBeverage = (ImageButton) dlg.findViewById(R.id.btnBeverages);
         btnVeg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

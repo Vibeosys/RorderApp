@@ -335,6 +335,7 @@ public class BillDetailsActivity extends BaseActivity {
         //  String footer = "Powered by QuickServe";
         String footer = restaurantDTO.getmFooter();
         PrintDataDTO printData = new PrintDataDTO();
+        printData.setConfigBarcode(mDbRepository.getConfigValue(AppConstants.CONFIG_BARCODE_PRINT));
         printData.setHeader(header);
         printData.setFooter(footer);
         printData.setBody(printBody);
@@ -345,14 +346,14 @@ public class BillDetailsActivity extends BaseActivity {
         try {
             printPaper.setPrinter(getApplicationContext(), printerDetail);
         } catch (OpenPrinterException e) {
-          //  customAlterDialog("Printer Error", e.getMessage());
+            //  customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         printPaper.openPrinter();
         try {
             printPaper.printText(printData);
         } catch (PrintException e) {
-          //  customAlterDialog("Printer Error", e.getMessage());
+            //  customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         return "Success";
@@ -365,7 +366,7 @@ public class BillDetailsActivity extends BaseActivity {
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         PrintHeader header = new PrintHeader("", "Take Away No.: #"
                 + mTakeAwayNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
-        Bitmap icon=BitmapFactory.decodeResource(getApplicationContext().getResources(),
+        Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.drawable.ic_launcher);
         String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity());
         header.setBmpIcon(icon);
@@ -389,6 +390,7 @@ public class BillDetailsActivity extends BaseActivity {
         //  String footer = "Powered by QuickServe";
         String footer = restaurantDTO.getmFooter();
         PrintDataDTO printData = new PrintDataDTO();
+        printData.setConfigBarcode(mDbRepository.getConfigValue(AppConstants.CONFIG_BARCODE_PRINT));
         printData.setHeader(header);
         printData.setFooter(footer);
         printData.setBody(printBody);
@@ -399,14 +401,14 @@ public class BillDetailsActivity extends BaseActivity {
         try {
             printPaper.setPrinter(getApplicationContext(), printerDetail);
         } catch (OpenPrinterException e) {
-           // customAlterDialog("Printer Error", e.getMessage());
+            // customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         printPaper.openPrinter();
         try {
             printPaper.printText(printData);
         } catch (PrintException e) {
-          //  customAlterDialog("Printer Error", e.getMessage());
+            //  customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
         return "Success";

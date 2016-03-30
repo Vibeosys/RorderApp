@@ -23,4 +23,7 @@ public final class AppConstants {
     public final static String PERMISSION_VIEW_DASHBOARD = "VIEW_DASHBOARD";
     public final static String PERMISSION_CHANGE_RESTAURANT_DATA = "CHANGE_RESTAURANT_DATA";
 
+    public final static String CONFIG_LOGO_PRINT="PRINT_LOGO";
+    public final static String CONFIG_BARCODE_PRINT="PRINT_BARCODE";
+
 }
