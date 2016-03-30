@@ -812,7 +812,7 @@ public class DbRepository extends SQLiteOpenHelper {
             String[] whereClause = new String[]{custId};
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                cursor = sqLiteDatabase.rawQuery("SELECT menu.MenuId,menu.FoodType,menu.Image,menu.FbTypeId," +
+                cursor = sqLiteDatabase.rawQuery("SELECT Distinct menu.MenuId,menu.FoodType,menu.Image,menu.FbTypeId," +
                         "menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle," +
                         "menu.AvailabilityStatus,menu.Active,menu.Price ,(Select temp_order.Quantity " +
                         "from temp_order   where menu.MenuId=temp_order.MenuId and temp_order.CustId=?)" +

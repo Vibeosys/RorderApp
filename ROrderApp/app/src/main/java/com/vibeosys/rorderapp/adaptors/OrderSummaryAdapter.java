@@ -132,7 +132,7 @@ public class OrderSummaryAdapter extends BaseExpandableListAdapter {
         TextView txtNote = (TextView) convertView.findViewById(R.id.txtNote);
         txtMenuName.setText(orderDetail.getMenuTitle());
         txtQuantity.setText("" + orderDetail.getOrderQuantity());
-        txtPrice.setText(String.format("%.0f", orderDetail.getOrderPrice()));
+        txtPrice.setText(String.format("%.0f", orderDetail.getMenuUnitPrice()));
         txtNote.setText(orderDetail.getmNote());
         OrderHeaderDTO header = orderHeaderDTOs.get(groupPosition);
         if (header.isCurrent()) {
