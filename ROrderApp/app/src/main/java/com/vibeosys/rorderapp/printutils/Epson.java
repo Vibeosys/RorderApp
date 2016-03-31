@@ -116,14 +116,14 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
             /*Log.d("##", "##" + printDataDTO.getBody().getMenus().toString());*/
             int[] status = new int[1];
             int[] battery = new int[1];
-            try {
-                this.mPrinter.sendData(mBuilder, SEND_TIMEOUT, status, battery);
-                System.out.println("## print data successfully");
 
-            } catch (EposException e) {
-                System.err.println("Error at printing data " + mMethod);
-                throw new PrintException(e.getMessage());
-            }
+            this.mPrinter.sendData(mBuilder, SEND_TIMEOUT, status, battery);
+            System.out.println("## print data successfully");
+
+             /*catch (EposException e) {*/
+            /*System.err.println("Error at printing data " + mMethod);
+            throw new PrintException(e.getMessage());*/
+            // }
 
 
         } catch (EposException e) {
