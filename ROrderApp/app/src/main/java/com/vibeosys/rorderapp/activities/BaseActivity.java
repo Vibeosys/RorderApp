@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -27,9 +29,12 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.ApplicationErrorDBDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.util.AnalyticsApplication;
+import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.DeviceBuildInfo;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 import com.vibeosys.rorderapp.util.SessionManager;
@@ -288,5 +293,19 @@ public abstract class BaseActivity extends AppCompatActivity {
             status = false;
         }
         return status;
+    }
+
+    public String getMacAddress() {
+        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        String address = info.getMacAddress();
+        return address;
+    }
+
+    public void addError(String screenName, String method, String desc) {
+        Gson gson = new Gson();
+        ApplicationErrorDBDTO errorDBDTO = new ApplicationErrorDBDTO(screenName, method, desc);
+        String serializedError = gson.toJson(errorDBDTO);
+        mDbRepository.addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "" + mSessionManager.getUserId(), serializedError);
     }
 }

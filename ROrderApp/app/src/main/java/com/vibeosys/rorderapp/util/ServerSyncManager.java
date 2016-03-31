@@ -177,10 +177,10 @@ public class ServerSyncManager
         ArrayList<TableDataDTO> tableDataList = new ArrayList<>();
 
         for (Sync syncEntry : syncRecordsInDb) {
-            tableDataList.add(new TableDataDTO(syncEntry.getTableName(), syncEntry.getJsonSync(), null));
+            tableDataList.add(new TableDataDTO(syncEntry.getTableName(), syncEntry.getJsonSync()));
         }
         uploadToServer.setData(tableDataList);
-
+        mDbRepository.clearSyncData();
         if (tableDataList.isEmpty()) {
             return null;
         } else {
@@ -333,54 +333,49 @@ public class ServerSyncManager
             downloadResults.put(DbTableNameConstants.ORDER_TYPE, jsonInsertList.size());
             dbOperations.addOrUpdateOrderType(jsonInsertList, tableValue.getUpdateJsonList());
         }
-        if(theTableData.containsKey(DbTableNameConstants.PERMISSION_SET)){
+        if (theTableData.containsKey(DbTableNameConstants.PERMISSION_SET)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.PERMISSION_SET);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
-            downloadResults.put(DbTableNameConstants.PERMISSION_SET,jsonInsertList.size());
+            downloadResults.put(DbTableNameConstants.PERMISSION_SET, jsonInsertList.size());
             dbOperations.addOrUpdatePermissionSet(jsonInsertList, tableValue.getUpdateJsonList());
 
         }
-        if(theTableData.containsKey(DbTableNameConstants.R_CONFIG_SETTINGS)){
+        if (theTableData.containsKey(DbTableNameConstants.R_CONFIG_SETTINGS)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_CONFIG_SETTINGS);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
-            downloadResults.put(DbTableNameConstants.R_CONFIG_SETTINGS,jsonInsertList.size());
+            downloadResults.put(DbTableNameConstants.R_CONFIG_SETTINGS, jsonInsertList.size());
             dbOperations.addOrUpdateRconfigSettings(jsonInsertList, tableValue.getUpdateJsonList());
         }
-        if(theTableData.containsKey(DbTableNameConstants.R_PRINTERS))
-        {
-            TableJsonCollectionDTO tableValue =theTableData.get(DbTableNameConstants.R_PRINTERS);
+        if (theTableData.containsKey(DbTableNameConstants.R_PRINTERS)) {
+            TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_PRINTERS);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
-            downloadResults.put(DbTableNameConstants.R_PRINTERS,jsonInsertList.size());
+            downloadResults.put(DbTableNameConstants.R_PRINTERS, jsonInsertList.size());
             dbOperations.addOrUpdateRprinters(jsonInsertList, tableValue.getUpdateJsonList());
 
         }
-        if(theTableData.containsKey(DbTableNameConstants.R_ROOM_PRINTER))
-        {
+        if (theTableData.containsKey(DbTableNameConstants.R_ROOM_PRINTER)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_ROOM_PRINTER);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
-            downloadResults.put(DbTableNameConstants.R_ROOM_PRINTER,jsonInsertList.size());
+            downloadResults.put(DbTableNameConstants.R_ROOM_PRINTER, jsonInsertList.size());
             dbOperations.addOrUpdateRoomPrinters(jsonInsertList, tableValue.getUpdateJsonList());
         }
-        if(theTableData.containsKey(DbTableNameConstants.R_ROOMS))
-        {
+        if (theTableData.containsKey(DbTableNameConstants.R_ROOMS)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_ROOMS);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
-            downloadResults.put(DbTableNameConstants.R_ROOMS,jsonInsertList.size());
+            downloadResults.put(DbTableNameConstants.R_ROOMS, jsonInsertList.size());
             dbOperations.addOrUpdateRooms(jsonInsertList, tableValue.getUpdateJsonList());
         }
-        if(theTableData.containsKey(DbTableNameConstants.ROOM_TYPE))
-        {
+        if (theTableData.containsKey(DbTableNameConstants.ROOM_TYPE)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.R_ROOMS);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
-            downloadResults.put(DbTableNameConstants.R_ROOMS,jsonInsertList.size());
-            dbOperations.addOrUpdateRoomType(jsonInsertList ,tableValue.getUpdateJsonList());
+            downloadResults.put(DbTableNameConstants.R_ROOMS, jsonInsertList.size());
+            dbOperations.addOrUpdateRoomType(jsonInsertList, tableValue.getUpdateJsonList());
         }
-        if(theTableData.containsKey(DbTableNameConstants.RESTAURANT))
-        {
+        if (theTableData.containsKey(DbTableNameConstants.RESTAURANT)) {
             TableJsonCollectionDTO tableValue = theTableData.get(DbTableNameConstants.RESTAURANT);
             ArrayList<String> jsonInsertList = tableValue.getInsertJsonList();
-            downloadResults.put(DbTableNameConstants.RESTAURANT,jsonInsertList.size());
-            dbOperations.addOrUpdateRestaurant(jsonInsertList,tableValue.getUpdateJsonList());
+            downloadResults.put(DbTableNameConstants.RESTAURANT, jsonInsertList.size());
+            dbOperations.addOrUpdateRestaurant(jsonInsertList, tableValue.getUpdateJsonList());
         }
 
         if (mOnDownloadReceived != null)

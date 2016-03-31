@@ -55,6 +55,8 @@ import java.util.Map;
  */
 public class BillDetailsActivity extends BaseActivity {
 
+
+    private final static String screenName = "Bill Details";
     private BillDetailsDTO mBillDetailsDTOs;
     private TableCommonInfoDTO tableCommonInfoDTO;
     private int mTableId, mTableNo, mTakeAwayNo;
@@ -81,7 +83,7 @@ public class BillDetailsActivity extends BaseActivity {
 
     @Override
     protected String getScreenName() {
-        return "Bill Details";
+        return screenName;
     }
 
     @Override
@@ -246,6 +248,7 @@ public class BillDetailsActivity extends BaseActivity {
                     }
 
                 } catch (NumberFormatException e) {
+                    addError(screenName, "txtDiscountOnClickListener", e.getMessage());
                     Log.d(TAG, "## error in enter discount percentage");
                 }
             }
@@ -347,6 +350,7 @@ public class BillDetailsActivity extends BaseActivity {
             printPaper.setPrinter(getApplicationContext(), printerDetail);
         } catch (OpenPrinterException e) {
             //  customAlterDialog("Printer Error", e.getMessage());
+            addError(screenName, "SetPrinter PrintDineIn", e.getMessage());
             return e.getMessage();
         }
         printPaper.openPrinter();
@@ -354,6 +358,7 @@ public class BillDetailsActivity extends BaseActivity {
             printPaper.printText(printData);
         } catch (PrintException e) {
             //  customAlterDialog("Printer Error", e.getMessage());
+            addError(screenName, "PrintText PrintDineIn", e.getMessage());
             return e.getMessage();
         }
         return "Success";
@@ -401,6 +406,7 @@ public class BillDetailsActivity extends BaseActivity {
         try {
             printPaper.setPrinter(getApplicationContext(), printerDetail);
         } catch (OpenPrinterException e) {
+            addError(screenName, "SetPrinter PrintTakeAway", e.getMessage());
             // customAlterDialog("Printer Error", e.getMessage());
             return e.getMessage();
         }
@@ -409,6 +415,7 @@ public class BillDetailsActivity extends BaseActivity {
             printPaper.printText(printData);
         } catch (PrintException e) {
             //  customAlterDialog("Printer Error", e.getMessage());
+            addError(screenName, "PrintText PrintTakeAway", e.getMessage());
             return e.getMessage();
         }
         return "Success";
@@ -446,8 +453,13 @@ public class BillDetailsActivity extends BaseActivity {
         protected void onPostExecute(String str) {
             super.onPostExecute(str);
             showProgress(false);
-            if (!str.equals("Success"))
-                customAlterDialog("Printer Error", str);
+            try {
+                if (!str.equals("Success"))
+                    customAlterDialog("Printer Error", str);
+            } catch (NullPointerException e) {
+                addError(screenName, "AsyncPrint", e.getMessage());
+            }
+
         }
     }
 }

@@ -64,6 +64,7 @@ public class TableOrderActivity extends BaseActivity implements
         OrderSummaryAdapter.ButtonListener, ServerSyncManager.OnStringResultReceived,
         OrderSummaryAdapter.PlaceOrderListener, ServerSyncManager.OnStringErrorReceived {
 
+    private final static String screenName = "Place Order";
     private ExpandableListView mOrdersList;
     private OrderSummaryAdapter mAdapter;
     private ArrayList<OrderHeaderDTO> mList = new ArrayList<>();
@@ -82,7 +83,7 @@ public class TableOrderActivity extends BaseActivity implements
 
     @Override
     protected String getScreenName() {
-        return "Order ";
+        return screenName;
     }
 
     @Override
@@ -390,6 +391,7 @@ public class TableOrderActivity extends BaseActivity implements
 
     private class AsyncPrintData extends AsyncTask<HashMap<Integer, List<OrderDetailsDTO>>, Void, String> {
         List<OrderDetailsDTO> orderListByRoom;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -401,7 +403,7 @@ public class TableOrderActivity extends BaseActivity implements
             keyRoomId = params[0].keySet();
             for (final Integer i : keyRoomId) {
                 ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
-                orderListByRoom= params[0].get(i);
+                orderListByRoom = params[0].get(i);
                 for (OrderDetailsDTO orderDetail : orderListByRoom) {
                     UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
                     sendDetails.add(sendOrder);
@@ -430,7 +432,8 @@ public class TableOrderActivity extends BaseActivity implements
                 try {
                     printPaper.setPrinter(getApplicationContext(), printerDetails);
                 } catch (OpenPrinterException e) {
-                    resultCount=0;
+                    addError(screenName, "AsyncPrintData setPrinter", e.getMessage());
+                    resultCount = 0;
                     return e.getMessage();
                 }
 
@@ -449,7 +452,8 @@ public class TableOrderActivity extends BaseActivity implements
                 try {
                     printPaper.printText(printData);
                 } catch (PrintException e) {
-                    resultCount=0;
+                    addError(screenName, "AsyncPrintData printText", e.getMessage());
+                    resultCount = 0;
                     return e.getMessage();
                 }
             }
@@ -460,8 +464,7 @@ public class TableOrderActivity extends BaseActivity implements
         protected void onPostExecute(String str) {
             super.onPostExecute(str);
             showProgress(false);
-            if(str.equals("Success"))
-            {
+            if (str.equals("Success")) {
                 for (final Integer i : keyRoomId) {
                     ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
                     for (OrderDetailsDTO orderDetail : orderListByRoom) {
@@ -495,9 +498,8 @@ public class TableOrderActivity extends BaseActivity implements
                         }*/
                 }
 
-            }
-            else {
-                customAlterDialog(getResources().getString(R.string.printer_error_title),str);
+            } else {
+                customAlterDialog(getResources().getString(R.string.printer_error_title), str);
             }
 
         }

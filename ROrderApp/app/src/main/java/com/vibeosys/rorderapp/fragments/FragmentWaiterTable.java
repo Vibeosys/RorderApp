@@ -67,6 +67,8 @@ import java.util.UUID;
  */
 public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnItemClickListener,
         ServerSyncManager.OnStringResultReceived, ServerSyncManager.OnStringErrorReceived {
+
+    private static final String screenName = "Tables fragment";
     private static final String TAG = FragmentWaiterTable.class.getSimpleName();
     public static Handler UIHandler;
     TextView txtTotalCount;
@@ -113,7 +115,7 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
 
     @Override
     protected String getScreenName() {
-        return "Tables fragment";
+        return screenName;
     }
 
     @Override
@@ -134,18 +136,18 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
     }
 
     private void customAlterNetworkDialog(String title, String message) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("" + title);
-            builder.setIcon(R.drawable.ic_action_warning_yellow);
-            builder.setMessage(message);
-            builder.setCancelable(false);
-            builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(Settings.ACTION_SETTINGS));
-                }
-            });
-            builder.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("" + title);
+        builder.setIcon(R.drawable.ic_action_warning_yellow);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_SETTINGS));
+            }
+        });
+        builder.show();
 
     }
 
@@ -321,6 +323,7 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
                     try {
                         customerCount = Integer.parseInt(strCount);
                     } catch (NumberFormatException e) {
+                        addError(screenName, "add Customer On Click", e.toString());
                         Log.e(TAG, "## Insert Count null pointer" + e.toString());
                     }
 

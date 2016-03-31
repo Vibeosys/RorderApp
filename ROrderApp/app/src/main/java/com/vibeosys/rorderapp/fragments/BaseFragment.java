@@ -16,9 +16,12 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.ApplicationErrorDBDTO;
 import com.vibeosys.rorderapp.database.DbRepository;
 import com.vibeosys.rorderapp.util.AnalyticsApplication;
+import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
 import com.vibeosys.rorderapp.util.SessionManager;
 
@@ -136,6 +139,13 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected abstract String getScreenName();
+
+    public void addError(String screenName, String method, String desc) {
+        Gson gson = new Gson();
+        ApplicationErrorDBDTO errorDBDTO = new ApplicationErrorDBDTO(screenName, method, desc);
+        String serializedError = gson.toJson(errorDBDTO);
+        mDbRepository.addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "" + mSessionManager.getUserId(), serializedError);
+    }
 }
 
 

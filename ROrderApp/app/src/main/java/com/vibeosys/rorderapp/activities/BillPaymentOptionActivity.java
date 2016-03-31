@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,12 +20,14 @@ import com.vibeosys.rorderapp.MainActivity;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.FeedbackAdapter;
 import com.vibeosys.rorderapp.adaptors.PaymentModeAdapter;
+import com.vibeosys.rorderapp.data.ApplicationErrorDBDTO;
 import com.vibeosys.rorderapp.data.BillPaidUpload;
 import com.vibeosys.rorderapp.data.FeedBackDTO;
 import com.vibeosys.rorderapp.data.PaymentModeDbDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.TableTransactionDbDTO;
+import com.vibeosys.rorderapp.data.UpdateCustomerDbDTO;
 import com.vibeosys.rorderapp.data.UploadCustomerFeedback;
 import com.vibeosys.rorderapp.data.UploadFeedback;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
@@ -36,6 +40,8 @@ import java.util.ArrayList;
  * Created by shrinivas on 08-02-2016.
  */
 public class BillPaymentOptionActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
+
+    private static final String screenName = "Payment Modes";
     private TableCommonInfoDTO tableCommonInfoDTO;
     PaymentModeAdapter adapter;
     private int mPaymentModeId;
@@ -48,7 +54,7 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
 
     @Override
     protected String getScreenName() {
-        return "Payment Modes";
+        return screenName;
     }
 
     @Override
@@ -119,6 +125,8 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
         TextView txtThank = (TextView) dlg.findViewById(R.id.txtThank);
         TextView txtSkip = (TextView) dlg.findViewById(R.id.dlg_skip);
         TextView txtTitle = (TextView) dlg.findViewById(R.id.dlg_title);
+        final EditText txtCustEmail = (EditText) dlg.findViewById(R.id.txtEmail);
+        final EditText txtCustPhNo = (EditText) dlg.findViewById(R.id.txtPhNo);
         txtTitle.setText(getResources().getString(R.string.feedback_activity_name));
         final ArrayList<FeedBackDTO> mFeedbacks = mDbRepository.getFeedBackList();
         FeedbackAdapter mFeedbackAdapter = new FeedbackAdapter(mFeedbacks, getApplicationContext());
@@ -132,16 +140,30 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
                     for (FeedBackDTO feedBackDTO : mFeedbacks) {
                         feedbackDbDTOs.add(new UploadFeedback(feedBackDTO.getmFeedbackId(), feedBackDTO.getmRating()));
                     }
+                    TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
+
+                    String custEmail = txtCustEmail.getText().toString();
+                    String custMobNo = txtCustPhNo.getText().toString();
+                    Gson gson = new Gson();
+                    UpdateCustomerDbDTO customerDbDTO = new UpdateCustomerDbDTO(mCustId, custEmail, custMobNo);
+                    String serializedJsonString1 = gson.toJson(customerDbDTO);
+
 
                     UploadCustomerFeedback customerFeedback = new UploadCustomerFeedback(mCustId, feedbackDbDTOs);
-
-                    Gson gson = new Gson();
-
                     String serializedJsonString = gson.toJson(customerFeedback);
                     Log.d(TAG, "##" + serializedJsonString);
-                    TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.CUSTOMER_FEEDBACK, serializedJsonString);
-                    mServerSyncManager.uploadDataToServer(tableDataDTO);
+                    tableDataDTOs[0] = new TableDataDTO(ConstantOperations.CUSTOMER_FEEDBACK, serializedJsonString);
 
+                    if (!TextUtils.isEmpty(custEmail) || !TextUtils.isEmpty(custMobNo)) {
+                        tableDataDTOs[1] = new TableDataDTO(ConstantOperations.CUSTOMER_UPDATE, serializedJsonString1);
+                    }
+                    try {
+
+                        mServerSyncManager.uploadDataToServer(tableDataDTOs);
+
+                    } catch (Exception e) {
+                        addError(screenName, "Thanks OnClickListener", e.getMessage());
+                    }
                     Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
                     iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(iMain);

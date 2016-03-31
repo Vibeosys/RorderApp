@@ -46,10 +46,24 @@
                 android:textSize="12sp" />
         </RelativeLayout>
 
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_margin="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter email id of customer" />
+
+        <EditText
+            android:id="@+id/txtPhNo"
+            android:layout_width="match_parent"
+            android:layout_margin="2dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter customer ph no." />
+
         <ListView
             android:id="@+id/listFeedback"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="250dp"
             android:layout_weight="1"
             android:background="@color/feedback_blue" />
 

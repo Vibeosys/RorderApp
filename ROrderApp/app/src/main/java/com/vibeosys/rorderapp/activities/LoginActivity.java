@@ -48,6 +48,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends BaseActivity {
 
+    private static final String screenName = "Login User";
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -78,7 +79,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected String getScreenName() {
-        return "Login User";
+        return screenName;
     }
 
     @Override
@@ -359,6 +360,7 @@ public class LoginActivity extends BaseActivity {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
+                addError(screenName, "UserLoginTask asyncTask", e.getMessage());
                 return false;
             }
             user = mDbRepository.autheticateUser(mEmail, mPassword, mRoleId);

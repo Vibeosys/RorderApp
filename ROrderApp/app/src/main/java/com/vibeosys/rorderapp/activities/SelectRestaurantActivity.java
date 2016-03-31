@@ -53,6 +53,7 @@ import java.util.UUID;
  */
 public class SelectRestaurantActivity extends BaseActivity implements View.OnClickListener {
 
+    private final static String screenName = "Restaurant registration";
     private ArrayList<RestaurantDbDTO> mRestaurantList;
     private Context mContext = this;
     private ProgressDialog mProgress;
@@ -67,7 +68,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
 
     @Override
     protected String getScreenName() {
-        return "Restaurant registration";
+        return screenName;
     }
 
     @Override
@@ -164,6 +165,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                         JSONObject jsResponce = new JSONObject(responce);
                         message = jsResponce.getString("message");
                     } catch (JSONException e) {
+                        addError(screenName, "Json error in downloadDatabase", e.getMessage());
                         Log.e(TAG, e.toString());
                     }
                 }
@@ -171,6 +173,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
 
         } catch (Exception ex) {
             Log.e("DbDownloadException", "##ROrder while downloading database" + ex.toString());
+            addError(screenName, "downloadDatabase", ex.getMessage());
         }
 
        /* boolean userCreated = mDbRepository.createUserId(mSessionManager.getUserId());
@@ -247,6 +250,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                 mSessionManager.setUserRestaurantId(mSelectedRestoId);
                 callDatabaseDownload();
             } catch (NumberFormatException e) {
+                addError(screenName, "getDatabase", e.getMessage());
                 mTxtRestaurant.setError(getResources().getString(R.string.error_select_restaurant));
                 Log.e(TAG, "Error at select Restaurant Id" + e.toString());
             }
@@ -345,7 +349,6 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         @Override
         protected Boolean doInBackground(Void... params) {
             boolean downFlag = downloadDatabase();
-
             return downFlag;
         }
 

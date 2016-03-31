@@ -16,5 +16,7 @@ public class ConstantOperations {
     public static final String CHEF_ORDER_PLACE = "orderFulfilled";
     public static final String ADD_WAITING_CUSTOMER = "addWaitingCustomer";
     public static final String CUSTOMER_FEEDBACK = "customerFeedback";
+    public static final String CUSTOMER_UPDATE = "updateCustomer";
     public static final String ADD_TAKEAWAY = "addTakeaway";
+    public static final String ADD_APPLICATION_ERROR = "addApplicationError";
 }

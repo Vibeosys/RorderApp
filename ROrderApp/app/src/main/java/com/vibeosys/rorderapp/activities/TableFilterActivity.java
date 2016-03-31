@@ -24,6 +24,7 @@ import java.util.ArrayList;
  */
 public class TableFilterActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
+    private static final String screenName = "Filter Tables";
     private TableCategoryAdapter mTableCategoryAdapter;
     private ArrayList<TableCategoryDTO> mAllTableCategory;
     private int mSelectedCategory;
@@ -31,7 +32,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected String getScreenName() {
-        return "Filter Tables";
+        return screenName;
     }
 
     @Override
@@ -66,6 +67,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
                 mSelectedCategory = json.getInt("Category");
                 changeUi();
             } catch (JSONException e) {
+                addError(screenName, "Null Json", e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -129,6 +131,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
                 jsonObject.put("chkUnoccupied", chkUnoccupied);
                 jsonObject.put("btnFlag", true);
             } catch (JSONException e) {
+                addError(screenName, "txtApply On Click", e.getMessage());
                 e.printStackTrace();
             }
             sendEventToGoogle("Action", "Table filter apply");
@@ -149,6 +152,7 @@ public class TableFilterActivity extends BaseActivity implements View.OnClickLis
                 setResult(2, intent);
                 finish();
             } catch (JSONException e) {
+                addError(screenName, "txtCancel On Click", e.getMessage());
                 e.printStackTrace();
             }
         }

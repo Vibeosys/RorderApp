@@ -63,6 +63,7 @@ public class TableMenusActivity extends BaseActivity implements
         OrderListAdapter.CustomButtonListener, View.OnClickListener, ServerSyncManager.OnStringResultReceived,
         ServerSyncManager.OnDownloadReceived, ServerSyncManager.OnStringErrorReceived {
 
+    private static final String screenName = "Menu List";
     private TableCommonInfoDTO tableCommonInfoDTO;
     private OrderListAdapter orderListAdapter;
     private List<OrderMenuDTO> allMenus;
@@ -83,7 +84,7 @@ public class TableMenusActivity extends BaseActivity implements
 
     @Override
     protected String getScreenName() {
-        return "Menu List";
+        return screenName;
     }
 
     //List<OrderMenuDTO> sortingMenu;

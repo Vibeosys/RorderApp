@@ -104,9 +104,11 @@ public class DbRepository extends SQLiteOpenHelper {
                 syncTableData = new ArrayList<>();
                 if (cursor != null) {
                     if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
                         do {
                             Sync sync = new Sync();
                             sync.setJsonSync(cursor.getString(cursor.getColumnIndex("JsonSync")));
+                            sync.setTableName(cursor.getString(cursor.getColumnIndex("TableName")));
                             syncTableData.add(sync);
                         } while (cursor.moveToNext());
 
@@ -124,6 +126,32 @@ public class DbRepository extends SQLiteOpenHelper {
                 sqLiteDatabase.close();
         }
         return syncTableData;
+    }
+
+    public boolean clearSyncData() {
+        SQLiteDatabase sqLiteDatabase = null;
+        // ContentValues contentValues = null;
+        sqLiteDatabase = getWritableDatabase();
+        long count = -1;
+
+        try {
+            synchronized (sqLiteDatabase) {
+                count = sqLiteDatabase.delete("sync", null,
+                        null);
+                // contentValues.clear();
+                //sqLiteDatabase.close();
+                Log.d(TAG, " ## clear sync sucessfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "## clear sync is not sucessfully" + e.toString());
+            //sqLiteDatabase.close();
+
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return count != -1;
     }
 
     public boolean addDataToSync(String tableName, String userId, String jsonSync) {
@@ -838,9 +866,9 @@ public class DbRepository extends SQLiteOpenHelper {
                             double menuPrice = Double.parseDouble(cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE)));
                             int quantity = cursor.getInt(cursor.getColumnIndex("Quantity"));
                             int iAvail = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.AVAIL_STATUS));
-                            int fbType=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.FB_TYPE_ID));
+                            int fbType = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlMenu.FB_TYPE_ID));
                             boolean isAvail = iAvail == 1 ? true : false;
-                            OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, quantity, OrderMenuDTO.SHOW, isSpicy, isAvail,fbType);
+                            OrderMenuDTO orderMenu = new OrderMenuDTO(menuId, menuTitle, menuImage, foodType, menuTags, menuCategory, menuPrice, quantity, OrderMenuDTO.SHOW, isSpicy, isAvail, fbType);
                             //table.setJsonSync();
                             orderMenus.add(orderMenu);
                         } while (cursor.moveToNext());
@@ -4097,9 +4125,8 @@ public class DbRepository extends SQLiteOpenHelper {
         return restaurantDTO;
     }
 
-    public int getConfigValue(String configKey)
-    {
-        int result=0;
+    public int getConfigValue(String configKey) {
+        int result = 0;
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
@@ -4114,7 +4141,7 @@ public class DbRepository extends SQLiteOpenHelper {
 
                     if (cursor.getCount() > 0) {
                         cursor.moveToFirst();
-                        result=cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRConfigSettings.CONFIG_VALUE));
+                        result = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRConfigSettings.CONFIG_VALUE));
                     }
                 }
 
@@ -4130,6 +4157,6 @@ public class DbRepository extends SQLiteOpenHelper {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
         }
-       return result;
+        return result;
     }
 }
