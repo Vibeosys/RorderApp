@@ -447,7 +447,7 @@ public class BillDetailsActivity extends BaseActivity {
             super.onPostExecute(str);
             showProgress(false);
             if (!str.equals("Success"))
-                customAlterDialog("Print Error", str);
+                customAlterDialog("Printer Error", str);
         }
     }
 }

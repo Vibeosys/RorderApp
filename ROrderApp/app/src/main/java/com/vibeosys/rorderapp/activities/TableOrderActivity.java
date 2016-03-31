@@ -497,7 +497,7 @@ public class TableOrderActivity extends BaseActivity implements
 
             }
             else {
-                customAlterDialog("Printer Error",str);
+                customAlterDialog(getResources().getString(R.string.printer_error_title),str);
             }
 
         }
