@@ -36,4 +36,5 @@ public final class PropertyTypeConstants {
     public static final String USER_REGD_API_KEY = "user.regd.api.key";
     public static final String USER_DEVICE_ID = "user.deviceId";
     public static final String USER_IMEI_ID = "user.imei";
+    public static final String USER_MAC_ID = "user.mac";
 }

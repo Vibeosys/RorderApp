@@ -46,14 +46,14 @@
                 android:textSize="12sp" />
         </RelativeLayout>
 
-        <EditText
+        <com.vibeosys.rorderapp.views.CustomEditText
             android:id="@+id/txtEmail"
             android:layout_margin="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter email id of customer" />
 
-        <EditText
+        <com.vibeosys.rorderapp.views.CustomEditText
             android:id="@+id/txtPhNo"
             android:layout_width="match_parent"
             android:layout_margin="2dp"

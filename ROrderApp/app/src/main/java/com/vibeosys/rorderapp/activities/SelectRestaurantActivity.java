@@ -89,6 +89,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
             customAlterDialog(stringTitle, stringMessage);
         }
         mSessionManager.setImei(getImei());
+        mSessionManager.setMac(getMacAddress());
         //listResto=(ListView)findViewById(R.id.listView);
         getRestaurant(mSessionManager.getRestaurantUrl());
         aboutUs.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +117,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         String buildInfo64Based = getBuild64BasedInfo();
         UUID uuid = UUID.randomUUID();
         mSessionManager.setDeviceId(uuid.toString());
-        String downloadDBURL = mSessionManager.getDownloadDbUrl(mSelectedRestoId) + "&info=" + buildInfo64Based + "&imei=" + mSessionManager.getImei();/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
+        String downloadDBURL = mSessionManager.getDownloadDbUrl(mSelectedRestoId) + "&info=" + buildInfo64Based + "&imei=" + mSessionManager.getImei() + "&macId=" + mSessionManager.getMac();/*mSessionManager.getDownloadDbUrl(mSessionManager.getUserId()) + "&info=" + buildInfo64Based;*/
         Log.i(TAG, "##" + downloadDBURL);
         try {
             URL url = new URL(downloadDBURL);

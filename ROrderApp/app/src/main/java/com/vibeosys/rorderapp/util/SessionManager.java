@@ -236,7 +236,13 @@ public class SessionManager {
     public String getImei() {
         return mProjectSharedPref.getString(PropertyTypeConstants.USER_IMEI_ID, null);
     }
+    public void setMac(String mac) {
+        setValuesInSharedPrefs(PropertyTypeConstants.USER_MAC_ID, mac);
+    }
 
+    public String getMac() {
+        return mProjectSharedPref.getString(PropertyTypeConstants.USER_MAC_ID, null);
+    }
     public String getAnalyticsSet() {
         return mProjectSharedPref.getString(PropertyTypeConstants.GOOGLE_PLAY_SERVICE_SET, "off");
     }

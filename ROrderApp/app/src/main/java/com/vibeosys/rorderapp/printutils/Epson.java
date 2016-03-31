@@ -46,25 +46,25 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
             e.printStackTrace();
             switch (e.getErrorStatus()) {
                 case EposException.ERR_PARAM:
-                    throw new OpenPrinterException("Something went wrong try again");
+                    throw new OpenPrinterException("Something went wrong try again.");
                 case EposException.ERR_OPEN:
-                    throw new OpenPrinterException("Could not found printer please check connection and printer power");
+                    throw new OpenPrinterException("Could not found printer, please check connection and printer power.");
                 case EposException.ERR_CONNECT:
-                    throw new OpenPrinterException("Could not found printer please check connection");
+                    throw new OpenPrinterException("Could not found printer, please check connection.");
                 case EposException.ERR_TIMEOUT:
-                    throw new OpenPrinterException("Printer is busy try again");
+                    throw new OpenPrinterException("Printer is busy try again.");
                 case EposException.ERR_MEMORY:
-                    throw new OpenPrinterException("Restart printer and try again");
+                    throw new OpenPrinterException("Restart printer and try again.");
                 case EposException.ERR_ILLEGAL:
-                    throw new OpenPrinterException("Something went wrong try again");
+                    throw new OpenPrinterException("Something went wrong try again.");
                 case EposException.ERR_PROCESSING:
-                    throw new OpenPrinterException("Could not found printer please contact administrator");
+                    throw new OpenPrinterException("Could not found printer, please contact administrator.");
                 case EposException.ERR_UNSUPPORTED:
-                    throw new OpenPrinterException("Selected printer is not supported");
+                    throw new OpenPrinterException("Selected printer is not supported.");
                 case EposException.ERR_OFF_LINE:
-                    throw new OpenPrinterException("Printer cover is open or no paper check the paper and cover");
+                    throw new OpenPrinterException("Printer cover is open or no paper, check the paper and cover.");
                 case EposException.ERR_FAILURE:
-                    throw new OpenPrinterException("Could not found printer please Check Connection");
+                    throw new OpenPrinterException("Could not found printer, please Check Connection.");
             }
             //throw new OpenPrinterException("Could not found printer");
         }
@@ -130,25 +130,25 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
             System.err.println("Error at method " + mMethod);
             switch (e.getErrorStatus()) {
                 case EposException.ERR_PARAM:
-                    throw new PrintException("Something went wrong try again");
+                    throw new PrintException("Something went wrong try again.");
                 case EposException.ERR_OPEN:
-                    throw new PrintException("Could not connect printer please check connection and printer power");
+                    throw new PrintException("Could not connect printer, please check connection and printer power.");
                 case EposException.ERR_CONNECT:
-                    throw new PrintException("Could not connect to the printer please check connection");
+                    throw new PrintException("Could not connect to the printer, please check connection.");
                 case EposException.ERR_TIMEOUT:
-                    throw new PrintException("Printer is busy try again");
+                    throw new PrintException("Printer is busy try again.");
                 case EposException.ERR_MEMORY:
-                    throw new PrintException("Restart printer and try again");
+                    throw new PrintException("Restart printer and try again.");
                 case EposException.ERR_ILLEGAL:
-                    throw new PrintException("Something went wrong try again");
+                    throw new PrintException("Something went wrong try again.");
                 case EposException.ERR_PROCESSING:
-                    throw new PrintException("Could not found printer please contact administrator");
+                    throw new PrintException("Could not found printer, please contact administrator.");
                 case EposException.ERR_UNSUPPORTED:
-                    throw new PrintException("Selected printer is not supported");
+                    throw new PrintException("Selected printer is not supported.");
                 case EposException.ERR_OFF_LINE:
-                    throw new PrintException("Printer cover is open or no paper check the paper and cover");
+                    throw new PrintException("Printer cover is open or no paper check the paper and cover.");
                 case EposException.ERR_FAILURE:
-                    throw new PrintException("Could not found printer please check connection");
+                    throw new PrintException("Could not found printer, please check connection.");
             }
         } finally {
             closePrinter();
