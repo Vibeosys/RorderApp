@@ -33,6 +33,7 @@ import com.vibeosys.rorderapp.data.UploadFeedback;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.NetworkUtils;
+import com.vibeosys.rorderapp.util.PhoneNumberValidator;
 
 import java.util.ArrayList;
 
@@ -153,23 +154,48 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
                     String serializedJsonString = gson.toJson(customerFeedback);
                     Log.d(TAG, "##" + serializedJsonString);
                     tableDataDTOs[0] = new TableDataDTO(ConstantOperations.CUSTOMER_FEEDBACK, serializedJsonString);
-
+                    boolean chkFlag = false;
+                    //boolean chkMobFlag = false;
+                    if (TextUtils.isEmpty(custEmail)) {
+                        if (!isEmailValid(custEmail)) {
+                            chkFlag = false;
+                            txtCustEmail.setError("Email id is not valid");
+                        } else {
+                            chkFlag = true;
+                        }
+                    } else {
+                        chkFlag = true;
+                    }
+                    if (TextUtils.isEmpty(custMobNo)) {
+                        PhoneNumberValidator validator = new PhoneNumberValidator();
+                        if (validator.validatePhoneNumber(custMobNo) == false) {
+                            txtCustPhNo.setError("Number is Not valid");
+                            chkFlag = false;
+                        } else {
+                            chkFlag = true;
+                        }
+                    } else {
+                        chkFlag = true;
+                    }
                     if (!TextUtils.isEmpty(custEmail) || !TextUtils.isEmpty(custMobNo)) {
-                        tableDataDTOs[1] = new TableDataDTO(ConstantOperations.CUSTOMER_UPDATE, serializedJsonString1);
+                        if (chkFlag)
+                            tableDataDTOs[1] = new TableDataDTO(ConstantOperations.CUSTOMER_UPDATE, serializedJsonString1);
                     }
-                    try {
+                    if (chkFlag) {
+                        try {
+                            mServerSyncManager.uploadDataToServer(tableDataDTOs);
+                        } catch (Exception e) {
+                            addError(screenName, "Thanks OnClickListener", e.getMessage());
+                        }
 
-                        mServerSyncManager.uploadDataToServer(tableDataDTOs);
-
-                    } catch (Exception e) {
-                        addError(screenName, "Thanks OnClickListener", e.getMessage());
+                        Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
+                        iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(iMain);
+                        dlg.dismiss();
+                        finish();
+                        sendEventToGoogle("Action", "Give Feedback");
                     }
-                    Intent iMain = new Intent(getApplicationContext(), MainActivity.class);
-                    iMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(iMain);
-                    dlg.dismiss();
-                    finish();
-                    sendEventToGoogle("Action", "Give Feedback");
+
                 } else {
                     showMyDialog(mContext);
                 }
@@ -187,6 +213,11 @@ public class BillPaymentOptionActivity extends BaseActivity implements AdapterVi
             }
         });
 
+    }
+
+    private boolean isEmailValid(String email) {
+        //TODO: Replace this with your own logic
+        return email.contains("@");
     }
 
     @Override

@@ -9,11 +9,15 @@ public class ApplicationErrorDBDTO {
     private String source;
     private String method;
     private String description;
+    private String errorDate;
+    private String errorTime;
 
-    public ApplicationErrorDBDTO(String source, String method, String description) {
+    public ApplicationErrorDBDTO(String source, String method, String description, String date, String time) {
         this.source = source;
         this.method = method;
         this.description = description;
+        this.errorDate = date;
+        this.errorTime = time;
     }
 
     public int getErrorId() {
@@ -46,5 +50,21 @@ public class ApplicationErrorDBDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getErrorDate() {
+        return errorDate;
+    }
+
+    public void setErrorDate(String errorDate) {
+        this.errorDate = errorDate;
+    }
+
+    public String getTime() {
+        return errorTime;
+    }
+
+    public void setTime(String time) {
+        this.errorTime = time;
     }
 }

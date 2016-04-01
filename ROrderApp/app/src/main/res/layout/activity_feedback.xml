@@ -46,19 +46,29 @@
                 android:textSize="12sp" />
         </RelativeLayout>
 
-        <com.vibeosys.rorderapp.views.CustomEditText
-            android:id="@+id/txtEmail"
-            android:layout_margin="2dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter email id of customer" />
+            android:background="@color/White"
+            android:orientation="vertical">
 
-        <com.vibeosys.rorderapp.views.CustomEditText
-            android:id="@+id/txtPhNo"
-            android:layout_width="match_parent"
-            android:layout_margin="2dp"
-            android:layout_height="wrap_content"
-            android:hint="Enter customer ph no." />
+            <com.vibeosys.rorderapp.views.CustomEditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:inputType="textEmailAddress"
+                android:hint="Enter email id of customer" />
+
+            <com.vibeosys.rorderapp.views.CustomEditText
+                android:id="@+id/txtPhNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:inputType="number"
+                android:hint="Enter customer ph no." />
+        </LinearLayout>
+
 
         <ListView
             android:id="@+id/listFeedback"
