@@ -37,6 +37,7 @@ import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.RoomPrintersDbDTO;
 import com.vibeosys.rorderapp.data.RoomTypesDbDTO;
 import com.vibeosys.rorderapp.data.RoomsDbDTO;
+import com.vibeosys.rorderapp.data.SubMenuDTO;
 import com.vibeosys.rorderapp.data.Sync;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
 import com.vibeosys.rorderapp.data.TableCategoryDbDTO;
@@ -4056,8 +4057,6 @@ public class DbRepository extends SQLiteOpenHelper {
                         }
                     }
                 }
-
-
             }
         } catch (Exception e) {
             Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
@@ -4078,8 +4077,6 @@ public class DbRepository extends SQLiteOpenHelper {
         sqLiteDatabase = getReadableDatabase();
         RestaurantDTO restaurantDTO = null;
         Cursor cursor = null;
-
-
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
@@ -4109,8 +4106,6 @@ public class DbRepository extends SQLiteOpenHelper {
                         } while (cursor.moveToNext());
                     }
                 }
-
-
             }
         } catch (Exception e) {
             Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
@@ -4138,14 +4133,11 @@ public class DbRepository extends SQLiteOpenHelper {
                 cursor = sqLiteDatabase.rawQuery("SELECT * " +
                         "from r_config_settings  where " + SqlContract.SqlRConfigSettings.CONFIG_KEY + " =?", where);
                 if (cursor != null) {
-
                     if (cursor.getCount() > 0) {
                         cursor.moveToFirst();
                         result = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlRConfigSettings.CONFIG_VALUE));
                     }
                 }
-
-
             }
         } catch (Exception e) {
             Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
@@ -4158,5 +4150,44 @@ public class DbRepository extends SQLiteOpenHelper {
                 sqLiteDatabase.close();
         }
         return result;
+    }
+
+    public ArrayList<SubMenuDTO> getSubMenu(int menuId) {
+        ArrayList<SubMenuDTO> subMenu = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] where = new String[]{String.valueOf(menuId)};
+
+                cursor = sqLiteDatabase.rawQuery("SELECT * from " +
+                        SqlContract.SqlSubMenu.TABLE_NAME + " Where " + SqlContract.SqlSubMenu.MENU_ID + "=?", where);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do {
+                            int subMenuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlSubMenu.SUB_MENU_ID));
+                            //int menuId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.IP_ADDRESS));
+                            String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlSubMenu.MENU_TITLE));
+                            double price = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE));
+                            SubMenuDTO subMenuDTO = new SubMenuDTO(subMenuId, menuId, menuTitle, price, 0);
+                            subMenu.add(subMenuDTO);
+                        } while (cursor.moveToNext());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e("DbOperationsEx", "Error while getting sub Menu data " + e.toString());
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        }
+        return subMenu;
     }
 }

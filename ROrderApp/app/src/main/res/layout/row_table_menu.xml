@@ -135,6 +135,13 @@
                     android:textSize="12sp" />
 
                 <ImageView
+                    android:id="@+id/imgSubMenu"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sub_menu_icon" />
+
+                <ImageView
                     android:id="@+id/imgMinus"
                     android:layout_width="20dp"
                     android:layout_height="20dp"

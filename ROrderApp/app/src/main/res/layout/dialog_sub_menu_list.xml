@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sub_menu_icon" />
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/txtMenuName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="2"
+            android:ellipsize="marquee"
+            android:ems="3"
+            android:marqueeRepeatLimit="3"
+            android:padding="5dp"
+            android:text="Menu Name"
+            android:textColor="@color/black_color"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_color" />
+
+    <ListView
+        android:id="@+id/subMenuList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.27" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/txtCancel"
+            style="@style/layout_cancel_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/cancel_string" />
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/txtDone"
+            style="@style/layout_ok_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/done" />
+
+
+    </LinearLayout>
+</LinearLayout>

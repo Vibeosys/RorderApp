@@ -85,6 +85,7 @@ public class OrderListAdapter extends BaseAdapter {
             viewHolder.txtQuantity = (TextView) row.findViewById(R.id.txtMenuQty);
             viewHolder.networkImageView = (NetworkRoundImageView) row.findViewById(R.id.menuImageLoader);
             viewHolder.imgNote = (ImageView) row.findViewById(R.id.imgNote);
+            viewHolder.imgSubMenu = (ImageView) row.findViewById(R.id.imgSubMenu);
             row.setTag(viewHolder);
 
         } else viewHolder = (ViewHolder) row.getTag();
@@ -98,21 +99,23 @@ public class OrderListAdapter extends BaseAdapter {
         }
         Log.d(TAG, menu.toString());
         viewHolder.txtMenuTitle.setText(menu.getmMenuTitle());
-        if (menu.getFbType()==1) {
+        if (menu.getFbType() == 1) {
             viewHolder.imgFoodType.setVisibility(View.VISIBLE);
             viewHolder.imgFoodType.setImageResource(R.drawable.veg_icon);
-        } else if (menu.getFbType()==2) {
+        } else if (menu.getFbType() == 2) {
             viewHolder.imgFoodType.setVisibility(View.VISIBLE);
             viewHolder.imgFoodType.setImageResource(R.drawable.non_veg_icon);
-        }
-        else if(menu.getFbType()==3){
+        } else if (menu.getFbType() == 3) {
             viewHolder.imgFoodType.setVisibility(View.VISIBLE);
             viewHolder.imgFoodType.setImageResource(R.drawable.beverage_icon);
-        }
-        else {
+        } else {
             viewHolder.imgFoodType.setVisibility(View.INVISIBLE);
         }
-
+        if (menu.getmPrice() != 0) {
+            viewHolder.imgSubMenu.setVisibility(View.INVISIBLE);
+        } else {
+            viewHolder.imgSubMenu.setVisibility(View.VISIBLE);
+        }
         if (menu.isSpicy()) {
             viewHolder.imgSpicy.setVisibility(View.VISIBLE);
         } else {
@@ -124,12 +127,9 @@ public class OrderListAdapter extends BaseAdapter {
         final String url = menu.getmImage();
         if (url != null && !url.isEmpty()) {
             try {
-
                 mImageLoader.get(url, ImageLoader.getImageListener(viewHolder.networkImageView,
                         R.drawable.menu_image_generic, R.drawable.menu_image_generic));
                 viewHolder.networkImageView.setImageUrl(url, mImageLoader);
-
-
             } catch (Exception e) {
                 viewHolder.networkImageView.setImageResource(R.drawable.menu_image_generic);
             }
@@ -169,6 +169,13 @@ public class OrderListAdapter extends BaseAdapter {
                     customButtonListener.onButtonClickListener(v.getId(), position, menu.getmMenuId(), menu);
             }
         });
+        viewHolder.imgSubMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (customButtonListener != null)
+                    customButtonListener.onButtonClickListener(v.getId(), position, menu.getmMenuId(), menu);
+            }
+        });
         return row;
     }
 
@@ -186,6 +193,7 @@ public class OrderListAdapter extends BaseAdapter {
         TextView txtQuantity;
         NetworkRoundImageView networkImageView;
         ImageView imgNote;
+        ImageView imgSubMenu;
     }
 
     public void setCustomButtonListner(CustomButtonListener listener) {

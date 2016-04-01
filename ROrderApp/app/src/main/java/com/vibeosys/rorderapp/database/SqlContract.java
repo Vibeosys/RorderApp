@@ -262,4 +262,12 @@ public class SqlContract {
         public final static String ROOM_TYPE = "RoomType";
         public final static String ACTIVE = "Active";
     }
+
+    public abstract class SqlSubMenu {
+        public final static String TABLE_NAME = "sub_menu";
+        public final static String SUB_MENU_ID = "SubMenuId";
+        public final static String MENU_ID = "MenuId";
+        public final static String MENU_TITLE = "SubMenuTitle";
+        public final static String PRICE = "Price";
+    }
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="1dp"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/txtMenuName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:maxLength="20"
+            android:singleLine="false"
+            android:text="Manchurian"
+            android:textColor="@color/listview_item" />
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_weight="1"
+            android:src="@drawable/rupee_icon" />
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/txtMenuPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="90"
+            android:textColor="@color/listview_item"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/imgMinus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/remove_menu" />
+
+
+        <!--  <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="3dp"
+              android:layout_weight="2"
+              android:gravity="right"
+              android:text="Qty "
+              android:textColor="@color/listview_item"
+              android:textSize="12sp" />-->
+
+        <com.vibeosys.rorderapp.views.CustomTextView
+            android:id="@+id/txtMenuQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="0"
+            android:textColor="@color/listview_item"
+            android:textSize="12sp"
+            android:translationZ="3dp" />
+
+        <ImageView
+            android:id="@+id/imgPlus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:src="@drawable/add_menu" />
+    </LinearLayout>
+</LinearLayout>

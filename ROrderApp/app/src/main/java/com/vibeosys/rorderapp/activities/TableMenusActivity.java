@@ -39,10 +39,12 @@ import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.adaptors.NoteAdapter;
 import com.vibeosys.rorderapp.adaptors.OrderListAdapter;
+import com.vibeosys.rorderapp.adaptors.SubMenuAdapter;
 import com.vibeosys.rorderapp.data.NoteDTO;
 import com.vibeosys.rorderapp.data.OrderHeaderDTO;
 import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.SelectedMenusDTO;
+import com.vibeosys.rorderapp.data.SubMenuDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
 import com.vibeosys.rorderapp.data.UploadBillGenerate;
@@ -289,6 +291,9 @@ public class TableMenusActivity extends BaseActivity implements
             displayMenuPriceAndItems();
             sendEventToGoogle("Action", "Add Note");
             orderListAdapter.notifyDataSetChanged();
+        }
+        if (id == R.id.imgSubMenu) {
+            showBevereges(orderMenu);
         }
         //Collections.sort(allMenus);
 
@@ -649,4 +654,21 @@ public class TableMenusActivity extends BaseActivity implements
         customAlterDialog(stringTitle, stringMessage);
         Log.d(TAG, "##" + error.toString());
     }
+
+    private void showBevereges(OrderMenuDTO orderMenu) {
+        final Dialog dialog = new Dialog(mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // dialog.setTitle(orderMenu.getmMenuTitle());
+        dialog.setContentView(R.layout.dialog_sub_menu_list);
+        ArrayList<SubMenuDTO> subMenuDTOs = mDbRepository.getSubMenu(orderMenu.getmMenuId());
+        SubMenuAdapter subMenuAdapter = new SubMenuAdapter(mContext, subMenuDTOs);
+        ListView subMenuList = (ListView) dialog.findViewById(R.id.subMenuList);
+        TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        TextView txtMenuName = (TextView) dialog.findViewById(R.id.txtMenuName);
+        TextView txtDone = (TextView) dialog.findViewById(R.id.txtDone);
+        subMenuList.setAdapter(subMenuAdapter);
+        txtMenuName.setText(orderMenu.getmMenuTitle());
+        dialog.show();
+    }
+
 }
