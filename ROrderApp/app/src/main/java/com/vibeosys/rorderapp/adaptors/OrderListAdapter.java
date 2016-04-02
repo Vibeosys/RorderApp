@@ -113,8 +113,16 @@ public class OrderListAdapter extends BaseAdapter {
         }
         if (menu.getmPrice() != 0) {
             viewHolder.imgSubMenu.setVisibility(View.INVISIBLE);
+            viewHolder.imgMinus.setVisibility(View.VISIBLE);
+            viewHolder.imgPlus.setVisibility(View.VISIBLE);
+            viewHolder.imgNote.setVisibility(View.VISIBLE);
+            viewHolder.txtQuantity.setVisibility(View.VISIBLE);
         } else {
             viewHolder.imgSubMenu.setVisibility(View.VISIBLE);
+            viewHolder.imgMinus.setVisibility(View.INVISIBLE);
+            viewHolder.imgPlus.setVisibility(View.INVISIBLE);
+            viewHolder.imgNote.setVisibility(View.INVISIBLE);
+            viewHolder.txtQuantity.setVisibility(View.INVISIBLE);
         }
         if (menu.isSpicy()) {
             viewHolder.imgSpicy.setVisibility(View.VISIBLE);

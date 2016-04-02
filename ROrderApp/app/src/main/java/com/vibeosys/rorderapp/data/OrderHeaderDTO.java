@@ -32,7 +32,7 @@ public class OrderHeaderDTO {
         this.orderDetailsDTOs = orderDetailsDTOs;
     }
 
-    public OrderHeaderDTO(String mOrderId, int mOrderNo, boolean mOrderStatus,int mTableNo,
+    public OrderHeaderDTO(String mOrderId, int mOrderNo, boolean mOrderStatus, int mTableNo,
                           int mUserId, double mOrderAmount, boolean mCurrent) {
         this.mOrderId = mOrderId;
         this.mOrderNo = mOrderNo;
@@ -138,5 +138,18 @@ public class OrderHeaderDTO {
 
     public void setCustId(String custId) {
         this.custId = custId;
+    }
+
+    public double getTotalBillAmount() {
+        double sum = 0;
+        for (int i = 0; i < orderDetailsDTOs.size(); i++) {
+            OrderDetailsDTO menu = orderDetailsDTOs.get(i);
+            sum = sum + getAmount(menu.getOrderQuantity(), menu.getMenuUnitPrice());
+        }
+        return sum;
+    }
+
+    public double getAmount(int qty, double price) {
+        return qty * price;
     }
 }

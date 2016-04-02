@@ -255,8 +255,9 @@ public class TableMenusActivity extends BaseActivity implements
         }
         mCount = mSelectedItems.size();
         SelectedMenusDTO selectedMenusDTO = new SelectedMenusDTO(mSelectedItems);
-        txtTotalAmount.setText(String.format(String.format("%.0f", selectedMenusDTO.getTotalBillAmount())) + " Rs.");
-        txtTotalItems.setText(selectedMenusDTO.getTotalItems() + " Items are selected");
+        OrderHeaderDTO mCurrentOrder = mDbRepository.getOrederDetailsFromTemp(mTableId, mSessionManager.getUserId(), custId);
+        txtTotalAmount.setText(String.format(String.format("%.0f", mCurrentOrder.getTotalBillAmount())) + " Rs.");
+        txtTotalItems.setText(mCurrentOrder.getOrderDetailsDTOs().size() + " Items are selected");
     }
 
     @Override
