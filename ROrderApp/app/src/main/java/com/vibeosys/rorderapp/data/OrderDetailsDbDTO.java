@@ -17,6 +17,7 @@ public class OrderDetailsDbDTO extends BaseDTO {
     private int orderQuantity;
     private String orderId;
     private int menuId;
+    private int subMenuId;
     private String menuTitle;
     private String note;
 
@@ -90,6 +91,13 @@ public class OrderDetailsDbDTO extends BaseDTO {
         this.note = note;
     }
 
+    public int getSubMenuId() {
+        return subMenuId;
+    }
+
+    public void setSubMenuId(int subMenuId) {
+        this.subMenuId = subMenuId;
+    }
 
     public static List<OrderDetailsDbDTO> deserializeOrderDetail(List<String> serializedStringList) {
         Gson gson = new Gson();

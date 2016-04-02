@@ -15,7 +15,7 @@
 
         <com.vibeosys.rorderapp.views.CustomTextView
             android:id="@+id/txtMenuName"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="3dp"
@@ -77,5 +77,13 @@
             android:layout_margin="3dp"
             android:layout_weight="1"
             android:src="@drawable/add_menu" />
+
+        <ImageView
+            android:id="@+id/imgNote"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_note" />
     </LinearLayout>
 </LinearLayout>

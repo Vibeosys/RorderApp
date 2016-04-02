@@ -98,6 +98,7 @@ public class SqlContract {
         public final static String ORDER_QUANTITY = "OrderQuantity";
         public final static String ORDER_ID = "OrderId";
         public final static String MENU_ID = "MenuId";
+        public final static String SUB_MENU_ID = "SubMenuId";
         public final static String MENU_TITLE = "MenuTitle";
         public final static String NOTE = "Note";
     }
@@ -129,6 +130,7 @@ public class SqlContract {
         public final static String ORDER_TIME = "OrderTime";
         public final static String ORDER_STATUS = "OrderStatus";
         public final static String NOTE = "Note";
+        public final static String SUB_MENU_ID = "SubMenuId";
 
     }
 

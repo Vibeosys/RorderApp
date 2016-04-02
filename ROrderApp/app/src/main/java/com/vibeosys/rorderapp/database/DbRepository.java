@@ -742,6 +742,7 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.put(SqlContract.SqlOrderDetails.ORDER_QUANTITY, orderDetail.getOrderQuantity());
                     contentValues.put(SqlContract.SqlOrderDetails.ORDER_ID, orderDetail.getOrderId());
                     contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
+                    contentValues.put(SqlContract.SqlOrderDetails.SUB_MENU_ID, orderDetail.getSubMenuId());
                     contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
                     contentValues.put(SqlContract.SqlOrderDetails.NOTE, orderDetail.getNote());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
@@ -887,18 +888,18 @@ public class DbRepository extends SQLiteOpenHelper {
         return orderMenus;
     }
 
-    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId, String note) {
+    public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId, String note, int subMenuId) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         int rowCount = 0;
         long count = -1;
         try {
-            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo), String.valueOf(menuId)};
+            String[] whereClause = new String[]{String.valueOf(tableId), String.valueOf(tableNo), String.valueOf(menuId), String.valueOf(subMenuId)};
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
                 Cursor cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlTempOrder.TABLE_NAME
                         + " Where " + SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
-                        + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+                        + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=? AND " + SqlContract.SqlTempOrder.SUB_MENU_ID + "=?", whereClause);
                 rowCount = cursor.getCount();
                 cursor.close();
                 sqLiteDatabase.close();
@@ -916,6 +917,7 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.put(SqlContract.SqlTempOrder.ORDER_DATE, rOrderDateUtils.getGMTCurrentDate());
                 contentValues.put(SqlContract.SqlTempOrder.ORDER_TIME, rOrderDateUtils.getGMTCurrentTime());
                 contentValues.put(SqlContract.SqlTempOrder.ORDER_STATUS, 0);
+                contentValues.put(SqlContract.SqlTempOrder.SUB_MENU_ID, subMenuId);
                 contentValues.put(SqlContract.SqlTempOrder.NOTE, note);
                 if (rowCount == 0 && qty != 0) {
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
@@ -924,12 +926,12 @@ public class DbRepository extends SQLiteOpenHelper {
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
                             SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
-                                    + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+                                    + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=? AND " + SqlContract.SqlTempOrder.SUB_MENU_ID + "=?", whereClause);
                 } else {
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlTempOrder.TABLE_NAME, contentValues,
                             SqlContract.SqlTempOrder.TABLE_ID + "=? AND " + SqlContract.SqlTempOrder.TABLE_NO
-                                    + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=?", whereClause);
+                                    + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=? AND " + SqlContract.SqlTempOrder.SUB_MENU_ID + "=?", whereClause);
                 }
 
 
@@ -1198,19 +1200,27 @@ public class DbRepository extends SQLiteOpenHelper {
                 String[] whereClause = new String[]{String.valueOf(tableId), custId};
                 double orderAmount = 0;
                 cursor = sqLiteDatabase.rawQuery("Select temp_order.TempOrderId,temp_order.Quantity,temp_order.Note," +
-                        "temp_order.MenuId,temp_order.OrderDate,temp_order.OrderTime,menu.MenuTitle,menu.RoomId," +
-                        "menu.Price from temp_order left join menu where " +
-                        "temp_order.MenuId=menu.MenuId and temp_order.TableId=? and temp_order.CustId=?", whereClause);
+                        "temp_order.MenuId,temp_order.SubMenuId,temp_order.OrderDate,temp_order.OrderTime,sub_menu.SubMenuTitle," +
+                        "menu.MenuTitle,menu.RoomId,menu.Price,sub_menu.Price as subPrice from temp_order left join menu on temp_order.MenuId=menu.MenuId " +
+                        "left join sub_menu on sub_menu.SubMenuId=temp_order.SubMenuId " +
+                        "where temp_order.MenuId=menu.MenuId and temp_order.TableId=? and temp_order.CustId=?", whereClause);
                 if (cursor != null) {
                     if (cursor.getCount() > 0) {
                         cursor.moveToFirst();
                         do {
                             int orderDetailsTempId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.TEMP_ORDER_ID));
-                            double menuPrice = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE));
+                            double menuPrice = 0;
                             int orderQuantity = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.QUANTITY));
                             //String myOrderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_ID));
                             int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.MENU_ID));
+                            int subMenuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTempOrder.SUB_MENU_ID));
                             String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlMenu.MENU_TITLE));
+                            if (subMenuId != 0) {
+                                menuTitle = menuTitle + " " + cursor.getString(cursor.getColumnIndex(SqlContract.SqlSubMenu.MENU_TITLE));
+                                menuPrice = cursor.getDouble(cursor.getColumnIndex("subPrice"));
+                            } else {
+                                menuPrice = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE));
+                            }
                             String note = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTempOrder.NOTE));
                             double orderPice = menuPrice * orderQuantity;
                             orderAmount = orderAmount + orderPice;
@@ -1219,6 +1229,7 @@ public class DbRepository extends SQLiteOpenHelper {
                                     orderDetails = new OrderDetailsDTO(orderDetailsTempId, orderPice
                                     , orderQuantity, "", menuId, menuTitle, menuPrice, note);
                             orderDetails.setRoomId(roomId);
+                            orderDetails.setmSubMenuId(subMenuId);
                             orderDetailsList.add(orderDetails);
                         } while (cursor.moveToNext());
                     }
@@ -1787,6 +1798,8 @@ public class DbRepository extends SQLiteOpenHelper {
                         contentValues.put(SqlContract.SqlOrderDetails.MENU_ID, orderDetail.getMenuId());
                     if (orderDetail.getMenuTitle() != null && !orderDetail.getMenuTitle().isEmpty())
                         contentValues.put(SqlContract.SqlOrderDetails.MENU_TITLE, orderDetail.getMenuTitle());
+                    if (orderDetail.getSubMenuId() != 0)
+                        contentValues.put(SqlContract.SqlOrderDetails.SUB_MENU_ID, orderDetail.getSubMenuId());
                     if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
                     count = sqLiteDatabase.update(SqlContract.SqlOrderDetails.TABLE_NAME, contentValues,
                             SqlContract.SqlOrderDetails.ORDER_ID + "=?", whereClause);
@@ -3995,12 +4008,12 @@ public class DbRepository extends SQLiteOpenHelper {
         return getOrderId;
     }
 
-    public HashMap<Integer, OrderDetailsDTO> getMenuDetailsForOrderPrint(ArrayList<String> getOrderId) {
+    public HashMap<String, OrderDetailsDTO> getMenuDetailsForOrderPrint(ArrayList<String> getOrderId) {
 
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
-        HashMap<Integer, OrderDetailsDTO> billdetails = new HashMap<>();
+        HashMap<String, OrderDetailsDTO> billdetails = new HashMap<>();
         String previousQty, previousOrderPrice, previousTotalPrice;
         try {
             sqLiteDatabase = getReadableDatabase();
@@ -4044,12 +4057,12 @@ public class DbRepository extends SQLiteOpenHelper {
                                     listTemp.add(2,String.valueOf(TotalPriceForQty));
                                     billdetails.put(MenuName, listTemp);
                                 }*/
-                                if (billdetails.containsKey(menuId)) {
+                                if (billdetails.containsKey(menuName)) {
                                     OrderDetailsDTO hshOrder = billdetails.get(menuId);
                                     hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + menuQty);
                                     hshOrder.setOrderPrice(hshOrder.getOrderPrice() + orderPrice);
                                 } else {
-                                    billdetails.put(menuId, new OrderDetailsDTO(0, orderPrice, menuQty, "", menuId,
+                                    billdetails.put(menuName, new OrderDetailsDTO(0, orderPrice, menuQty, "", menuId,
                                             menuName, 0.0, ""));
                                 }
 
@@ -4152,7 +4165,7 @@ public class DbRepository extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<SubMenuDTO> getSubMenu(int menuId) {
+    public ArrayList<SubMenuDTO> getSubMenu(int menuId, String custId) {
         ArrayList<SubMenuDTO> subMenu = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -4161,8 +4174,10 @@ public class DbRepository extends SQLiteOpenHelper {
             synchronized (sqLiteDatabase) {
                 String[] where = new String[]{String.valueOf(menuId)};
 
-                cursor = sqLiteDatabase.rawQuery("SELECT * from " +
-                        SqlContract.SqlSubMenu.TABLE_NAME + " Where " + SqlContract.SqlSubMenu.MENU_ID + "=?", where);
+                cursor = sqLiteDatabase.rawQuery("SELECT Distinct sub_menu.SubMenuId,(Select temp_order.Quantity " +
+                        "from temp_order where sub_menu.SubMenuId=temp_order.SubMenuId " +
+                        "and temp_order.CustId='" + custId + "') as Quantity,sub_menu.SubMenuTitle,sub_menu.Price " +
+                        "from sub_menu left join temp_order on sub_menu.MenuId=temp_order.MenuId Where sub_menu.MenuId=?", where);
                 if (cursor != null) {
 
                     if (cursor.getCount() > 0) {
@@ -4172,7 +4187,8 @@ public class DbRepository extends SQLiteOpenHelper {
                             //int menuId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlRPrinters.IP_ADDRESS));
                             String menuTitle = cursor.getString(cursor.getColumnIndex(SqlContract.SqlSubMenu.MENU_TITLE));
                             double price = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlMenu.PRICE));
-                            SubMenuDTO subMenuDTO = new SubMenuDTO(subMenuId, menuId, menuTitle, price, 0);
+                            int quantity = cursor.getInt(cursor.getColumnIndex("Quantity"));
+                            SubMenuDTO subMenuDTO = new SubMenuDTO(subMenuId, menuId, menuTitle, price, quantity);
                             subMenu.add(subMenuDTO);
                         } while (cursor.moveToNext());
                     }
@@ -4191,3 +4207,11 @@ public class DbRepository extends SQLiteOpenHelper {
         return subMenu;
     }
 }
+/*
+"SELECT Distinct menu.MenuId,menu.FoodType,menu.Image,menu.FbTypeId,"+
+        "menu.MenuTitle,menu.Tags,menu.IsSpicy,menu_category.CategoryTitle,"+
+        "menu.AvailabilityStatus,menu.Active,menu.Price ,(Select temp_order.Quantity "+
+        "from temp_order   where menu.MenuId=temp_order.MenuId and temp_order.CustId=?)"+
+        " as Quantity From menu Left Join menu_category on menu.CategoryId="+
+        "menu_category.CategoryId left join temp_order on menu.MenuId=temp_order.MenuId "+
+        "where menu.Active=1"*/

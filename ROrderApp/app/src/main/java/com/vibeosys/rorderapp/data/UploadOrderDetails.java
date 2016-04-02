@@ -12,11 +12,13 @@ public class UploadOrderDetails extends BaseDTO {
     private int menuId;
     private int orderQty;
     private String note;
+    private int subMenuId;
 
-    public UploadOrderDetails(int menuId, int orderQty, String note) {
+    public UploadOrderDetails(int menuId, int orderQty, String note, int subMenuId) {
         this.menuId = menuId;
         this.orderQty = orderQty;
         this.note = note;
+        this.subMenuId = subMenuId;
     }
 
     public int getMenuId() {
@@ -41,6 +43,14 @@ public class UploadOrderDetails extends BaseDTO {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public int getSubMenuId() {
+        return subMenuId;
+    }
+
+    public void setSubMenuId(int subMenuId) {
+        this.subMenuId = subMenuId;
     }
 
     public static List<UploadOrderDetails> deserializeOrders(List<String> serializedStringList) {

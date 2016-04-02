@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.data.NoteDTO;
+import com.vibeosys.rorderapp.data.OrderMenuDTO;
 import com.vibeosys.rorderapp.data.SubMenuDTO;
 
 import java.util.ArrayList;
@@ -21,12 +22,15 @@ import java.util.ArrayList;
  */
 public class SubMenuAdapter extends BaseAdapter {
 
+    SubMenuButtonListener subMenuButtonListener;
     private Context mContext;
     ArrayList<SubMenuDTO> subMenus;
+    OrderMenuDTO menuDTO;
 
-    public SubMenuAdapter(Context mContext, ArrayList<SubMenuDTO> subMenus) {
+    public SubMenuAdapter(Context mContext, ArrayList<SubMenuDTO> subMenus, OrderMenuDTO menuDTO) {
         this.mContext = mContext;
         this.subMenus = subMenus;
+        this.menuDTO = menuDTO;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class SubMenuAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
         ViewHolder viewHolder = null;
 
@@ -59,13 +63,32 @@ public class SubMenuAdapter extends BaseAdapter {
             viewHolder.txtQuantity = (TextView) row.findViewById(R.id.txtMenuQty);
             viewHolder.imgPlus = (ImageView) row.findViewById(R.id.imgPlus);
             viewHolder.imgMinus = (ImageView) row.findViewById(R.id.imgMinus);
+            viewHolder.imgNote = (ImageView) row.findViewById(R.id.imgNote);
             row.setTag(viewHolder);
 
         } else viewHolder = (ViewHolder) row.getTag();
-        SubMenuDTO subMenu = subMenus.get(position);
+        final SubMenuDTO subMenu = subMenus.get(position);
         viewHolder.txtMenuTitle.setText(subMenu.getMenuTitle());
         viewHolder.txtPrice.setText("" + subMenu.getMenuPrice());
         viewHolder.txtQuantity.setText("" + subMenu.getQuantity());
+        viewHolder.imgPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subMenuButtonListener.onSubMenuButtonListener(v.getId(), position, subMenu.getQuantity(), subMenu, menuDTO);
+            }
+        });
+        viewHolder.imgMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subMenuButtonListener.onSubMenuButtonListener(v.getId(), position, subMenu.getQuantity(), subMenu, menuDTO);
+            }
+        });
+        viewHolder.imgNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subMenuButtonListener.onSubMenuButtonListener(v.getId(), position, subMenu.getQuantity(), subMenu, menuDTO);
+            }
+        });
         return row;
     }
 
@@ -75,5 +98,14 @@ public class SubMenuAdapter extends BaseAdapter {
         TextView txtQuantity;
         ImageView imgPlus;
         ImageView imgMinus;
+        ImageView imgNote;
+    }
+
+    public void setCustomButtonListner(SubMenuButtonListener listener) {
+        this.subMenuButtonListener = listener;
+    }
+
+    public interface SubMenuButtonListener {
+        public void onSubMenuButtonListener(int id, int position, int value, SubMenuDTO subMenu, OrderMenuDTO orderMenuDTO);
     }
 }

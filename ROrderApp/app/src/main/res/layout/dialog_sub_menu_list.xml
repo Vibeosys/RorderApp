@@ -12,8 +12,8 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/sub_menu_icon" />
 
         <com.vibeosys.rorderapp.views.CustomTextView
@@ -28,7 +28,7 @@
             android:padding="5dp"
             android:text="Menu Name"
             android:textColor="@color/black_color"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
     <View

@@ -311,7 +311,7 @@ public class BillDetailsActivity extends BaseActivity {
         mBillDetailsDTOs.setDeliveryChr(mDeliveryCharges);
     }
 
-    public String printDineIn(HashMap<Integer, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail, RestaurantDTO restaurantDTO) {
+    public String printDineIn(HashMap<String, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail, RestaurantDTO restaurantDTO) {
         PrintBody printBody = new PrintBody();
         printBody.setMenus(billdetails);
         ROrderDateUtils dateUtils = new ROrderDateUtils();
@@ -364,7 +364,7 @@ public class BillDetailsActivity extends BaseActivity {
         return "Success";
     }
 
-    public String printTakeAway(HashMap<Integer, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail, RestaurantDTO restaurantDTO) {
+    public String printTakeAway(HashMap<String, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail, RestaurantDTO restaurantDTO) {
         TakeAwayDTO takeAwayDTO = mDbRepository.getTakeAway(mTakeAwayNo);
         PrintBody printBody = new PrintBody();
         printBody.setMenus(billdetails);
@@ -437,7 +437,7 @@ public class BillDetailsActivity extends BaseActivity {
             ArrayList<String> getOrderId = new ArrayList<>();
             getOrderId = mDbRepository.getOderIdForPrinting("3", custId);
             RestaurantDTO restaurantDTO = mDbRepository.getRestaurantDetails(mSessionManager.getUserRestaurantName());
-            HashMap<Integer, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
+            HashMap<String, OrderDetailsDTO> billdetails = mDbRepository.getMenuDetailsForOrderPrint(getOrderId);
             for (PrinterDetailsDTO printerDetail : detailsArray) {
 
                 if (mTableId != 0) {

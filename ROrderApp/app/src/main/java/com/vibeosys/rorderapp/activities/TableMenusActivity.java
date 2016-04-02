@@ -63,7 +63,7 @@ import java.util.Map;
 
 public class TableMenusActivity extends BaseActivity implements
         OrderListAdapter.CustomButtonListener, View.OnClickListener, ServerSyncManager.OnStringResultReceived,
-        ServerSyncManager.OnDownloadReceived, ServerSyncManager.OnStringErrorReceived {
+        ServerSyncManager.OnDownloadReceived, ServerSyncManager.OnStringErrorReceived, SubMenuAdapter.SubMenuButtonListener {
 
     private static final String screenName = "Menu List";
     private TableCommonInfoDTO tableCommonInfoDTO;
@@ -83,6 +83,7 @@ public class TableMenusActivity extends BaseActivity implements
     private int mCount = 0;
     private final Context mContext = this;
     private LinearLayout mMainLayout;
+    SubMenuAdapter subMenuAdapter;
 
     @Override
     protected String getScreenName() {
@@ -271,7 +272,7 @@ public class TableMenusActivity extends BaseActivity implements
             }
             displayMenuPriceAndItems();
             mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
-                    orderMenu.getmQuantity(), custId, orderMenu.getNote());
+                    orderMenu.getmQuantity(), custId, orderMenu.getNote(), 0);
             orderListAdapter.notifyDataSetChanged();
         }
         if (id == R.id.imgPlus) {
@@ -279,7 +280,7 @@ public class TableMenusActivity extends BaseActivity implements
                 orderMenu.setmQuantity(value + 1);
                 displayMenuPriceAndItems();
                 mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
-                        orderMenu.getmQuantity(), custId, orderMenu.getNote());
+                        orderMenu.getmQuantity(), custId, orderMenu.getNote(), 0);
                 orderListAdapter.notifyDataSetChanged();
             } else
                 Toast.makeText(getApplicationContext(), "This item is not available now", Toast.LENGTH_SHORT).show();
@@ -548,7 +549,7 @@ public class TableMenusActivity extends BaseActivity implements
                 String selectedNote = noteDto.getNoteTitle();
                 orderMenu.setNote(selectedNote);
                 mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getmMenuId(),
-                        orderMenu.getmQuantity(), custId, orderMenu.getNote());
+                        orderMenu.getmQuantity(), custId, orderMenu.getNote(), 0);
                 noteadapter.setItemChecked(noteDto.getNoteId());
             }
         });
@@ -660,15 +661,101 @@ public class TableMenusActivity extends BaseActivity implements
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // dialog.setTitle(orderMenu.getmMenuTitle());
         dialog.setContentView(R.layout.dialog_sub_menu_list);
-        ArrayList<SubMenuDTO> subMenuDTOs = mDbRepository.getSubMenu(orderMenu.getmMenuId());
-        SubMenuAdapter subMenuAdapter = new SubMenuAdapter(mContext, subMenuDTOs);
+        ArrayList<SubMenuDTO> subMenuDTOs = mDbRepository.getSubMenu(orderMenu.getmMenuId(), custId);
+        subMenuAdapter = new SubMenuAdapter(mContext, subMenuDTOs, orderMenu);
+        subMenuAdapter.setCustomButtonListner(this);
         ListView subMenuList = (ListView) dialog.findViewById(R.id.subMenuList);
         TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
         TextView txtMenuName = (TextView) dialog.findViewById(R.id.txtMenuName);
         TextView txtDone = (TextView) dialog.findViewById(R.id.txtDone);
         subMenuList.setAdapter(subMenuAdapter);
         txtMenuName.setText(orderMenu.getmMenuTitle());
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        txtDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 
+    @Override
+    public void onSubMenuButtonListener(int id, int position, int value, SubMenuDTO subMenu, OrderMenuDTO orderMenuDTO) {
+        if (id == R.id.imgMinus) {
+
+            if (value > 0) {
+                subMenu.setQuantity(value - 1);
+                orderMenuDTO.setmQuantity(orderMenuDTO.getmQuantity() - 1);
+            } else
+                Toast.makeText(getApplicationContext(), "Quantity Should be greater than 0", Toast.LENGTH_LONG).show();
+            //displayMenuPriceAndItems();
+            mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, subMenu.getMenuId(),
+                    subMenu.getQuantity(), custId, subMenu.getNote(), subMenu.getSubMenuId());
+            orderListAdapter.notifyDataSetChanged();
+            subMenuAdapter.notifyDataSetChanged();
+        }
+        if (id == R.id.imgPlus) {
+            subMenu.setQuantity(value + 1);
+            orderMenuDTO.setmQuantity(orderMenuDTO.getmQuantity() + 1);
+            displayMenuPriceAndItems();
+            mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, subMenu.getMenuId(),
+                    subMenu.getQuantity(), custId, subMenu.getNote(), subMenu.getSubMenuId());
+            orderListAdapter.notifyDataSetChanged();
+            subMenuAdapter.notifyDataSetChanged();
+        }
+        if (id == R.id.imgNote) {
+            showMyDialog(subMenu);
+            Log.d(TAG, "##" + subMenu.getNote());
+            displayMenuPriceAndItems();
+            sendEventToGoogle("Action", "Add Note");
+            subMenuAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void showMyDialog(final SubMenuDTO subMenu) {
+        final String[] orderNote = {""};
+        final Dialog dialog = new Dialog(mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // dialog.setTitle(orderMenu.getmMenuTitle());
+        dialog.setContentView(R.layout.dialog_select_note);
+        ArrayList<NoteDTO> notes = mDbRepository.getNoteList();
+        final NoteAdapter noteadapter = new NoteAdapter(dialog.getContext(), notes);
+        ListView listNotes = (ListView) dialog.findViewById(R.id.noteList);
+        TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        TextView txtMenuName = (TextView) dialog.findViewById(R.id.txtMenuName);
+        TextView txtOrder = (TextView) dialog.findViewById(R.id.txtOrder);
+        listNotes.setAdapter(noteadapter);
+        txtMenuName.setText(subMenu.getMenuTitle());
+        listNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                NoteDTO noteDto = (NoteDTO) noteadapter.getItem(position);
+                String selectedNote = noteDto.getNoteTitle();
+                subMenu.setNote(selectedNote);
+                mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, subMenu.getMenuId(),
+                        subMenu.getQuantity(), custId, subMenu.getNote(), subMenu.getSubMenuId());
+                noteadapter.setItemChecked(noteDto.getNoteId());
+            }
+        });
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                subMenu.setNote("");
+            }
+        });
+        txtOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
 }

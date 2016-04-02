@@ -15,6 +15,7 @@ public class OrderDetailsDTO {
     private String mMenuTitle;
     private String mNote;
     private int mRoomId;
+    private int mSubMenuId;
 
 
     public OrderDetailsDTO(int mOrderDetailsId, double mOrderPrice, int mOrderQuantity, String mOrderId, int mMenuId,
@@ -99,5 +100,13 @@ public class OrderDetailsDTO {
 
     public void setRoomId(int mRoomId) {
         this.mRoomId = mRoomId;
+    }
+
+    public int getmSubMenuId() {
+        return mSubMenuId;
+    }
+
+    public void setmSubMenuId(int mSubMenuId) {
+        this.mSubMenuId = mSubMenuId;
     }
 }

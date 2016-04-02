@@ -9,13 +9,13 @@ import java.util.HashMap;
  */
 public class PrintBody {
 
-    HashMap<Integer, OrderDetailsDTO> menus;
+    HashMap<String, OrderDetailsDTO> menus;
 
-    public HashMap<Integer, OrderDetailsDTO> getMenus() {
+    public HashMap<String, OrderDetailsDTO> getMenus() {
         return menus;
     }
 
-    public void setMenus(HashMap<Integer, OrderDetailsDTO> menus) {
+    public void setMenus(HashMap<String, OrderDetailsDTO> menus) {
         this.menus = menus;
     }
 

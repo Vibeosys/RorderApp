@@ -10,6 +10,7 @@ public class SubMenuDTO {
     private String mMenuTitle;
     private double mMenuPrice;
     private int mQuantity;
+    private String mNote;
 
     public SubMenuDTO(int mSubMenuId, int mMenuId, String mMenuTitle, double mMenuPrice, int quantity) {
         this.mSubMenuId = mSubMenuId;
@@ -57,5 +58,13 @@ public class SubMenuDTO {
 
     public void setQuantity(int mQuantity) {
         this.mQuantity = mQuantity;
+    }
+
+    public String getNote() {
+        return mNote;
+    }
+
+    public void setNote(String mNote) {
+        this.mNote = mNote;
     }
 }

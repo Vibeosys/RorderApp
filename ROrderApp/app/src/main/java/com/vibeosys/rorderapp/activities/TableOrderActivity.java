@@ -161,7 +161,7 @@ public class TableOrderActivity extends BaseActivity implements
             orderMenu.setOrderQuantity(value + 1);
         //Collections.sort(allMenus);
         orderMenu.setOrderPrice(orderMenu.getOrderQuantity() * orderMenu.getMenuUnitPrice());
-        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getMenuId(), orderMenu.getOrderQuantity(), mCustId, orderMenu.getmNote());
+        mDbRepository.insertOrUpdateTempOrder(mTableId, mTableNo, orderMenu.getMenuId(), orderMenu.getOrderQuantity(), mCustId, orderMenu.getmNote(), 0);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -390,7 +390,8 @@ public class TableOrderActivity extends BaseActivity implements
     }
 
     private class AsyncPrintData extends AsyncTask<HashMap<Integer, List<OrderDetailsDTO>>, Void, String> {
-        List<OrderDetailsDTO> orderListByRoom;
+        //;
+        HashMap<Integer, List<OrderDetailsDTO>> sortOrderByKitchen = new HashMap<>();
 
         @Override
         protected void onPreExecute() {
@@ -401,27 +402,28 @@ public class TableOrderActivity extends BaseActivity implements
         @Override
         protected String doInBackground(HashMap<Integer, List<OrderDetailsDTO>>... params) {
             keyRoomId = params[0].keySet();
+            sortOrderByKitchen = params[0];
             for (final Integer i : keyRoomId) {
                 ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
-                orderListByRoom = params[0].get(i);
+                List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
                 for (OrderDetailsDTO orderDetail : orderListByRoom) {
-                    UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
+                    UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote(), orderDetail.getmSubMenuId());
                     sendDetails.add(sendOrder);
                 }
 
                 printKot(orderListByRoom, i);
                 PrintBody printBody = new PrintBody();
-                HashMap<Integer, OrderDetailsDTO> hshMap = new HashMap<>();
+                HashMap<String, OrderDetailsDTO> hshMap = new HashMap<>();
                 /**
                  * Create hash map for kot printing 1 menu item and add quantity */
 
                 for (OrderDetailsDTO order : orderListByRoom) {
-                    int menuId = order.getMenuId();
-                    if (hshMap.containsKey(menuId)) {
-                        OrderDetailsDTO hshOrder = hshMap.get(menuId);
+                    String menuTitle = order.getMenuTitle();
+                    if (hshMap.containsKey(menuTitle)) {
+                        OrderDetailsDTO hshOrder = hshMap.get(menuTitle);
                         hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + order.getOrderQuantity());
                     } else {
-                        hshMap.put(menuId, order);
+                        hshMap.put(menuTitle, order);
                     }
                 }
                 printBody.setMenus(hshMap);
@@ -467,8 +469,9 @@ public class TableOrderActivity extends BaseActivity implements
             if (str.equals("Success")) {
                 for (final Integer i : keyRoomId) {
                     ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+                    List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
                     for (OrderDetailsDTO orderDetail : orderListByRoom) {
-                        UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote());
+                        UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote(), orderDetail.getmSubMenuId());
                         sendDetails.add(sendOrder);
                     }
 
@@ -477,25 +480,10 @@ public class TableOrderActivity extends BaseActivity implements
                     UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType);
                     Gson gson = new Gson();
 
-                    //Kot Printing
-                        /*Thread t = new Thread() {
-                            public void run() {
-                                printKot(orderListByRoom, i);
-                            }
-                        };
-                        t.start();*/
-                    //
-
-                    //printKot(orderListByRoom, i);
                     String serializedJsonString = gson.toJson(sendOrder);
                     Log.d(TAG, "##" + serializedJsonString);
                     TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
-                        /*try {*/
-                    //Thread.sleep(200);
                     mServerSyncManager.uploadDataToServer(tableDataDTO);
-                        /*} catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }*/
                 }
 
             } else {

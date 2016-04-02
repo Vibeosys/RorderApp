@@ -105,7 +105,7 @@ public class PrintDataDTO {
     }
 
     public String getKotPrint(int maxNoChar, int padding, int margin) {
-        HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
+        HashMap<String, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
         StringBuilder strPrint = new StringBuilder();
         String strLine = "";
         for (int i = 0; i < maxNoChar; i++) {
@@ -138,9 +138,9 @@ public class PrintDataDTO {
         strPrint.append(strPadding);
         strPrint.append(strLine);
         strPrint.append(strPadding + "\n");
-        Set<Integer> keys = menusHashMap.keySet();
+        Set<String> keys = menusHashMap.keySet();
         String menuList = "";
-        for (Integer i : keys) {
+        for (String i : keys) {
             OrderDetailsDTO orderMenu = menusHashMap.get(i);
             String menuTitle = strMargin + orderMenu.getMenuTitle();
             int menuLength = menuTitle.length();
@@ -185,7 +185,7 @@ public class PrintDataDTO {
 
 
     public String getBillPrint(int maxNoChar, int padding, int margin) {
-        HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
+        HashMap<String, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
         StringBuilder strPrint = new StringBuilder();
         String strLine = "";
         for (int i = 0; i < maxNoChar; i++) {
@@ -222,9 +222,9 @@ public class PrintDataDTO {
         strPrint.append(strPadding);
         strPrint.append(strLine);
         strPrint.append(strPadding + "\n");
-        Set<Integer> keys = menusHashMap.keySet();
+        Set<String> keys = menusHashMap.keySet();
         String menuList = "";
-        for (Integer i : keys) {
+        for (String i : keys) {
             OrderDetailsDTO orderMenu = menusHashMap.get(i);
             String menuTitle = strMargin + orderMenu.getMenuTitle();
             int menuLength = menuTitle.length();
@@ -321,10 +321,10 @@ public class PrintDataDTO {
 
             builder.addText(strPadding);
             builder.addText(strLine + "\n");
-            HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
-            Set<Integer> keys = menusHashMap.keySet();
+            HashMap<String, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
+            Set<String> keys = menusHashMap.keySet();
             String menuList = "";
-            for (Integer i : keys) {
+            for (String i : keys) {
                 OrderDetailsDTO orderMenu = menusHashMap.get(i);
                 String menuTitle = orderMenu.getMenuTitle();
                 int menuLength = menuTitle.length();
@@ -384,7 +384,7 @@ public class PrintDataDTO {
     }
 
     public Builder getKotPrint(Builder builder, int maxNoChar, int padding, int margin) {
-        HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
+        HashMap<String, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
         StringBuilder strPrint = new StringBuilder();
         String strLine = "";
         for (int i = 0; i < maxNoChar; i++) {
@@ -419,9 +419,9 @@ public class PrintDataDTO {
             builder.addText(strPadding);
             builder.addText(strLine);
             builder.addText(strPadding + "\n");
-            Set<Integer> keys = menusHashMap.keySet();
+            Set<String> keys = menusHashMap.keySet();
             String menuList = "";
-            for (Integer i : keys) {
+            for (String i : keys) {
                 OrderDetailsDTO orderMenu = menusHashMap.get(i);
                 String menuTitle = strMargin + orderMenu.getMenuTitle();
                 int menuLength = menuTitle.length();
@@ -529,10 +529,10 @@ public class PrintDataDTO {
             builder.addTextStyle(Builder.PARAM_UNSPECIFIED, Builder.FALSE, Builder.FALSE, Builder.PARAM_UNSPECIFIED);
             builder.addText(strPadding);
             builder.addText(strLine + "\n");
-            HashMap<Integer, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
-            Set<Integer> keys = menusHashMap.keySet();
+            HashMap<String, OrderDetailsDTO> menusHashMap = this.mBody.getMenus();
+            Set<String> keys = menusHashMap.keySet();
             String menuList = "";
-            for (Integer i : keys) {
+            for (String i : keys) {
                 OrderDetailsDTO orderMenu = menusHashMap.get(i);
                 String menuTitle = orderMenu.getMenuTitle();
                 int menuLength = menuTitle.length();
