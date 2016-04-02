@@ -18,4 +18,6 @@ public interface PrintPaper {
     void printText(PrintDataDTO printDataDTO) throws PrintException;
 
     void closePrinter();
+
+    void printTest(String type) throws PrintException;
 }

@@ -60,15 +60,17 @@
             android:name=".activities.TableFilterActivity"
             android:label="@string/title_filter_menu"
             android:parentActivityName=".MainActivity">
-
         </activity>
         <activity
             android:name=".activities.TableOrderActivity"
-            android:label="@string/order_summary"></activity>
+            android:label="@string/order_summary">
+        </activity>
         <activity
             android:name=".activities.BillDetailsActivity"
             android:label="@string/bill_details"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity">
+
+        </activity>
         <activity
             android:name=".activities.BillPaymentOptionActivity"
             android:label="@string/payment_option_screen"
@@ -81,8 +83,8 @@
             android:name=".activities.CustomerFeedBackActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
-
-        <activity android:name=".activities.ChefOrdersDisplayActivity"></activity>
+        <activity android:name=".activities.ChefOrdersDisplayActivity">
+        </activity>
         <activity
             android:name=".activities.FeedbackActivity"
             android:parentActivityName=".MainActivity"
@@ -93,16 +95,25 @@
         <activity
             android:name=".activities.NotificationActivity"
             android:parentActivityName=".MainActivity"></activity>
-        <activity
-            android:name=".activities.SettingPrinterActivity"></activity>
+        <activity android:name=".activities.SettingPrinterActivity">
+        </activity>
 
-        <activity android:name=".activities.ChefOrdersDisplayTabActivity"
+        <activity
+            android:name=".activities.ChefOrdersDisplayTabActivity"
             android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".activities.DiagnosticActivity"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".activities.CompletedOrdersScreen"
+            android:parentActivityName=".MainActivity">
 
         </activity>
         <activity
-            android:name=".activities.CompletedOrdersScreen"
+            android:name=".activities.DiagnosticKOTPrintingActivity"
             android:parentActivityName=".MainActivity"></activity>
+
         <service
             android:name=".service.SyncService"
             android:exported="false" />

@@ -155,4 +155,9 @@
     <string name="beverages">Beverages</string>
     <string name="printer_error_title"> Printer Error</string>
     <string name="done">Done</string>
+
+    <string name="search_printer_btn">Search Printer</string>
+    <string name="print_kot_btn_diagnostic">Print KOT</string>
+    <string name="print_bill_btn_diagnostic">Print Billing</string>
+    <string name="diagnostic_title">Diagnostic</string>
 </resources>

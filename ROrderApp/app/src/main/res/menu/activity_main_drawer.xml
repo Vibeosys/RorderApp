@@ -25,6 +25,10 @@
     <item android:title="Other">
         <menu>
             <item
+                android:id="@+id/diagnostic"
+                android:icon="@drawable/ic_action_warning_yellow"
+                android:title="@string/diagnostic_title" />
+            <item
                 android:id="@+id/settings"
                 android:icon="@drawable/ic_setting_dark"
                 android:title="@string/action_settings" />

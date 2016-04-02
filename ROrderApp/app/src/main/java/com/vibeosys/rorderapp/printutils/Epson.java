@@ -94,6 +94,7 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
         android.util.Log.d("##", "## epson Printer selected");
         try {
             mMethod = "Builder";
+            String check = printerDetails.getmModelName();
             mBuilder = new Builder(printerDetails.getmModelName(), mLanguage, mContext);
 
             mMethod = "addText";
@@ -169,6 +170,59 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
     }
 
     @Override
+    public void printTest(String type) throws PrintException {
+        try {
+            mMethod = "Builder";
+            String check = printerDetails.getmModelName();
+            mBuilder = new Builder(printerDetails.getmModelName(), mLanguage, mContext);
+
+            mMethod = "addText";
+            mBuilder.addTextSize(1, 2);
+            mBuilder.addText(type + " Test Print\n");
+            mBuilder.addTextSize(1, 1);
+            mBuilder.addText("Ip Address: " + printerDetails.getmIpAddress() + " \n" +
+                    "Printer name: Epson " + printerDetails.getmModelName() + "\n" +
+                    "Mac Address:" + printerDetails.getmMacAddress() + "\nPowered By QuickServe(TM)\n");
+
+            mBuilder.addCut(Builder.CUT_FEED);
+
+
+            int[] status = new int[1];
+            int[] battery = new int[1];
+
+            this.mPrinter.sendData(mBuilder, SEND_TIMEOUT, status, battery);
+            System.out.println("## print data successfully");
+
+        } catch (EposException e) {
+            System.err.println("Error at method " + mMethod);
+            switch (e.getErrorStatus()) {
+                case EposException.ERR_PARAM:
+                    throw new PrintException("Something went wrong try again.");
+                case EposException.ERR_OPEN:
+                    throw new PrintException("Could not connect printer, please check connection and printer power.");
+                case EposException.ERR_CONNECT:
+                    throw new PrintException("Could not connect to the printer, please check connection.");
+                case EposException.ERR_TIMEOUT:
+                    throw new PrintException("Printer is busy try again.");
+                case EposException.ERR_MEMORY:
+                    throw new PrintException("Restart printer and try again.");
+                case EposException.ERR_ILLEGAL:
+                    throw new PrintException("Something went wrong try again.");
+                case EposException.ERR_PROCESSING:
+                    throw new PrintException("Could not found printer, please contact administrator.");
+                case EposException.ERR_UNSUPPORTED:
+                    throw new PrintException("Selected printer is not supported.");
+                case EposException.ERR_OFF_LINE:
+                    throw new PrintException("Printer cover is open or no paper check the paper and cover.");
+                case EposException.ERR_FAILURE:
+                    throw new PrintException("Could not found printer, please check connection.");
+            }
+        } finally {
+            closePrinter();
+        }
+    }
+
+    @Override
     public void onBatteryStatusChangeEvent(String s, int i) {
         System.out.println("## Battery changed event" + s + " Status " + i);
     }
@@ -177,4 +231,12 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
     public void onStatusChangeEvent(String s, int i) {
         System.out.println("## Status changed event" + s + " Status " + i);
     }
+
+
+    /*public void printTest() throws PrintException {
+
+        android.util.Log.d("##", "## epson Printer selected");
+
+
+    }*/
 }

@@ -46,6 +46,7 @@ import com.vibeosys.rorderapp.activities.BaseActivity;
 import com.vibeosys.rorderapp.activities.BillDetailsActivity;
 import com.vibeosys.rorderapp.activities.ChefOrdersDisplayActivity;
 import com.vibeosys.rorderapp.activities.CompletedOrdersScreen;
+import com.vibeosys.rorderapp.activities.DiagnosticActivity;
 import com.vibeosys.rorderapp.activities.LoginActivity;
 import com.vibeosys.rorderapp.activities.NotificationActivity;
 import com.vibeosys.rorderapp.activities.SelectRestaurantActivity;
@@ -409,6 +410,11 @@ public class MainActivity extends BaseActivity
             Intent selectRestoIntent = new Intent(getApplicationContext(), CompletedOrdersScreen.class);
             startActivity(selectRestoIntent);
 
+        }
+        else if(id == R.id.diagnostic)
+        {
+            Intent diagnostic = new Intent(getApplicationContext(), DiagnosticActivity.class);
+            startActivity(diagnostic);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
