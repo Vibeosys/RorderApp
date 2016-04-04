@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.vibeosys.rorderapp.data.ApplicationErrorDBDTO;
 import com.vibeosys.rorderapp.data.BillDbDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.BillDetailsDbDTO;
@@ -51,6 +53,7 @@ import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
 import com.vibeosys.rorderapp.util.AppConstants;
+import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
 import com.vibeosys.rorderapp.util.SessionManager;
 
@@ -95,6 +98,8 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public ArrayList<Sync> getPendingSyncRecords() {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         ArrayList<Sync> syncTableData = null;
@@ -115,22 +120,29 @@ public class DbRepository extends SQLiteOpenHelper {
 
                     }
                 }
+                flagError = true;
             }
 
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Sync Records", errorMessage);
         }
         return syncTableData;
     }
 
     public boolean clearSyncData() {
         SQLiteDatabase sqLiteDatabase = null;
+        boolean flagError = false;
+        String errorMessage = "";
         // ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
@@ -141,9 +153,12 @@ public class DbRepository extends SQLiteOpenHelper {
                         null);
                 // contentValues.clear();
                 //sqLiteDatabase.close();
+                flagError = true;
                 Log.d(TAG, " ## clear sync sucessfully");
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             Log.d(TAG, "## clear sync is not sucessfully" + e.toString());
             //sqLiteDatabase.close();
@@ -151,11 +166,15 @@ public class DbRepository extends SQLiteOpenHelper {
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Clear Sync", errorMessage);
         }
         return count != -1;
     }
 
     public boolean addDataToSync(String tableName, String userId, String jsonSync) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long rowsAffected = -1;
@@ -167,7 +186,9 @@ public class DbRepository extends SQLiteOpenHelper {
             contentValues.put("TableName", tableName);
             if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
             rowsAffected = sqLiteDatabase.insert("Sync", null, contentValues);
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
             Log.e("SyncInsert", "Error occurred while inserting in Sync table " + e.toString());
         } finally {
             if (contentValues != null)
@@ -175,6 +196,8 @@ public class DbRepository extends SQLiteOpenHelper {
 
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Sync Entry", errorMessage);
         }
         return rowsAffected != -1;
     }
@@ -202,6 +225,8 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public boolean insertUsers(List<UserDbDTO> usersList) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -221,19 +246,26 @@ public class DbRepository extends SQLiteOpenHelper {
                     count = sqLiteDatabase.insert(SqlContract.SqlUser.TABLE_NAME, null, contentValues);
                     contentValues.clear();
                     Log.d(TAG, "## User is Added Successfully");
+                    flagError = true;
                 }
 
             }
         } catch (Exception e) {
-            Log.e("DbOperationsEx", "Error while adding users " + e.toString());
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e("DbOperationsEx", "Error while insert users " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert User", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertTables(List<HotelTableDbDTO> tableList) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -251,19 +283,26 @@ public class DbRepository extends SQLiteOpenHelper {
                     count = sqLiteDatabase.insert(SqlContract.SqlHotelTable.TABLE_NAME, null, contentValues);
                     contentValues.clear();
                     Log.d(TAG, "## Table is Added Successfully");
+                    flagError = true;
                 }
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error while adding Tables " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Table", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertTakeAwaySource(List<TakeAwaySourceDbDTO> sourceList) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -281,19 +320,26 @@ public class DbRepository extends SQLiteOpenHelper {
                     count = sqLiteDatabase.insert(SqlContract.SqlTakeAwaySource.TABLE_NAME, null, contentValues);
                     contentValues.clear();
                     Log.d(TAG, "## Take Away source is Added Successfully");
+                    flagError = true;
                 }
 
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while adding Take Away source " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Take Away", errorMessage);
         }
         return count != -1;
     }
 
     public UserDTO autheticateUser(String userName, String password, int roleId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         int userId = 0;
@@ -324,9 +370,12 @@ public class DbRepository extends SQLiteOpenHelper {
                         user.setmPermission(permission);
                     }
                 }
+                flagError = true;
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             user = null;
             Log.e(TAG, "Error occured in autheticate User function" + e.toString());
         } finally {
@@ -334,11 +383,15 @@ public class DbRepository extends SQLiteOpenHelper {
                 cursor.close();
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "User Authentication", errorMessage);
         }
         return user;
     }
 
     public ArrayList<RestaurantTables> getTableRecords(String where) {//changes
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         ArrayList<RestaurantTables> hotelTables = null;
@@ -379,16 +432,21 @@ public class DbRepository extends SQLiteOpenHelper {
                         } while (cursor.moveToNext());
                     }
                 }
+                flagError = true;
             }
 
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Table Records", errorMessage);
         }
         return hotelTables;
     }
@@ -396,6 +454,8 @@ public class DbRepository extends SQLiteOpenHelper {
 
     public BillDetailsDTO getBillDetailsRecords(String custId)//08/02/2016 put where condition for table no and custer id and from sharder preference take user name ann user id
     {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         BillDetailsDTO billDetailsRecords = null;
@@ -428,20 +488,27 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
 
                 }
+                flagError = true;
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Bill Details", errorMessage);
         }
         return billDetailsRecords;
     }
 
     public ArrayList<TableCategoryDTO> getTableCategories() {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         ArrayList<TableCategoryDTO> tableCategories = null;
@@ -469,16 +536,21 @@ public class DbRepository extends SQLiteOpenHelper {
                         } while (cursor.moveToNext());
                     }
                 }
+                flagError = true;
             }
 
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Table Categories", errorMessage);
         }
         return tableCategories;
     }
@@ -501,6 +573,8 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public boolean insertBills(List<BillDbDTO> billInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -527,18 +601,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.clear();
                     Log.d(TAG, "## Bill is Added Successfully" + bill.getBillNo());
                 }
+                flagError = true;
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error while adding Bills " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Add Bill", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertBillDetails(List<BillDetailsDbDTO> billDetailInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -555,17 +636,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.clear();
                     Log.d(TAG, "## Bill Details is added successfully" + billDetails.getBillNo());
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error While adding Bill details" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Add Bill Details", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertMenus(List<MenuDbDTO> menuInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -592,18 +680,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.clear();
                     Log.d(TAG, "## Menu is added successfully" + menu.getMenuId());
                 }
+                flagError = true;
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "## Error at insertMenu" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Menu", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertMenuCategory(List<MenuCateoryDbDTO> menuCategoryInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -622,19 +717,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Menu Category is added successfully" + menuCateory.getCategoryId());
 
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at insertMenuCategory" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Menu Category", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertTakeAway(List<TakeAwayDbDTO> takeawayInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -657,19 +757,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Take away is added successfully" + takeAwayDbDTO.getTakeawayNo());
 
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at insert take away" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Take Away", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertMenuTags(List<MenuTagsDbDTO> menuTagInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -686,19 +791,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Menu Tag is added successfully" + menuTag.getTagId());
 
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at insertMenuTag" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Menu Tag", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertOrderType(List<OrderTypeDbDTO> menuTagInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -716,19 +826,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Order Type is added successfully" + orderTypeDbDTO.getOrderTypeId());
 
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Order Type insert" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Order Type", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertOrderDetails(List<OrderDetailsDbDTO> orderDetailInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -751,20 +866,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Order detail is added successfully" + orderDetail.getOrderDetailsId());
 
                 }
+                flagError = true;
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at insertOrderDetails" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Order details", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertOrders(List<OrdersDbDTO> orderInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -791,19 +911,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.clear();
                     Log.d(TAG, "## Order is added successfully" + order.getOrderId());
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at insertOrders" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Orders", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertTableCategories(List<TableCategoryDbDTO> tableCategoryInsert) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -821,20 +946,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Table Category is added successfully" + tableCategory.getTableCategoryId());
 
                 }
+                flagError = true;
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at insertMenuCategory" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Menu Category", errorMessage);
         }
         return count != -1;
     }
 
     public ArrayList<OrderMenuDTO> getOrderMenu(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         ArrayList<OrderMenuDTO> orderMenus = null;
@@ -876,19 +1006,26 @@ public class DbRepository extends SQLiteOpenHelper {
                         } while (cursor.moveToNext());
                     }
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Order Menu", errorMessage);
         }
         return orderMenus;
     }
 
     public boolean insertOrUpdateTempOrder(int tableId, int tableNo, int menuId, int qty, String custId, String note, int subMenuId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         int rowCount = 0;
@@ -934,22 +1071,28 @@ public class DbRepository extends SQLiteOpenHelper {
                                     + "=? And " + SqlContract.SqlTempOrder.MENU_ID + "=? AND " + SqlContract.SqlTempOrder.SUB_MENU_ID + "=?", whereClause);
                 }
 
-
+                flagError = true;
                 contentValues.clear();
                 //sqLiteDatabase.close();
                 Log.i(TAG, "Values are inserted into TempTable" + rOrderDateUtils.getGMTCurrentDate() + "" + rOrderDateUtils.getGMTCurrentTime());
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "error at insertOrUpdateTempOrder");
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Or Update Temp Order", errorMessage);
         }
 
         return count != -1;
     }
 
     public boolean clearUpdateTempData(int tableId, int tableNo, String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         // ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
@@ -966,19 +1109,26 @@ public class DbRepository extends SQLiteOpenHelper {
                 //sqLiteDatabase.close();
                 Log.d(TAG, " ## clear update sucessfully");
             }
+            flagError = true;
         } catch (Exception e) {
             e.printStackTrace();
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## clear update is not sucessfully" + e.toString());
             //sqLiteDatabase.close();
 
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Clear Update temp Data", errorMessage);
         }
         return count != -1;
     }
 
     public boolean setOccupied(boolean value, int tableId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
@@ -993,19 +1143,26 @@ public class DbRepository extends SQLiteOpenHelper {
                         SqlContract.SqlHotelTable.TABLE_ID + "=?", whereClause);
                 //sqLiteDatabase.close();
                 Log.e(TAG, "##  Occupied sucessfully ");
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "## error at set Occupied " + e.toString());
             e.printStackTrace();
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Set Occupy", errorMessage);
         }
         return count != -1;
     }
 
 
     public ArrayList<OrderHeaderDTO> getOrdersOfTable(int tableId, String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<OrderHeaderDTO> orders = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         String[] whereClause = new String[]{String.valueOf(tableId), custId};
@@ -1037,11 +1194,14 @@ public class DbRepository extends SQLiteOpenHelper {
                         } while (cursor.moveToNext());
                     }
                 }
+                flagError = true;
             }
             //cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at getOrdersOf table " + e.toString());
         } finally {
             if (cursor != null) {
@@ -1049,11 +1209,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Order", errorMessage);
         }
         return orders;
     }
 
     public void getOrederDetailsGroupByID(ArrayList<OrderHeaderDTO> orders) {
+        boolean flagError = false;
+        String errorMessage = "";
         HashMap<OrderHeaderDTO, List<OrderDetailsDTO>> hashMap = new HashMap<>();
         Cursor cursor = null;
         SQLiteDatabase sqLiteDatabase = null;
@@ -1087,20 +1251,27 @@ public class DbRepository extends SQLiteOpenHelper {
 
                     // cursor.close();
                     order.setOrderDetailsDTOs(orderDetailsList);
+                    flagError = true;
                 }
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "## error at getOrederDetailsGroupByID function");
         } finally {
             if (cursor != null)
                 cursor.close();
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Order details Group by Id", errorMessage);
         }
 
     }
 
     public int getOccupiedTable() {
+        boolean flagError = false;
+        String errorMessage = "";
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -1109,8 +1280,11 @@ public class DbRepository extends SQLiteOpenHelper {
             synchronized (sqLiteDatabase) {
                 cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlHotelTable.TABLE_NAME + " where IsOccupied = 1", null);
                 count = cursor.getCount();
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "## error at getOccupied table" + e.toString());
         } finally {
             if (cursor != null) {
@@ -1118,6 +1292,8 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Occupied", errorMessage);
         }
         return count;
     }
@@ -1145,6 +1321,8 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public int getCompletedTakeAwayCount() {
+        boolean flagError = false;
+        String errorMessage = "";
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -1154,7 +1332,10 @@ public class DbRepository extends SQLiteOpenHelper {
                 cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrders.TABLE_NAME + " where OrderType = 2 and OrderStatus = 2", null);
                 count = cursor.getCount();
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "## error at getTakeAwayCount table" + e.toString());
         } finally {
             if (cursor != null) {
@@ -1162,11 +1343,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Take away Complete count", errorMessage);
         }
         return count;
     }
 
     public int checkOrders() {
+        boolean flagError = false;
+        String errorMessage = "";
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -1176,20 +1361,27 @@ public class DbRepository extends SQLiteOpenHelper {
                 cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrderDetails.TABLE_NAME, null);
                 count = cursor.getCount();
             }
+            flagError = true;
         } catch (Exception e) {
-            Log.e(TAG, "## error at getOccupied table" + e.toString());
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "## error at checkOrders" + e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Check Orders", errorMessage);
         }
         return count;
     }
 
     public OrderHeaderDTO getOrederDetailsFromTemp(int tableId, int userId, String custId) {
 
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         OrderHeaderDTO orderHeaderDTO = null;
@@ -1236,8 +1428,11 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
                 orderHeaderDTO = new OrderHeaderDTO(tableId, userId, orderAmount, orderDetailsList.size(), true, orderDetailsList);
                 //cursor.close();
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, e.toString());
         } finally {
             if (cursor != null) {
@@ -1245,11 +1440,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Order Details from temp", errorMessage);
         }
         return orderHeaderDTO;
     }
 
     public boolean insertCustomerDetails(CustomerDbDTO customer) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1265,19 +1464,26 @@ public class DbRepository extends SQLiteOpenHelper {
                 count = sqLiteDatabase.insert(SqlContract.SqlCustomer.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "##Customer is added successfully" + customer.getCustId());
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Customer" + e.toString());
         } finally {
             {
                 if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                     sqLiteDatabase.close();
             }
+            if (!flagError)
+                addError(TAG, "Insert Customer", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertTableTransaction(TableTransactionDbDTO tableTransaction) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1297,19 +1503,24 @@ public class DbRepository extends SQLiteOpenHelper {
                 count = sqLiteDatabase.insert(SqlContract.SqlTableTransaction.TABLE_NAME, null, contentValues);
                 contentValues.clear();
                 Log.d(TAG, "##Table Transaction is added successfully" + tableTransaction.getCustId());
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Table Transaction" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Table Transaction", errorMessage);
         }
         return count != -1;
     }
 
     public ArrayList<WaitingUserDTO> getWaitingList() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<WaitingUserDTO> waitingList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -1336,11 +1547,14 @@ public class DbRepository extends SQLiteOpenHelper {
                         } while (cursor.moveToNext());
                     }
                 }
+                flagError = true;
             }
             //cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at getWaitingList table " + e.toString());
         } finally {
             if (cursor != null) {
@@ -1348,11 +1562,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Waiting List", errorMessage);
         }
         return waitingList;
     }
 
     public boolean updateTableTransaction(TableTransactionDbDTO tableTransaction) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         String[] whereClause = new String[]{tableTransaction.getCustId()};
@@ -1370,18 +1588,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 contentValues.clear();
                 Log.d(TAG, "##Table Transaction is Updated successfully" + tableTransaction.getCustId());
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Table Transaction" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Table Trasaction", errorMessage);
         }
         return count != -1;
     }
 
     public int getTaleId(int tableNo) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         String[] whereClause = new String[]{String.valueOf(tableNo)};
         Cursor cursor = null;
@@ -1399,11 +1622,14 @@ public class DbRepository extends SQLiteOpenHelper {
                         tableId = iOccupied == 0 ? cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_ID)) : -1;
                     }
                 }
+                flagError = true;
             }
             //cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at getTableId function " + e.toString());
         } finally {
             if (cursor != null) {
@@ -1411,6 +1637,8 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get TableId", errorMessage);
         }
         return tableId;
     }
@@ -1419,6 +1647,8 @@ public class DbRepository extends SQLiteOpenHelper {
             * clearTableTransaction(int custId,int tableId) this function clears the table_transaction from sqlite
     * */
     public boolean clearTableTransaction(String custId, int tableId) {
+        String errorMessage = "";
+        boolean flagError = false;
         SQLiteDatabase sqLiteDatabase = null;
         //ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
@@ -1434,13 +1664,18 @@ public class DbRepository extends SQLiteOpenHelper {
                 // sqLiteDatabase.close();
                 Log.d(TAG, "## Data deledted from transcation table");
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             // sqLiteDatabase.close();
             Log.d(TAG, "## Data not deledted from transcation table");
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Clear Transaction", errorMessage);
         }
         return count != -1;
     }
@@ -1451,6 +1686,8 @@ public class DbRepository extends SQLiteOpenHelper {
 
     * */
     public String getCustmerIdFromTransaction(int tableId) {
+        boolean flagError = false;
+        String errorMessage = "";
         String custId = "";
         SQLiteDatabase sqLiteDatabase = null;
         String[] whereClasuse = new String[]{String.valueOf(tableId)};
@@ -1467,15 +1704,20 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
             // cursor.close();
             // sqLiteDatabase.close();
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
             if (cursor != null)
                 cursor.close();
+            if (!flagError)
+                addError(TAG, "Get CustomerId", errorMessage);
 
         }
         return custId;
@@ -1483,6 +1725,8 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public String getPassword(int userId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         String password = "@password";
@@ -1498,19 +1742,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
-
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
             if (cursor != null)
                 cursor.close();
+            if (!flagError)
+                addError(TAG, "Get Password", errorMessage);
         }
         return password;
     }
 
     public String getRestaurantName(int restaurantId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         String restaurantName = "";
@@ -1526,19 +1776,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
-
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
             if (cursor != null)
                 cursor.close();
+            if (!flagError)
+                addError(TAG, "Get Restaurant Name", errorMessage);
         }
         return restaurantName;
     }
 
     public String getRestaurantUrl(int restaurantId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         String restaurantUrl = "";
@@ -1554,14 +1810,18 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
-
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
             if (cursor != null)
                 cursor.close();
+            if (!flagError)
+                addError(TAG, "Get Restaurant Url", errorMessage);
         }
         return restaurantUrl;
     }
@@ -1617,6 +1877,8 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public boolean updateBills(List<BillDbDTO> billUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1653,7 +1915,11 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Bill is Updated Successfully" + bill.getBillNo());
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
+            e.printStackTrace();
             Log.e(TAG, "Error while updating Bills " + e.toString());
         } finally {
             if (contentValues != null) {
@@ -1661,11 +1927,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Bill", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateOrderType(List<OrderTypeDbDTO> menuTagInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1684,19 +1954,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Order Type is added successfully" + orderTypeDbDTO.getOrderTypeId());
 
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Order Type insert" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Order Type Insert", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateBillDetails(List<BillDetailsDbDTO> billDetailUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1715,17 +1990,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.clear();
                     Log.d(TAG, "## Bill Details is Updated successfully" + billDetails.getBillNo());
                 }
+                flagError = true;
             }
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error While updating Bill details" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Updating bill Details", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateOrders(List<OrdersDbDTO> orderUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1765,20 +2047,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     contentValues.clear();
                     Log.d(TAG, "## Order is update successfully" + order.getOrderId());
                 }
+                flagError = true;
             }
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at update Orders" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Order", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateOrderDetails(List<OrderDetailsDbDTO> orderDetailUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1807,19 +2094,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Order detail is Updated successfully" + orderDetail.getOrderDetailsId());
                 }
             }
+            flagError = true;
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at updatedOrderDetails" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Order Details", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateTakeAwaySource(List<TakeAwaySourceDbDTO> sourceList) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -1844,17 +2136,24 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while adding Take Away source " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, " Take away Source", errorMessage);
         }
         return count != -1;
     }
 
     /*chef order header function*/
     public ArrayList<ChefOrderDetailsDTO> getOrderHeadesInAsc(int status) {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<ChefOrderDetailsDTO> AscindingOrdres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -1901,9 +2200,12 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
             //cursor.close();
             //sqLiteDatabase.close();
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
 
             Log.e(TAG, "Error in ChefDb Headre" + e.toString());
@@ -1913,12 +2215,16 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Chef Header", errorMessage);
 
         }
         return AscindingOrdres;
     }
 
     public ArrayList<ChefOrderDetailsDTO> getRecordChefDining() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<ChefOrderDetailsDTO> ordres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -1936,8 +2242,6 @@ public class DbRepository extends SQLiteOpenHelper {
                     if (cursor.getCount() > 0) {
                         cursor.moveToFirst();
                         do {
-
-
                             String orderId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_ID));
                             int tableNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlHotelTable.TABLE_NO));
                             String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
@@ -1954,9 +2258,11 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
             e.printStackTrace();
-
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error in ChefDb Headre" + e.toString());
         } finally {
             if (cursor != null) {
@@ -1964,12 +2270,16 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Chef Dine In records", errorMessage);
 
         }
         return ordres;
     }
 
     public ArrayList<ChefMenuDetailsDTO> getChefMenu(String orderId) {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<ChefMenuDetailsDTO> menudetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2000,9 +2310,12 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
             // cursor.close();
             //sqLiteDatabase.close();
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
 
             Log.e(TAG, "Error in ChefDb MenuLog" + e.toString());
@@ -2012,12 +2325,16 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Chef Menu", errorMessage);
 
         }
         return menudetails;
     }
 
     public boolean insertListCustomerDetails(List<CustomerDbDTO> customer) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2036,18 +2353,23 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "##Customer is added successfully" + customerDbDTO.getCustId());
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Customer" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Customer List", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateCustomer(List<CustomerDbDTO> customerUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2071,19 +2393,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
-
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Customer" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Customer", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertTableTransactionList(List<TableTransactionDbDTO> tableTransactionInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2104,13 +2430,16 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "##Table Transaction is added successfully" + tableTransaction.getCustId());
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Table Transaction" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Table Transaction", errorMessage);
         }
         return count != -1;
     }
@@ -2118,8 +2447,8 @@ public class DbRepository extends SQLiteOpenHelper {
     public boolean updateTableTransactionList(List<TableTransactionDbDTO> tableTransactionUpdates) {
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
-
-
+        boolean flagError = false;
+        String errorMessage = "";
         long count = -1;
         try {
             sqLiteDatabase = getWritableDatabase();
@@ -2140,19 +2469,23 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "##Table Transaction is Updated successfully" + tableTransaction.getCustId());
                 }
             }
-
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at Table Transaction" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Table Transaction", errorMessage);
         }
         return count != -1;
     }
 
     public ArrayList<PaymentModeDbDTO> getPaymentList() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<PaymentModeDbDTO> paymentModeList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2175,24 +2508,29 @@ public class DbRepository extends SQLiteOpenHelper {
                         } while (cursor.moveToNext());
                     }
                 }
-
+                flagError = true;
                 //cursor.close();
                 //sqLiteDatabase.close();
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error at getWaitingList table " + e.toString());
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "Error at getPaymentList table " + e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Add payment List", errorMessage);
         }
         return paymentModeList;
     }
 
     public boolean deleteTableTransaction(List<TableTransactionDbDTO> tableTransactionDelete) {
-
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
@@ -2208,18 +2546,25 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Data deleted from transaction table");
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             // sqLiteDatabase.close();
             Log.d(TAG, "## Data not deleted from transaction table");
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete TableTransaction", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateRTables(List<HotelTableDbDTO> rTableUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2243,16 +2588,23 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Table is updated Successfully");
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error while updating Tables " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update taable", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateTableCategories(List<TableCategoryDbDTO> tableCategoryUpdate) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2275,19 +2627,23 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 }
             }
-
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at updating table" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Table Categories", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateMenus(List<MenuDbDTO> menuUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2324,16 +2680,22 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Menu is Updated successfully" + menu.getMenuId());
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
             Log.e(TAG, "## Error at Updated Menu" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Menu", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateMenuCategory(List<MenuCateoryDbDTO> menuCategoryUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2356,19 +2718,24 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## Menu Category is updated successfully" + menuCateory.getCategoryId());
                 }
             }
+            flagError = true;
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at updated Menu Category" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Menu Category ", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateMenuTags(List<MenuTagsDbDTO> menuTagUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2388,18 +2755,23 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at update Menu Tag" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Menu Tag", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateUsers(List<UserDbDTO> userUpdates) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2425,16 +2797,23 @@ public class DbRepository extends SQLiteOpenHelper {
                     Log.d(TAG, "## User is update Successfully");
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while update users " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update User", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateTakeAway(List<TakeAwayDbDTO> takeawayInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -2466,18 +2845,23 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at update take away" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Take Away", errorMessage);
         }
         return count != -1;
     }
 
     public ArrayList<NoteDTO> getNoteList() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<NoteDTO> noteList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2501,10 +2885,13 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
             //cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at getoteList table " + e.toString());
         } finally {
             if (cursor != null) {
@@ -2512,11 +2899,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Note List", errorMessage);
         }
         return noteList;
     }
 
     public OrdersDbDTO getOrderDetails(String orderId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         String[] whereClause = new String[]{orderId};
         OrdersDbDTO order = null;
@@ -2546,10 +2937,13 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
             // cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at getOrdersOf table " + e.toString());
         } finally {
             if (cursor != null) {
@@ -2557,11 +2951,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Order details", errorMessage);
         }
         return order;
     }
 
     public int getTaleNo(int tableId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         String[] whereClause = new String[]{String.valueOf(tableId)};
         Cursor cursor = null;
@@ -2578,10 +2976,13 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
             //cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at getTableNo function " + e.toString());
         } finally {
             if (cursor != null) {
@@ -2589,11 +2990,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Table No", errorMessage);
         }
         return tableNo;
     }
 
     public ArrayList<FeedBackDTO> getFeedBackList() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<FeedBackDTO> feebackList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2617,10 +3022,13 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
             //cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at feedbackList table " + e.toString());
         } finally {
             if (cursor != null) {
@@ -2628,11 +3036,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Fedback llist", errorMessage);
         }
         return feebackList;
     }
 
     public long getPendingOrdersOfTable(int tableId, String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         long count = 0;
         SQLiteDatabase sqLiteDatabase = null;
         /*String[] whereClause = new String[]{String.valueOf(tableId), custId};
@@ -2652,10 +3064,13 @@ public class DbRepository extends SQLiteOpenHelper {
                 count = sqLiteStatement.simpleQueryForLong();
 
             }
+            flagError = true;
             //cursor.close();
             //sqLiteDatabase.close();
 
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error at getOrdersOf table " + e.toString());
         } finally {
            /* if (cursor != null) {
@@ -2663,11 +3078,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }*/
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get pending orders", errorMessage);
         }
         return count;
     }
 
     public ArrayList<ChefOrderDetailsDTO> getCompletedRecordsChef() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<ChefOrderDetailsDTO> ordres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2704,22 +3123,28 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
 
-            Log.e(TAG, "Error in ChefDb Headre" + e.toString());
+            Log.e(TAG, "Get Complete records" + e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
-
+            if (!flagError)
+                addError(TAG, "Get Complete Records", errorMessage);
         }
         return ordres;
     }
 
     public int getOrderCountFromTemp(int tableId, String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         int count = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2738,7 +3163,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, e.toString());
         } finally {
             if (cursor != null) {
@@ -2746,12 +3174,16 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Order from temp", errorMessage);
         }
         return count;
     }
 
 
     public ArrayList<ChefOrderDetailsDTO> getRecChefOrder() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<ChefOrderDetailsDTO> ordres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2788,7 +3220,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
 
             Log.e(TAG, "Error in ChefDb Headre" + e.toString());
@@ -2798,12 +3233,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
-
+            if (!flagError)
+                addError(TAG, "get Chef Order", errorMessage);
         }
         return ordres;
     }
 
     public ArrayList<ChefOrderDetailsDTO> getRecChefTakeAwayOrders() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<ChefOrderDetailsDTO> ordres = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -2839,7 +3277,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
 
             Log.e(TAG, "Error in ChefDb Headre" + e.toString());
@@ -2849,13 +3290,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
-
+            if (!flagError)
+                addError(TAG, "Get Chef take away orders", errorMessage);
         }
         return ordres;
     }
 
     public void addMenuList(ArrayList<ChefOrderDetailsDTO> list) {
-
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         synchronized (sqLiteDatabase) {
@@ -2888,9 +3331,11 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                     order.setmMenuChild(menudetails);
                 }
+                flagError = true;
             } catch (Exception e) {
                 e.printStackTrace();
-
+                flagError = false;
+                errorMessage = e.getMessage();
                 Log.e(TAG, "Error in ChefDb MenuLog" + e.toString());
             } finally {
                 if (cursor != null) {
@@ -2898,13 +3343,16 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
                 if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                     sqLiteDatabase.close();
-
+                if (!flagError)
+                    addError(TAG, "Add Menu List", errorMessage);
             }
 
         }
     }
 
     public boolean deleteCustomer(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         // ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
@@ -2920,7 +3368,10 @@ public class DbRepository extends SQLiteOpenHelper {
                 //sqLiteDatabase.close();
                 Log.d(TAG, " ## delete customer successfully");
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             Log.d(TAG, "## delete customer is not successfully" + e.toString());
             //sqLiteDatabase.close();
@@ -2928,11 +3379,15 @@ public class DbRepository extends SQLiteOpenHelper {
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete Customer", errorMessage);
         }
         return count != -1;
     }
 
     public boolean deleteCustomerTableTrans(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         // ContentValues contentValues = null;
         sqLiteDatabase = getWritableDatabase();
@@ -2948,7 +3403,10 @@ public class DbRepository extends SQLiteOpenHelper {
                 //sqLiteDatabase.close();
                 Log.d(TAG, " ## delete customer successfully");
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             Log.d(TAG, "## delete customer is not successfully" + e.toString());
             //sqLiteDatabase.close();
@@ -2956,11 +3414,15 @@ public class DbRepository extends SQLiteOpenHelper {
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete Customer", errorMessage);
         }
         return count != -1;
     }
 
     public boolean deleteBill(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
@@ -2974,17 +3436,24 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 Log.d(TAG, " ## delete Bill successfully");
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             Log.d(TAG, "## delete bill is not successfully" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete Bill", errorMessage);
         }
         return count != -1;
     }
 
     public boolean deleteBillDetails(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
@@ -2999,17 +3468,24 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 Log.d(TAG, " ## delete BillDetails successfully");
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             Log.d(TAG, "## delete BillDetails is not successfully" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete Bill details", errorMessage);
         }
         return count != -1;
     }
 
     public boolean deleteOrderDetails(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
@@ -3024,17 +3500,24 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 Log.d(TAG, " ## delete order details successfully");
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             Log.d(TAG, "## delete order details is not successfully" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete Order Details", errorMessage);
         }
         return count != -1;
     }
 
     public boolean deleteOrder(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
@@ -3048,12 +3531,17 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 Log.d(TAG, " ## delete Order successfully");
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             e.printStackTrace();
             Log.d(TAG, "## delete Order is not successfully" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete Order", errorMessage);
         }
         return count != -1;
     }
@@ -3071,6 +3559,8 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public boolean deleteTakeAwayOrder(String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getWritableDatabase();
         long count = -1;
@@ -3084,17 +3574,23 @@ public class DbRepository extends SQLiteOpenHelper {
 
                 Log.d(TAG, " ## delete Take away order Order successfully");
             }
+            flagError = true;
         } catch (Exception e) {
             e.printStackTrace();
+            flagError = false;
             Log.d(TAG, "## delete Take away Order is not successfully" + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Delete Take Away", errorMessage);
         }
         return count != -1;
     }
 
     public ArrayList<TakeAwaySourceDTO> getTakeAwaySource() {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<TakeAwaySourceDTO> takeAwaySourceDTOs = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -3119,9 +3615,11 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
             e.printStackTrace();
-
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error in Take away source" + e.toString());
         } finally {
             if (cursor != null) {
@@ -3129,12 +3627,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
-
+            if (!flagError)
+                addError(TAG, "Take away source", errorMessage);
         }
         return takeAwaySourceDTOs;
     }
 
     public boolean insertTakeAway(UploadTakeAway takeAwayDbDTO, int userId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3154,18 +3655,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 Log.d(TAG, "## Take away is added successfully using UploadTakeAway" + takeAwayDbDTO.getTakeawayId());
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.d(TAG, "## Error at insert take away using UploadTakeAway" + e.toString());
         } finally {
-            {
-                if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
-                    sqLiteDatabase.close();
-            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Take away", errorMessage);
         }
         return count != -1;
     }
 
     public ArrayList<TakeAwayDTO> getTakeAwayList() {
+        boolean flagError = false;
+        String errorMessage = "";
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         String date = dateUtils.getLocalSQLCurrentDate();
         String time = dateUtils.getSqlOffsetTime(AppConstants.ORDER_TIME_HOUR, AppConstants.ORDER_TIME_MINUTE);
@@ -3210,22 +3716,27 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
             e.printStackTrace();
-
-            Log.e(TAG, "Error in Take away source" + e.toString());
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "Error in get Take away list" + e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
-
+            if (!flagError)
+                addError(TAG, "get Take away list", errorMessage);
         }
         return takeAways;
     }
 
     public double getTakeAwayDiscount(int takeAwayNo) {
+        boolean flagError = false;
+        String errorMessage = "";
         double discount = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -3244,7 +3755,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, e.toString());
         } finally {
             if (cursor != null) {
@@ -3252,11 +3766,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Take away Discount", errorMessage);
         }
         return discount;
     }
 
     public double getTakeAwayDeliveryChr(int takeAwayNo) {
+        boolean flagError = false;
+        String errorMessage = "";
         double deliveryChr = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -3275,7 +3793,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, e.toString());
         } finally {
             if (cursor != null) {
@@ -3283,11 +3804,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Take away Delivery Charges", errorMessage);
         }
         return deliveryChr;
     }
 
     public TakeAwayDTO getTakeAway(int takeAwayNo) {
+        boolean flagError = false;
+        String errorMessage = "";
         TakeAwayDTO takeAway = null;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -3322,23 +3847,27 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
             e.printStackTrace();
-
-            Log.e(TAG, "Error in Take away source" + e.toString());
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "Error in get Take away" + e.toString());
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
-
+            if (!flagError)
+                addError(TAG, "get Take away ", errorMessage);
         }
         return takeAway;
     }
 
     public void setTakeAwayStatus(ArrayList<TakeAwayDTO> takeAwayDTOs) {
-
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
 
@@ -3377,9 +3906,11 @@ public class DbRepository extends SQLiteOpenHelper {
 
 
             }
+            flagError = true;
         } catch (Exception e) {
             e.printStackTrace();
-
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, "Error in setTakeAwayStatus" + e.toString());
         } finally {
             if (cursor != null) {
@@ -3387,7 +3918,8 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
-
+            if (!flagError)
+                addError(TAG, "set Take away status", errorMessage);
         }
 
 
@@ -3398,6 +3930,8 @@ public class DbRepository extends SQLiteOpenHelper {
      */
 
     public boolean insertConfigSettings(List<ConfigSettingsDbDTO> configSettings) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3416,16 +3950,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while adding Config settings " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "add Config settings", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateConfigSettings(List<ConfigSettingsDbDTO> configSettings) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3445,17 +3986,24 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while updating  Config settings " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "update config settings", errorMessage);
         }
         return count != -1;
     }
 
 
     public boolean insertRoomType(List<RoomTypesDbDTO> roomType) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3474,16 +4022,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while  Room Type adding " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Room type add", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateRoomType(List<RoomTypesDbDTO> roomType) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3504,16 +4059,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while  Room Type updating " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update room type", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertRestaurant(List<RestaurantDbDTO> restaurant) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3539,16 +4101,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while  Restaurant  adding " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Restaurant", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateRestaurant(List<RestaurantDbDTO> restaurant) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3585,17 +4154,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
             Log.e("DbOperationsEx", "Error while  Updating Restaurant " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Restaurant", errorMessage);
         }
         return count != -1;
     }
 
 
     public boolean insertPrinters(List<PrintersDbDTO> printers) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3618,16 +4193,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while  Printer adding " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Add printer", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updatePrinters(List<PrintersDbDTO> printers) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3657,16 +4239,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while  Printer updating " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Printer updating", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertRooms(List<RoomsDbDTO> rooms) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3685,16 +4274,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while adding rooms " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Add Room", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateRooms(List<RoomsDbDTO> rooms) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3714,16 +4310,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while updating rooms " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update room", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertRoomPrinter(List<RoomPrintersDbDTO> roomPrinters) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3744,16 +4347,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while adding room printer " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Room Printer", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updateRoomPrinter(List<RoomPrintersDbDTO> roomPrinters) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3777,16 +4387,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while updating room printer " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "update room printer", errorMessage);
         }
         return count != -1;
     }
 
     public boolean insertPermission(List<PermissionSetDbDTO> permissions) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3806,16 +4423,23 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while adding permission " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "adding permission", errorMessage);
         }
         return count != -1;
     }
 
     public boolean updatePermission(List<PermissionSetDbDTO> permissions) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues contentValues = null;
         long count = -1;
@@ -3838,11 +4462,16 @@ public class DbRepository extends SQLiteOpenHelper {
                 }
 
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while updating permission " + e.toString());
         } finally {
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Permission updating", errorMessage);
         }
         return count != -1;
     }
@@ -3854,6 +4483,8 @@ public class DbRepository extends SQLiteOpenHelper {
     * */
 
     public int getPermissionId(String key) {
+        boolean flagError = false;
+        String errorMessage = "";
         int id = 0;
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -3871,7 +4502,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e(TAG, e.toString());
         } finally {
             if (cursor != null) {
@@ -3879,11 +4513,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Permission Id", errorMessage);
         }
         return id;
     }
 
     public ArrayList<PrinterDetailsDTO> getPrinterDetails(int roomType) {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<PrinterDetailsDTO> detailsArray = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -3915,7 +4553,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while getting printer data " + e.toString());
         } finally {
 
@@ -3924,11 +4565,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Printer details", errorMessage);
         }
         return detailsArray;
     }
 
     public PrinterDetailsDTO getPrinterDetailsByRoom(int roomId) {
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
         PrinterDetailsDTO printerDetailsDTO = null;
@@ -3956,7 +4601,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while getting getPrinterDetailsByRoom data " + e.toString());
         } finally {
 
@@ -3965,11 +4613,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Printer details by room", errorMessage);
         }
         return printerDetailsDTO;
     }
 
     public ArrayList<String> getOderIdForPrinting(String OrderStatus, String CustmerId) {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<String> getOrderId = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
@@ -3995,7 +4647,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
         } finally {
 
@@ -4004,12 +4659,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Order Id", errorMessage);
         }
         return getOrderId;
     }
 
     public HashMap<String, OrderDetailsDTO> getMenuDetailsForOrderPrint(ArrayList<String> getOrderId) {
-
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
@@ -4071,7 +4729,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
         } finally {
 
@@ -4080,12 +4741,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Menu Details", errorMessage);
         }
         return billdetails;
     }
 
     public RestaurantDTO getRestaurantDetails(String restaurantName) {
-
+        boolean flagError = false;
+        String errorMessage = "";
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
         RestaurantDTO restaurantDTO = null;
@@ -4120,7 +4784,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
         } finally {
 
@@ -4129,11 +4796,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Restaurant details", errorMessage);
         }
         return restaurantDTO;
     }
 
     public int getConfigValue(String configKey) {
+        boolean flagError = false;
+        String errorMessage = "";
         int result = 0;
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getReadableDatabase();
@@ -4152,8 +4823,11 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
-            Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e("DbOperationsEx", "Get Config value" + e.toString());
         } finally {
 
             if (cursor != null) {
@@ -4161,11 +4835,15 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Config value", errorMessage);
         }
         return result;
     }
 
     public ArrayList<SubMenuDTO> getSubMenu(int menuId, String custId) {
+        boolean flagError = false;
+        String errorMessage = "";
         ArrayList<SubMenuDTO> subMenu = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = null;
         Cursor cursor = null;
@@ -4194,7 +4872,10 @@ public class DbRepository extends SQLiteOpenHelper {
                     }
                 }
             }
+            flagError = true;
         } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while getting sub Menu data " + e.toString());
         } finally {
 
@@ -4203,8 +4884,18 @@ public class DbRepository extends SQLiteOpenHelper {
             }
             if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
                 sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Sub Menu", errorMessage);
         }
         return subMenu;
+    }
+
+    public void addError(String screenName, String method, String desc) {
+        Gson gson = new Gson();
+        ROrderDateUtils dateUtils = new ROrderDateUtils();
+        ApplicationErrorDBDTO errorDBDTO = new ApplicationErrorDBDTO(screenName, method, desc, dateUtils.getLocalSQLCurrentDate(), dateUtils.getLocalCurrentTime());
+        String serializedError = gson.toJson(errorDBDTO);
+        addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "", serializedError);
     }
 }
 /*
