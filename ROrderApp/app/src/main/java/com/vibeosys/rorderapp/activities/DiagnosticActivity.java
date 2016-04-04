@@ -63,17 +63,23 @@ public class DiagnosticActivity extends BaseActivity {
                         flagTest = true;
                         Toast.makeText(getApplicationContext(), "Search for Printer", Toast.LENGTH_SHORT).show();
                         showSearchPrintBtn.setVisibility(View.VISIBLE);
+                        samplePrintKot.setVisibility(View.VISIBLE);
+                        samplePrintBillKot.setVisibility(View.VISIBLE);
                     } else {
                         Toast.makeText(getApplication(), " error while serching the Printer", Toast.LENGTH_SHORT).show();
                         searchPrinter.stopSearch();
                         flagTest = false;
                         showSearchPrintBtn.setVisibility(View.VISIBLE);
 
+
                     }
 
                 } else {
 
                     showSearchPrintBtn.setVisibility(View.INVISIBLE);
+                    linearLayout.setVisibility(View.INVISIBLE);
+                    samplePrintKot.setVisibility(View.INVISIBLE);
+                    samplePrintBillKot.setVisibility(View.INVISIBLE);
                     searchPrinter.stopSearch();
                     searchBtnCnt =1;
                 }
@@ -95,6 +101,7 @@ public class DiagnosticActivity extends BaseActivity {
 
                         } else if ((mList.length) >= 0) {
                             for (int i = 0; i < mList.length; i++) {
+                                linearLayout.setVisibility(View.VISIBLE);
                                 String IpAddress = mList[0].getIpAddress();
                                 String PrinterName = mList[0].getPrinterName();
                                 String MacAddress = mList[0].getMacAddress();
@@ -105,6 +112,7 @@ public class DiagnosticActivity extends BaseActivity {
                                 GlobalDeviceType =DeviceType;
                                 TextView tv1 = new TextView(getApplicationContext());
                                 tv1.setText("IP ADDRESS :" + IpAddress);
+                                linearLayout.removeAllViews();
                                 linearLayout.addView(tv1);
                                 TextView tv2 = new TextView(getApplicationContext());
                                 tv2.setText("PRINTER NAME :" + PrinterName);
@@ -115,6 +123,7 @@ public class DiagnosticActivity extends BaseActivity {
                                 TextView tv4 = new TextView(getApplicationContext());
                                 tv4.setText("DEVICE TYPE : " + DeviceType);
                                 linearLayout.addView(tv4);
+
 
                             }
                             searchPrinter.stopSearch();
@@ -153,7 +162,7 @@ public class DiagnosticActivity extends BaseActivity {
         samplePrintBillKot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchPrinter.BuilderMethod(GlobalIpAddress, GlobalPrinterName, GlobalMacAddress, GlobalDeviceType,"Bill");
+                searchPrinter.BuilderMethod(GlobalIpAddress, GlobalPrinterName, GlobalMacAddress, GlobalDeviceType, "Bill");
 
             }
         });
