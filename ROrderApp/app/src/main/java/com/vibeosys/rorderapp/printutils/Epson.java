@@ -4,6 +4,7 @@ import android.content.Context;
 import android.nfc.Tag;
 import android.util.*;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.epson.eposprint.*;
 import com.vibeosys.rorderapp.data.OrderDetailsDTO;
@@ -190,11 +191,16 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
             int[] status = new int[1];
             int[] battery = new int[1];
 
-            this.mPrinter.sendData(mBuilder, SEND_TIMEOUT, status, battery);
+                this.mPrinter.sendData(mBuilder, SEND_TIMEOUT, status, battery);
+
+
             System.out.println("## print data successfully");
 
-        } catch (EposException e) {
-            System.err.println("Error at method " + mMethod);
+        } /*catch (EposException e) {
+            e.getErrorStatus();
+            Log.d("TAG","$$"+e.getErrorStatus());
+            System.err.println("Error at method ");
+
             switch (e.getErrorStatus()) {
                 case EposException.ERR_PARAM:
                     throw new PrintException("Something went wrong try again.");
@@ -217,7 +223,32 @@ public class Epson implements PrintPaper, StatusChangeEventListener, BatteryStat
                 case EposException.ERR_FAILURE:
                     throw new PrintException("Could not found printer, please check connection.");
             }
-        } finally {
+        }*/
+        catch (EposException e )
+        {
+            e.getErrorStatus();
+            e.getPrinterStatus();
+            e.printStackTrace();
+            if(e.getErrorStatus() == EposException.ERR_OFF_LINE)
+            Toast.makeText(mContext,"Please check Printer cover or paper availability",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus() ==EposException.ERR_TIMEOUT)
+                Toast.makeText(mContext,"Time out for printer",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus()== EposException.ERR_CONNECT)
+                Toast.makeText(mContext,"Fail to connect ot device",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus() == EposException.ERR_PARAM)
+                Toast.makeText(mContext,"Invalid parameter is passed",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus() ==EposException.ERR_FAILURE)
+                Toast.makeText(mContext,"Check printer settings",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus() ==EposException.ERR_UNSUPPORTED)
+                Toast.makeText(mContext,"Unsupported Pinter Model name ",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus() ==EposException.ERR_PROCESSING)
+                Toast.makeText(mContext,"Processing time overlap ",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus() == EposException.ERR_MEMORY)
+                Toast.makeText(mContext,"Memory issue .End the unneeded applications ",Toast.LENGTH_SHORT).show();
+            if(e.getErrorStatus() == EposException.ERR_OPEN)
+                Toast.makeText(mContext,"Opening process failed ",Toast.LENGTH_SHORT).show();
+
+        }finally {
             closePrinter();
         }
     }
