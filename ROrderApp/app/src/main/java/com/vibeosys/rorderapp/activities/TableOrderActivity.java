@@ -280,7 +280,7 @@ public class TableOrderActivity extends BaseActivity implements
                         }
                     }
                     keyRoomId = sortOrderByKitchen.keySet();
-                    if (mDbRepository.getConfigValue(AppConstants.CONFIG_KOT_PRINT) == 1) {
+                    if (mDbRepository.getConfigValue(AppConstants.CONFIG_KOT_PRINT) == 0) {
                         for (final Integer i : keyRoomId) {
                             ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
                             List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
@@ -303,10 +303,6 @@ public class TableOrderActivity extends BaseActivity implements
                         AsyncPrintData asyncPrintData = new AsyncPrintData();
                         asyncPrintData.execute(sortOrderByKitchen);
                     }
-
-
-
-
                 }
             } else {
                 showMyDialog(mContext);
