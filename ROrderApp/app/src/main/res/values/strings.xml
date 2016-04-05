@@ -160,4 +160,14 @@
     <string name="print_kot_btn_diagnostic">Print KOT</string>
     <string name="print_bill_btn_diagnostic">Print Billing</string>
     <string name="diagnostic_title">Diagnostic</string>
+    <string name="diagnostic_switch_print">Search For Printer</string>
+    <string name="diagnostic_switch_internet">Search For Internet</string>
+    <string name="diagnostic_switch_api">Check API for availability </string>
+    <string name="diagnostic_data_base">Data base availiblity</string>
+    <string name="diagnostic_alert_title">Result Message</string>
+    <string name="diagnostic_internet_available">Internet is available</string>
+    <string name="diagnostic_internet_not_available">Internet is not available</string>
+    <string name="diagnostic_data_base_available">Data base is available</string>
+    <string name="diagnostic_data_base_not_available">Data base is not available</string>
+    <string name="diagnostic_api_available">API is available</string>
 </resources>

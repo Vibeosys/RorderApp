@@ -1,6 +1,8 @@
 package com.vibeosys.rorderapp.activities;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.epson.*;
@@ -25,6 +27,8 @@ import com.vibeosys.rorderapp.printutils.PrinterTypes;
 import com.vibeosys.rorderapp.printutils.exceptions.OpenPrinterException;
 import com.vibeosys.rorderapp.printutils.exceptions.PrintException;
 import com.vibeosys.rorderapp.util.ROrderDateUtils;
+
+import java.io.Serializable;
 
 /**
  * Created by shrinivas on 30-03-2016.
@@ -56,7 +60,7 @@ public class DiagnosticEpson {
         } catch (EpsonIoException e) {
             errorStatus = e.getStatus();
             e.printStackTrace();
-
+            stopSearch();
 
             if (e.getStatus() == IoStatus.ERR_FAILURE)
                 Log.d("TAG", "$$" + "UNSPECIFED ERROR");
@@ -119,6 +123,7 @@ public class DiagnosticEpson {
         try {
             if (errorStatus == 0) {
                 Finder.stop();
+
                 String s3 = "@ Stop Printer";
                 Log.d("TAG", "EPSVAL " + s3);
             }
@@ -156,6 +161,7 @@ public class DiagnosticEpson {
         }
 
     }
+
 
 
 }

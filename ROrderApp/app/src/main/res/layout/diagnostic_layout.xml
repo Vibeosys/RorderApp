@@ -10,48 +10,55 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginRight="10dp"
-        android:text="Search For Printer"
+        android:text="@string/diagnostic_switch_internet"
+        android:textSize="18dp"
+        android:id="@+id/searchInternatSwitch" />
+
+    <View
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:checked="false"
+        android:text="@string/diagnostic_switch_print"
         android:textSize="18dp"
         android:id="@+id/searchPrinterSwitch" />
-
-
-    <Button
-        android:id="@+id/show_search_result"
+    <View
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+    <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="Show Search Result"/>
-
-    <LinearLayout
+        android:layout_marginRight="10dp"
+        android:text="@string/diagnostic_switch_api"
+        android:textSize="18dp"
+        android:id="@+id/searchApiSwitch" />
+    <View
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+    <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/print_kot_diagnostic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:clickable="false"
-            android:text="@string/print_kot_btn_diagnostic"/>
-        <Button
-            android:id="@+id/print_bill_diagnostic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:text="@string/print_bill_btn_diagnostic"/>
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/Printer_linear"
+        android:layout_marginRight="10dp"
+        android:text="@string/diagnostic_data_base"
+        android:textSize="18dp"
+        android:id="@+id/searchDataBaseSwitch" />
+    <View
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        </LinearLayout>
-
-
-
-
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
 </LinearLayout>
