@@ -14,17 +14,19 @@ public class UploadOrderHeader extends BaseDTO {
     private int tableId;
     private String custId;
     private int takeawayNo;
+    private int deliveryNo;
     private int orderType;
     private ArrayList<UploadOrderDetails> orderDetails;
 
     public UploadOrderHeader(String orderId, int tableId, String custId, ArrayList<UploadOrderDetails>
-            orderDetails, int takeawayNo, int orderType) {
+            orderDetails, int takeawayNo, int orderType, int deliveryNo) {
         this.orderId = orderId;
         this.tableId = tableId;
         this.custId = custId;
         this.orderDetails = orderDetails;
         this.takeawayNo = takeawayNo;
         this.orderType = orderType;
+        this.deliveryNo = deliveryNo;
     }
 
     public String getOrderId() {
@@ -73,6 +75,14 @@ public class UploadOrderHeader extends BaseDTO {
 
     public void setOrderType(int orderType) {
         this.orderType = orderType;
+    }
+
+    public int getDeliveryNo() {
+        return deliveryNo;
+    }
+
+    public void setDeliveryNo(int deliveryNo) {
+        this.deliveryNo = deliveryNo;
     }
 
     public static List<UploadOrderHeader> deserializeOrders(List<String> serializedStringList) {

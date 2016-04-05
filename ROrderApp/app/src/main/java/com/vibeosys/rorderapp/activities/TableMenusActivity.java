@@ -72,7 +72,7 @@ public class TableMenusActivity extends BaseActivity implements
     private ListView listMenus;
     private TextView txtTotalAmount, txtTotalItems, txtBillGenerate;
     private LinearLayout txtPreviousOrder;
-    private int mTableId, mTableNo, mTakeAwayNo;
+    private int mTableId, mTableNo, mTakeAwayNo, mDeliveryNo;
     private String custId;
     private ImageButton imgFloat;
     private LinearLayout llCurrentOrder;
@@ -101,6 +101,7 @@ public class TableMenusActivity extends BaseActivity implements
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
         mTakeAwayNo = tableCommonInfoDTO.getTakeAwayNo();
+        mDeliveryNo = tableCommonInfoDTO.getDeliveryNo();
 
         Log.i("##", "##" + mTakeAwayNo);
         setTitle(getResources().getString(R.string.title_search_cuisine));
@@ -126,7 +127,8 @@ public class TableMenusActivity extends BaseActivity implements
 
         String tableIndicator = "T-" + mTableNo;
         String orderIndicator = "# " + mTakeAwayNo;
-        String strIndicator = mTableNo != 0 ? tableIndicator : orderIndicator;
+        String deliveryIndicator = "# " + mDeliveryNo;
+        String strIndicator = mTableNo != 0 ? tableIndicator : mTakeAwayNo != 0 ? orderIndicator : deliveryIndicator;
         txtTableNo.setText(strIndicator);
 
         orderListAdapter = new OrderListAdapter(allMenus, getApplicationContext());
@@ -438,7 +440,7 @@ public class TableMenusActivity extends BaseActivity implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showProgress(true);
-                UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId, mTakeAwayNo);
+                UploadBillGenerate uploadBillGenerate = new UploadBillGenerate(mTableId, custId, mTakeAwayNo, mDeliveryNo);
                 Gson gson = new Gson();
                 String serializedJsonString = gson.toJson(uploadBillGenerate);
                 Log.d(TAG, "##" + serializedJsonString);

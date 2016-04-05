@@ -59,6 +59,7 @@ import com.vibeosys.rorderapp.adaptors.MainActivityAdapter;
 import com.vibeosys.rorderapp.adaptors.TableGridAdapter;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
+import com.vibeosys.rorderapp.data.DeliveryDTO;
 import com.vibeosys.rorderapp.data.HotelTableDTO;
 import com.vibeosys.rorderapp.data.RestaurantTables;
 import com.vibeosys.rorderapp.data.TableCategoryDTO;
@@ -69,6 +70,7 @@ import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.UploadOccupiedDTO;
 import com.vibeosys.rorderapp.data.WaitingUserDTO;
 import com.vibeosys.rorderapp.fragments.FragmentChefPlacedOrder;
+import com.vibeosys.rorderapp.fragments.FragmentDelivery;
 import com.vibeosys.rorderapp.fragments.FragmentTakeAway;
 import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 import com.vibeosys.rorderapp.service.SyncService;
@@ -158,6 +160,7 @@ public class MainActivity extends BaseActivity
 
             tab_layout.addTab(tab_layout.newTab().setText("TAKE AWAY"));
 
+            tab_layout.addTab(tab_layout.newTab().setText("DELIVERY"));
 
             tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
             tab_layout.setSelectedTabIndicatorHeight(4);
@@ -176,6 +179,9 @@ public class MainActivity extends BaseActivity
                         txtSearch.setHint(R.string.search_table);
                         txtSearch.setInputType(InputType.TYPE_CLASS_NUMBER);
                     } else if (selectedTab == 1) {
+                        txtSearch.setHint(R.string.search_order);
+                        txtSearch.setInputType(InputType.TYPE_CLASS_TEXT);
+                    } else if (selectedTab == 2) {
                         txtSearch.setHint(R.string.search_order);
                         txtSearch.setInputType(InputType.TYPE_CLASS_TEXT);
                     }
@@ -233,6 +239,21 @@ public class MainActivity extends BaseActivity
                             }
                         }
                     }
+                    if (selectedTab == 2) {
+                        if (s.length() <= 2) {
+                            ArrayList<DeliveryDTO> list = mDbRepository.getDeliveryList();
+                            mDbRepository.setDeliveryStatus(list);
+                            FragmentDelivery.gridAdapter.refresh(list);
+                        } else {
+                            try {
+                                FragmentDelivery.gridAdapter.refresh(sortDeliveryList(mDbRepository.getDeliveryList(), s.toString()));
+                            } catch (Exception e) {
+                                Log.e(TAG, "##" + e.toString());
+                                e.printStackTrace();
+                                //Toast.makeText(getActivity().getApplicationContext(), "You should Enter number", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
 
                 }
 
@@ -273,6 +294,25 @@ public class MainActivity extends BaseActivity
         }
         mDbRepository.setTakeAwayStatus(takeAway);
         return takeAway;
+
+    }
+
+    private ArrayList<DeliveryDTO> sortDeliveryList(ArrayList<DeliveryDTO> deliveryDTOs, String search) {
+        ArrayList<DeliveryDTO> delivery = new ArrayList<DeliveryDTO>();
+
+        for (DeliveryDTO deliveryDTO : deliveryDTOs) {
+            if (deliveryDTO.getmCustName().toLowerCase().contains(search.toLowerCase())) {
+                delivery.add(deliveryDTO);
+            } else if (String.valueOf(deliveryDTO.getmDeliveryNo()).contains(search.toLowerCase())) {
+                delivery.add(deliveryDTO);
+            } else if (deliveryDTO.getmCustAddress().toLowerCase().contains(search.toLowerCase())) {
+                delivery.add(deliveryDTO);
+            } else if (deliveryDTO.getCustPhone().contains(search)) {
+                delivery.add(deliveryDTO);
+            }
+        }
+        mDbRepository.setDeliveryStatus(delivery);
+        return delivery;
 
     }
 
@@ -403,16 +443,12 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.settings) {
             Intent iSetting = new Intent(getApplicationContext(), SettingPrinterActivity.class);
             startActivity(iSetting);
-        }
-        else if(id == R.id.completed_ordres)
-        {
+        } else if (id == R.id.completed_ordres) {
 
             Intent selectRestoIntent = new Intent(getApplicationContext(), CompletedOrdersScreen.class);
             startActivity(selectRestoIntent);
 
-        }
-        else if(id == R.id.diagnostic)
-        {
+        } else if (id == R.id.diagnostic) {
             Intent diagnostic = new Intent(getApplicationContext(), DiagnosticActivity.class);
             startActivity(diagnostic);
         }

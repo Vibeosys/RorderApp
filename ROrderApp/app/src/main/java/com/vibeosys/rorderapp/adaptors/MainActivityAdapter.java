@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.vibeosys.rorderapp.fragments.FragmentDelivery;
 import com.vibeosys.rorderapp.fragments.FragmentTakeAway;
 import com.vibeosys.rorderapp.fragments.FragmentWaiterTable;
 
@@ -30,7 +31,9 @@ public class MainActivityAdapter extends FragmentPagerAdapter {
                 FragmentTakeAway takeAway = new FragmentTakeAway();
                 return takeAway;
 
-
+            case 2:
+                FragmentDelivery delivery = new FragmentDelivery();
+                return delivery;
             default:
                 return null;
 

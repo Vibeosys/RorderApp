@@ -8,11 +8,13 @@ public class UploadBillGenerate extends BaseDTO {
     String custId;
     int tableId;
     int takeawayNo;
+    int deliveryNo;
 
-    public UploadBillGenerate(int tableId, String custId, int takeawayNo) {
+    public UploadBillGenerate(int tableId, String custId, int takeawayNo, int deliveryNo) {
         this.custId = custId;
         this.tableId = tableId;
         this.takeawayNo = takeawayNo;
+        this.deliveryNo = deliveryNo;
     }
 
     public String getCustId() {
@@ -37,5 +39,13 @@ public class UploadBillGenerate extends BaseDTO {
 
     public void setTakeawayNo(int takeawayNo) {
         this.takeawayNo = takeawayNo;
+    }
+
+    public int getDeliveryNo() {
+        return deliveryNo;
+    }
+
+    public void setDeliveryNo(int deliveryNo) {
+        this.deliveryNo = deliveryNo;
     }
 }

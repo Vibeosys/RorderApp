@@ -29,6 +29,7 @@ import com.epson.epsonio.IoStatus;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 
 import com.vibeosys.rorderapp.R;
+import com.vibeosys.rorderapp.data.DeliveryDTO;
 import com.vibeosys.rorderapp.data.OrderDetailsDTO;
 import com.vibeosys.rorderapp.data.PrinterDetailsDTO;
 import com.vibeosys.rorderapp.data.RestaurantDTO;
@@ -59,7 +60,7 @@ public class BillDetailsActivity extends BaseActivity {
     private final static String screenName = "Bill Details";
     private BillDetailsDTO mBillDetailsDTOs;
     private TableCommonInfoDTO tableCommonInfoDTO;
-    private int mTableId, mTableNo, mTakeAwayNo;
+    private int mTableId, mTableNo, mTakeAwayNo, mDeliveryNo;
     private String custId;
     private TextView mTxtTableNo;
     private TextView mTxtServedBy;
@@ -103,6 +104,7 @@ public class BillDetailsActivity extends BaseActivity {
         mTableNo = tableCommonInfoDTO.getTableNo();
         custId = tableCommonInfoDTO.getCustId();
         mTakeAwayNo = tableCommonInfoDTO.getTakeAwayNo();
+        mDeliveryNo = tableCommonInfoDTO.getDeliveryNo();
         mDiscPer = tableCommonInfoDTO.getDiscount();
         mDeliveryCharges = tableCommonInfoDTO.getDeliveryCharges();
 
@@ -261,6 +263,7 @@ public class BillDetailsActivity extends BaseActivity {
         double netAmount = mBillDetailsDTOs.getNetAmount();
         double totalPaybleAmount = mBillDetailsDTOs.getTotalPayableAmt();
         TakeAwayDTO takeAwayDTO = mDbRepository.getTakeAway(mTakeAwayNo);
+        DeliveryDTO deliveryDTO = mDbRepository.getDelivery(mDeliveryNo);
 
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         if (percenatge != 0) {
@@ -275,11 +278,20 @@ public class BillDetailsActivity extends BaseActivity {
             mTxtServedByTitle.setText("Customer was served by");
             mImgTable.setImageResource(R.drawable.ic_table);
             mDeliveryChargeRow.setVisibility(View.GONE);
-        } else {
+        } else if (mTakeAwayNo != 0) {
             mTxtTableNoTitle.setText("Order for " + takeAwayDTO.getmCustName() + " was ");
             mTxtTableNo.setText(" # " + mTakeAwayNo);
             layoutLocation.setVisibility(View.VISIBLE);
             mTxtAddress.setText(takeAwayDTO.getmCustAddress());
+            mTxtServedByTitle.setText("Order was delivered by");
+            mImgTable.setImageResource(R.drawable.ic_person);
+            mDeliveryChargeRow.setVisibility(View.VISIBLE);
+            mTxtDeliveryAmt.setText(String.format("%.2f", mDeliveryCharges));
+        } else {
+            mTxtTableNoTitle.setText("Order for " + deliveryDTO.getmCustName() + " was ");
+            mTxtTableNo.setText(" # " + mDeliveryNo);
+            layoutLocation.setVisibility(View.VISIBLE);
+            mTxtAddress.setText(deliveryDTO.getmCustAddress());
             mTxtServedByTitle.setText("Order was delivered by");
             mImgTable.setImageResource(R.drawable.ic_person);
             mDeliveryChargeRow.setVisibility(View.VISIBLE);
@@ -421,6 +433,63 @@ public class BillDetailsActivity extends BaseActivity {
         return "Success";
     }
 
+    public String printDelivery(HashMap<String, OrderDetailsDTO> billdetails, PrinterDetailsDTO printerDetail, RestaurantDTO restaurantDTO) {
+        DeliveryDTO deliveryDTO = mDbRepository.getDelivery(mDeliveryNo);
+        PrintBody printBody = new PrintBody();
+        printBody.setMenus(billdetails);
+        ROrderDateUtils dateUtils = new ROrderDateUtils();
+        PrintHeader header = new PrintHeader("", "Take Away No.: #"
+                + mDeliveryNo, "Bill Date : " + dateUtils.getLocalDateInReadableFormat(new java.util.Date()) + " " + dateUtils.getLocalTimeInReadableFormat());
+        Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                R.drawable.ic_launcher);
+        String Full_Address = restaurantDTO.getmAddress().concat(",").concat(restaurantDTO.getmArea()).concat(",").concat(restaurantDTO.getmCity());
+        header.setBmpIcon(icon);
+        if (Full_Address.length() >= 37) {
+            String subStringFirst = Full_Address.substring(0, 37);
+            String subStringSecond = Full_Address.substring(38);
+            header.setAddress(subStringFirst + "\n" + "     " + subStringSecond);
+
+        } else {
+            header.setAddress(Full_Address);
+        }
+
+        // header.setAddress(restaurantDTO.getmArea());
+        header.setNumber("Bill No.: " + mBillDetailsDTOs.getBillNo());
+        header.setBillType("Delivery");
+        header.setCustName("Name: " + deliveryDTO.getmCustName());
+        header.setCustAddress("Address:" + deliveryDTO.getmCustAddress() + "\n");
+        header.setPhNo("Phone.:" + deliveryDTO.getCustPhone());
+        header.setRestaurantName(mSessionManager.getUserRestaurantName());
+        header.setPhoneNumber(restaurantDTO.getmPhoneNumber());
+        //  String footer = "Powered by QuickServe";
+        String footer = restaurantDTO.getmFooter();
+        PrintDataDTO printData = new PrintDataDTO();
+        printData.setConfigBarcode(mDbRepository.getConfigValue(AppConstants.CONFIG_BARCODE_PRINT));
+        printData.setHeader(header);
+        printData.setFooter(footer);
+        printData.setBody(printBody);
+        printData.setType(PrintDataDTO.BILL_TAKE_AWAY);
+        printData.setBillDetailsDTO(mBillDetailsDTOs);
+        PrinterFactory printerFactory = new PrinterFactory();
+        PrintPaper printPaper = printerFactory.getPrinter(printerDetail);
+        try {
+            printPaper.setPrinter(getApplicationContext(), printerDetail);
+        } catch (OpenPrinterException e) {
+            addError(screenName, "SetPrinter PrintDelivery", e.getMessage());
+            // customAlterDialog("Printer Error", e.getMessage());
+            return e.getMessage();
+        }
+        printPaper.openPrinter();
+        try {
+            printPaper.printText(printData);
+        } catch (PrintException e) {
+            //  customAlterDialog("Printer Error", e.getMessage());
+            addError(screenName, "PrintText PrintDelivery", e.getMessage());
+            return e.getMessage();
+        }
+        return "Success";
+    }
+
     private class AsyncPrint extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -442,8 +511,10 @@ public class BillDetailsActivity extends BaseActivity {
 
                 if (mTableId != 0) {
                     result = printDineIn(billdetails, printerDetail, restaurantDTO);
-                } else {
+                } else if (mTakeAwayNo != 0) {
                     result = printTakeAway(billdetails, printerDetail, restaurantDTO);
+                } else if (mDeliveryNo != 0) {
+                    result = printDelivery(billdetails, printerDetail, restaurantDTO);
                 }
             }
             return result;

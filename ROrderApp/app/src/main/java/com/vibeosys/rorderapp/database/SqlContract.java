@@ -209,6 +209,19 @@ public class SqlContract {
         public final static String DATE = "CreatedDate";
     }
 
+    public abstract class SqlDelivery {
+        public final static String TABLE_NAME = "delivery";
+        public final static String DELIVERY_ID = "DeliveryId";
+        public final static String DELIVERY_NO = "DeliveryNo";
+        public final static String DISCOUNT = "Discount";
+        public final static String DELIVERY_CHG = "DeliveryCharges";
+        public final static String CUST_ID = "CustId";
+        public final static String RESTAURANT_ID = "RestaurantId";
+        public final static String USER_ID = "UserId";
+        public final static String SOURCE_ID = "SourceId";
+        public final static String DATE = "CreatedDate";
+    }
+
     public abstract class SqlOrderType {
         public final static String TABLE_NAME = "order_type";
         public final static String ORDER_TYPE_ID = "OrderTypeId";

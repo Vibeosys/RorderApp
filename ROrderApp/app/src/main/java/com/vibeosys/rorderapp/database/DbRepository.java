@@ -17,6 +17,8 @@ import com.vibeosys.rorderapp.data.ChefMenuDetailsDTO;
 import com.vibeosys.rorderapp.data.ChefOrderDetailsDTO;
 import com.vibeosys.rorderapp.data.ConfigSettingsDbDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
+import com.vibeosys.rorderapp.data.DeliveryDTO;
+import com.vibeosys.rorderapp.data.DeliveryDbDTO;
 import com.vibeosys.rorderapp.data.FeedBackDTO;
 import com.vibeosys.rorderapp.data.HotelTableDbDTO;
 import com.vibeosys.rorderapp.data.MenuCateoryDbDTO;
@@ -48,6 +50,7 @@ import com.vibeosys.rorderapp.data.TakeAwayDTO;
 import com.vibeosys.rorderapp.data.TakeAwayDbDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
 import com.vibeosys.rorderapp.data.TakeAwaySourceDbDTO;
+import com.vibeosys.rorderapp.data.UploadDelivery;
 import com.vibeosys.rorderapp.data.UploadTakeAway;
 import com.vibeosys.rorderapp.data.UserDTO;
 import com.vibeosys.rorderapp.data.UserDbDTO;
@@ -4888,6 +4891,415 @@ public class DbRepository extends SQLiteOpenHelper {
                 addError(TAG, "Get Sub Menu", errorMessage);
         }
         return subMenu;
+    }
+
+    public ArrayList<DeliveryDTO> getDeliveryList() {
+        boolean flagError = false;
+        String errorMessage = "";
+        ROrderDateUtils dateUtils = new ROrderDateUtils();
+        String date = dateUtils.getLocalSQLCurrentDate();
+        String time = dateUtils.getSqlOffsetTime(AppConstants.ORDER_TIME_HOUR, AppConstants.ORDER_TIME_MINUTE);
+
+        ArrayList<DeliveryDTO> deliveryDTOs = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String strQuery = "Select delivery.DeliveryId,delivery.DeliveryNo,delivery.CustId,delivery.CreatedDate," +
+                        "delivery.SourceId,delivery.Discount,delivery.DeliveryCharges," +
+                        "delivery.UserId,users.UserName,customer.CustName,customer.CustPhone," +
+                        "customer.CustAddress,takeaway_source.SourceName " +
+                        "from delivery left join users on users.UserId=delivery.UserId " +
+                        "left join customer on customer.CustId=delivery.CustId " +
+                        "left join takeaway_source on takeaway_source.SourceId=delivery.SourceId " +
+                        "where delivery.CreatedDate>= '" + date + "T" + time + "'";
+                cursor = sqLiteDatabase.rawQuery(strQuery, null);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do {
+                            String deliveryId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlDelivery.DELIVERY_ID));
+                            int deliveryNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlDelivery.DELIVERY_NO));
+                            double discount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlDelivery.DISCOUNT));
+                            double deliveryCharges = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlDelivery.DELIVERY_CHG));
+                            String custId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlDelivery.CUST_ID));
+                            int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlDelivery.USER_ID));
+                            int sourceId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlDelivery.SOURCE_ID));
+                            String custName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_NAME));
+                            String custAddress = cursor.getString(cursor.getColumnIndex("CustAddress"));
+                            String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                            String custPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_PHONE));
+                            String sourceName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_NAME));
+                            String createdDate = cursor.getString(cursor.getColumnIndex(SqlContract.SqlDelivery.DATE));
+                            DeliveryDTO deliveryDTO = new DeliveryDTO(deliveryId, deliveryNo, discount,
+                                    deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName);
+                            deliveryDTOs.add(deliveryDTO);
+                        } while (cursor.moveToNext());
+                    }
+                }
+            }
+            flagError = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "Error in get delivery list" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get delivery list", errorMessage);
+        }
+        return deliveryDTOs;
+    }
+
+    public void setDeliveryStatus(ArrayList<DeliveryDTO> deliveryDTOs) {
+        boolean flagError = false;
+        String errorMessage = "";
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                for (DeliveryDTO deliveryDTO : deliveryDTOs) {
+                    int countSPending = 0, countSReady = 0, countSDelivered = 0;
+                    String[] where = new String[]{String.valueOf(deliveryDTO.getmDeliveryNo())};
+                    String strQuery = "Select " + SqlContract.SqlOrders.ORDER_STATUS + " FROM "
+                            + SqlContract.SqlOrders.TABLE_NAME + " Where " + SqlContract.SqlOrders.TAKE_AWAY_NO + "=?";
+                    cursor = sqLiteDatabase.rawQuery(strQuery, where);
+                    if (cursor != null) {
+
+                        if (cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            do {
+                                int status = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrders.ORDER_STATUS));
+                                if (status == AppConstants.TAKAWAY_STATUS_PENDING)
+                                    countSPending = countSPending + 1;
+                                if (status == AppConstants.TAKAWAY_STATUS_READY)
+                                    countSReady = countSReady + 1;
+                                if (status == AppConstants.TAKAWAY_STATUS_DELIVERED)
+                                    countSDelivered = countSDelivered + 1;
+                            } while (cursor.moveToNext());
+                        }
+                        if (countSPending > 0)
+                            deliveryDTO.setOrderStatus(AppConstants.TAKAWAY_STATUS_PENDING);
+                        if (cursor.getCount() == countSReady)
+                            deliveryDTO.setOrderStatus(AppConstants.TAKAWAY_STATUS_READY);
+                        if (cursor.getCount() == countSDelivered)
+                            deliveryDTO.setOrderStatus(AppConstants.TAKAWAY_STATUS_DELIVERED);
+                    }
+
+                }
+
+
+            }
+            flagError = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "Error in setTakeAwayStatus" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "set Take away status", errorMessage);
+        }
+
+
+    }
+
+    public int getCompleteddeliveryCount() {
+        boolean flagError = false;
+        String errorMessage = "";
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("Select * From " + SqlContract.SqlOrders.TABLE_NAME + " where OrderType = 2 and OrderStatus = 2", null);
+                count = cursor.getCount();
+            }
+            flagError = true;
+        } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "## error at getTakeAwayCount table" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Get Take away Complete count", errorMessage);
+        }
+        return count;
+    }
+
+    public boolean insertDelivery(UploadDelivery deliveryDto, int userId) {
+        boolean flagError = false;
+        String errorMessage = "";
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                contentValues.put(SqlContract.SqlDelivery.DELIVERY_ID, deliveryDto.getDeliveryId());
+                contentValues.put(SqlContract.SqlDelivery.DISCOUNT, deliveryDto.getDiscount());
+                contentValues.put(SqlContract.SqlDelivery.DELIVERY_CHG, deliveryDto.getDeliveryCharges());
+                contentValues.put(SqlContract.SqlDelivery.CUST_ID, deliveryDto.getCustId());
+                contentValues.put(SqlContract.SqlDelivery.USER_ID, userId);
+                contentValues.put(SqlContract.SqlDelivery.SOURCE_ID, deliveryDto.getSourceId());
+                if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                count = sqLiteDatabase.insert(SqlContract.SqlDelivery.TABLE_NAME, null, contentValues);
+                contentValues.clear();
+                Log.d(TAG, "## Delivery is added successfully using UploadDelivery" + deliveryDto.getDeliveryId());
+
+            }
+            flagError = true;
+        } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.d(TAG, "## Error at insert delivery using UploadDelivery" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Delivery", errorMessage);
+        }
+        return count != -1;
+    }
+
+    public boolean insertDelivery(List<DeliveryDbDTO> deliveryInserts) {
+        boolean flagError = false;
+        String errorMessage = "";
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (DeliveryDbDTO deliveryDbDTO : deliveryInserts) {
+                    contentValues.put(SqlContract.SqlDelivery.DELIVERY_ID, deliveryDbDTO.getDeliveryId());
+                    contentValues.put(SqlContract.SqlDelivery.DELIVERY_NO, deliveryDbDTO.getDeliveryNo());
+                    contentValues.put(SqlContract.SqlDelivery.DISCOUNT, deliveryDbDTO.getDiscount());
+                    contentValues.put(SqlContract.SqlDelivery.DELIVERY_CHG, deliveryDbDTO.getDeliveryCharges());
+                    contentValues.put(SqlContract.SqlDelivery.CUST_ID, deliveryDbDTO.getCustId());
+                    contentValues.put(SqlContract.SqlDelivery.USER_ID, deliveryDbDTO.getUserId());
+                    contentValues.put(SqlContract.SqlDelivery.SOURCE_ID, deliveryDbDTO.getSourceId());
+                    contentValues.put(SqlContract.SqlDelivery.DATE, deliveryDbDTO.getCreatedDate());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.insert(SqlContract.SqlDelivery.TABLE_NAME, null, contentValues);
+                    contentValues.clear();
+                    Log.d(TAG, "## Delivery is added successfully" + deliveryDbDTO.getDeliveryNo());
+
+                }
+                flagError = true;
+            }
+        } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.d(TAG, "## Error at insert Delivery" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Insert Delivery", errorMessage);
+        }
+        return count != -1;
+    }
+
+    public boolean updateDelivery(List<DeliveryDbDTO> updateDelivery) {
+        boolean flagError = false;
+        String errorMessage = "";
+        SQLiteDatabase sqLiteDatabase = null;
+        ContentValues contentValues = null;
+        long count = -1;
+        try {
+            sqLiteDatabase = getWritableDatabase();
+            synchronized (sqLiteDatabase) {
+                contentValues = new ContentValues();
+                for (DeliveryDbDTO deliveryDbDTO : updateDelivery) {
+                    String[] where = new String[]{deliveryDbDTO.getDeliveryId()};
+                    if (deliveryDbDTO.getDeliveryNo() != 0)
+                        contentValues.put(SqlContract.SqlDelivery.DELIVERY_NO, deliveryDbDTO.getDeliveryNo());
+                    if (deliveryDbDTO.getDiscount() != 0)
+                        contentValues.put(SqlContract.SqlDelivery.DISCOUNT, deliveryDbDTO.getDiscount());
+                    if (deliveryDbDTO.getDeliveryCharges() != 0)
+                        contentValues.put(SqlContract.SqlDelivery.DELIVERY_CHG, deliveryDbDTO.getDeliveryCharges());
+                    if (deliveryDbDTO.getCustId() != null && !deliveryDbDTO.getCustId().isEmpty())
+                        contentValues.put(SqlContract.SqlDelivery.CUST_ID, deliveryDbDTO.getCustId());
+                    if (deliveryDbDTO.getUserId() != 0)
+                        contentValues.put(SqlContract.SqlDelivery.USER_ID, deliveryDbDTO.getUserId());
+                    if (deliveryDbDTO.getSourceId() != 0)
+                        contentValues.put(SqlContract.SqlDelivery.SOURCE_ID, deliveryDbDTO.getSourceId());
+                    if (deliveryDbDTO.getCreatedDate() != null)
+                        contentValues.put(SqlContract.SqlDelivery.DATE, deliveryDbDTO.getCreatedDate());
+                    if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+                    count = sqLiteDatabase.update(SqlContract.SqlDelivery.TABLE_NAME, contentValues,
+                            SqlContract.SqlDelivery.DELIVERY_ID + "=?", where);
+                    contentValues.clear();
+                    Log.d(TAG, "## Take Delivery is updated successfully" + deliveryDbDTO.getDeliveryNo());
+
+                }
+            }
+            flagError = true;
+        } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.d(TAG, "## Error at update delivery" + e.toString());
+        } finally {
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "Update Delivery", errorMessage);
+        }
+        return count != -1;
+    }
+
+    public double getDeliveryDiscount(int deliveryNo) {
+        boolean flagError = false;
+        String errorMessage = "";
+        double discount = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        OrderHeaderDTO orderHeaderDTO = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{String.valueOf(deliveryNo)};
+                cursor = sqLiteDatabase.rawQuery("select " + SqlContract.SqlDelivery.DISCOUNT + " from "
+                        + SqlContract.SqlDelivery.TABLE_NAME + " where " +
+                        SqlContract.SqlDelivery.DELIVERY_NO + "=?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        discount = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlDelivery.DISCOUNT));
+                    }
+                }
+            }
+            flagError = true;
+        } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get delivery Discount", errorMessage);
+        }
+        return discount;
+    }
+
+    public double getDeliveryDeliveryChr(int deliveryNo) {
+        boolean flagError = false;
+        String errorMessage = "";
+        double deliveryChr = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        OrderHeaderDTO orderHeaderDTO = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                String[] whereClause = new String[]{String.valueOf(deliveryNo)};
+                cursor = sqLiteDatabase.rawQuery("select " + SqlContract.SqlDelivery.DELIVERY_CHG + " from "
+                        + SqlContract.SqlDelivery.TABLE_NAME + " where " +
+                        SqlContract.SqlDelivery.DELIVERY_NO + "=?", whereClause);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        deliveryChr = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlDelivery.DELIVERY_CHG));
+                    }
+                }
+            }
+            flagError = true;
+        } catch (Exception e) {
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Take away Delivery Charges", errorMessage);
+        }
+        return deliveryChr;
+    }
+
+    public DeliveryDTO getDelivery(int deliveryNo) {
+        boolean flagError = false;
+        String errorMessage = "";
+        DeliveryDTO deliveryDTO = null;
+        SQLiteDatabase sqLiteDatabase = null;
+        Cursor cursor = null;
+        try {
+            sqLiteDatabase = getReadableDatabase();
+            synchronized (sqLiteDatabase) {
+                cursor = sqLiteDatabase.rawQuery("Select delivery.DeliveryId,delivery.DeliveryNo," +
+                        "delivery.CustId,delivery.SourceId,delivery.Discount,delivery.DeliveryCharges," +
+                        "delivery.UserId,users.UserName,customer.CustName,customer.CustPhone," +
+                        "customer.CustAddress,takeaway_source.SourceName from delivery left join " +
+                        "users on users.UserId=delivery.UserId left join customer on customer.CustId=" +
+                        "delivery.CustId left join takeaway_source on takeaway_source.SourceId=delivery.SourceId " +
+                        "where delivery.DeliveryNo=" + deliveryNo, null);
+                if (cursor != null) {
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        String deliveryId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlDelivery.DELIVERY_ID));
+                        //int delNo = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlTakeAway.TAKE_AWAY_NO));
+                        double discount = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlDelivery.DISCOUNT));
+                        double deliveryCharges = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlDelivery.DELIVERY_CHG));
+                        String custId = cursor.getString(cursor.getColumnIndex(SqlContract.SqlDelivery.CUST_ID));
+                        int userId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlDelivery.USER_ID));
+                        int sourceId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlDelivery.SOURCE_ID));
+                        String custName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_NAME));
+                        String custAddress = cursor.getString(cursor.getColumnIndex("CustAddress"));
+                        String userName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlUser.USER_NAME));
+                        String custPhone = cursor.getString(cursor.getColumnIndex(SqlContract.SqlCustomer.CUST_PHONE));
+                        String sourceName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlTakeAwaySource.SOURCE_NAME));
+                        deliveryDTO = new DeliveryDTO(deliveryId, deliveryNo, discount,
+                                deliveryCharges, custId, userId, sourceId, custName, custAddress, userName, custPhone, sourceName);
+                    }
+                }
+            }
+            flagError = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            flagError = false;
+            errorMessage = e.getMessage();
+            Log.e(TAG, "Error in get delivery" + e.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqLiteDatabase != null && sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+            if (!flagError)
+                addError(TAG, "get Delivery ", errorMessage);
+        }
+        return deliveryDTO;
     }
 
     public void addError(String screenName, String method, String desc) {

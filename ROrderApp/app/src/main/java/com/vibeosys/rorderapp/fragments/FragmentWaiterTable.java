@@ -188,7 +188,7 @@ public class FragmentWaiterTable extends BaseFragment implements AdapterView.OnI
     private void callToMenuIntent(int tableNo, int tableId, String custId) {
 
 
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo, 0, 0, 0);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(tableId, custId, tableNo, 0, 0, 0, 0);
         BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
         if (billDetailsDTO != null) {
             Intent intentBillDetails = new Intent(getActivity().getApplicationContext(), BillDetailsActivity.class);

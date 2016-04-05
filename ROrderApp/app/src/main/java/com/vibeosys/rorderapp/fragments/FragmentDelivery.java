@@ -33,15 +33,16 @@ import com.google.gson.Gson;
 import com.vibeosys.rorderapp.R;
 import com.vibeosys.rorderapp.activities.BillDetailsActivity;
 import com.vibeosys.rorderapp.activities.TableMenusActivity;
-import com.vibeosys.rorderapp.adaptors.TakeAwayGridAdapter;
+import com.vibeosys.rorderapp.adaptors.DeliveryGridAdapter;
 import com.vibeosys.rorderapp.adaptors.TakeAwaySourceAdapter;
 import com.vibeosys.rorderapp.data.BillDetailsDTO;
 import com.vibeosys.rorderapp.data.CustomerDbDTO;
+import com.vibeosys.rorderapp.data.DeliveryDTO;
 import com.vibeosys.rorderapp.data.TableCommonInfoDTO;
 import com.vibeosys.rorderapp.data.TableDataDTO;
-import com.vibeosys.rorderapp.data.TakeAwayDTO;
+
 import com.vibeosys.rorderapp.data.TakeAwaySourceDTO;
-import com.vibeosys.rorderapp.data.UploadTakeAway;
+import com.vibeosys.rorderapp.data.UploadDelivery;
 import com.vibeosys.rorderapp.util.ConstantOperations;
 import com.vibeosys.rorderapp.util.PhoneNumberValidator;
 import com.vibeosys.rorderapp.util.ServerSyncManager;
@@ -53,22 +54,22 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by akshay on 08-03-2016.
+ * Created by akshay on 04-04-2016.
  */
-public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.OnStringResultReceived,
+public class FragmentDelivery extends BaseFragment implements ServerSyncManager.OnStringResultReceived,
         ServerSyncManager.OnStringErrorReceived, AdapterView.OnItemClickListener {
     public static Handler UIHandler;
     private TextView mTxtTotalCount;
     private GridView mGridView;
     private int mSourceId;
-    private int mTakeAwayNo;
+    private int mDeliveryNo;
     private UUID custid;
     private ProgressBar mProgressBar;
     private LinearLayout mMainLayout;
     TextView txtTotalCount;
     GridView gridView;
-    ArrayList<TakeAwayDTO> takeAwayDTOs;
-    public static TakeAwayGridAdapter gridAdapter;
+    ArrayList<DeliveryDTO> deliveryDTOs;
+    public static DeliveryGridAdapter gridAdapter;
 
     @Nullable
     @Override
@@ -80,8 +81,8 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
             public void onClick(View view) {
                 //callWaitingIntent();
                 //Show waiting dialog
-                sendEventToGoogle("Action", "Add take away");
-                showTakeawayDialog(savedInstanceState);
+                sendEventToGoogle("Action", "Add delivery");
+                showDeliveryDialog(savedInstanceState);
             }
         });
         mServerSyncManager.setOnStringResultReceived(this);
@@ -93,15 +94,15 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         gridView = (GridView) view.findViewById(R.id.gridview);
 
 
-        takeAwayDTOs = mDbRepository.getTakeAwayList();
-        mDbRepository.setTakeAwayStatus(takeAwayDTOs);
-        gridAdapter = new TakeAwayGridAdapter(getActivity().getApplicationContext(), takeAwayDTOs);
+        deliveryDTOs = mDbRepository.getDeliveryList();
+        mDbRepository.setDeliveryStatus(deliveryDTOs);
+        gridAdapter = new DeliveryGridAdapter(getActivity().getApplicationContext(), deliveryDTOs);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(this);
-        int completeTakeAway = mDbRepository.getCompletedTakeAwayCount();
+        int completeDelivery = mDbRepository.getCompleteddeliveryCount();
         //  int getTakeAwayCount = mDbRepository.getTakeAwayCount();
-        int getTakeAwayCount = gridAdapter.getCount();
-        txtTotalCount.setText(" " + completeTakeAway + " out of " + getTakeAwayCount + " Take Aways are completed");
+        int getDeliveryCount = gridAdapter.getCount();
+        txtTotalCount.setText(" " + completeDelivery + " out of " + getDeliveryCount + " Delivery are completed");
 
 
         return view;
@@ -110,15 +111,15 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
     @Override
     public void onResume() {
         super.onResume();
-        int completeTakeAway = mDbRepository.getCompletedTakeAwayCount();
+        int completeDelivery = mDbRepository.getCompleteddeliveryCount();
         //  int getTakeAwayCount = mDbRepository.getTakeAwayCount();
-        int getTakeAwayCount = gridAdapter.getCount();
-        txtTotalCount.setText(" " + completeTakeAway + " out of " + getTakeAwayCount + " Take Aways are completed");
+        int getDeliveryCount = gridAdapter.getCount();
+        txtTotalCount.setText(" " + completeDelivery + " out of " + getDeliveryCount + " Delivery are completed");
 
 
     }
 
-    private void showTakeawayDialog(Bundle savedInstanceState) {
+    private void showDeliveryDialog(Bundle savedInstanceState) {
         final Dialog dlg = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         View view = getLayoutInflater(savedInstanceState).inflate(R.layout.dialog_add_take_away, null);
         dlg.setContentView(view);
@@ -134,12 +135,11 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         final EditText txtDeliveryCharges = (EditText) dlg.findViewById(R.id.txtDeliveryChrgs);
         final EditText txtPhNo = (EditText) dlg.findViewById(R.id.txtCustomerPhNo);
 
-        txtDeliveryCharges.setVisibility(View.INVISIBLE);
         TextView txtPlaceOrder = (TextView) dlg.findViewById(R.id.txtPlaceOrder);
         TextView txtCancel = (TextView) dlg.findViewById(R.id.txtCancel);
         Spinner spnSource = (Spinner) dlg.findViewById(R.id.spnSource);
 
-        txtTitle.setText("Add take away");
+        txtTitle.setText("Add Delivery");
         txtDiscountPer.setEnabled(false);
 
         ArrayList<TakeAwaySourceDTO> tableTransactionDbDTOs = mDbRepository.getTakeAwaySource();
@@ -162,7 +162,7 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
         txtPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEventToGoogle("Action", "Place order from take away");
+                sendEventToGoogle("Action", "Place order from Delivery");
                 boolean wrongCredential = false;
                 View focus = null;
 
@@ -211,17 +211,17 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
                     CustomerDbDTO customer = new CustomerDbDTO(custid.toString(), strName, strAddress, strPhNo);
                     //here inserting custmer to custmer table
                     mDbRepository.insertCustomerDetails(customer);
-                    UUID takeAwayId = UUID.randomUUID();
-                    UploadTakeAway uploadTakeAway = new UploadTakeAway(takeAwayId.toString(), discount, deliveryCharges, custid.toString(), mSourceId);
-                    mDbRepository.insertTakeAway(uploadTakeAway, mSessionManager.getUserId());
+                    UUID deliveryId = UUID.randomUUID();
+                    UploadDelivery uploadDelivery = new UploadDelivery(deliveryId.toString(), discount, deliveryCharges, custid.toString(), mSourceId);
+                    mDbRepository.insertDelivery(uploadDelivery, mSessionManager.getUserId());
                     // showProgress(true);
                     TableDataDTO[] tableDataDTOs = new TableDataDTO[2];
                     Gson gson = new Gson();
                     String serializedJsonString = gson.toJson(customer);
                     tableDataDTOs[0] = new TableDataDTO(ConstantOperations.ADD_CUSTOMER, serializedJsonString);
 
-                    String serializedTake = gson.toJson(uploadTakeAway);
-                    tableDataDTOs[1] = new TableDataDTO(ConstantOperations.ADD_TAKEAWAY, serializedTake);
+                    String serializedTake = gson.toJson(uploadDelivery);
+                    tableDataDTOs[1] = new TableDataDTO(ConstantOperations.ADD_DELIVERY, serializedTake);
                     mServerSyncManager.uploadDataToServer(tableDataDTOs);
                     dlg.dismiss();
                 }
@@ -294,9 +294,9 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
             int errorCode = data.getInt("errorCode");
             String message = data.getString("message");
             if (errorCode == 0) {
-                mTakeAwayNo = Integer.parseInt(message);
+                mDeliveryNo = Integer.parseInt(message);
                 mServerSyncManager.syncDataWithServer(false);
-                callToMenuIntent(mTakeAwayNo, custid.toString());
+                callToMenuIntent(mDeliveryNo, custid.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -304,11 +304,11 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     }
 
-    private void callToMenuIntent(int takeAwayNo, String custId) {
+    private void callToMenuIntent(int deliveryNo, String custId) {
         showProgress(false);
-        double givenDiscount = mDbRepository.getTakeAwayDiscount(takeAwayNo);
-        double deliveryCharges = mDbRepository.getTakeAwayDeliveryChr(takeAwayNo);
-        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(0, custId, 0, takeAwayNo, givenDiscount, deliveryCharges,0);
+        double givenDiscount = mDbRepository.getDeliveryDiscount(deliveryNo);
+        double deliveryCharges = mDbRepository.getDeliveryDeliveryChr(deliveryNo);
+        TableCommonInfoDTO tableCommonInfoDTO = new TableCommonInfoDTO(0, custId, 0, 0, givenDiscount, deliveryCharges, deliveryNo);
         BillDetailsDTO billDetailsDTO = mDbRepository.getBillDetailsRecords(custId);
         if (billDetailsDTO != null) {
             Intent intentBillDetails = new Intent(getActivity().getApplicationContext(), BillDetailsActivity.class);
@@ -328,11 +328,11 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TakeAwayDTO takeAwayDTO = (TakeAwayDTO) gridAdapter.getItem(position);
-        String custId = takeAwayDTO.getmCustId();
+        DeliveryDTO deliveryDTO = (DeliveryDTO) gridAdapter.getItem(position);
+        String custId = deliveryDTO.getmCustId();
         Log.i(TAG, "## Customer Id " + custId);
-        callToMenuIntent(takeAwayDTO.getmTakeawayNo(), custId);
-        Log.i(TAG, "##" + takeAwayDTO.getmTakeawayNo() + " Is Clicked");
+        callToMenuIntent(deliveryDTO.getmDeliveryNo(), custId);
+        Log.i(TAG, "##" + deliveryDTO.getmDeliveryNo() + " Is Clicked");
     }
 
     static {
@@ -346,6 +346,6 @@ public class FragmentTakeAway extends BaseFragment implements ServerSyncManager.
 
     @Override
     protected String getScreenName() {
-        return "Take away";
+        return "Delivery";
     }
 }

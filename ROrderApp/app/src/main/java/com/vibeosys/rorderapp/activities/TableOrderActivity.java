@@ -72,6 +72,7 @@ public class TableOrderActivity extends BaseActivity implements
     private int mTableNo;
     private int mTableId;
     private int mTakeAwayNo;
+    private int mDeliveryNo;
     private String mCustId;
     private OrderHeaderDTO mCurrentOrder;
     private Context mContext = this;
@@ -95,7 +96,9 @@ public class TableOrderActivity extends BaseActivity implements
         mTableId = tableCommonInfo.getTableId();
         mCustId = tableCommonInfo.getCustId();
         mTakeAwayNo = tableCommonInfo.getTakeAwayNo();
-        mOrderType = mTableId != 0 ? AppConstants.DINE_IN : AppConstants.TAKE_AWAY;
+        mDeliveryNo = tableCommonInfo.getDeliveryNo();
+
+        mOrderType = mTableId != 0 ? AppConstants.DINE_IN : mTakeAwayNo != 0 ? AppConstants.TAKE_AWAY : AppConstants.DELIVERY;
         setContentView(R.layout.activity_table_order);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mOrdersList = (ExpandableListView) findViewById(R.id.expListViewForTableOrder);
@@ -277,10 +280,31 @@ public class TableOrderActivity extends BaseActivity implements
                         }
                     }
                     keyRoomId = sortOrderByKitchen.keySet();
+                    if (mDbRepository.getConfigValue(AppConstants.CONFIG_KOT_PRINT) == 1) {
+                        for (final Integer i : keyRoomId) {
+                            ArrayList<UploadOrderDetails> sendDetails = new ArrayList<>();
+                            List<OrderDetailsDTO> orderListByRoom = sortOrderByKitchen.get(i);
+                            for (OrderDetailsDTO orderDetail : orderListByRoom) {
+                                UploadOrderDetails sendOrder = new UploadOrderDetails(orderDetail.getMenuId(), orderDetail.getOrderQuantity(), orderDetail.getmNote(), orderDetail.getmSubMenuId());
+                                sendDetails.add(sendOrder);
+                            }
+
+                            UUID mOrderId;
+                            mOrderId = UUID.randomUUID();
+                            UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType, mDeliveryNo);
+                            Gson gson = new Gson();
+
+                            String serializedJsonString = gson.toJson(sendOrder);
+                            Log.d(TAG, "##" + serializedJsonString);
+                            TableDataDTO tableDataDTO = new TableDataDTO(ConstantOperations.PLACE_ORDER, serializedJsonString);
+                            mServerSyncManager.uploadDataToServer(tableDataDTO);
+                        }
+                    } else {
+                        AsyncPrintData asyncPrintData = new AsyncPrintData();
+                        asyncPrintData.execute(sortOrderByKitchen);
+                    }
 
 
-                    AsyncPrintData asyncPrintData = new AsyncPrintData();
-                    asyncPrintData.execute(sortOrderByKitchen);
 
 
                 }
@@ -442,8 +466,10 @@ public class TableOrderActivity extends BaseActivity implements
                 printPaper.openPrinter();
                 PrintHeader header = new PrintHeader("Served By :" + mSessionManager.getUserName(), "Table No.: #"
                         + mTableNo, new ROrderDateUtils().getLocalTimeInReadableFormat());
-                if (mTableId == 0) {
+                if (mTakeAwayNo > 0) {
                     header.setTableNo("Take Away No.: #" + mTakeAwayNo);
+                } else if (mDeliveryNo > 0) {
+                    header.setTableNo("Delivery No.: #" + mDeliveryNo);
                 }
                 String footer = "Powered by QuickServe";
                 PrintDataDTO printData = new PrintDataDTO();
@@ -477,7 +503,7 @@ public class TableOrderActivity extends BaseActivity implements
 
                     UUID mOrderId;
                     mOrderId = UUID.randomUUID();
-                    UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType);
+                    UploadOrderHeader sendOrder = new UploadOrderHeader(mOrderId.toString(), mTableId, mCustId, sendDetails, mTakeAwayNo, mOrderType, mDeliveryNo);
                     Gson gson = new Gson();
 
                     String serializedJsonString = gson.toJson(sendOrder);
