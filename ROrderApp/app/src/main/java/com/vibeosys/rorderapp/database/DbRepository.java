@@ -4678,17 +4678,15 @@ public class DbRepository extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
-                for (int i = 0; i <= getOrderId.size(); i++) {
+                for (int i = 0; i < getOrderId.size(); i++) {
                     String OrderId = getOrderId.get(i);
                     String[] where = new String[]{OrderId};
                     cursor = sqLiteDatabase.rawQuery("SELECT * " +
                             "from order_details  where " + SqlContract.SqlOrderDetails.ORDER_ID + " =?", where);
                     if (cursor != null) {
-
                         if (cursor.getCount() > 0) {
                             cursor.moveToFirst();
                             do {
-
                                 int menuId = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_ID));
                                 String menuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_TITLE));
                                 int menuQty = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_QUANTITY));
