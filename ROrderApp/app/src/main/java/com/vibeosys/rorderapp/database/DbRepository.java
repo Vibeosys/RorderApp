@@ -1254,9 +1254,9 @@ public class DbRepository extends SQLiteOpenHelper {
 
                     // cursor.close();
                     order.setOrderDetailsDTOs(orderDetailsList);
-                    flagError = true;
                 }
             }
+            flagError = true;
         } catch (Exception e) {
             flagError = false;
             errorMessage = e.getMessage();
@@ -4675,7 +4675,6 @@ public class DbRepository extends SQLiteOpenHelper {
         sqLiteDatabase = getReadableDatabase();
         Cursor cursor = null;
         HashMap<String, OrderDetailsDTO> billdetails = new HashMap<>();
-        String previousQty, previousOrderPrice, previousTotalPrice;
         try {
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
@@ -4694,30 +4693,6 @@ public class DbRepository extends SQLiteOpenHelper {
                                 String menuName = cursor.getString(cursor.getColumnIndex(SqlContract.SqlOrderDetails.MENU_TITLE));
                                 int menuQty = cursor.getInt(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_QUANTITY));
                                 double orderPrice = cursor.getDouble(cursor.getColumnIndex(SqlContract.SqlOrderDetails.ORDER_PRICE));
-                               /* TotalPriceForQty = (MenuQty * OrderPrice);
-                                if (billdetails.containsKey(MenuName)) {
-                                    listTemp =billdetails.get(MenuName);
-                                   // ArrayList<String> temp = billdetails.get(MenuName);
-                                    previousQty = listTemp.get(0);
-                                    previousOrderPrice = listTemp.get(1);
-                                    previousTotalPrice = listTemp.get(2);
-                                    int Qty = Integer.parseInt(previousQty) + MenuQty;
-                                    double orderPrice = (Double.parseDouble(previousOrderPrice));
-                                    TotalPriceForQty = (Double.parseDouble(previousTotalPrice) + TotalPriceForQty) ;
-                                    listTemp.clear();
-                                    billdetails.remove(MenuName);
-                                    listTemp.add(0,String.valueOf(Qty));
-                                    listTemp.add(1,String.valueOf(orderPrice));
-                                    listTemp.add(2, String.valueOf(TotalPriceForQty));
-
-                                    billdetails.put(MenuName, listTemp);
-
-                                } else if(!billdetails.containsKey(MenuName)){
-                                    listTemp.add(0,String.valueOf(MenuQty));
-                                    listTemp.add(1,String.valueOf(OrderPrice));
-                                    listTemp.add(2,String.valueOf(TotalPriceForQty));
-                                    billdetails.put(MenuName, listTemp);
-                                }*/
                                 if (billdetails.containsKey(menuName)) {
                                     OrderDetailsDTO hshOrder = billdetails.get(menuId);
                                     hshOrder.setOrderQuantity(hshOrder.getOrderQuantity() + menuQty);
@@ -4737,6 +4712,7 @@ public class DbRepository extends SQLiteOpenHelper {
             flagError = false;
             errorMessage = e.getMessage();
             Log.e("DbOperationsEx", "Error while getting oderId " + e.toString());
+            e.printStackTrace();
         } finally {
 
             if (cursor != null) {
@@ -4842,6 +4818,22 @@ public class DbRepository extends SQLiteOpenHelper {
                 addError(TAG, "Get Config value", errorMessage);
         }
         return result;
+    }
+
+    public void deleteMenu(int menuId, String custId) {
+        int count = 0;
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getWritableDatabase();
+        String[] whereClause = new String[]{custId, String.valueOf(menuId)};
+        try {
+            if (!sqLiteDatabase.isOpen()) sqLiteDatabase = getWritableDatabase();
+            count = sqLiteDatabase.delete(SqlContract.SqlTempOrder.TABLE_NAME,
+                    SqlContract.SqlTempOrder.CUST_ID + "=? AND " + SqlContract.SqlTempOrder.MENU_ID
+                            + "=?", whereClause);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public ArrayList<SubMenuDTO> getSubMenu(int menuId, String custId) {
@@ -5309,6 +5301,8 @@ public class DbRepository extends SQLiteOpenHelper {
         String serializedError = gson.toJson(errorDBDTO);
         addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "", serializedError);
     }
+
+
 }
 /*
 "SELECT Distinct menu.MenuId,menu.FoodType,menu.Image,menu.FbTypeId,"+

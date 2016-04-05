@@ -659,7 +659,7 @@ public class TableMenusActivity extends BaseActivity implements
         Log.d(TAG, "##" + error.toString());
     }
 
-    private void showBevereges(OrderMenuDTO orderMenu) {
+    private void showBevereges(final OrderMenuDTO orderMenu) {
         final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // dialog.setTitle(orderMenu.getmMenuTitle());
@@ -676,6 +676,8 @@ public class TableMenusActivity extends BaseActivity implements
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDbRepository.deleteMenu(orderMenu.getmMenuId(), custId);
+                displayMenuPriceAndItems();
                 dialog.dismiss();
             }
         });
@@ -683,6 +685,7 @@ public class TableMenusActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                displayMenuPriceAndItems();
             }
         });
         dialog.show();
