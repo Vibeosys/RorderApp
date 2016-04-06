@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -66,12 +67,14 @@ public class DeliveryGridAdapter extends BaseAdapter {
             viewHolder.txtCustAddress = (TextView) row.findViewById(R.id.txtCustAddress);
             //viewHolder.txtUserName = (TextView) row.findViewById(R.id.txtUserName);
             viewHolder.txtCustPhone = (TextView) row.findViewById(R.id.txtCustPh);
+            viewHolder.imgLogo = (ImageView) row.findViewById(R.id.imgLogo);
             // viewHolder.imgTableStatus=(ImageView)row.findViewById(R.id.imgTabelStatus);
             row.setTag(viewHolder);
 
         } else viewHolder = (ViewHolder) row.getTag();
         DeliveryDTO deliveryDTO = mDeliveryList.get(position);
         int orderStatus = deliveryDTO.getOrderStatus();
+        viewHolder.imgLogo.setImageResource(R.drawable.deliver_food);
         Log.d("##", deliveryDTO.getmDeliveryNo() + "## " + orderStatus);
         if (orderStatus == AppConstants.TAKAWAY_STATUS_PENDING) {
             viewHolder.layoutIsReady.setBackgroundColor(mContext.getResources().getColor(R.color.red));
@@ -95,5 +98,6 @@ public class DeliveryGridAdapter extends BaseAdapter {
         TextView txtCustomerName;
         TextView txtCustAddress;
         TextView txtCustPhone;
+        ImageView imgLogo;
     }
 }
