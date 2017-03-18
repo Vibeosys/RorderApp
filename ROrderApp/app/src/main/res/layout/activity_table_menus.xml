@@ -27,7 +27,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center">
 
-                <com.vibeosys.rorderapp.views.CustomEditText
+                <com.vibeosys.quickserve.views.CustomEditText
                     android:id="@+id/search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                     android:drawableLeft="@drawable/abc_ic_search_api_mtrl_alpha"
                     android:hint="@string/title_search_cuisine" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtTableNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             android:orientation="vertical"
             android:padding="@dimen/activity_table_menu_bottom">
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txtTotalRs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
             android:orientation="vertical"
             android:padding="@dimen/activity_table_menu_bottom">
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txtTotalItems"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
             android:layout_height="match_parent"
             android:background="@color/black_color" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtGenerateBill"
             style="@style/layout_generate_button"
             android:layout_width="match_parent"

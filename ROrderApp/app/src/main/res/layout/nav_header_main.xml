@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <com.vibeosys.rorderapp.views.RoundedImageView
+    <com.vibeosys.quickserve.views.RoundedImageView
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -19,7 +19,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/hotel_logo" />
 
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
         android:id="@+id/txtHeaderWaiterName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:text="ABC XYZ"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
         android:id="@+id/txtHeaderHotelName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

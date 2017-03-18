@@ -16,7 +16,7 @@
         android:layout_marginTop="4dp"
         android:orientation="horizontal">
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/chefMenuNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:text=" "
             android:textColor="@color/listview_item" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/chefMenuName"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -35,14 +35,14 @@
             android:textColor="@color/listview_item"
             android:textSize="14sp" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/commentForChef"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" "
             android:textColor="@color/listview_item" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/chefQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:textColor="@color/listview_item"
             android:textSize="16sp" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/cQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
         android:background="@drawable/custom_border"
         android:paddingBottom="2dp">
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/chefMenuComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

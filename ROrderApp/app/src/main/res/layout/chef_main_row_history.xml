@@ -15,7 +15,7 @@
         android:padding="4dp">
 
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/chefMenuNameHistory"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:textColor="@color/listview_item"
             android:textSize="16sp" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/commentForChefHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:text=" "
             android:textColor="@color/listview_item" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/chefQtyHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

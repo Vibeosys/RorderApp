@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtTableName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/chefTableNumber"
 
                     android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                     android:textColor="@color/black_color"
                     android:textSize="18sp" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtHash"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="14sp" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/orderNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                     android:layout_weight="1"
                     android:src="@drawable/icon_hours_glass" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/orderTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
                 android:padding="4dp"
                 android:src="@drawable/ico_served_by_black" />
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txtExpLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
             android:layout_weight="0.5"
             android:orientation="vertical">
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/orderServedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -159,7 +159,7 @@
                 android:gravity="bottom|end"
                 android:orientation="horizontal">
 
-                <com.vibeosys.rorderapp.views.CustomButton
+                <com.vibeosys.quickserve.views.CustomButton
                     android:id="@+id/OrderDoneChef"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"

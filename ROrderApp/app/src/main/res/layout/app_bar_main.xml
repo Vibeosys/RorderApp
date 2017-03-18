@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.vibeosys.rorderapp.MainActivity">
+    tools:context="com.vibeosys.quickserve.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center">
 
-                <com.vibeosys.rorderapp.views.CustomEditText
+                <com.vibeosys.quickserve.views.CustomEditText
                     android:id="@+id/search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

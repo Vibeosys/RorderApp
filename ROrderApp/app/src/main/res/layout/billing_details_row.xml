@@ -6,21 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
     android:layout_weight="1"
     android:id="@+id/Item_menu_name"
     android:text="Veg Manchurian"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     style="@style/largeTextBillingDtl"/>
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
         android:layout_weight="1"
         android:id="@+id/Item_menu_Qty"
         android:text="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/largeTextBillingDtl"/>
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
         android:layout_weight="1"
         android:id="@+id/Item_menu_price"
         android:text="180"

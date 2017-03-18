@@ -8,10 +8,10 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:387147069386:android:0f13ae98b854a82c",
-        "client_id": "android:com.vibeosys.rorderapp",
+        "client_id": "com.vibeosys.quickserve",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.vibeosys.rorderapp"
+          "package_name": "com.vibeosys.quickserve"
         }
       },
       "oauth_client": [],

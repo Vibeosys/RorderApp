@@ -33,7 +33,7 @@
         android:orientation="vertical"
         android:padding="64dp">
 
-        <com.vibeosys.rorderapp.views.CustomEditText
+        <com.vibeosys.quickserve.views.CustomEditText
             android:id="@+id/txtRestaurantId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:background="@color/White"
             android:layout_weight="0.57" />-->
 
-        <com.vibeosys.rorderapp.views.CustomButton
+        <com.vibeosys.quickserve.views.CustomButton
             android:id="@+id/btnOk"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
         android:orientation="vertical">
 
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/abt_Us_info"
             style="@style/about_us_info"
             android:layout_width="match_parent"
@@ -80,7 +80,7 @@
             android:text="abcd" />
 
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/about_us"
             style="@style/about_us_link"
             android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
             android:padding="6dp"
             android:text="@string/about_us" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/versionId"
             style="?metaButtonBarButtonStyle"
             android:layout_width="match_parent"

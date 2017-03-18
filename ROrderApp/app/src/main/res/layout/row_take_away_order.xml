@@ -42,7 +42,7 @@
                     android:orientation="horizontal"
                     android:padding="2dp">
 
-                    <com.vibeosys.rorderapp.views.CustomTextView
+                    <com.vibeosys.quickserve.views.CustomTextView
                         android:id="@+id/txtTableName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                         android:textColor="@color/White"
                         android:textSize="15sp" />
 
-                    <com.vibeosys.rorderapp.views.CustomTextView
+                    <com.vibeosys.quickserve.views.CustomTextView
                         android:id="@+id/txtTakeAwayNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txtCustName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
                         android:layout_height="18dp"
                         android:src="@drawable/ic_action_location" />
 
-                    <com.vibeosys.rorderapp.views.CustomTextView
+                    <com.vibeosys.quickserve.views.CustomTextView
                         android:id="@+id/txtCustAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                         android:layout_marginLeft="2dp"
                         android:src="@drawable/ic_phone" />
 
-                    <com.vibeosys.rorderapp.views.CustomTextView
+                    <com.vibeosys.quickserve.views.CustomTextView
                         android:id="@+id/txtCustPh"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

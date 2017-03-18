@@ -13,7 +13,7 @@
         android:text="@string/print_kot_title"
         android:textSize="18sp" />
 
-    <com.vibeosys.rorderapp.views.CustomEditText
+    <com.vibeosys.quickserve.views.CustomEditText
         android:id="@+id/txtIpKOT"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -29,7 +29,7 @@
         android:text="@string/print_bill_title"
         android:textSize="18sp" />
 
-    <com.vibeosys.rorderapp.views.CustomEditText
+    <com.vibeosys.quickserve.views.CustomEditText
         android:id="@+id/txtIpBill"
         android:layout_width="match_parent"
         android:layout_height="48dp"

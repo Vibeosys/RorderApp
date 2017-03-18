@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtSrNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             android:text="1"
             android:textColor="@color/listview_item" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtCustomerName"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:text="Name"
             android:textColor="@color/listview_item" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

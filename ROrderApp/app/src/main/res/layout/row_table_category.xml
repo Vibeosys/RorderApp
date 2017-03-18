@@ -18,7 +18,7 @@
         android:layout_margin="@dimen/header_margin_top"
         android:src="@drawable/default_table" />
 
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
         android:id="@+id/txtTableCategory"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

@@ -26,7 +26,7 @@
                 android:src="@drawable/veg" >
 
             </com.vibeosys.rorderapp.views.RoundedImageView>-->
-            <com.vibeosys.rorderapp.views.NetworkRoundImageView
+            <com.vibeosys.quickserve.views.NetworkRoundImageView
                 android:id="@+id/menuImageLoader"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -59,7 +59,7 @@
                     android:orientation="horizontal"
                     android:padding="2dp">
 
-                    <com.vibeosys.rorderapp.views.CustomTextView
+                    <com.vibeosys.quickserve.views.CustomTextView
                         android:id="@+id/txtMenuName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                         android:text="Manchurian"
                         android:textColor="@color/listview_item" />
 
-                    <com.vibeosys.rorderapp.views.CustomTextView
+                    <com.vibeosys.quickserve.views.CustomTextView
                         android:id="@+id/txtMenuTag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                         android:textColor="@color/listview_item"
                         android:textSize="10sp" />
 
-                    <com.vibeosys.rorderapp.views.CustomTextView
+                    <com.vibeosys.quickserve.views.CustomTextView
                         android:id="@+id/txtCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                     android:layout_weight="1"
                     android:src="@drawable/rupee_icon" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtMenuPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                       android:textColor="@color/listview_item"
                       android:textSize="12sp" />-->
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtMenuQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

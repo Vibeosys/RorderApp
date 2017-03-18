@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/White"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.vibeosys.rorderapp.MainActivity">
+    tools:context="com.vibeosys.quickserve.MainActivity">
 
     <ProgressBar
         android:id="@+id/select_reto_progress"
@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

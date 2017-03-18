@@ -22,7 +22,7 @@
         android:gravity="center_horizontal|left"
         android:orientation="vertical">
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtOrderName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:textColor="@color/listview_item" />
 
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/textOrderCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
     </LinearLayout>
 
 
-    <com.vibeosys.rorderapp.views.CustomButton
+    <com.vibeosys.quickserve.views.CustomButton
         android:id="@+id/btnPlaceOrder"
         style="@style/button_custom_new"
         android:layout_width="wrap_content"

@@ -16,7 +16,7 @@
             android:layout_height="45dp"
             android:src="@drawable/sub_menu_icon" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtMenuName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,14 +50,14 @@
         android:orientation="horizontal">
 
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtCancel"
             style="@style/layout_cancel_button_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/cancel_string" />
 
-        <com.vibeosys.rorderapp.views.CustomTextView
+        <com.vibeosys.quickserve.views.CustomTextView
             android:id="@+id/txtDone"
             style="@style/layout_ok_button_style"
             android:layout_width="wrap_content"

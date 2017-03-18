@@ -9,7 +9,7 @@
     android:orientation="horizontal"
     android:padding="@dimen/activity_horizontal_margin">
 
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
         android:id="@+id/txtNote"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

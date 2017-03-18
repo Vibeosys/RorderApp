@@ -19,7 +19,7 @@
 -keep interface android.support.v4.app.**{*;}
 -keep class android.support.v7.app.**{*;}
 -keep interface android.support.v7.app.**{*;}
--keep class com.vibeosys.rorderapp.data.**{*;}
+-keep class com.vibeosys.quickserve.data.**{*;}
 -keep public class com.google.android.gms.**
 -keep class com.mcxiaoke.volley.**{*;}
 -dontwarn android.support.v7.**

@@ -32,7 +32,7 @@
                 android:orientation="horizontal"
                 android:padding="15dp">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/dlg_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -56,14 +56,14 @@
                 android:orientation="horizontal"
                 android:padding="4dp">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="@string/customer_name"
                     android:textSize="15sp" />
 
-                <com.vibeosys.rorderapp.views.CustomEditText
+                <com.vibeosys.quickserve.views.CustomEditText
                     android:id="@+id/txtCustomerName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,14 +78,14 @@
                 android:orientation="horizontal"
                 android:padding="4dp">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="@string/address"
                     android:textSize="15sp" />
 
-                <com.vibeosys.rorderapp.views.CustomEditText
+                <com.vibeosys.quickserve.views.CustomEditText
                     android:id="@+id/txtCustomerAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -101,14 +101,14 @@
                 android:orientation="horizontal"
                 android:padding="4dp">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="@string/custPhNo"
                     android:textSize="15sp" />
 
-                <com.vibeosys.rorderapp.views.CustomEditText
+                <com.vibeosys.quickserve.views.CustomEditText
                     android:id="@+id/txtCustomerPhNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                 android:orientation="horizontal"
                 android:padding="4dp">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
@@ -145,28 +145,28 @@
                 android:orientation="horizontal"
                 android:padding="4dp">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="@string/discount_btn"
                     android:textSize="15sp" />
 
-                <com.vibeosys.rorderapp.views.CustomEditText
+                <com.vibeosys.quickserve.views.CustomEditText
                     android:id="@+id/txtDiscountPer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/discount_per_hint"
                     android:singleLine="false" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="%"
                     android:textSize="15sp" />
 
-                <com.vibeosys.rorderapp.views.CustomEditText
+                <com.vibeosys.quickserve.views.CustomEditText
                     android:id="@+id/txtDeliveryChrgs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -212,14 +212,14 @@
                 android:orientation="horizontal">
 
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtCancel"
                     style="@style/layout_cancel_button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/cancel_string" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtPlaceOrder"
                     style="@style/layout_ok_button_style"
                     android:layout_width="wrap_content"

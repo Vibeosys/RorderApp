@@ -4,11 +4,11 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
-        applicationId "com.vibeosys.rorderapp"
+        applicationId 'com.vibeosys.quickserve'
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 5
-        versionName '1.4'
+        versionCode 1
+        versionName '1.0'
     }
     buildTypes {
         release {

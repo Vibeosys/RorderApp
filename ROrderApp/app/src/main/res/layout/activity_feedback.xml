@@ -25,7 +25,7 @@
             android:orientation="horizontal"
             android:padding="15dp">
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/dlg_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:textColor="@color/White"
                 android:textSize="18sp" />
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/dlg_skip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:background="@color/White"
             android:orientation="vertical">
 
-            <com.vibeosys.rorderapp.views.CustomEditText
+            <com.vibeosys.quickserve.views.CustomEditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 android:inputType="textEmailAddress"
                 android:hint="Enter email id of customer" />
 
-            <com.vibeosys.rorderapp.views.CustomEditText
+            <com.vibeosys.quickserve.views.CustomEditText
                 android:id="@+id/txtPhNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txtThank"
                 style="@style/layout_ok_button_style"
                 android:layout_width="wrap_content"

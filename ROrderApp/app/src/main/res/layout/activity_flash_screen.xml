@@ -16,7 +16,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/flash_icon" />
 
-    <com.vibeosys.rorderapp.views.CustomTextView
+    <com.vibeosys.quickserve.views.CustomTextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-            <com.vibeosys.rorderapp.views.CustomButton
+            <com.vibeosys.quickserve.views.CustomButton
                 android:id="@+id/continue_to_click_button"
                 style="?metaButtonBarButtonStyle"
                 android:layout_width="0dp"

@@ -28,7 +28,7 @@
                 android:layout_weight="2"
                 android:orientation="horizontal">
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtHistryTableName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/orderTakenHistryBy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                     android:textColor="@color/black_color"
                     android:textSize="22sp" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/txtHashHistry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
 
-                <com.vibeosys.rorderapp.views.CustomTextView
+                <com.vibeosys.quickserve.views.CustomTextView
                     android:id="@+id/orderNoHistry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
 
             </LinearLayout>
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txtServedNameHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/orderFromTableNoHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/orderTimeHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                 android:text="29 mins ago"
                 android:textColor="@color/listview_item" />
 
-            <com.vibeosys.rorderapp.views.CustomTextView
+            <com.vibeosys.quickserve.views.CustomTextView
                 android:id="@+id/txtExpLinkHistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
