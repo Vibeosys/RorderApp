@@ -289,10 +289,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void addError(String screenName, String method, String desc) {
-        Gson gson = new Gson();
+      /*  Gson gson = new Gson();
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         ApplicationErrorDBDTO errorDBDTO = new ApplicationErrorDBDTO(screenName, method, desc, dateUtils.getLocalSQLCurrentDate(),dateUtils.getLocalCurrentTime());
         String serializedError = gson.toJson(errorDBDTO);
-        mDbRepository.addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "" + mSessionManager.getUserId(), serializedError);
+        mDbRepository.addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "" + mSessionManager.getUserId(), serializedError);*/
     }
 }

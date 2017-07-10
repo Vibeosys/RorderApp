@@ -73,7 +73,9 @@ public class DbRepository extends SQLiteOpenHelper {
     private final String TAG = DbRepository.class.getSimpleName();
 
     public DbRepository(Context context, SessionManager sessionManager) {
+
         super(context, sessionManager.getDatabaseDeviceFullPath(), null, 1);
+        String  dataBaseFull = sessionManager.getDatabaseDeviceFullPath();
     }
 
     @Override
@@ -353,6 +355,7 @@ public class DbRepository extends SQLiteOpenHelper {
         String permission;
         UserDTO user = null;
         try {
+
             sqLiteDatabase = getReadableDatabase();
             synchronized (sqLiteDatabase) {
                 String query = "SELECT * FROM " + SqlContract.SqlUser.TABLE_NAME + " WHERE " + SqlContract.SqlUser.USER_NAME
@@ -5293,11 +5296,11 @@ public class DbRepository extends SQLiteOpenHelper {
     }
 
     public void addError(String screenName, String method, String desc) {
-        Gson gson = new Gson();
+       /* Gson gson = new Gson();
         ROrderDateUtils dateUtils = new ROrderDateUtils();
         ApplicationErrorDBDTO errorDBDTO = new ApplicationErrorDBDTO(screenName, method, desc, dateUtils.getLocalSQLCurrentDate(), dateUtils.getLocalCurrentTime());
         String serializedError = gson.toJson(errorDBDTO);
-        addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "", serializedError);
+        addDataToSync(ConstantOperations.ADD_APPLICATION_ERROR, "", serializedError);*/
     }
 
 

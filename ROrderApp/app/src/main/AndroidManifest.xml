@@ -4,6 +4,8 @@
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -59,12 +61,10 @@
         <activity
             android:name="com.vibeosys.quickserve.activities.TableFilterActivity"
             android:label="@string/title_filter_menu"
-            android:parentActivityName="com.vibeosys.quickserve.MainActivity">
-        </activity>
+            android:parentActivityName="com.vibeosys.quickserve.MainActivity"></activity>
         <activity
             android:name="com.vibeosys.quickserve.activities.TableOrderActivity"
-            android:label="@string/order_summary">
-        </activity>
+            android:label="@string/order_summary"></activity>
         <activity
             android:name="com.vibeosys.quickserve.activities.BillDetailsActivity"
             android:label="@string/bill_details"
@@ -83,8 +83,7 @@
             android:name="com.vibeosys.quickserve.activities.CustomerFeedBackActivity"
             android:parentActivityName="com.vibeosys.quickserve.MainActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
-        <activity android:name="com.vibeosys.quickserve.activities.ChefOrdersDisplayActivity">
-        </activity>
+        <activity android:name="com.vibeosys.quickserve.activities.ChefOrdersDisplayActivity"></activity>
         <activity
             android:name="com.vibeosys.quickserve.activities.FeedbackActivity"
             android:parentActivityName="com.vibeosys.quickserve.MainActivity"
@@ -95,13 +94,11 @@
         <activity
             android:name="com.vibeosys.quickserve.activities.NotificationActivity"
             android:parentActivityName="com.vibeosys.quickserve.MainActivity"></activity>
-        <activity android:name="com.vibeosys.quickserve.activities.SettingPrinterActivity">
-        </activity>
+        <activity android:name="com.vibeosys.quickserve.activities.SettingPrinterActivity"></activity>
 
         <activity
             android:name="com.vibeosys.quickserve.activities.ChefOrdersDisplayTabActivity"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name="com.vibeosys.quickserve.activities.DiagnosticActivity"
             android:parentActivityName="com.vibeosys.quickserve.MainActivity"></activity>

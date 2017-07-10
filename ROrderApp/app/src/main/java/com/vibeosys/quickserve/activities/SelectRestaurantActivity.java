@@ -1,5 +1,6 @@
 package com.vibeosys.quickserve.activities;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -7,11 +8,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -20,6 +27,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
@@ -63,6 +71,8 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     private LinearLayout mSelectRestoView;
     private ProgressBar mProgressBar;
     private String message = "";
+    private static final int MAC_ID_LOCATION_PERMISSION = 101;
+    private static final int IMEI_PERMISSION = 102;
 
     @Override
     protected String getScreenName() {
@@ -86,8 +96,18 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
             String stringMessage = getResources().getString(R.string.error_msg_for_select_restaurant);
             customAlterDialog(stringTitle, stringMessage);
         }
-        mSessionManager.setImei(getImei());
-        mSessionManager.setMac(getMacAddress());
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            // Marshmallow+
+            checkMacAdrressPermission();
+            checkIMEINumber();
+        } else {
+            //below Marshmallow
+
+            mSessionManager.setImei(getImei());
+            mSessionManager.setMac(getMacAddress());
+        }
+
         //listResto=(ListView)findViewById(R.id.listView);
         getRestaurant(mSessionManager.getRestaurantUrl());
         aboutUs.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +123,59 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         mSelectRestoView = (LinearLayout) findViewById(R.id.select_rest_view);
         mTxtRestaurant = (TextView) findViewById(R.id.txtRestaurantId);
         btnOk.setOnClickListener(this);
+    }
+
+    private void checkIMEINumber() {
+        String[] PermissionArray = {Manifest.permission.READ_PHONE_STATE};
+        ActivityCompat.requestPermissions(SelectRestaurantActivity.this, PermissionArray, IMEI_PERMISSION);
+    }
+
+    private void checkMacAdrressPermission() {
+        String[] PermissionArray = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        ActivityCompat.requestPermissions(SelectRestaurantActivity.this, PermissionArray, MAC_ID_LOCATION_PERMISSION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MAC_ID_LOCATION_PERMISSION) {
+            if (grantResults.length > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    proceedForMacIdPermission();
+                } else {
+                    Log.d("TAG", "TAG");
+                }
+
+            }
+        } else {
+            //   Toast.makeText(getApplicationContext(), "Permission for mac address is denied", Toast.LENGTH_LONG).show();
+        }
+        if (requestCode == IMEI_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                proceedIMEINumberPermission();
+            }
+        } else {
+            //    Toast.makeText(getApplicationContext(), "Permission for IMEI number is denied", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void proceedIMEINumberPermission() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String IMEINUmber = telephonyManager.getDeviceId();
+        mSessionManager.setImei(IMEINUmber);
+        Log.d("TAG", "TAG");
+        Log.d("TAG", "TAG");
+    }
+
+    private void proceedForMacIdPermission() {
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wInfo = wifiManager.getConnectionInfo();
+        String macAddress = wInfo.getMacAddress();
+        mSessionManager.setMac(macAddress);
+        Log.d("TAG", "TAG");
+        Log.d("TAG", "TAG");
+
+
     }
 
     private boolean downloadDatabase() {
@@ -144,13 +217,21 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
                 if (contentType.equals("application/octet-stream")) {
                     ContextWrapper ctw = new ContextWrapper(getApplicationContext());
                     File directory = ctw.getDir(mSessionManager.getDatabaseDirPath(), Context.MODE_PRIVATE);
+                    String dataBaseDirectory = mSessionManager.getDatabaseDirPath();
+                    String dataBaseName = mSessionManager.getDatabaseFileName();
+                    Log.d("TAG", "TAG");
                     File dbFile = new File(directory, mSessionManager.getDatabaseFileName());
                     buffer = new byte[1024];
                     myOutput = new FileOutputStream(dbFile);
                     int length;
-                    while ((length = inputStream.read(buffer)) > 0) {
-                        myOutput.write(buffer, 0, length);
+                    try {
+                        while ((length = inputStream.read(buffer)) > 0) {
+                            myOutput.write(buffer, 0, length);
+                        }
+                    } catch (Exception e) {
+                        Log.d("TAG", "TAG");
                     }
+
                     myOutput.flush();
                     myOutput.close();
                     inputStream.close();
@@ -232,11 +313,17 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnOk) {
-            if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext()))
+            if (NetworkUtils.isActiveNetworkAvailable(getApplicationContext())) {
                 getDataBase();
-            else
+
+            } else
                 startActivityForResult(new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
         }
+    }
+
+    private static boolean doesDatabaseExist(Context context, String dbName) {
+        File dbFile = context.getDatabasePath("/data/data/com.vibeosys.quickserve/app_databases/db");
+        return dbFile.exists();
     }
 
     private void getDataBase() {
@@ -275,6 +362,7 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
             }*/
             DownloadAndProceed down = new DownloadAndProceed();
             down.execute();
+
         } else {
             showMyDialog(mContext);
         }
@@ -355,6 +443,13 @@ public class SelectRestaurantActivity extends BaseActivity implements View.OnCli
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             showProgress(false);
+            boolean test = doesDatabaseExist(getApplicationContext(), mSessionManager.getDatabaseDirPath());
+
+            Log.d("TAG", "TAG");
+            boolean test1 = doesDatabaseExist(getApplicationContext(), mSessionManager.getDatabaseFileName());
+            Log.d("TAG", "TAG");
+            Log.d("TAG", "TAG");
+
             if (aBoolean) {
                 mSelectedRestaurantName = mDbRepository.getRestaurantName(mSelectedRestoId);
                 mSessionManager.setUserRestaurantName(mSelectedRestaurantName);
